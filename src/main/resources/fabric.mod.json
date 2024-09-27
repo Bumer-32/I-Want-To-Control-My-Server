@@ -2,18 +2,19 @@
 	"schemaVersion": 1,
 	"id": "iwtcms",
 	"version": "${version}",
-	"name": "IWTCMS",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"name": "I Want To Control My Server",
+	"description": "Allows you to send commands and get logs through tcp/ip",
 	"authors": [
-		"Me!"
+		"Bumer_32"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://lumivoid.pp.ua",
+		"sources": "https://github.com/Bumer-32/Redstone-Helper",
+		"issues": "https://github.com/Bumer-32/Redstone-Helper/issues"
 	},
-	"license": "CC0-1.0",
+	"license": "Apache-2.0",
 	"icon": "assets/iwtcms/icon.png",
-	"environment": "*",
+	"environment": "server",
 	"entrypoints": {
 		"main": [
 			{
