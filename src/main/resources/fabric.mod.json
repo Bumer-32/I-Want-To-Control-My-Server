@@ -21,6 +21,13 @@
 				"value": "ua.pp.lumivoid.IWTCMS",
 				"adapter": "kotlin"
 			}
+		],
+
+		"preLaunch": [
+			{
+				"value": "ua.pp.lumivoid.PREIWTCMS",
+				"adapter": "kotlin"
+			}
 		]
 	},
 	"mixins": [
