@@ -23,6 +23,7 @@ object PREIWTCMS: PreLaunchEntrypoint {
             .withFileName("logs/iwtcms.log")
             .withName("CustomFileAppender")
             .withLayout(layout)
+            .withAppend(false)
             .build()
 
         appender.start()
