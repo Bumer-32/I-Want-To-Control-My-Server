@@ -1,7 +1,7 @@
 package ua.pp.lumivoid.iwtcms.util
 
 import org.apache.commons.io.output.ByteArrayOutputStream
-import org.apache.logging.log4j.Level.INFO
+import org.apache.logging.log4j.Level
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.core.Logger
 import org.apache.logging.log4j.core.appender.FileAppender
@@ -57,17 +57,13 @@ object CustomLogger {
                     }
                 }
             } catch (e: IOException) {
-                //e.stackTrace.forEach { logger.error(it.toString()) }
-                //bufferedReader.close()
-            } finally {
-                //bufferedReader.close()
             }
         }
 
         appender.start()
         rootLogger.addAppender(appender)
 
-        Configurator.setLevel(rootLogger.name, INFO)
+        Configurator.setLevel(rootLogger.name, Level.getLevel(Config.readConfig().logLevel))
 
         logger.info("Initialized new logger") // After logger added, to log this
         logger.info("Logging level - ${rootLogger.level}")

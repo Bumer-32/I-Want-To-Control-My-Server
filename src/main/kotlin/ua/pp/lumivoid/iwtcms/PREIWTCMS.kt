@@ -9,8 +9,8 @@ object PREIWTCMS: PreLaunchEntrypoint {
     private val logger = LoggerFactory.getLogger("iwtcms pre launch")
     @Suppress("DEPRECATION")
     override fun onPreLaunch() {
+        logger.info("Initialize pre launch iwtcms")
         Server.setup()
-
         CustomLogger.setup()
     }
 }
