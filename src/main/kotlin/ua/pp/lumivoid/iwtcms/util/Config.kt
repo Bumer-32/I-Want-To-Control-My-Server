@@ -31,7 +31,7 @@ object Config {
             }
         }
 
-        val data = ConfigData(ip = "127.0.0.1", port = 25566, logLevel = 3)
+        val data = ConfigData(ip = "127.0.0.1", port = 25566, logLevel = "INFO")
         writeConfig(data)
 
         return data
