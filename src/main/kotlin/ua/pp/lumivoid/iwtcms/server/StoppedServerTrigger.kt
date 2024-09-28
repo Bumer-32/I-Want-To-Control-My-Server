@@ -1,7 +1,7 @@
-package ua.pp.lumivoid.server
+package ua.pp.lumivoid.iwtcms.server
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
-import ua.pp.lumivoid.util.CustomLogger
+import ua.pp.lumivoid.iwtcms.util.CustomLogger
 
 object StoppedServerTrigger {
     fun register() {

@@ -1,4 +1,4 @@
-package ua.pp.lumivoid.util
+package ua.pp.lumivoid.iwtcms.util
 
 import kotlinx.serialization.Serializable
 

@@ -1,9 +1,9 @@
-package ua.pp.lumivoid.util
+package ua.pp.lumivoid.iwtcms.util
 
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import net.fabricmc.loader.api.FabricLoader
-import ua.pp.lumivoid.Constants
+import ua.pp.lumivoid.iwtcms.Constants
 import java.io.File
 
 object Config {

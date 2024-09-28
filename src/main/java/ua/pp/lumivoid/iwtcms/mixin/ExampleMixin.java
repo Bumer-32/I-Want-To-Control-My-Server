@@ -1,4 +1,4 @@
-package ua.pp.lumivoid.mixin;
+package ua.pp.lumivoid.iwtcms.mixin;
 
 import net.minecraft.server.MinecraftServer;
 import org.spongepowered.asm.mixin.Mixin;

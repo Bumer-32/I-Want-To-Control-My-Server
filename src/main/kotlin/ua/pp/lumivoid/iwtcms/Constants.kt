@@ -1,4 +1,4 @@
-package ua.pp.lumivoid
+package ua.pp.lumivoid.iwtcms
 
 import org.slf4j.LoggerFactory
 

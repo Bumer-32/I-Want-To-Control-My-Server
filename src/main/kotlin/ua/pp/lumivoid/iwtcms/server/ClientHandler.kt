@@ -1,10 +1,7 @@
-package ua.pp.lumivoid.server
+package ua.pp.lumivoid.iwtcms.server
 
-import net.minecraft.client.MinecraftClient
-import net.minecraft.server.MinecraftServer
-import net.minecraft.server.dedicated.DedicatedServer
 import org.slf4j.LoggerFactory
-import ua.pp.lumivoid.util.MinecraftServerStartedTrigger
+import ua.pp.lumivoid.iwtcms.util.MinecraftServerStartedTrigger
 import java.io.OutputStream
 import java.net.Socket
 import java.nio.charset.Charset
