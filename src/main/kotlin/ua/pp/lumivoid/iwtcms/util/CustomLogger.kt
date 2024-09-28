@@ -50,13 +50,14 @@ object CustomLogger {
             try {
                 running = true
                 while (running) {
+                    @Suppress("Deprecation")
                     val logs = output.toString()
                     if (logs.isNotEmpty()) {
                         Server.broadcast(logs)
                         output.reset()
                     }
                 }
-            } catch (e: IOException) {
+            } catch (_: IOException) {
             }
         }
 
