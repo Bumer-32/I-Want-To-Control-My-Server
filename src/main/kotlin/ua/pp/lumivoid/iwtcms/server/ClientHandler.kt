@@ -18,7 +18,7 @@ class ClientHandler(client: Socket?, private val server: Server) {
     fun run() {
         running = true
 
-        write("iwtcms_connected")
+        write("iwtcms_connected\n")
 
         while (running) {
             try {
@@ -29,7 +29,7 @@ class ClientHandler(client: Socket?, private val server: Server) {
                         break
                     }
                     "iwtcms_ping" -> {
-                        write("iwtcms_pong")
+                        write("iwtcms_pong\n")
                     }
                     else -> {
                         logger.info("Received data from ${client.inetAddress}: $data")
@@ -61,7 +61,7 @@ class ClientHandler(client: Socket?, private val server: Server) {
     }
 
     fun shutdown() {
-        write("iwtcms_shutdown")
+        write("iwtcms_shutdown\n")
         logger.info("Shutting down client ${client.inetAddress}")
         running = false
         client.close()
