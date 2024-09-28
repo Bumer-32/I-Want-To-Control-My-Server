@@ -1,8 +1,8 @@
-package ua.pp.lumivoid
+package ua.pp.lumivoid.iwtcms
 
 import net.fabricmc.api.ModInitializer
-import ua.pp.lumivoid.server.StoppedServerTrigger
-import ua.pp.lumivoid.util.MinecraftServerStartedTrigger
+import ua.pp.lumivoid.iwtcms.server.StoppedServerTrigger
+import ua.pp.lumivoid.iwtcms.util.MinecraftServerStartedTrigger
 
 object IWTCMS : ModInitializer {
 	private val logger = Constants.LOGGER

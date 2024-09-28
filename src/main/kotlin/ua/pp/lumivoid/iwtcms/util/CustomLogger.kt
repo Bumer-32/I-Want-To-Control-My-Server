@@ -1,4 +1,4 @@
-package ua.pp.lumivoid.util
+package ua.pp.lumivoid.iwtcms.util
 
 import org.apache.commons.io.output.ByteArrayOutputStream
 import org.apache.logging.log4j.Level.INFO
@@ -8,8 +8,8 @@ import org.apache.logging.log4j.core.appender.FileAppender
 import org.apache.logging.log4j.core.appender.WriterAppender
 import org.apache.logging.log4j.core.config.Configurator
 import org.apache.logging.log4j.core.layout.PatternLayout
-import ua.pp.lumivoid.Constants
-import ua.pp.lumivoid.server.Server
+import ua.pp.lumivoid.iwtcms.Constants
+import ua.pp.lumivoid.iwtcms.server.Server
 import java.io.IOException
 import java.io.OutputStreamWriter
 import kotlin.concurrent.thread

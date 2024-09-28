@@ -18,20 +18,19 @@
 	"entrypoints": {
 		"main": [
 			{
-				"value": "ua.pp.lumivoid.IWTCMS",
+				"value": "ua.pp.lumivoid.iwtcms.IWTCMS",
 				"adapter": "kotlin"
 			}
 		],
 
 		"preLaunch": [
 			{
-				"value": "ua.pp.lumivoid.PREIWTCMS",
+				"value": "ua.pp.lumivoid.iwtcms.PREIWTCMS",
 				"adapter": "kotlin"
 			}
 		]
 	},
 	"mixins": [
-		"iwtcms.mixins.json"
 	],
 	"depends": {
 		"fabricloader": ">=0.16.5",

@@ -1,7 +1,7 @@
-package ua.pp.lumivoid.server
+package ua.pp.lumivoid.iwtcms.server
 
 import org.slf4j.LoggerFactory
-import ua.pp.lumivoid.util.Config
+import ua.pp.lumivoid.iwtcms.util.Config
 import java.net.InetAddress
 import java.net.ServerSocket
 import java.net.SocketException
