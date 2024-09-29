@@ -1,4 +1,8 @@
 # I-Want-To-Control-My-Server
+### or just IWTCMS
+
+
+
 Simple minecraft mod, which allows you to connect to your server and control it
 
 Configuration
@@ -20,7 +24,21 @@ There's also simple example of client written on <a href="https://python.org">py
 https://gist.github.com/Bumer-32/99e64287299333e370751b58cabd5e98
 
 
-Plans:
+## Custom commands
+
+These commands available only through connecting to IWTCMS internal server, and didn't available from default minecraft console.
+
+To "execute" this command just send it to server.
+
+##### Note: All these command starts with "iwtcms_"
+
+| command         | function                                     | response          | responce type |
+|-----------------|----------------------------------------------|-------------------|---------------|
+| iwtcms_ping     | Pings server, e.g. you can check is it alive | iwtcms_pong\n     | text          |
+| iwtcms_shutdown | Shutdown connection with **this** client     | iwtcms_shutdown\n | text          |    
+
+
+## Plans:
 
 | Idea                                                                                      | Ready? |
 |-------------------------------------------------------------------------------------------|-------:|
