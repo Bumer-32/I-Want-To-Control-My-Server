@@ -9,7 +9,6 @@ import org.apache.logging.log4j.core.appender.WriterAppender
 import org.apache.logging.log4j.core.config.Configurator
 import org.apache.logging.log4j.core.layout.PatternLayout
 import ua.pp.lumivoid.iwtcms.Constants
-import ua.pp.lumivoid.iwtcms.server.Server
 import java.io.IOException
 import java.io.OutputStreamWriter
 import kotlin.concurrent.thread
@@ -53,7 +52,7 @@ object CustomLogger {
                     @Suppress("Deprecation")
                     val logs = output.toString()
                     if (logs.isNotEmpty()) {
-                        Server.broadcast(logs)
+                        Constants.SERVER_INSTANCE?.broadcast(logs)
                         output.reset()
                     }
                 }
