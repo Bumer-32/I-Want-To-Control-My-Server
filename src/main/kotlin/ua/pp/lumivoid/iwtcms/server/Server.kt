@@ -29,7 +29,6 @@ object Server {
                     val client = serverSocket!!.accept()
 
                     logger.info("New client connected: ${client.inetAddress}")
-                    logger.info(clients.toString())
 
                     val clientHandler = ClientHandler(client, this)
                     clients.add(clientHandler)
