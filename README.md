@@ -21,7 +21,7 @@ Configuration
 
 There's also simple example of client written on <a href="https://python.org">python</a>:
 
-https://gist.github.com/Bumer-32/99e64287299333e370751b58cabd5e98
+https://github.com/Bumer-32/I-Want-To-Control-My-Server/blob/main/iwtcms_client.py
 
 
 ## Custom commands
