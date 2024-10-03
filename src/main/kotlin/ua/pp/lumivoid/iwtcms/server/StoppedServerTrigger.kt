@@ -7,7 +7,7 @@ import ua.pp.lumivoid.iwtcms.util.CustomLogger
 /**
  * Trigger of Minecraft Server stopping
  *
- * Also you can request any log in last possible log time
+ * Also, you can request any log in last possible log time
  * for example for error in config, then user can see your log in end of it.
  */
 object StoppedServerTrigger {
