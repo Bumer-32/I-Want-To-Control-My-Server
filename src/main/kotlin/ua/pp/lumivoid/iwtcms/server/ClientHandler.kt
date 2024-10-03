@@ -1,11 +1,12 @@
 package ua.pp.lumivoid.iwtcms.server
 
 import org.slf4j.LoggerFactory
-import ua.pp.lumivoid.iwtcms.util.MinecraftServerStartedTrigger
+import ua.pp.lumivoid.iwtcms.util.MinecraftServerHandler
 import java.io.OutputStream
 import java.net.Socket
 import java.nio.charset.Charset
 import java.util.Scanner
+import kotlin.concurrent.thread
 
 class ClientHandler(client: Socket?, private val server: Server) {
     private val logger = LoggerFactory.getLogger("iwtcms internal server")
@@ -34,9 +35,9 @@ class ClientHandler(client: Socket?, private val server: Server) {
                     else -> {
                         logger.info("Received data from ${client.inetAddress}: $data")
                         try {
-                            if (MinecraftServerStartedTrigger.server != null) {
-                                MinecraftServerStartedTrigger.server!!.commandManager.executeWithPrefix(
-                                    MinecraftServerStartedTrigger.server!!.commandSource,
+                            if (MinecraftServerHandler.server != null) {
+                                MinecraftServerHandler.server!!.commandManager.executeWithPrefix(
+                                    MinecraftServerHandler.server!!.commandSource,
                                     data
                                 )
                             }
@@ -45,7 +46,7 @@ class ClientHandler(client: Socket?, private val server: Server) {
                         }
                     }
                 }
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 logger.warn("Connection lost with ${client.inetAddress}")
                 shutdown()
                 break
@@ -54,9 +55,11 @@ class ClientHandler(client: Socket?, private val server: Server) {
     }
 
     fun write(message: String) {
-        try {
-            writer.write((message).toByteArray(Charset.defaultCharset()))
-        } catch (e: Exception) {
+        thread { // thread for every client, because ALL clients must get message
+            try {
+                writer.write((message).toByteArray(Charset.defaultCharset()))
+            } catch (_: Exception) {
+            }
         }
     }
 

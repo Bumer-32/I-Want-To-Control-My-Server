@@ -13,14 +13,14 @@ object Config {
 
     init {
         if (!File(FabricLoader.getInstance().configDir.toString().toString()).exists()) File(FabricLoader.getInstance().configDir.toString().toString()).mkdirs()
-        val configFile = File(FabricLoader.getInstance().configDir.toString().toString() + "\\iwtcms.json")
+        val configFile = File(Constants.CONFIG_FILE)
         if (!configFile.exists()) configFile.createNewFile()
     }
 
     fun readConfig(): ConfigData {
         if (cachedConfig != null) return cachedConfig!!
 
-        val file = File(FabricLoader.getInstance().configDir.toString() + "\\iwtcms.json")
+        val file = File(Constants.CONFIG_FILE)
         if (file.exists()) {
             val jsonData = file.readText()
             try {
@@ -31,7 +31,7 @@ object Config {
             }
         }
 
-        val data = ConfigData(ip = "127.0.0.1", port = 25566, logLevel = "INFO")
+        val data = ConfigData(ip = "127.0.0.1", port = 25566, logLevel = "INFO", useSSL = false)
         writeConfig(data)
 
         return data
@@ -39,7 +39,7 @@ object Config {
 
     fun writeConfig(data: ConfigData) {
         cachedConfig = data
-        val file = File(FabricLoader.getInstance().configDir.toString() + "\\iwtcms.json")
+        val file = File(Constants.CONFIG_FILE)
         file.writeText(json.encodeToString(data))
     }
 }
