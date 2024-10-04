@@ -1,4 +1,5 @@
 import socket
+import hashlib
 import ssl
 import threading
 
@@ -10,7 +11,7 @@ def receive_messages(client_socket):
         try:
             message = client_socket.recv(1024).decode('utf-8')
             if message:
-                if message.lower() == 'shutdown':
+                if message.lower() == 'iwtcms_shutdown':
                     print("Server shut down. Exiting...")
                     client_socket.close()
                     exit(1)
@@ -42,6 +43,11 @@ def main():
 
         while True:
             message = input()
+
+            if message.startswith("iwtcms_login"):
+                _, password = message.split(" ", 1)
+                password_hash = hashlib.sha256(password.encode()).hexdigest()
+                message = f"iwtcms_login {password_hash}"
             message = message + "\n"
             client_socket.send(message.encode('utf-8'))
 

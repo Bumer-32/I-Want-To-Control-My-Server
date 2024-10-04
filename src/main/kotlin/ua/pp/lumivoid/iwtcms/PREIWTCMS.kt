@@ -12,11 +12,11 @@ object PREIWTCMS: PreLaunchEntrypoint {
     @Suppress("DEPRECATION")
     override fun onPreLaunch() {
         logger.info("Initialize pre launch iwtcms")
+        CustomLogger.setup()
         if (Config.readConfig().useSSL) {
             SSLServer.setup()
         } else {
             DefaultServer.setup()
         }
-        CustomLogger.setup()
     }
 }
