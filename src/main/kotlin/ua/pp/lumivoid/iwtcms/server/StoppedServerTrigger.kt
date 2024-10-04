@@ -7,8 +7,8 @@ import ua.pp.lumivoid.iwtcms.util.CustomLogger
 /**
  * Trigger of Minecraft Server stopping
  *
- * Also, you can request any log in last possible log time
- * for example for error in config, then user can see your log in end of it.
+ * Also, you can request any log in the last possible log time,
+ * for example, for error in config, then user can see your log at the end of it.
  */
 object StoppedServerTrigger {
     private val requestedLogs: MutableList<() -> Unit> = mutableListOf()
@@ -24,7 +24,7 @@ object StoppedServerTrigger {
     /**
      * Request log in last possible log time
      *
-     * After logs logger will be stopped
+     * After all logs, logger will be stopped
      */
     fun requestLog(log: () -> Unit) {
         requestedLogs.add(log)
