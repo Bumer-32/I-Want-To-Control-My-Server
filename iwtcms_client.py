@@ -9,7 +9,7 @@ def receive_messages(client_socket):
         try:
             message = client_socket.recv(1024).decode('utf-8')
             if message:
-                if message.lower() == 'shutdown':
+                if message.lower() == 'iwtcms_shutdown':
                     print("Server shut down. Exiting...")
                     client_socket.close()
                     exit(1)

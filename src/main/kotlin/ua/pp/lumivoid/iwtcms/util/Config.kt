@@ -31,7 +31,7 @@ object Config {
             }
         }
 
-        val data = ConfigData(ip = "127.0.0.1", port = 25566, logLevel = "INFO", useSSL = false)
+        val data = ConfigData(ip = "127.0.0.1", port = 25566, logLevel = "INFO", useSSL = false, useAuthentication = false, authenticationPassword = "")
         writeConfig(data)
 
         return data
