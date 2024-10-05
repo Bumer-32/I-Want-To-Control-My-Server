@@ -28,7 +28,7 @@ def main():
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
     context = ssl.create_default_context()
-
+    context.minimum_version = ssl.TLSVersion.TLSv1_2
     context.check_hostname = False  # ! IMPORTANT disable check for "handmade" certs
     context.verify_mode = ssl.CERT_NONE  # ! IMPORTANT disable check for "handmade" certs
 
