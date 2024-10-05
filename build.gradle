@@ -1,9 +1,11 @@
+import com.modrinth.minotaur.dependencies.ModDependency
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
 	id 'fabric-loom' version '1.8.2'
 	id 'org.jetbrains.kotlin.plugin.serialization' version '2.0.20'
 	id "org.jetbrains.kotlin.jvm" version "2.0.20"
+	id "com.modrinth.minotaur" version "2.+"
 }
 
 version = project.mod_version
@@ -16,6 +18,29 @@ base {
 }
 
 repositories {
+}
+
+
+modrinth {
+	token = project.hasProperty('modrinthToken') ? project.modrinthToken : System.getenv("MODRINTH_TOKEN")
+	projectId = project.id_main
+	versionNumber = project.mod_version
+	versionName = "IWTCMS ${project.mod_version}"
+	uploadFile = remapJar
+	//additionalFiles = [remapSourcesJar]
+	gameVersions = Eval.me(project.release_minecraft_versions)
+	versionType = project.release_type
+	loaders = ["fabric"]
+	syncBodyFrom = rootProject.file("README.md").text
+	changelog = rootProject.file("CHANGELOG.md").text
+	dependencies = [
+			new ModDependency(project.id_fabric_api, "required"),
+			new ModDependency(project.id_fabric_kotlin, "required"),
+	]
+
+	debugMode = true
+
+	tasks.modrinth.dependsOn(tasks.modrinthSyncBody)
 }
 
 dependencies {
