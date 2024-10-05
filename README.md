@@ -13,7 +13,9 @@ Simple minecraft mod, which allows you to connect to your server and control it
   "ip": "127.0.0.1",
   "port": 25566,
   "logLevel": "INFO",
-  "useSSL": true
+  "useSSL": false,
+  "useAuthentication": false,
+  "authenticationPassword": ""
 }
 ```
 ``ip: any ip you want to connect. By default it's 127.0.0.1 (localhost)``
@@ -22,8 +24,11 @@ Simple minecraft mod, which allows you to connect to your server and control it
 
 ``logLevel: how much logs you get in client. can be TRACE, DEBUG, INFO, WARN, ERROR. By default it's INFO``
 
-``useSSL: enabling SSL for internal server, clients must connect with SSL or they can't send/receive any data. By default it's disabled BUT highly recommended to enable it and setup SSL connection.``
+``useSSL: enabling SSL for internal server, clients must connect with SSL or they can't send/receive any data. By default it's disabled(false) BUT highly recommended to enable(true) it and setup SSL connection.``
 
+``useAuthentication: enabling password for clients, client can't receive/send messages from/to server before login. By default it's disabled(false) BUT highly recommended to enable(true) it password.``
+
+``"authenticationPassword": password for clients, works only if useAuthentication enabled, iwtcms_login {password} to login. By default it's "" and needs change.``
 ---
 
 There's also a simple example of client written on <a href="https://python.org">python</a>:
@@ -98,10 +103,11 @@ To "execute" this command, just send it to server.
 
 ##### Note: All these commands start with "iwtcms_"
 
-| command         | function                                     | response          | response type |
-|-----------------|----------------------------------------------|-------------------|---------------|
-| iwtcms_ping     | Pings server, e.g. you can check is it alive | iwtcms_pong\n     | text          |
-| iwtcms_shutdown | Shutdown connection with **this** client     | iwtcms_shutdown\n | text          |    
+| command         | args                                    | example usage                                                                 | function                                                                                                                            | response                                          | response type |
+|-----------------|-----------------------------------------|-------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------|---------------|
+| iwtcms_ping     |                                         | iwtcms_ping                                                                   | Pings server, e.g. you can check is it alive                                                                                        | iwtcms_pong\n                                     | text          |
+| iwtcms_login    | password: hash (sha256) coded in string | iwtcms_login a591a6d40bf420404a011733cfb7b190d62c65bf0bcda32b4f8e0f1fbc8ed2a3 | Logins if password enabled, if client not logged it can't receive/send messages from/to server and receives iwtcms_not_authorized\n | iwtcms_login_success\n \|\| iwtcms_login_failed\n | text          |
+| iwtcms_shutdown |                                         | iwtcms_shutdown                                                               | Shutdown connection with **this** client                                                                                            | iwtcms_shutdown\n                                 | text          |    
 
 ---
 
@@ -109,7 +115,7 @@ To "execute" this command, just send it to server.
 
 | Idea                                                                                      | Ready? |
 |-------------------------------------------------------------------------------------------|-------:|
-| Any security? Maybe password or something else, because now anyone can connect to console |    50% |
+| Any security? Maybe password or something else, because now anyone can connect to console |     ✔️ |
 | Cool remote client for server, maybe site with client or just application                 |      ❌ |
 | Port to forge (Not sure)                                                                  |      ❌ |
 
