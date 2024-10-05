@@ -38,8 +38,6 @@ modrinth {
 			new ModDependency(project.id_fabric_kotlin, "required"),
 	]
 
-	debugMode = true
-
 	tasks.modrinth.dependsOn(tasks.modrinthSyncBody)
 }
 
