@@ -2,7 +2,6 @@ package ua.pp.lumivoid.iwtcms.util
 
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import net.fabricmc.loader.api.FabricLoader
 import ua.pp.lumivoid.iwtcms.Constants
 import java.io.File
 
@@ -12,7 +11,7 @@ object Config {
     private var cachedConfig: ConfigData? = null
 
     init {
-        if (!File(FabricLoader.getInstance().configDir.toString().toString()).exists()) File(FabricLoader.getInstance().configDir.toString().toString()).mkdirs()
+        if (!File(Constants.CONFIG_FOLDER).exists()) File(Constants.CONFIG_FOLDER).mkdirs()
         val configFile = File(Constants.CONFIG_FILE)
         if (!configFile.exists()) configFile.createNewFile()
     }
