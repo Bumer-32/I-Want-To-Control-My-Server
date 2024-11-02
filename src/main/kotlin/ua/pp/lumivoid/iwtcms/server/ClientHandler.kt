@@ -7,7 +7,6 @@ import ua.pp.lumivoid.iwtcms.util.MinecraftServerHandler
 import java.io.OutputStream
 import java.net.Socket
 import java.nio.charset.Charset
-import java.security.MessageDigest
 import java.util.Scanner
 import kotlin.concurrent.thread
 
@@ -69,9 +68,6 @@ class ClientHandler(client: Socket?, private val server: Server) {
 
             data.startsWith("iwtcms_login") -> {
                 val loginData = data.split(" ")
-
-                logger.warn(loginData[1])
-                logger.warn(Constants.passwordHash)
 
                 if (loginData[1].replace("\n", "") == Constants.passwordHash) {
                     authorized = true
