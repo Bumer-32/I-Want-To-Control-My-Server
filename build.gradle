@@ -3,9 +3,10 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
 	id 'fabric-loom' version '1.8.2'
-	id 'org.jetbrains.kotlin.plugin.serialization' version '2.0.20'
-	id "org.jetbrains.kotlin.jvm" version "2.0.20"
+	id 'org.jetbrains.kotlin.plugin.serialization' version '2.0.21'
+	id "org.jetbrains.kotlin.jvm" version "2.0.21"
 	id "com.modrinth.minotaur" version "2.+"
+	id 'maven-publish'
 }
 
 version = project.mod_version
@@ -80,4 +81,28 @@ java {
 
 jar {
 	from("LICENSE")
+}
+
+publishing {
+	publications {
+		create("mavenJava", MavenPublication) {
+			artifactId = project.archives_base_name
+			groupId = project.maven_group
+			version = version
+			//noinspection GroovyAssignabilityCheck
+			from components.java
+		}
+	}
+
+	repositories {
+		maven {
+			name = 'Lumivoid'
+			url = 'https://maven.lumivoid.pp.ua/repository/lumivoid/'
+
+			credentials {
+				username = project.hasProperty("mavenUsername") ? project.mavenUsername : System.getenv("MAVEN_USERNAME")
+				password = project.hasProperty("mavenPassword") ? project.mavenPassword : System.getenv("MAVEN_PASSWORD")
+			}
+		}
+	}
 }

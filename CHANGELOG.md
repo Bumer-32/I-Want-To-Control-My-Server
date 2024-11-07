@@ -1,4 +1,3 @@
-1.2.0-FIX_1
+1.2.0-FIX_2
 
-No more credentials at logs
-Now must work at 1.21 and 1.21.1 and also 1.21.3 (maybe 1.21.2 also works but it didn't tested)
+<a href="https://github.com/Bumer-32/I-Want-To-Control-My-Server/issues/10">Fixed wrong working with filesystem for linux users</a> (Thank you <a href="https://github.com/AXCWG">AXCWG</a>)
