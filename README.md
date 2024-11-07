@@ -15,7 +15,7 @@ Simple minecraft mod, which allows you to connect to your server and control it
   "logLevel": "INFO",
   "useSSL": false,
   "useAuthentication": false,
-  "authenticationPassword": ""
+  "authenticationPassword": "",
 }
 ```
 ``ip: any ip you want to connect. By default it's 127.0.0.1 (localhost)``
@@ -29,9 +29,18 @@ Simple minecraft mod, which allows you to connect to your server and control it
 ``useAuthentication: enabling password for clients, client can't receive/send messages from/to server before login. By default it's disabled(false) BUT highly recommended to enable(true) it password.``
 
 ``"authenticationPassword": password for clients, works only if useAuthentication enabled, iwtcms_login {password} to login. By default it's "" and needs change.``
+
 ---
 
-There's also a simple example of client written on <a href="https://python.org">python</a>:
+## Clients
+#### Now IWTCMS didn't have any official released clients, but <a href="https://github.com/AXCWG">AXCWG</a> created fun made client written on C#
+### <a href="https://github.com/AXCWG/IWTCMS-Client">You can check IWTCMS client by AXCWG on github</a>
+
+&nbsp;
+
+#### There's also client examples written on python:
+
+Simple example of client written on <a href="https://python.org">python</a>:
 
 https://github.com/Bumer-32/I-Want-To-Control-My-Server/blob/main/iwtcms_client.py
 
@@ -116,7 +125,7 @@ To "execute" this command, just send it to server.
 | Idea                                                                                      | Ready? |
 |-------------------------------------------------------------------------------------------|-------:|
 | Any security? Maybe password or something else, because now anyone can connect to console |     ✔️ |
-| Cool remote client for server, maybe site with client or just application                 |      ❌ |
+| Cool remote client for server, maybe site with client or just application                 |    50% |
 | Port to forge (Not sure)                                                                  |      ❌ |
 
 ---
