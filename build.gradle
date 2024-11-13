@@ -4,15 +4,19 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
 	id 'fabric-loom' version '1.8.2'
 	id 'org.jetbrains.kotlin.plugin.serialization' version '2.0.21'
-	id "org.jetbrains.kotlin.jvm" version "2.0.21"
-	id "com.modrinth.minotaur" version "2.+"
+	id 'org.jetbrains.kotlin.jvm' version '2.0.21'
+	id 'com.modrinth.minotaur' version '2.+'
 	id 'maven-publish'
+	id 'io.ktor.plugin' version '3.0.1'
 }
 
 version = project.mod_version
 group = project.maven_group
 
 archives_base_name = "${project.archives_base_name}-${project.minecraft_version}"
+
+def isDevelopment = project.ext.has("development")
+applicationDefaultJvmArgs = ["-Dio.ktor.development=$isDevelopment"]
 
 base {
 	archivesName = project.archives_base_name
@@ -43,12 +47,27 @@ modrinth {
 }
 
 dependencies {
+	implementation 'io.ktor:ktor-server-core-jvm:3.0.1'
+	implementation 'io.ktor:ktor-server-websockets-jvm:3.0.1'
+
+
 	// To change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 	modImplementation "net.fabricmc:fabric-language-kotlin:${project.fabric_kotlin_version}"
+
+    implementation "io.ktor:ktor-server-core"
+    implementation "io.ktor:ktor-server-netty"
+	implementation "io.ktor:ktor-network-tls-certificates"
+	implementation "io.ktor:ktor-server-websockets"
+
+	//implementation libs.logback.classic
+	//testImplementation libs.ktor.server.test.host
+	//testImplementation libs.kotlin.test.junit
+
+	implementation "com.typesafe:config:${project.hocon_config_version}"
 }
 
 processResources {
