@@ -8,6 +8,8 @@ data class ConfigData(
     val port: Int,
     val logLevel: String,
     val useSSL: Boolean,
+    val sslAlias: String,
+    val sslPass: String,
     val useAuthentication: Boolean,
     val authenticationPassword: String
 )
