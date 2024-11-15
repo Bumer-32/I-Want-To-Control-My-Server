@@ -7,16 +7,12 @@ plugins {
 	id 'org.jetbrains.kotlin.jvm' version '2.0.21'
 	id 'com.modrinth.minotaur' version '2.+'
 	id 'maven-publish'
-	id 'io.ktor.plugin' version '3.0.1'
 }
 
 version = project.mod_version
 group = project.maven_group
 
 archives_base_name = "${project.archives_base_name}-${project.minecraft_version}"
-
-def isDevelopment = project.ext.has("development")
-applicationDefaultJvmArgs = ["-Dio.ktor.development=$isDevelopment"]
 
 base {
 	archivesName = project.archives_base_name
@@ -58,16 +54,24 @@ dependencies {
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 	modImplementation "net.fabricmc:fabric-language-kotlin:${project.fabric_kotlin_version}"
 
-    implementation "io.ktor:ktor-server-core"
-    implementation "io.ktor:ktor-server-netty"
-	implementation "io.ktor:ktor-network-tls-certificates"
-	implementation "io.ktor:ktor-server-websockets"
+	// Ktor cool thing, but launching with fabricmc looks terrible
+    implementation include("io.ktor:ktor-server-core:${project.ktor_version}")
+    implementation include("io.ktor:ktor-server-netty:${project.ktor_version}")
+	implementation include("io.ktor:ktor-network-tls-certificates:${project.ktor_version}")
+	implementation include("io.ktor:ktor-server-websockets:${project.ktor_version}")
+	include "io.ktor:ktor-events-jvm:${project.ktor_version}"
+	include "io.ktor:ktor-utils-jvm:${project.ktor_version}"
+	include "io.ktor:ktor-network-tls-jvm:${project.ktor_version}"
+	include "io.ktor:ktor-io-jvm:${project.ktor_version}"
+	include "io.ktor:ktor-http:${project.ktor_version}" // fuck this
+	include "io.ktor:ktor-websockets-jvm:${project.ktor_version}"
 
-	//implementation libs.logback.classic
-	//testImplementation libs.ktor.server.test.host
-	//testImplementation libs.kotlin.test.junit
+	include "io.netty:netty-transport-classes-kqueue:${project.netty_version}"
+	include "io.netty:netty-codec-http2:${project.netty_version}"
+	include "io.netty:netty-codec-http:${project.netty_version}"
+	// already launched ktor
 
-	implementation "com.typesafe:config:${project.hocon_config_version}"
+	implementation include("com.typesafe:config:${project.hocon_config_version}")
 }
 
 processResources {
