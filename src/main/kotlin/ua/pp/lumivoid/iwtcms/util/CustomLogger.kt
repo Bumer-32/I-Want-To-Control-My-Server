@@ -13,6 +13,7 @@ import org.apache.logging.log4j.core.config.Configurator
 import org.apache.logging.log4j.core.layout.PatternLayout
 import ua.pp.lumivoid.iwtcms.Constants
 import ua.pp.lumivoid.iwtcms.ktor.api.WsConsoleImpl
+import ua.pp.lumivoid.iwtcms.ktor.api.requests.LogsHistoryPage
 import java.io.IOException
 import java.io.OutputStreamWriter
 
@@ -53,9 +54,10 @@ object CustomLogger {
                 running = true
                 while (running) {
                     @Suppress("Deprecation")
-                    val logs = output.toString()
-                    if (logs.isNotEmpty()) {
-                        WsConsoleImpl.asWsConsole()?.sendMessage(logs)
+                    val log = output.toString()
+                    if (log.isNotEmpty()) {
+                        LogsHistoryPage.addLog(log)
+                        WsConsoleImpl.asWsConsole()?.sendMessage(log)
                         output.reset()
                     }
                 }
