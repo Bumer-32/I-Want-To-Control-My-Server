@@ -1,12 +1,16 @@
-package ua.pp.lumivoid.iwtcms.ktor.plugins
+package ua.pp.lumivoid.iwtcms.ktor.api.requests
 
 import io.ktor.http.ContentType
-import io.ktor.server.application.*
 import io.ktor.server.response.respondText
-import io.ktor.server.routing.*
+import io.ktor.server.routing.Routing
+import io.ktor.server.routing.get
+import ua.pp.lumivoid.iwtcms.Constants
 
-fun Application.configureRouting() {
-    routing {
+object MainPage {
+    private val logger = Constants.EMBEDDED_SERVER_LOGGER
+
+    val request: Routing.() -> Unit = {
+        logger.info("Initializing / request")
         get("/") {
             val response = """
                 <html>
