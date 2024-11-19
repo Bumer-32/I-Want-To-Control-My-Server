@@ -43,6 +43,11 @@ modrinth {
 }
 
 dependencies {
+	implementation 'io.ktor:ktor-server-core-jvm:3.0.1'
+	implementation 'io.ktor:ktor-server-host-common-jvm:3.0.1'
+	implementation 'io.ktor:ktor-server-status-pages-jvm:3.0.1'
+	implementation 'io.ktor:ktor-server-core-jvm:3.0.1'
+
 	// To change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
@@ -58,6 +63,7 @@ dependencies {
 	implementation include("io.ktor:ktor-server-sessions:${project.ktor_version}")
 	implementation include("io.ktor:ktor-serialization-kotlinx-json:${project.ktor_version}")
 	implementation include("io.ktor:ktor-server-content-negotiation:${project.ktor_version}")
+	implementation include("io.ktor:ktor-server-status-pages:$ktor_version")
 	include "io.ktor:ktor-events:${project.ktor_version}"
 	include "io.ktor:ktor-utils:${project.ktor_version}"
 	include "io.ktor:ktor-network-tls:${project.ktor_version}"
