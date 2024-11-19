@@ -1,8 +1,11 @@
 package ua.pp.lumivoid.iwtcms.ktor.plugins
 
+import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.*
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.server.plugins.statuspages.StatusPages
+import io.ktor.server.plugins.statuspages.statusFile
 import io.ktor.server.routing.*
 import io.ktor.server.sessions.*
 import io.ktor.server.websocket.*
@@ -30,6 +33,10 @@ fun Application.configureRouting() {
 
     install(ContentNegotiation) {
         json()
+    }
+
+    install(StatusPages) {
+        statusFile(HttpStatusCode.NotFound, filePattern = "/web/index.html")
     }
 
     val r = routing {
