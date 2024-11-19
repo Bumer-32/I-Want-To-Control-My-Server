@@ -7,7 +7,6 @@ import io.ktor.server.engine.ApplicationEngine
 import io.ktor.server.engine.sslConnector
 import ua.pp.lumivoid.iwtcms.Constants
 import ua.pp.lumivoid.iwtcms.ktor.plugins.configureRouting
-import ua.pp.lumivoid.iwtcms.ktor.plugins.configureSockets
 import ua.pp.lumivoid.iwtcms.util.Config
 import java.io.File
 import java.security.KeyStore
@@ -17,7 +16,6 @@ private val modConfig = Config.readConfig()
 
 fun Application.module() {
     configureRouting()
-    configureSockets()
 }
 
 fun ApplicationEngine.Configuration.envConfig() {
