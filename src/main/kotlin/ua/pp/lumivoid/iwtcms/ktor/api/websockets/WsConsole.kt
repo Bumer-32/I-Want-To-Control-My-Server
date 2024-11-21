@@ -1,19 +1,17 @@
 package ua.pp.lumivoid.iwtcms.ktor.api.websockets
 
-import io.ktor.http.HttpStatusCode
-import io.ktor.server.response.respondText
+import io.ktor.http.*
 import io.ktor.server.routing.*
-import io.ktor.server.sessions.get
-import io.ktor.server.sessions.sessions
+import io.ktor.server.sessions.*
 import io.ktor.server.websocket.*
 import io.ktor.websocket.*
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import ua.pp.lumivoid.iwtcms.Constants
-import ua.pp.lumivoid.iwtcms.ktor.api.User
+import ua.pp.lumivoid.iwtcms.ktor.api.UserAuthentication
+import ua.pp.lumivoid.iwtcms.ktor.api.requests.ApiListGET.registerAPI
 import ua.pp.lumivoid.iwtcms.ktor.cookie.UserSession
-import ua.pp.lumivoid.iwtcms.util.Config
 import ua.pp.lumivoid.iwtcms.util.MinecraftServerHandler
 
 interface WsConsole {
@@ -30,44 +28,37 @@ object WsConsoleImpl {
 
     val ws: Routing.() -> Unit = {
         logger.info("Initializing $PATH websocket")
+        registerAPI("WsConsole", PATH)
+
         webSocket(PATH) { // why console? because we use this socket same as console, receive logs and send commands
 
-            //authentication
-
-            var user: User? = null
-
-            if (Config.readConfig().useAuthentication) {
-
-                val session = call.sessions.get<UserSession>()
-
-                if (Config.readConfig().users.any {user = it; it.id == session?.id}) {
-                    if (user!!.permits["read real time logs"] == false) {
-                        close(CloseReason(CloseReason.Codes.VIOLATED_POLICY, "Forbidden"))
-                        return@webSocket
-                    }
-                } else {
-                    close(CloseReason(CloseReason.Codes.VIOLATED_POLICY, "Unauthorized"))
-                    return@webSocket
+            val status = UserAuthentication.doAuth(
+                call = call,
+                permit = "read real time logs",
+                success = {},
+                unauthorized = { runBlocking{ close(CloseReason(CloseReason.Codes.VIOLATED_POLICY, "Unauthorized")) } },
+                forbidden = {
+                    runBlocking{ close(CloseReason(CloseReason.Codes.VIOLATED_POLICY, "Forbidden")) }
                 }
-            }
+            )
+
+            if (status != HttpStatusCode.OK) return@webSocket
 
             // and ws
 
             send(Frame.Text("Connected to iwtcms logs"))
 
-            wsConsole = object : WsConsole {
-                override fun sendMessage(message: String) {
-                    launch {
-                        send(Frame.Text(message))
-                    }
-                }
-                override fun shutdown() {
-                    logger.info("Сlosing $PATH websocket")
-                    runBlocking { close(CloseReason(CloseReason.Codes.NORMAL, "shutting down server")) }
-                }
-            }
+            var allowExecution = false
 
-            if ((Config.readConfig().useAuthentication && user!!.permits.get("execute commands") == true) || !Config.readConfig().useAuthentication) {
+            UserAuthentication.doAuth(
+                call = call,
+                permit = "execute commands",
+                success = { allowExecution = true },
+                unauthorized = { allowExecution = false },
+                forbidden = { allowExecution = false }
+            )
+
+            if (allowExecution) {
                 runCatching {
                     incoming.consumeEach { frame ->
                         if (frame is Frame.Text) {
@@ -88,6 +79,18 @@ object WsConsoleImpl {
                     }
                 }.onFailure { exception ->
                     logger.error("WebSocket exception: ${exception.localizedMessage}")
+                }
+            }
+
+            wsConsole = object : WsConsole {
+                override fun sendMessage(message: String) {
+                    launch {
+                        send(Frame.Text(message))
+                    }
+                }
+                override fun shutdown() {
+                    logger.info("Сlosing $PATH websocket")
+                    runBlocking { close(CloseReason(CloseReason.Codes.NORMAL, "shutting down server")) }
                 }
             }
         }

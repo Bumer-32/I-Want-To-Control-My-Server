@@ -1,18 +1,14 @@
 package ua.pp.lumivoid.iwtcms.ktor.api.requests
 
-import io.ktor.http.ContentType
-import io.ktor.http.HttpStatusCode
-import io.ktor.server.request.receive
-import io.ktor.server.response.respondText
+import io.ktor.http.*
+import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import io.ktor.server.sessions.get
-import io.ktor.server.sessions.sessions
+import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import ua.pp.lumivoid.iwtcms.Constants
-import ua.pp.lumivoid.iwtcms.ktor.api.User
-import ua.pp.lumivoid.iwtcms.ktor.cookie.UserSession
-import ua.pp.lumivoid.iwtcms.util.Config
+import ua.pp.lumivoid.iwtcms.ktor.api.UserAuthentication
+import ua.pp.lumivoid.iwtcms.ktor.api.requests.ApiListGET.registerAPI
 
 object LogsHistoryGET {
     private val logger = Constants.EMBEDDED_SERVER_LOGGER
@@ -24,26 +20,18 @@ object LogsHistoryGET {
 
     val request: Routing.() -> Unit = {
         logger.info("Initializing $PATH request")
+        registerAPI("LogsHistoryGET",  PATH)
+
         get(PATH) {
-            if (Config.readConfig().useAuthentication) {
-
-                val session = call.sessions.get<UserSession>()
-
-                var user: User? = null
-
-                if (Config.readConfig().users.any {user = it; it.id == session?.id}) {
-                    if (user!!.permits["read logs history"] == false) {
-                        call.respondText("Forbidden", status = HttpStatusCode.Forbidden)
-                        return@get
-                    }
-                } else {
-                    call.respondText("Unauthorized", status = HttpStatusCode.Unauthorized)
-                    return@get
-                }
-            }
-
-            val response = json.encodeToString(logs)
-            call.respondText(response, contentType = ContentType.Text.Plain)
+            UserAuthentication.doAuth(
+                call = call,
+                permit = "read logs history",
+                success = {
+                    val response = json.encodeToString(logs)
+                    runBlocking { call.respondText(response, contentType = ContentType.Text.Plain) }
+                },
+                forbidden = { runBlocking { call.respondText("Forbidden", status = HttpStatusCode.Forbidden) } }
+            )
         }
     }
 
