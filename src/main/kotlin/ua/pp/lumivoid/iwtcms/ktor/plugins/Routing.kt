@@ -9,6 +9,7 @@ import io.ktor.server.plugins.statuspages.statusFile
 import io.ktor.server.routing.*
 import io.ktor.server.sessions.*
 import io.ktor.server.websocket.*
+import ua.pp.lumivoid.iwtcms.ktor.api.requests.ApiListGET
 import ua.pp.lumivoid.iwtcms.ktor.api.websockets.WsConsoleImpl
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.LoginPOST
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.LogsHistoryGET
@@ -45,6 +46,7 @@ fun Application.configureRouting() {
     MainGET.request.invoke(r)
     LogsHistoryGET.request.invoke(r)
     LoginPOST.request.invoke(r)
+    ApiListGET.request.invoke(r)
 
     WsConsoleImpl.ws.invoke(r)
 }
