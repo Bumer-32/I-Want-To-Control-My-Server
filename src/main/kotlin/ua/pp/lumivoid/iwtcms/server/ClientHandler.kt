@@ -18,6 +18,8 @@ class ClientHandler(client: Socket?, private val server: Server) {
     private val writer: OutputStream = this.client.getOutputStream()
     private var running = false
     private var authorized = false
+    private var times_tried = 0;
+
 
     fun run() {
         running = true
@@ -58,7 +60,7 @@ class ClientHandler(client: Socket?, private val server: Server) {
 
     private fun command(data: String) {
         when {
-            data  == "iwtcms_shutdown" -> {
+            data == "iwtcms_shutdown" -> {
                 shutdown()
             }
 
@@ -67,6 +69,10 @@ class ClientHandler(client: Socket?, private val server: Server) {
             }
 
             data.startsWith("iwtcms_login") -> {
+                if(authorized){
+                    write("Already logged in. \n")
+                    return
+                }
                 val loginData = data.split(" ")
 
                 if (loginData[1].replace("\n", "") == Constants.passwordHash) {
@@ -74,6 +80,13 @@ class ClientHandler(client: Socket?, private val server: Server) {
                     write("iwtcms_login_success\n")
                 } else {
                     write("iwtcms_login_failed\n", false)
+                    times_tried++
+                    if(times_tried > 2){
+                        write(("Maximum retries. Login failed. \n"), false)
+                        shutdown();
+                        logger.info("Login attempt failed for 3 wrong password input: ${client.inetAddress}")
+
+                    }
                 }
 
             }
@@ -89,7 +102,10 @@ class ClientHandler(client: Socket?, private val server: Server) {
 
                 try {
                     if (MinecraftServerHandler.server != null) {
-                        MinecraftServerHandler.server!!.commandManager.executeWithPrefix(MinecraftServerHandler.server!!.commandSource, data)
+                        MinecraftServerHandler.server!!.commandManager.executeWithPrefix(
+                            MinecraftServerHandler.server!!.commandSource,
+                            data
+                        )
                     }
                 } catch (e: Exception) {
                     e.stackTrace.forEach { logger.error(it.toString()) }
