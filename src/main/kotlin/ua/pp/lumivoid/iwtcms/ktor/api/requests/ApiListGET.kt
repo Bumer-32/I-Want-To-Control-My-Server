@@ -18,7 +18,8 @@ object ApiListGET {
 
     val request: Routing.() -> Unit = {
         logger.info("Initializing $PATH request")
-        registerAPI("apiList", PATH)
+        registerAPI("ApiListGET", PATH)
+
         get(PATH) {
             val response = json.encodeToString(apis)
             call.respondText(response, contentType = ContentType.Text.Plain)

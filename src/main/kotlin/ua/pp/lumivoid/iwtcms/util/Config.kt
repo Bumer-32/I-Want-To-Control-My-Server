@@ -52,7 +52,7 @@ object Config {
         config.getList("auth.users").forEach { configUser ->
             val user = (configUser as ConfigObject).toConfig()
             val newUsername = user.getString("name")
-            val newPassword = user.getString("password")
+            val newPassword = if (user.hasPath("password") && user.getString("password").isNotEmpty()) { user.getString("password") } else { null }
             val newPermits: MutableMap<String, Boolean> = mutableMapOf()
 
 
