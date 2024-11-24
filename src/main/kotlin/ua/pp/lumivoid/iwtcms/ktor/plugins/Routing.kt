@@ -14,6 +14,7 @@ import ua.pp.lumivoid.iwtcms.ktor.api.websockets.WsConsoleImpl
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.LoginPOST
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.LogsHistoryGET
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.MainGET
+import ua.pp.lumivoid.iwtcms.ktor.api.requests.PermitsGET
 import ua.pp.lumivoid.iwtcms.ktor.cookie.UserSession
 import kotlin.time.Duration.Companion.seconds
 
@@ -47,6 +48,7 @@ fun Application.configureRouting() {
     LogsHistoryGET.request.invoke(r)
     LoginPOST.request.invoke(r)
     ApiListGET.request.invoke(r)
+    PermitsGET.request.invoke(r)
 
     WsConsoleImpl.ws.invoke(r)
 }
