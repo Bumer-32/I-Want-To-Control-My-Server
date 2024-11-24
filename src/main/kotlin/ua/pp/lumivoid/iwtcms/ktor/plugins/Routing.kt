@@ -38,7 +38,7 @@ fun Application.configureRouting() {
     }
 
     install(StatusPages) {
-        statusFile(HttpStatusCode.NotFound, filePattern = "/web/index.html")
+        statusFile(HttpStatusCode.NotFound, filePattern = "/web/404.html")
     }
 
     val r = routing {
