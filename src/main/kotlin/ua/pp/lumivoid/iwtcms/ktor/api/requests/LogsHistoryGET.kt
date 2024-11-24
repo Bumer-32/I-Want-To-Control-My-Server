@@ -16,7 +16,7 @@ object LogsHistoryGET {
 
     private val logs = mutableListOf<String>()
 
-    private const val PATH = "/api/logsHistory/"
+    private const val PATH = "/api/logsHistory"
 
     val request: Routing.() -> Unit = {
         logger.info("Initializing $PATH request")
