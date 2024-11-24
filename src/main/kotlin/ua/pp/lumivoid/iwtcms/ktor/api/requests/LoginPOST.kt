@@ -17,7 +17,7 @@ import ua.pp.lumivoid.iwtcms.util.Config
 object LoginPOST {
     private val logger = Constants.EMBEDDED_SERVER_LOGGER
 
-    private const val PATH = "/api/login/"
+    private const val PATH = "/api/login"
 
     val request: Routing.() -> Unit = {
         logger.info("Initializing $PATH request")
@@ -27,10 +27,9 @@ object LoginPOST {
         post(PATH) {
             val payload = call.receive<LoginPayload>()
 
-            var user: User? = null
+            var user: User? = Config.readConfig().users.find { it.username == payload.username && it.password == payload.password }
 
-            if (Config.readConfig().users.any {user = it; it.username == payload.username && it.password == payload.password }) {
-                user!!
+            if (user != null) {
                 call.sessions.set(UserSession(user.username, user.id))
 
                 call.respondText("Login successful")

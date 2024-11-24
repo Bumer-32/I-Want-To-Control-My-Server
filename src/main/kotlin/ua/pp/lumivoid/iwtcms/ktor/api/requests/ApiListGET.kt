@@ -14,7 +14,7 @@ object ApiListGET {
 
     private val apis = mutableMapOf<String, String>()
 
-    private const val PATH = "/apiList/"
+    private const val PATH = "/apiList"
 
     val request: Routing.() -> Unit = {
         logger.info("Initializing $PATH request")

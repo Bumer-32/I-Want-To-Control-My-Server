@@ -11,7 +11,6 @@ import kotlinx.coroutines.runBlocking
 import ua.pp.lumivoid.iwtcms.Constants
 import ua.pp.lumivoid.iwtcms.ktor.api.UserAuthentication
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.ApiListGET.registerAPI
-import ua.pp.lumivoid.iwtcms.ktor.cookie.UserSession
 import ua.pp.lumivoid.iwtcms.util.MinecraftServerHandler
 
 interface WsConsole {
@@ -24,20 +23,23 @@ object WsConsoleImpl {
 
     private var wsConsole: WsConsole? = null
 
-    private const val PATH = "/ws/console/"
+    private const val PATH = "/ws/console"
 
     val ws: Routing.() -> Unit = {
         logger.info("Initializing $PATH websocket")
         registerAPI("WsConsole", PATH)
 
         webSocket(PATH) { // why console? because we use this socket same as console, receive logs and send commands
-
+            logger.info("connect")
             val status = UserAuthentication.doAuth(
                 call = call,
                 permit = "read real time logs",
                 success = {},
-                unauthorized = { runBlocking{ close(CloseReason(CloseReason.Codes.VIOLATED_POLICY, "Unauthorized")) } },
+                unauthorized = {
+                    logger.info("Unauthorized user tried to connect to $PATH websocket")
+                    runBlocking{ close(CloseReason(CloseReason.Codes.VIOLATED_POLICY, "Unauthorized")) } },
                 forbidden = {
+                    logger.info("Forbidden user tried to connect to $PATH websocket")
                     runBlocking{ close(CloseReason(CloseReason.Codes.VIOLATED_POLICY, "Forbidden")) }
                 }
             )
@@ -45,6 +47,8 @@ object WsConsoleImpl {
             if (status != HttpStatusCode.OK) return@webSocket
 
             // and ws
+
+            logger.info("login")
 
             send(Frame.Text("Connected to iwtcms logs"))
 
@@ -59,6 +63,7 @@ object WsConsoleImpl {
             )
 
             if (allowExecution) {
+                logger.info("User is allowed to execute commands")
                 runCatching {
                     incoming.consumeEach { frame ->
                         if (frame is Frame.Text) {
