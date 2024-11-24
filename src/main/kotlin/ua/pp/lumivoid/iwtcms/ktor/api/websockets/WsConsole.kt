@@ -2,7 +2,6 @@ package ua.pp.lumivoid.iwtcms.ktor.api.websockets
 
 import io.ktor.http.*
 import io.ktor.server.routing.*
-import io.ktor.server.sessions.*
 import io.ktor.server.websocket.*
 import io.ktor.websocket.*
 import kotlinx.coroutines.channels.consumeEach
@@ -49,6 +48,18 @@ object WsConsoleImpl {
 
             send(Frame.Text("Connected to iwtcms logs"))
 
+            wsConsole = object : WsConsole {
+                override fun sendMessage(message: String) {
+                    launch {
+                        send(Frame.Text(message))
+                    }
+                }
+                override fun shutdown() {
+                    logger.info("Сlosing $PATH websocket")
+                    runBlocking { close(CloseReason(CloseReason.Codes.NORMAL, "shutting down server")) }
+                }
+            }
+
             var allowExecution = false
 
             UserAuthentication.doAuth(
@@ -80,18 +91,6 @@ object WsConsoleImpl {
                     }
                 }.onFailure { exception ->
                     logger.error("WebSocket exception: ${exception.localizedMessage}")
-                }
-            }
-
-            wsConsole = object : WsConsole {
-                override fun sendMessage(message: String) {
-                    launch {
-                        send(Frame.Text(message))
-                    }
-                }
-                override fun shutdown() {
-                    logger.info("Сlosing $PATH websocket")
-                    runBlocking { close(CloseReason(CloseReason.Codes.NORMAL, "shutting down server")) }
                 }
             }
         }
