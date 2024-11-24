@@ -30,7 +30,6 @@ object WsConsoleImpl {
         registerAPI("WsConsole", PATH)
 
         webSocket(PATH) { // why console? because we use this socket same as console, receive logs and send commands
-            logger.info("connect")
             val status = UserAuthentication.doAuth(
                 call = call,
                 permit = "read real time logs",
@@ -48,8 +47,6 @@ object WsConsoleImpl {
 
             // and ws
 
-            logger.info("login")
-
             send(Frame.Text("Connected to iwtcms logs"))
 
             var allowExecution = false
@@ -63,7 +60,6 @@ object WsConsoleImpl {
             )
 
             if (allowExecution) {
-                logger.info("User is allowed to execute commands")
                 runCatching {
                     incoming.consumeEach { frame ->
                         if (frame is Frame.Text) {
