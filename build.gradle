@@ -1,3 +1,4 @@
+//file:noinspection GrDeprecatedAPIUsage
 import com.modrinth.minotaur.dependencies.ModDependency
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -83,14 +84,6 @@ dependencies {
 	implementation include("commons-codec:commons-codec:${project.commons_codec}")
 }
 
-processResources {
-	inputs.property "version", project.version
-
-	filesMatching("fabric.mod.json") {
-		expand "version": project.version
-	}
-}
-
 tasks.withType(JavaCompile).configureEach {
 	it.options.release = 21
 }
@@ -111,8 +104,39 @@ java {
 	targetCompatibility = JavaVersion.VERSION_21
 }
 
+tasks.register("preparePythonClient") {
+	group = "build"
+
+	def clientDir = file("$buildDir/../python")
+	def outputZip = file("$buildDir/resources/web/iwtcms_client.zip")
+
+	inputs.dir(clientDir)
+	outputs.file(outputZip)
+
+	doLast {
+		ant.zip(destfile: outputZip, basedir: clientDir)
+	}
+}
+
 jar {
 	from("LICENSE")
+}
+
+processResources {
+	dependsOn tasks.preparePythonClient
+
+	inputs.property "version", project.version
+
+	filesMatching("fabric.mod.json") {
+		expand "version": project.version
+	}
+
+	doLast {
+		copy {
+			from("$buildDir/resources/web/iwtcms_client.zip")
+			into("$buildDir/resources/main/web")
+		}
+	}
 }
 
 publishing {
