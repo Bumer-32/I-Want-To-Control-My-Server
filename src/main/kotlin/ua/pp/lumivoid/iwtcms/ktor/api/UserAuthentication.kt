@@ -30,15 +30,16 @@ object UserAuthentication {
         }
     ) : HttpStatusCode {
         val session = call.sessions.get<UserSession>()
-        var user: User? = null
 
         if (!Config.readConfig().useAuthentication) {
             success()
             return HttpStatusCode.OK
         }
 
-        if (Config.readConfig().users.any { user = it; it.username == "anonymous"}) {
-            if (user!!.permits[permit] == true) {
+        val anonymousUser: User? = Config.readConfig().users.find { it.username == "anonymous" }
+
+        if (session == null && anonymousUser != null) {
+            if (anonymousUser.permits[permit] == true) {
                 success()
                 return HttpStatusCode.OK
             } else {
@@ -47,13 +48,10 @@ object UserAuthentication {
             }
         }
 
-        if (session == null) {
-            unauthorized()
-            return HttpStatusCode.Unauthorized
-        }
+        val user: User? = Config.readConfig().users.find { it.username == session?.name && it.id == session.id }
 
-        if (Config.readConfig().users.any {user = it; it.username == session.name && it.id == session.id} ) {
-            if (user!!.permits[permit] == true) {
+        if (user != null) {
+            if (user.permits[permit] == true) {
                 success()
                 return HttpStatusCode.OK
             } else {
