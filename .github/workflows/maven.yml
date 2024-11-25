@@ -1,6 +1,6 @@
 # Publishing to maven
 
-name: publish
+name: maven
 
 on:
   workflow_dispatch:
@@ -15,19 +15,33 @@ jobs:
     if: "!contains(github.ref, 'refs/tags/skip-ci')"
 
     name: build and publish to maven
+    strategy:
+      matrix:
+        python: [
+          3.13,
+        ]
     runs-on: ubuntu-latest
 
     steps:
       - name: checkout repository
         uses: actions/checkout@v4
+
+      - name: setup python ${{ matrix.python }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+
       - name: validate gradle wrapper
         uses: gradle/actions/wrapper-validation@v3
+
       - name: setup jdk
         uses: actions/setup-java@v4
         with:
           java-version: 21
           distribution: 'microsoft'
+
       - name: make gradle wrapper executable
         run: chmod +x ./gradlew
+
       - name: building and publishing
         run: ./gradlew publish -PmavenUsername=${{ secrets.MAVEN_USERNAME }} -PmavenPassword=${{ secrets.MAVEN_PASSWORD }}
