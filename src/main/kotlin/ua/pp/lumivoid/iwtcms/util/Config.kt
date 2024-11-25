@@ -71,11 +71,12 @@ object Config {
         return ConfigData(
             ip = config.getString("server.ip"),
             port = config.getInt("server.port"),
-            logLevel = config.getString("server.logLevel"),
-            useSSL = config.getBoolean("ssl.useSSL"),
-            sslAlias = config.getString("ssl.sslAlias"),
-            sslPass = config.getString("ssl.sslPass"),
-            useAuthentication = config.getBoolean("auth.useAuthentication"),
+            logLevel = config.getString("server.log Level"),
+            useSSL = config.getBoolean("ssl.use SSL"),
+            customSertificate = config.getBoolean("ssl.custom Sertificate"),
+            sslAlias = config.getString("ssl.ssl Alias"),
+            sslPass = config.getString("ssl.ssl Pass"),
+            useAuthentication = config.getBoolean("auth.use Authentication"),
             users = users
         )
     }

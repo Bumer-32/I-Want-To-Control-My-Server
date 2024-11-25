@@ -1,6 +1,5 @@
 package ua.pp.lumivoid.iwtcms.util
 
-import com.typesafe.config.ConfigList
 import kotlinx.serialization.Serializable
 import ua.pp.lumivoid.iwtcms.ktor.api.User
 
@@ -10,6 +9,7 @@ data class ConfigData(
     val port: Int,
     val logLevel: String,
     val useSSL: Boolean,
+    val customSertificate: Boolean,
     val sslAlias: String,
     val sslPass: String,
     val useAuthentication: Boolean,
