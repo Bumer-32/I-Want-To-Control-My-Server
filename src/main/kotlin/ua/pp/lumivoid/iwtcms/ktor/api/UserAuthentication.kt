@@ -20,6 +20,7 @@ object UserAuthentication {
     *
     * returns HTTP status:
     * */
+    @Suppress("t")
     fun doAuth(
         call: ApplicationCall, permit: String,
         success: () -> Unit, unauthorized: () -> Unit = {
@@ -29,13 +30,12 @@ object UserAuthentication {
             runBlocking{ call.respondText("Forbidden", status = HttpStatusCode.Forbidden) }
         }
     ) : HttpStatusCode {
-        val session = call.sessions.get<UserSession>()
-
         if (!Config.readConfig().useAuthentication) {
             success()
             return HttpStatusCode.OK
         }
 
+        val session = call.sessions.get<UserSession>()
         val anonymousUser: User? = Config.readConfig().users.find { it.username == "anonymous" }
 
         if (session == null && anonymousUser != null) {
@@ -51,12 +51,26 @@ object UserAuthentication {
         val user: User? = Config.readConfig().users.find { it.username == session?.name && it.id == session.id }
 
         if (user != null) {
+            println("yyyyy")
             if (user.permits[permit] == true) {
                 success()
                 return HttpStatusCode.OK
-            } else {
+            } else if (user.permits[permit] == false) {
                 forbidden()
                 return HttpStatusCode.Forbidden
+            } else {
+                // if permit == null try anonymous
+                if (anonymousUser?.permits[permit] == true) {
+                    success()
+                    return HttpStatusCode.OK
+                } else if (user.permits[permit] == false) {
+                    forbidden()
+                    return HttpStatusCode.Forbidden
+                } else {
+                    // if even anonymous not found - forbidden
+                    forbidden()
+                    return HttpStatusCode.Forbidden
+                }
             }
         }
 
