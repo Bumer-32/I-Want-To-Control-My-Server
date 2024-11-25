@@ -1,5 +1,8 @@
 package ua.pp.lumivoid.iwtcms.util
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.apache.commons.io.output.ByteArrayOutputStream
 import org.apache.logging.log4j.Level
 import org.apache.logging.log4j.LogManager
@@ -9,9 +12,10 @@ import org.apache.logging.log4j.core.appender.WriterAppender
 import org.apache.logging.log4j.core.config.Configurator
 import org.apache.logging.log4j.core.layout.PatternLayout
 import ua.pp.lumivoid.iwtcms.Constants
+import ua.pp.lumivoid.iwtcms.ktor.api.websockets.WsConsoleImpl
+import ua.pp.lumivoid.iwtcms.ktor.api.requests.LogsHistoryGET
 import java.io.IOException
 import java.io.OutputStreamWriter
-import kotlin.concurrent.thread
 
 object CustomLogger {
     private val logger = Constants.LOGGER
@@ -45,14 +49,15 @@ object CustomLogger {
         customAppender.start()
         rootLogger.addAppender(customAppender)
 
-        thread {
+        CoroutineScope(Dispatchers.Default).launch {
             try {
                 running = true
                 while (running) {
                     @Suppress("Deprecation")
-                    val logs = output.toString()
-                    if (logs.isNotEmpty()) {
-                        Constants.SERVER_INSTANCE?.broadcast(logs)
+                    val log = output.toString()
+                    if (log.isNotEmpty()) {
+                        LogsHistoryGET.addLog(log)
+                        WsConsoleImpl.asWsConsole()?.sendMessage(log)
                         output.reset()
                     }
                 }
