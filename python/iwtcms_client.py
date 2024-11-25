@@ -1,7 +1,6 @@
 import asyncio
 import ssl
 import json
-import os
 import sys
 import time
 import websockets
@@ -15,6 +14,7 @@ logs_history_url: str
 login_url: str
 permits_url: str
 ws_url: str
+use_ssl: bool
 use_login: bool
 permits: dict = {
     "read real time logs" : True,
@@ -28,7 +28,7 @@ async def handle_input(websocket):
 
         if message == "iwtcms_bye":
             # noinspection PyProtectedMember
-            os._exit(0)
+            quit(0)
 
         await websocket.send(message)
 
@@ -39,15 +39,20 @@ async def handle_output(websocket):
             print(f"> {response}")
     except websockets.exceptions.ConnectionClosedOK:
         print("Connection closed by server")
+        # noinspection PyProtectedMember
+        quit(0)
     return
 
 
 # noinspection t
 async def main():
     global permits
-    ssl_context = ssl.create_default_context()
-    ssl_context.check_hostname = False # ! IMPORTANT disable check for "handmade" certs
-    ssl_context.verify_mode = ssl.CERT_NONE # ! IMPORTANT disable check for "handmade" certs
+    ssl_context = None
+
+    if use_ssl:
+        ssl_context = ssl.create_default_context()
+        ssl_context.check_hostname = False # ! IMPORTANT disable check for "handmade" certs
+        ssl_context.verify_mode = ssl.CERT_NONE # ! IMPORTANT disable check for "handmade" certs
 
     session = requests.Session()
     session.verify = False # ! IMPORTANT disable check for "handmade" certs
@@ -135,9 +140,9 @@ if __name__ == "__main__":
             base_url = sys.argv[i + 1]
         elif v == "-help" or v == "-man":
             print(f"Usage: {sys.argv[0]} -u <username> -p <password> -h <host>")
-            print(f"Example:  {sys.argv[0]} -u admin -p iwtcms -h localhost:25566")
+            print(f"Example:  {sys.argv[0]} -u admin -p iwtcms -h https://localhost:25566")
             # noinspection PyProtectedMember
-            os._exit(0)
+            quit(0)
 
     try:
         # noinspection PyUnboundLocalVariable
@@ -162,8 +167,10 @@ if __name__ == "__main__":
     login_url = f"{base_url}/api/login"
     permits_url = f"{base_url}/api/permits/"
     if base_url.startswith("https://"):
+        use_ssl = True
         ws_url = f"wss://{base_url.replace("https://", "")}/ws/console"
     else:
+        use_ssl = False
         # noinspection HttpUrlsUsage
         ws_url = f"ws://{base_url.replace("http://", "")}/ws/console"
 
