@@ -58,9 +58,9 @@ object Config {
 
             val permits = user.getConfig("permits")
 
-            newPermits.put("read real time logs", permits.getBoolean("read real time logs"))
-            newPermits.put("read logs history", permits.getBoolean("read logs history"))
-            newPermits.put("execute commands", permits.getBoolean("execute commands"))
+            if (permits.hasPath("read real time logs")) newPermits.put("read real time logs", permits.getBoolean("read real time logs"))
+            if (permits.hasPath("read logs history")) newPermits.put("read logs history", permits.getBoolean("read logs history"))
+            if (permits.hasPath("execute commands")) newPermits.put("execute commands", permits.getBoolean("execute commands"))
 
             val newId: String = DigestUtils.sha256Hex((newUsername + newPassword.toString()))
 
