@@ -22,6 +22,9 @@ Simple minecraft mod, which allows you to connect to your server and control it
 &nbsp;
 
 ### [Official IWTCMS CLI client](https://github.com/Bumer-32/I-Want-To-Control-My-Server/blob/main/python/iwtcms_client.py)
+
+To launch an official client, type: ``python iwtcms_client.py --help``
+
 ### [Unofficial IWTCMS GUI client by AXCWG](https://github.com/AXCWG/IWTCMS-Client)
 
 &nbsp;

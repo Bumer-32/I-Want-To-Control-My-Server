@@ -138,7 +138,7 @@ if __name__ == "__main__":
             password = sys.argv[i + 1]
         elif v == "-h" or v == "-host":
             base_url = sys.argv[i + 1]
-        elif v == "-help" or v == "-man":
+        elif v == "--help" or v == "--man":
             print(f"Usage: {sys.argv[0]} -u <username> -p <password> -h <host>")
             print(f"Example:  {sys.argv[0]} -u admin -p iwtcms -h https://localhost:25566")
             # noinspection PyProtectedMember
@@ -148,7 +148,8 @@ if __name__ == "__main__":
         # noinspection PyUnboundLocalVariable
         base_url
     except NameError:
-        print("Host not specified")
+        print(f"Usage: {sys.argv[0]} -u <username> -p <password> -h <host>")
+        print(f"Example:  {sys.argv[0]} -u admin -p iwtcms -h https://localhost:25566")
         # noinspection PyProtectedMember
         os._exit(1)
 
