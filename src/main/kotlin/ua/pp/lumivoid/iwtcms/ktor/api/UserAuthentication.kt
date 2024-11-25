@@ -51,7 +51,6 @@ object UserAuthentication {
         val user: User? = Config.readConfig().users.find { it.username == session?.name && it.id == session.id }
 
         if (user != null) {
-            println("yyyyy")
             if (user.permits[permit] == true) {
                 success()
                 return HttpStatusCode.OK
