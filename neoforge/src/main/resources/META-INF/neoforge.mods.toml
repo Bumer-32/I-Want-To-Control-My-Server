@@ -18,21 +18,28 @@ modId = "neoforge"
 type = "required"
 versionRange = "[21.0,)"
 ordering = "NONE"
-side = "BOTH"
+side = "SERVER"
 
 [[dependencies.iwtcms]]
 modId = "minecraft"
 type = "required"
 versionRange = "[1.21,)"
 ordering = "NONE"
-side = "BOTH"
+side = "SERVER"
 
 [[dependencies.iwtcms]]
 modId = "architectury"
 type = "required"
 versionRange = "[13.0.2,)"
 ordering = "AFTER"
-side = "BOTH"
+side = "SERVER"
+
+[[dependencies.iwtcms]]
+modId = "kotlinforforge"
+type = "required"
+versionRange = "[13.0.2,)"
+ordering = "AFTER"
+side = "SERVER"
 
 [[mixins]]
 config = "iwtcms.mixins.json"

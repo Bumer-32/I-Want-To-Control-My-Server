@@ -111,8 +111,6 @@ subprojects {
 //}
 //
 //dependencies {
-//	implementation "thedarkcolour:kotlinforforge-neoforge:${project.kotlin_for_forge_version}"
-//
 //	// Ktor cool thing, but launching with fabricmc looks terrible
 //    implementation include("io.ktor:ktor-server-core:${project.ktor_version}")
 //    implementation include("io.ktor:ktor-server-netty:${project.ktor_version}")
