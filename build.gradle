@@ -1,164 +1,176 @@
 //file:noinspection GrDeprecatedAPIUsage
-import com.modrinth.minotaur.dependencies.ModDependency
+//import com.modrinth.minotaur.dependencies.ModDependency
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-	id 'fabric-loom' version '1.8.2'
+	id 'dev.architectury.loom' version '1.6-SNAPSHOT' apply false
+	id 'architectury-plugin' version '3.4-SNAPSHOT'
+	id 'com.github.johnrengelman.shadow' version '8.1.1' apply false
 	id 'org.jetbrains.kotlin.plugin.serialization' version '2.0.21'
 	id 'org.jetbrains.kotlin.jvm' version '2.0.21'
-	id 'com.modrinth.minotaur' version '2.+'
-	id 'maven-publish'
+	//id 'com.modrinth.minotaur' version '2.+' apply false
 }
 
-version = project.mod_version
-group = project.maven_group
-
-archives_base_name = "${project.archives_base_name}-${project.minecraft_version}"
-
-base {
-	archivesName = project.archives_base_name
+architectury {
+	minecraft = project.minecraft_version
 }
 
-repositories {
+allprojects {
+	version = project.mod_version
+	group = project.maven_group
 }
 
+subprojects {
+	apply plugin: 'dev.architectury.loom'
+	apply plugin: 'architectury-plugin'
+	apply plugin: 'maven-publish'
 
-modrinth {
-	token = project.hasProperty('modrinthToken') ? project.modrinthToken : System.getenv("MODRINTH_TOKEN")
-	projectId = project.id_main
-	versionNumber = project.mod_version
-	versionName = "IWTCMS ${project.mod_version}"
-	uploadFile = remapJar
-	//additionalFiles = [remapSourcesJar]
-	gameVersions = Eval.me(project.release_minecraft_versions)
-	versionType = project.release_type
-	loaders = ["fabric"]
-	syncBodyFrom = rootProject.file("README.md").text
-	changelog = rootProject.file("CHANGELOG.md").text
-	dependencies = [
-			new ModDependency(project.id_fabric_api, "required"),
-			new ModDependency(project.id_fabric_kotlin, "required"),
-	]
-
-	tasks.modrinth.dependsOn(tasks.modrinthSyncBody)
-}
-
-dependencies {
-	implementation 'io.ktor:ktor-server-core-jvm:3.0.1'
-	implementation 'io.ktor:ktor-server-host-common-jvm:3.0.1'
-	implementation 'io.ktor:ktor-server-status-pages-jvm:3.0.1'
-	implementation 'io.ktor:ktor-server-core-jvm:3.0.1'
-
-	// To change the versions see the gradle.properties file
-	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-	modImplementation "net.fabricmc:fabric-language-kotlin:${project.fabric_kotlin_version}"
-
-	// Ktor cool thing, but launching with fabricmc looks terrible
-    implementation include("io.ktor:ktor-server-core:${project.ktor_version}")
-    implementation include("io.ktor:ktor-server-netty:${project.ktor_version}")
-	implementation include("io.ktor:ktor-network-tls-certificates:${project.ktor_version}")
-	implementation include("io.ktor:ktor-server-websockets:${project.ktor_version}")
-	implementation include("io.ktor:ktor-server-sessions:${project.ktor_version}")
-	implementation include("io.ktor:ktor-serialization-kotlinx-json:${project.ktor_version}")
-	implementation include("io.ktor:ktor-server-content-negotiation:${project.ktor_version}")
-	implementation include("io.ktor:ktor-server-status-pages:$ktor_version")
-	include "io.ktor:ktor-events:${project.ktor_version}"
-	include "io.ktor:ktor-utils:${project.ktor_version}"
-	include "io.ktor:ktor-network-tls:${project.ktor_version}"
-	include "io.ktor:ktor-io:${project.ktor_version}"
-	include "io.ktor:ktor-http:${project.ktor_version}" // fuck this
-	include "io.ktor:ktor-websockets:${project.ktor_version}"
-	include "io.ktor:ktor-serialization:${project.ktor_version}"
-	include "io.ktor:ktor-serialization-kotlinx:${project.ktor_version}"
-
-	include "io.netty:netty-transport-classes-kqueue:${project.netty_version}"
-	include "io.netty:netty-codec-http2:${project.netty_version}"
-	include "io.netty:netty-codec-http:${project.netty_version}"
-	// already launched ktor
-
-	implementation include("com.typesafe:config:${project.hocon_config_version}")
-
-	implementation include("commons-codec:commons-codec:${project.commons_codec}")
-}
-
-tasks.withType(JavaCompile).configureEach {
-	it.options.release = 21
-}
-
-tasks.withType(KotlinCompile).configureEach {
-	kotlinOptions {
-		jvmTarget = 21
-	}
-}
-
-java {
-	// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
-	// if it is present.
-	// If you remove this line, sources will not be generated.
-	withSourcesJar()
-
-	sourceCompatibility = JavaVersion.VERSION_21
-	targetCompatibility = JavaVersion.VERSION_21
-}
-
-tasks.register("preparePythonClient") {
-	group = "build"
-
-	def clientDir = file("$buildDir/../python")
-	def outputZip = file("$buildDir/resources/web/iwtcms_client.zip")
-
-	inputs.dir(clientDir)
-	outputs.file(outputZip)
-
-	doLast {
-		ant.zip(destfile: outputZip, basedir: clientDir)
-	}
-}
-
-jar {
-	from("LICENSE")
-}
-
-processResources {
-	dependsOn tasks.preparePythonClient
-
-	inputs.property "version", project.version
-
-	filesMatching("fabric.mod.json") {
-		expand "version": project.version
-	}
-
-	doLast {
-		copy {
-			from("$buildDir/resources/web/iwtcms_client.zip")
-			into("$buildDir/resources/main/web")
-		}
-	}
-}
-
-publishing {
-	publications {
-		create("mavenJava", MavenPublication) {
-			artifactId = project.archives_base_name
-			groupId = project.maven_group
-			version = version
-			//noinspection GroovyAssignabilityCheck
-			from components.java
-		}
+	base {
+		// Set up a suffixed format for the mod jar names, e.g. `example-fabric`.
+		archivesName = "$rootProject.archives_name-$project.name"
 	}
 
 	repositories {
 		maven {
-			name = 'Lumivoid'
-			url = 'https://maven.lumivoid.pp.ua/repository/lumivoid/'
+			name = 'Kotlin for Forge'
+			url = 'https://thedarkcolour.github.io/KotlinForForge/'
+		}
+	}
 
-			credentials {
-				username = project.hasProperty("mavenUsername") ? project.mavenUsername : System.getenv("MAVEN_USERNAME")
-				password = project.hasProperty("mavenPassword") ? project.mavenPassword : System.getenv("MAVEN_PASSWORD")
+	dependencies {
+		minecraft "net.minecraft:minecraft:$rootProject.minecraft_version"
+		mappings loom.layered {
+			it.mappings("net.fabricmc:yarn:$rootProject.yarn_mappings:v2")
+			it.mappings("dev.architectury:yarn-mappings-patch-neoforge:$rootProject.yarn_mappings_patch_neoforge_version")
+		}
+	}
+
+	java {
+		// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
+		// if it is present.
+		// If you remove this line, sources will not be generated.
+		withSourcesJar()
+
+		sourceCompatibility = JavaVersion.VERSION_21
+		targetCompatibility = JavaVersion.VERSION_21
+	}
+
+	tasks.withType(JavaCompile).configureEach {
+		it.options.release = 21
+	}
+
+	tasks.withType(KotlinCompile).configureEach {
+		kotlinOptions {
+			jvmTarget = 21
+		}
+	}
+
+	// Configure Maven publishing.
+	publishing {
+		publications {
+			create("mavenJava", MavenPublication) {
+				artifactId = project.archives_name
+				groupId = project.maven_group
+				version = version
+				//noinspection GroovyAssignabilityCheck
+				from components.java
+			}
+		}
+
+		repositories {
+			maven {
+				name = 'Lumivoid'
+				url = 'https://maven.lumivoid.pp.ua/repository/lumivoid/'
+
+				credentials {
+					username = project.hasProperty("mavenUsername") ? project.mavenUsername : System.getenv("MAVEN_USERNAME")
+					password = project.hasProperty("mavenPassword") ? project.mavenPassword : System.getenv("MAVEN_PASSWORD")
+				}
 			}
 		}
 	}
 }
+//modrinth {
+//	token = project.hasProperty('modrinthToken') ? project.modrinthToken : System.getenv("MODRINTH_TOKEN")
+//	projectId = project.id_main
+//	versionNumber = project.mod_version
+//	versionName = "IWTCMS ${project.mod_version}"
+//	uploadFile = remapJar
+//	//additionalFiles = [remapSourcesJar]
+//	gameVersions = Eval.me(project.release_minecraft_versions)
+//	versionType = project.release_type
+//	loaders = ["fabric"]
+//	syncBodyFrom = rootProject.file("README.md").text
+//	changelog = rootProject.file("CHANGELOG.md").text
+//	dependencies = [
+//			new ModDependency(project.id_fabric_api, "required"),
+//			new ModDependency(project.id_fabric_kotlin, "required"),
+//	]
+//
+//	tasks.modrinth.dependsOn(tasks.modrinthSyncBody)
+//}
+//
+//dependencies {
+//	implementation "thedarkcolour:kotlinforforge-neoforge:${project.kotlin_for_forge_version}"
+//
+//	// Ktor cool thing, but launching with fabricmc looks terrible
+//    implementation include("io.ktor:ktor-server-core:${project.ktor_version}")
+//    implementation include("io.ktor:ktor-server-netty:${project.ktor_version}")
+//	implementation include("io.ktor:ktor-network-tls-certificates:${project.ktor_version}")
+//	implementation include("io.ktor:ktor-server-websockets:${project.ktor_version}")
+//	implementation include("io.ktor:ktor-server-sessions:${project.ktor_version}")
+//	implementation include("io.ktor:ktor-serialization-kotlinx-json:${project.ktor_version}")
+//	implementation include("io.ktor:ktor-server-content-negotiation:${project.ktor_version}")
+//	implementation include("io.ktor:ktor-server-status-pages:$ktor_version")
+//	include "io.ktor:ktor-events:${project.ktor_version}"
+//	include "io.ktor:ktor-utils:${project.ktor_version}"
+//	include "io.ktor:ktor-network-tls:${project.ktor_version}"
+//	include "io.ktor:ktor-io:${project.ktor_version}"
+//	include "io.ktor:ktor-http:${project.ktor_version}" // fuck this
+//	include "io.ktor:ktor-websockets:${project.ktor_version}"
+//	include "io.ktor:ktor-serialization:${project.ktor_version}"
+//	include "io.ktor:ktor-serialization-kotlinx:${project.ktor_version}"
+//
+//	include "io.netty:netty-transport-classes-kqueue:${project.netty_version}"
+//	include "io.netty:netty-codec-http2:${project.netty_version}"
+//	include "io.netty:netty-codec-http:${project.netty_version}"
+//	// already launched ktor
+//
+//	implementation include("com.typesafe:config:${project.hocon_config_version}")
+//
+//	implementation include("commons-codec:commons-codec:${project.commons_codec}")
+//}
+//
+//tasks.register("preparePythonClient") {
+//	group = "build"
+//
+//	def clientDir = file("$buildDir/../python")
+//	def outputZip = file("$buildDir/resources/web/iwtcms_client.zip")
+//
+//	inputs.dir(clientDir)
+//	outputs.file(outputZip)
+//
+//	doLast {
+//		ant.zip(destfile: outputZip, basedir: clientDir)
+//	}
+//}
+//
+//jar {
+//	from("LICENSE")
+//}
+//
+//processResources {
+//	dependsOn tasks.preparePythonClient
+//
+//	inputs.property "version", project.version
+//
+//	filesMatching("fabric.mod.json") {
+//		expand "version": project.version
+//	}
+//
+//	doLast {
+//		copy {
+//			from("$buildDir/resources/web/iwtcms_client.zip")
+//			into("$buildDir/resources/main/web")
+//		}
+//	}
