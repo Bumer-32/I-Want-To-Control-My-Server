@@ -1,4 +1,7 @@
 //file:noinspection GrDeprecatedAPIUsage
+//file:noinspection DependencyNotationArgument
+
+
 //import com.modrinth.minotaur.dependencies.ModDependency
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -31,10 +34,6 @@ subprojects {
 	}
 
 	repositories {
-		maven {
-			name = 'Kotlin for Forge'
-			url = 'https://thedarkcolour.github.io/KotlinForForge/'
-		}
 	}
 
 	dependencies {
@@ -43,6 +42,35 @@ subprojects {
 			it.mappings("net.fabricmc:yarn:$rootProject.yarn_mappings:v2")
 			it.mappings("dev.architectury:yarn-mappings-patch-neoforge:$rootProject.yarn_mappings_patch_neoforge_version")
 		}
+
+		implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:${project.kotlinx_serialization_version}"
+
+		// Ktor cool thing, but launching with minecraft... looks terrible
+		implementation include("io.ktor:ktor-server-core:${project.ktor_version}")
+		implementation include("io.ktor:ktor-server-netty:${project.ktor_version}")
+		implementation include("io.ktor:ktor-network-tls-certificates:${project.ktor_version}")
+		implementation include("io.ktor:ktor-server-websockets:${project.ktor_version}")
+		implementation include("io.ktor:ktor-server-sessions:${project.ktor_version}")
+		implementation include("io.ktor:ktor-serialization-kotlinx-json:${project.ktor_version}")
+		implementation include("io.ktor:ktor-server-content-negotiation:${project.ktor_version}")
+		implementation include("io.ktor:ktor-server-status-pages:${project.ktor_version}")
+		include "io.ktor:ktor-events:${project.ktor_version}"
+		include "io.ktor:ktor-utils:${project.ktor_version}"
+		include "io.ktor:ktor-network-tls:${project.ktor_version}"
+		include "io.ktor:ktor-io:${project.ktor_version}"
+		include "io.ktor:ktor-http:${project.ktor_version}" // fuck this
+		include "io.ktor:ktor-websockets:${project.ktor_version}"
+		include "io.ktor:ktor-serialization:${project.ktor_version}"
+		include "io.ktor:ktor-serialization-kotlinx:${project.ktor_version}"
+
+		include "io.netty:netty-transport-classes-kqueue:${project.netty_version}"
+		include "io.netty:netty-codec-http2:${project.netty_version}"
+		include "io.netty:netty-codec-http:${project.netty_version}"
+		// already launched ktor
+
+		implementation include("com.typesafe:config:${project.hocon_config_version}")
+
+		implementation include("commons-codec:commons-codec:${project.commons_codec}")
 	}
 
 	java {
@@ -108,35 +136,6 @@ subprojects {
 //	]
 //
 //	tasks.modrinth.dependsOn(tasks.modrinthSyncBody)
-//}
-//
-//dependencies {
-//	// Ktor cool thing, but launching with fabricmc looks terrible
-//    implementation include("io.ktor:ktor-server-core:${project.ktor_version}")
-//    implementation include("io.ktor:ktor-server-netty:${project.ktor_version}")
-//	implementation include("io.ktor:ktor-network-tls-certificates:${project.ktor_version}")
-//	implementation include("io.ktor:ktor-server-websockets:${project.ktor_version}")
-//	implementation include("io.ktor:ktor-server-sessions:${project.ktor_version}")
-//	implementation include("io.ktor:ktor-serialization-kotlinx-json:${project.ktor_version}")
-//	implementation include("io.ktor:ktor-server-content-negotiation:${project.ktor_version}")
-//	implementation include("io.ktor:ktor-server-status-pages:$ktor_version")
-//	include "io.ktor:ktor-events:${project.ktor_version}"
-//	include "io.ktor:ktor-utils:${project.ktor_version}"
-//	include "io.ktor:ktor-network-tls:${project.ktor_version}"
-//	include "io.ktor:ktor-io:${project.ktor_version}"
-//	include "io.ktor:ktor-http:${project.ktor_version}" // fuck this
-//	include "io.ktor:ktor-websockets:${project.ktor_version}"
-//	include "io.ktor:ktor-serialization:${project.ktor_version}"
-//	include "io.ktor:ktor-serialization-kotlinx:${project.ktor_version}"
-//
-//	include "io.netty:netty-transport-classes-kqueue:${project.netty_version}"
-//	include "io.netty:netty-codec-http2:${project.netty_version}"
-//	include "io.netty:netty-codec-http:${project.netty_version}"
-//	// already launched ktor
-//
-//	implementation include("com.typesafe:config:${project.hocon_config_version}")
-//
-//	implementation include("commons-codec:commons-codec:${project.commons_codec}")
 //}
 //
 //tasks.register("preparePythonClient") {

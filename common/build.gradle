@@ -13,6 +13,15 @@ dependencies {
 
     // Architectury API. This is optional, and you can comment it out if you don't need it.
     modImplementation "dev.architectury:architectury:$rootProject.architectury_api_version"
+
+    implementation "io.ktor:ktor-server-core:${project.ktor_version}"
+    implementation "io.ktor:ktor-server-netty:${project.ktor_version}"
+    implementation "io.ktor:ktor-network-tls-certificates:${project.ktor_version}"
+    implementation "io.ktor:ktor-server-websockets:${project.ktor_version}"
+    implementation "io.ktor:ktor-server-sessions:${project.ktor_version}"
+    implementation "io.ktor:ktor-serialization-kotlinx-json:${project.ktor_version}"
+    implementation "io.ktor:ktor-server-content-negotiation:${project.ktor_version}"
+    implementation "io.ktor:ktor-server-status-pages:${project.ktor_version}"
 }
 repositories {
     mavenCentral()

@@ -6,6 +6,7 @@ pluginManagement {
 		gradlePluginPortal()
 	}
 }
+
 plugins {
     id 'org.gradle.toolchains.foojay-resolver-convention' version '0.8.0'
 }
@@ -15,6 +16,4 @@ rootProject.name = 'iwtcms'
 include 'common'
 include 'fabric'
 include 'neoforge'
-include 'common:src:main:untitled'
-findProject(':common:src:main:untitled')?.name = 'untitled'
 
