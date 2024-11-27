@@ -3,23 +3,20 @@
   "id": "iwtcms",
   "version": "${version}",
   "name": "I Want To Control My Server",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "description": "Allows you to control server through web!",
   "authors": [
-    "Me!"
+    "Bumer_32"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "homepage": "https://lumivoid.pp.ua",
+    "sources": "https://github.com/Bumer-32/I-Want-To-Control-My-Server/issues"
   },
-  "license": "CC0-1.0",
+  "license": "Apache-2.0",
   "icon": "assets/iwtcms/icon.png",
-  "environment": "*",
+  "environment": "server",
   "entrypoints": {
     "main": [
-      "ua.pp.lumivoid.iwtcms.fabric.ExampleModFabric"
-    ],
-    "client": [
-      "ua.pp.lumivoid.iwtcms.fabric.client.ExampleModFabricClient"
+      "ua.pp.lumivoid.iwtcms.fabric.IWTCMSFabric"
     ]
   },
   "mixins": [

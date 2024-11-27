@@ -1,3 +1,6 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm'
+}
 architectury {
     common rootProject.enabled_platforms.split(',')
 }
@@ -10,4 +13,11 @@ dependencies {
 
     // Architectury API. This is optional, and you can comment it out if you don't need it.
     modImplementation "dev.architectury:architectury:$rootProject.architectury_api_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+}
+repositories {
+    mavenCentral()
+}
+kotlin {
+    jvmToolchain(21)
 }

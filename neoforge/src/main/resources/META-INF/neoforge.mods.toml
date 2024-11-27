@@ -1,17 +1,17 @@
 modLoader = "javafml"
 loaderVersion = "[4,)"
-#issueTrackerURL = ""
-license = "Insert License Here"
+issueTrackerURL = "https://github.com/Bumer-32/I-Want-To-Control-My-Server/issues"
+license = "Apache-2.0"
 
 [[mods]]
 modId = "iwtcms"
 version = "${version}"
 displayName = "I Want To Control My Server"
-authors = "Me!"
+authors = "Bumer_32"
 description = '''
-This is an example description! Tell everyone what your mod is about!
+Allows you to control server through web!
 '''
-#logoFile = ""
+logoFile = "assets/iwtcms/icon.png"
 
 [[dependencies.iwtcms]]
 modId = "neoforge"
