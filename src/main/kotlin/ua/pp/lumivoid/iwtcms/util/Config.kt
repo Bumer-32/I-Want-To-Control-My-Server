@@ -4,6 +4,7 @@ import com.typesafe.config.Config
 import com.typesafe.config.ConfigException
 import com.typesafe.config.ConfigFactory
 import com.typesafe.config.ConfigObject
+import kotlinx.serialization.Serializable
 import org.apache.commons.codec.digest.DigestUtils
 import ua.pp.lumivoid.iwtcms.Constants
 import ua.pp.lumivoid.iwtcms.ktor.api.User
@@ -81,3 +82,16 @@ object Config {
         )
     }
 }
+
+@Serializable
+data class ConfigData(
+    val ip: String,
+    val port: Int,
+    val logLevel: String,
+    val useSSL: Boolean,
+    val customSertificate: Boolean,
+    val sslAlias: String,
+    val sslPass: String,
+    val useAuthentication: Boolean,
+    val users: List<User>
+)
