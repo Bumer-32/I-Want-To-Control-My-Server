@@ -1,8 +1,8 @@
-package ua.pp.lumivoid.iwtcms.ktor
+package ua.pp.lumivoid.iwtcms.util
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
+import ua.pp.lumivoid.iwtcms.ktor.KtorServer
 import ua.pp.lumivoid.iwtcms.ktor.api.websockets.WsConsoleImpl
-import ua.pp.lumivoid.iwtcms.util.CustomLogger
 
 object StoppedServerTrigger {
     fun register() {

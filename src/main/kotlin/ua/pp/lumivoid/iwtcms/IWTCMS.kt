@@ -1,7 +1,7 @@
 package ua.pp.lumivoid.iwtcms
 
 import net.fabricmc.api.ModInitializer
-import ua.pp.lumivoid.iwtcms.ktor.StoppedServerTrigger
+import ua.pp.lumivoid.iwtcms.util.StoppedServerTrigger
 import ua.pp.lumivoid.iwtcms.util.MinecraftServerHandler
 
 object IWTCMS : ModInitializer {
