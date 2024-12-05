@@ -102,7 +102,7 @@ java {
 tasks.register("preparePythonClient") {
 	group = "build"
 
-	def clientDir = file("$buildDir/../python")
+	def clientDir = file("${sourceSets.main.kotlin.srcDirs.first()}/../python")
 	def outputZip = file("$buildDir/resources/web/iwtcms_client.zip")
 
 	inputs.dir(clientDir)
