@@ -8,6 +8,7 @@ plugins {
 	id "org.jetbrains.kotlin.plugin.serialization" version "2.1.0"
 	id "org.jetbrains.kotlin.jvm" version "2.1.0"
 	id "com.pswidersk.python-plugin" version "2.8.1"
+	id "com.github.node-gradle.node" version "7.1.0"
 	id "com.modrinth.minotaur" version "2.+"
 	id "maven-publish"
 }
@@ -137,7 +138,7 @@ tasks.register("preparePythonClient") {
 
 	def clientDir = file("src/main/python")
 	def pyBuildDir = file("$buildDir/python")
-	def outputZip = file("$buildDir/resources/web/iwtcms_client.zip")
+	def outputZip = file("$buildDir/resources/main/web/iwtcms_client.zip")
 
 	copy {
 		from(clientDir)
@@ -153,24 +154,29 @@ tasks.register("preparePythonClient") {
 	}
 }
 
+tasks.register("compileWeb", NpxTask) {
+	dependsOn tasks.npmInstall
+
+	command = "tsc"
+
+	copy {
+		from(file("src/main/web"))
+		into(file("$buildDir/resources/main/web"))
+	}
+}
+
 jar {
 	from("LICENSE")
 }
 
 processResources {
 	dependsOn tasks.preparePythonClient
+	dependsOn tasks.compileWeb
 
 	inputs.property "version", project.version
 
 	filesMatching("fabric.mod.json") {
 		expand "version": project.version
-	}
-
-	doLast {
-		copy {
-			from("$buildDir/resources/web/iwtcms_client.zip")
-			into("$buildDir/resources/main/web")
-		}
 	}
 }
 
