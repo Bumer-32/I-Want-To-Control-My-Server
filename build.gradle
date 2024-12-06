@@ -20,6 +20,7 @@ base {
 }
 
 repositories {
+	maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
 }
 
 
@@ -38,6 +39,7 @@ modrinth {
 	dependencies = [
 			new ModDependency(project.id_fabric_api, "required"),
 			new ModDependency(project.id_fabric_kotlin, "required"),
+			new ModDependency(project.id_spark, "optional")
 	]
 
 	tasks.modrinth.dependsOn(tasks.modrinthSyncBody)
@@ -77,6 +79,8 @@ dependencies {
 	implementation include("com.typesafe:config:${project.hocon_config_version}")
 
 	implementation include("commons-codec:commons-codec:${project.commons_codec}")
+
+	modImplementation "me.lucko:spark-api:${project.spark_api_version}"
 }
 
 tasks.withType(JavaCompile).configureEach {
