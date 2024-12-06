@@ -14,12 +14,11 @@ import ua.pp.lumivoid.iwtcms.ktor.api.requests.ApiListGET.registerAPI
 import ua.pp.lumivoid.iwtcms.ktor.cookie.UserSession
 import ua.pp.lumivoid.iwtcms.util.Config
 
-object LoginPOST {
-    private val logger = Constants.EMBEDDED_SERVER_LOGGER
+object LoginPOST: Request() {
+    override val logger = Constants.EMBEDDED_SERVER_LOGGER
+    override val PATH = "/api/login"
 
-    private const val PATH = "/api/login"
-
-    val request: Routing.() -> Unit = {
+    override val request: Routing.() -> Unit = {
         logger.info("Initializing $PATH request")
 
         registerAPI("LoginPOST", PATH)

@@ -10,11 +10,12 @@ import io.ktor.server.routing.*
 import io.ktor.server.sessions.*
 import io.ktor.server.websocket.*
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.ApiListGET
-import ua.pp.lumivoid.iwtcms.ktor.api.websockets.WsConsoleImpl
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.LoginPOST
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.LogsHistoryGET
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.MainGET
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.PermitsGET
+import ua.pp.lumivoid.iwtcms.ktor.api.websockets.ConsoleWS
+import ua.pp.lumivoid.iwtcms.ktor.api.websockets.ServerStatsWS
 import ua.pp.lumivoid.iwtcms.ktor.cookie.UserSession
 import kotlin.time.Duration.Companion.seconds
 
@@ -50,5 +51,6 @@ fun Application.configureRouting() {
     ApiListGET.request.invoke(r)
     PermitsGET.request.invoke(r)
 
-    WsConsoleImpl.ws.invoke(r)
+    ConsoleWS.ws.invoke(r)
+    ServerStatsWS.ws.invoke(r)
 }

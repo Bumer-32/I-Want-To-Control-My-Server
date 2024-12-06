@@ -5,12 +5,11 @@ import io.ktor.server.routing.Routing
 import ua.pp.lumivoid.iwtcms.Constants
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.ApiListGET.registerAPI
 
-object MainGET {
-    private val logger = Constants.EMBEDDED_SERVER_LOGGER
+object MainGET: Request() {
+    override val logger = Constants.EMBEDDED_SERVER_LOGGER
+    override val PATH =  "/"
 
-    private const val PATH =  "/"
-
-    val request: Routing.() -> Unit = {
+    override val request: Routing.() -> Unit = {
         logger.info("Initializing $PATH request")
         registerAPI("MainGET", PATH)
 

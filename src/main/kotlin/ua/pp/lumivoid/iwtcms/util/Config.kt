@@ -62,6 +62,7 @@ object Config {
             if (permits.hasPath("read real time logs")) newPermits.put("read real time logs", permits.getBoolean("read real time logs"))
             if (permits.hasPath("read logs history")) newPermits.put("read logs history", permits.getBoolean("read logs history"))
             if (permits.hasPath("execute commands")) newPermits.put("execute commands", permits.getBoolean("execute commands"))
+            if (permits.hasPath("access to server stats")) newPermits.put("access to server stats", permits.getBoolean("access to server stats"))
 
             val newId: String = DigestUtils.sha256Hex((newUsername + newPassword.toString()))
 
@@ -77,6 +78,7 @@ object Config {
             customSertificate = config.getBoolean("ssl.custom Sertificate"),
             sslAlias = config.getString("ssl.ssl Alias"),
             sslPass = config.getString("ssl.ssl Pass"),
+            statisticsPeriod = config.getInt("stuff.statistics period"),
             useAuthentication = config.getBoolean("auth.use Authentication"),
             users = users
         )
@@ -92,6 +94,7 @@ data class ConfigData(
     val customSertificate: Boolean,
     val sslAlias: String,
     val sslPass: String,
+    val statisticsPeriod: Int,
     val useAuthentication: Boolean,
     val users: List<User>
 )

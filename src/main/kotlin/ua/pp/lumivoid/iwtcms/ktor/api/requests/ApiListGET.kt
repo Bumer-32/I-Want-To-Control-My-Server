@@ -8,15 +8,15 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import ua.pp.lumivoid.iwtcms.Constants
 
-object ApiListGET {
-    private val logger = Constants.EMBEDDED_SERVER_LOGGER
+object ApiListGET: Request() {
+    override val logger = Constants.EMBEDDED_SERVER_LOGGER
+    override val PATH = "/apiList"
+
     private val json = Json { prettyPrint = true }
 
     private val apis = mutableMapOf<String, String>()
 
-    private const val PATH = "/apiList"
-
-    val request: Routing.() -> Unit = {
+    override val request: Routing.() -> Unit = {
         logger.info("Initializing $PATH request")
         registerAPI("ApiListGET", PATH)
 

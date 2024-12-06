@@ -12,13 +12,13 @@ import ua.pp.lumivoid.iwtcms.ktor.api.User
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.ApiListGET.registerAPI
 import ua.pp.lumivoid.iwtcms.util.Config
 
-object PermitsGET {
-    private val logger = Constants.EMBEDDED_SERVER_LOGGER
+object PermitsGET: Request() {
+    override val logger = Constants.EMBEDDED_SERVER_LOGGER
+    override val PATH = "/api/permits/{username}"
+
     private val json = Json { prettyPrint = true }
 
-    private const val PATH = "/api/permits/{username}"
-
-    val request: Routing.() -> Unit = {
+    override val request: Routing.() -> Unit = {
         logger.info("Initializing $PATH request")
         registerAPI("PermitsGET",  PATH)
 

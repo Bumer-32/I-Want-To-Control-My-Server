@@ -12,8 +12,8 @@ import org.apache.logging.log4j.core.appender.WriterAppender
 import org.apache.logging.log4j.core.config.Configurator
 import org.apache.logging.log4j.core.layout.PatternLayout
 import ua.pp.lumivoid.iwtcms.Constants
-import ua.pp.lumivoid.iwtcms.ktor.api.websockets.WsConsoleImpl
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.LogsHistoryGET
+import ua.pp.lumivoid.iwtcms.ktor.api.websockets.ConsoleWS
 import java.io.IOException
 import java.io.OutputStreamWriter
 
@@ -57,7 +57,7 @@ object CustomLogger {
                     val log = output.toString()
                     if (log.isNotEmpty()) {
                         LogsHistoryGET.addLog(log)
-                        WsConsoleImpl.asWsConsole()?.sendMessage(log)
+                        ConsoleWS.asWs()?.sendMessage(log)
                         output.reset()
                     }
                 }
