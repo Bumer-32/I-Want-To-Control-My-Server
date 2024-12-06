@@ -1,13 +1,15 @@
 //file:noinspection GrDeprecatedAPIUsage
 import com.modrinth.minotaur.dependencies.ModDependency
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import com.pswidersk.gradle.python.VenvTask
 
 plugins {
-	id 'fabric-loom' version '1.9.2'
-	id 'org.jetbrains.kotlin.plugin.serialization' version '2.1.0'
-	id 'org.jetbrains.kotlin.jvm' version '2.1.0'
-	id 'com.modrinth.minotaur' version '2.+'
-	id 'maven-publish'
+	id "fabric-loom" version "1.9.2"
+	id "org.jetbrains.kotlin.plugin.serialization" version "2.1.0"
+	id "org.jetbrains.kotlin.jvm" version "2.1.0"
+	id "com.pswidersk.python-plugin" version "2.8.1"
+	id "com.modrinth.minotaur" version "2.+"
+	id "maven-publish"
 }
 
 version = project.mod_version
@@ -20,12 +22,12 @@ base {
 }
 
 repositories {
-	maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+	maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
 }
 
 
 modrinth {
-	token = project.hasProperty('modrinthToken') ? project.modrinthToken : System.getenv("MODRINTH_TOKEN")
+	token = project.hasProperty("modrinthToken") ? project.modrinthToken : System.getenv("MODRINTH_TOKEN")
 	projectId = project.id_main
 	versionNumber = project.mod_version
 	versionName = "IWTCMS ${project.mod_version}"
@@ -103,17 +105,51 @@ java {
 	targetCompatibility = JavaVersion.VERSION_21
 }
 
+pythonPlugin {
+	pythonVersion = project.python_version
+}
+
+tasks.register("installPipreqs", VenvTask) {
+	venvExec = "pip"
+	args = ["install", "--upgrade", "pipreqs"]
+}
+
+tasks.register("generatePythonRequirements", VenvTask) {
+	dependsOn tasks.installPipreqs
+	//venvExec = "python"
+
+	doFirst {
+		file("$buildDir/python").delete()
+	}
+
+	workingDir = file("$buildDir/python")
+	args = ["-m", "pipreqs.pipreqs", "--force"]
+
+	doLast {
+		println("generated requirements.txt")
+	}
+}
+
 tasks.register("preparePythonClient") {
 	group = "build"
 
-	def clientDir = file("${sourceSets.main.kotlin.srcDirs.first()}/../python")
+	dependsOn tasks.generatePythonRequirements
+
+	def clientDir = file("src/main/python")
+	def pyBuildDir = file("$buildDir/python")
 	def outputZip = file("$buildDir/resources/web/iwtcms_client.zip")
 
-	inputs.dir(clientDir)
+	copy {
+		from(clientDir)
+		into(pyBuildDir)
+	}
+
+	inputs.dir(pyBuildDir)
 	outputs.file(outputZip)
 
 	doLast {
-		ant.zip(destfile: outputZip, basedir: clientDir)
+		ant.zip(destfile: outputZip, basedir: pyBuildDir)
+		println("Python client files have been archived as: $outputZip")
 	}
 }
 
@@ -151,8 +187,8 @@ publishing {
 
 	repositories {
 		maven {
-			name = 'Lumivoid'
-			url = 'https://maven.lumivoid.pp.ua/repository/lumivoid/'
+			name = "Lumivoid"
+			url = "https://maven.lumivoid.pp.ua/repository/lumivoid/"
 
 			credentials {
 				username = project.hasProperty("mavenUsername") ? project.mavenUsername : System.getenv("MAVEN_USERNAME")
