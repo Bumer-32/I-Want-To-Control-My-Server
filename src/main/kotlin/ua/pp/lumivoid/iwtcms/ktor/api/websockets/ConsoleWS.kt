@@ -12,32 +12,25 @@ import ua.pp.lumivoid.iwtcms.ktor.api.UserAuthentication
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.ApiListGET.registerAPI
 import ua.pp.lumivoid.iwtcms.util.MinecraftServerHandler
 
-interface WsConsole {
-    fun sendMessage(message: String) {}
-    fun shutdown() {}
-}
+object ConsoleWS: WS() {
+    override val logger = Constants.EMBEDDED_SERVER_LOGGER
+    override var WSinterface: WebSocketBaseInterface? = null
+    override val PATH = "/ws/console" // why console? because we use this socket same as console, receive logs and send commands
 
-object WsConsoleImpl {
-    private val logger = Constants.EMBEDDED_SERVER_LOGGER
-
-    private var wsConsole: WsConsole? = null
-
-    private const val PATH = "/ws/console"
-
-    val ws: Routing.() -> Unit = {
+    override val ws: Routing.() -> Unit = {
         logger.info("Initializing $PATH websocket")
-        registerAPI("WsConsole", PATH)
+        registerAPI("ConsoleWS", PATH)
 
-        webSocket(PATH) { // why console? because we use this socket same as console, receive logs and send commands
+        webSocket(PATH) {
             val status = UserAuthentication.doAuth(
                 call = call,
                 permit = "read real time logs",
                 success = {},
                 unauthorized = {
-                    logger.info("Unauthorized user tried to connect to $PATH websocket")
+                    logger.debug("Unauthorized user tried to connect to $PATH websocket")
                     runBlocking{ close(CloseReason(CloseReason.Codes.VIOLATED_POLICY, "Unauthorized")) } },
                 forbidden = {
-                    logger.info("Forbidden user tried to connect to $PATH websocket")
+                    logger.debug("Forbidden user tried to connect to $PATH websocket")
                     runBlocking{ close(CloseReason(CloseReason.Codes.VIOLATED_POLICY, "Forbidden")) }
                 }
             )
@@ -46,9 +39,9 @@ object WsConsoleImpl {
 
             // and ws
 
-            send(Frame.Text("Connected to iwtcms logs"))
+            send(Frame.Text("Connected to $PATH"))
 
-            wsConsole = object : WsConsole {
+            WSinterface = object : WebSocketBaseInterface {
                 override fun sendMessage(message: String) {
                     launch {
                         send(Frame.Text(message))
@@ -90,11 +83,11 @@ object WsConsoleImpl {
                         }
                     }
                 }.onFailure { exception ->
-                    logger.error("WebSocket exception: ${exception.localizedMessage}")
+                    logger.error("WebSocket exception: ${exception}")
                 }
             }
         }
     }
 
-    fun asWsConsole(): WsConsole? = wsConsole
+    override fun asWs(): WebSocketBaseInterface? = WSinterface
 }

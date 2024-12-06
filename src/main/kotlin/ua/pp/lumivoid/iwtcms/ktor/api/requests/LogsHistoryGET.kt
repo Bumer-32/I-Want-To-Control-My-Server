@@ -10,15 +10,14 @@ import ua.pp.lumivoid.iwtcms.Constants
 import ua.pp.lumivoid.iwtcms.ktor.api.UserAuthentication
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.ApiListGET.registerAPI
 
-object LogsHistoryGET {
-    private val logger = Constants.EMBEDDED_SERVER_LOGGER
-    private val json = Json { prettyPrint = true }
+object LogsHistoryGET: Request() {
+    override val logger = Constants.EMBEDDED_SERVER_LOGGER
+    override val PATH = "/api/logsHistory"
 
+    private val json = Json { prettyPrint = true }
     private val logs = mutableListOf<String>()
 
-    private const val PATH = "/api/logsHistory"
-
-    val request: Routing.() -> Unit = {
+    override val request: Routing.() -> Unit = {
         logger.info("Initializing $PATH request")
         registerAPI("LogsHistoryGET",  PATH)
 
