@@ -39,7 +39,14 @@ replay_*.log
 *.hprof
 *.jfr
 
+# kotlin
+
 .kotlin/
 
 # python
+
 .venv
+
+# nodejs
+
+node_modules/
