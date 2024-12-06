@@ -4,7 +4,6 @@ import net.fabricmc.api.ModInitializer
 import net.fabricmc.loader.api.FabricLoader
 import ua.pp.lumivoid.iwtcms.util.StoppedServerTrigger
 import ua.pp.lumivoid.iwtcms.util.MinecraftServerHandler
-import ua.pp.lumivoid.iwtcms.util.ServerStats
 
 object IWTCMS : ModInitializer {
 	private val logger = Constants.LOGGER

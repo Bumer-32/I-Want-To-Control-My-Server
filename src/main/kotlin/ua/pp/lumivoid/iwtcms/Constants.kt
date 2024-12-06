@@ -1,8 +1,6 @@
 package ua.pp.lumivoid.iwtcms
 
 import org.slf4j.LoggerFactory
-import ua.pp.lumivoid.iwtcms.util.Config
-import java.security.MessageDigest
 
 object Constants {
     const val MOD_ID = "iwtcms"
