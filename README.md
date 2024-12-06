@@ -274,3 +274,5 @@ Since IWTCMS integrates a real ktor web server, it hosts a lot of static files w
 | iwtcms_client.zip | /iwtcms_client.zip  |                                |    zip    |
 
 ---
+
+[//]: # (TODO: How to build in README.md)
