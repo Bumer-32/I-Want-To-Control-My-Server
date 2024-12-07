@@ -148,11 +148,20 @@ tasks.register("preparePythonClient") {
 	}
 }
 
-tasks.register("compileWeb", NpxTask) {
+tasks.register("compileTypeScript", NpxTask) {
 	dependsOn tasks.npmInstall
-
 	command = "tsc"
+}
 
+tasks.register("compileSASS", NpxTask) {
+	dependsOn tasks.npmInstall
+	command = "sass"
+	args = ["$buildDir/../src/main/web/style.scss", "$buildDir/resources/main/web/style.css"]
+}
+
+tasks.register("compileWeb"){
+	dependsOn tasks.compileTypeScript
+	dependsOn tasks.compileSASS
 	copy {
 		from(file("src/main/web"))
 		into(file("$buildDir/resources/main/web"))
