@@ -1,13 +1,11 @@
 //file:noinspection GrDeprecatedAPIUsage
 import com.modrinth.minotaur.dependencies.ModDependency
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import com.pswidersk.gradle.python.VenvTask
 
 plugins {
 	id "fabric-loom" version "1.9.2"
 	id "org.jetbrains.kotlin.plugin.serialization" version "2.1.0"
 	id "org.jetbrains.kotlin.jvm" version "2.1.0"
-	id "com.pswidersk.python-plugin" version "2.8.1"
 	id "com.github.node-gradle.node" version "7.1.0"
 	id "com.modrinth.minotaur" version "2.+"
 	id "maven-publish"
@@ -106,25 +104,21 @@ java {
 	targetCompatibility = JavaVersion.VERSION_21
 }
 
-pythonPlugin {
-	pythonVersion = project.python_version
-}
-
-tasks.register("installPipreqs", VenvTask) {
-	venvExec = "pip"
-	args = ["install", "--upgrade", "pipreqs"]
-}
-
-tasks.register("generatePythonRequirements", VenvTask) {
-	dependsOn tasks.installPipreqs
-	//venvExec = "python"
+tasks.register("generatePythonRequirements") {
 
 	doFirst {
 		file("$buildDir/python").delete()
-	}
 
-	workingDir = file("$buildDir/python")
-	args = ["-m", "pipreqs.pipreqs", "--force"]
+		if (System.getProperty("os.name").toLowerCase().contains("win")) {
+			exec {
+				commandLine 'cmd', '/c', 'genpyreqs.bat'
+			}
+		} else {
+			exec {
+				commandLine 'bash', 'genpyreqs.sh'
+			}
+		}
+	}
 
 	doLast {
 		println("generated requirements.txt")

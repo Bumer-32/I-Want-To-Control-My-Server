@@ -168,11 +168,13 @@ if __name__ == "__main__":
     login_url = f"{base_url}/api/login"
     permits_url = f"{base_url}/api/permits/"
     if base_url.startswith("https://"):
+        url_without_prefix = base_url.replace("https://", "")
         use_ssl = True
-        ws_url = f"wss://{base_url.replace("https://", "")}/ws/console"
+        ws_url = f"wss://{url_without_prefix}/ws/console"
     else:
+        url_without_prefix = base_url.replace("http://", "")
         use_ssl = False
         # noinspection HttpUrlsUsage
-        ws_url = f"ws://{base_url.replace("http://", "")}/ws/console"
+        ws_url = f"ws://{url_without_prefix}/ws/console"
 
     asyncio.run(main())
