@@ -50,3 +50,8 @@ replay_*.log
 # nodejs
 
 node_modules/
+
+# cool things
+
+/web/
+/webc/

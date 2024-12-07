@@ -1,0 +1,28 @@
+
+root {
+  --header-height: 50px;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #121212;
+  color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.header > .icon {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 50px;
+}
+
+.container {
+  text-align: center;
+  max-width: 600px;
+}
