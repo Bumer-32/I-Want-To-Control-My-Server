@@ -21,6 +21,12 @@ jobs:
       - name: checkout repository
         uses: actions/checkout@v4
 
+      - name: Setup Miniconda
+        uses: conda-incubator/setup-miniconda@v3
+        with:
+          python-version: 3.12
+          auto-activate-base: true
+
       - name: validate gradle wrapper
         uses: gradle/actions/wrapper-validation@v3
 
