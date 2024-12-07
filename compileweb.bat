@@ -15,7 +15,7 @@ call npx tsc --rootDir .
 call npx sass style.scss style.css
 
 cd ..
-rmdir /S /Q web
+del /S /Q web
 xcopy webc web /E /I /Q /Y
 
 rmdir /S /Q webc
