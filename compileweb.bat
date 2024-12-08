@@ -1,7 +1,8 @@
 @echo off
 
-REM This script added just for amenities in vscode (live server easier to launch in extern folder because typescript and sass needs compiling)
+REM This script added just for amenities in vscode and webstorm (live server easier to launch in extern folder because typescript and sass needs compiling)
 REM Better to use it with this extention: https://marketplace.visualstudio.com/items?itemName=wk-j.save-and-run
+REM Or with Prepros: https://prepros.io
 
 cd /d "%~dp0"
 
