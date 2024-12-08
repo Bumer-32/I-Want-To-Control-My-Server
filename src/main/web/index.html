@@ -1,28 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>I want to control my server!</title>
+    <title>I want to control my Server!</title>
     <link rel="stylesheet" href="style.css">
+
+
 </head>
 <body>
     <div class="header">
         <div class="logo">
             <a href="/"><img src="icon_clearbg.png" alt="IWTCMS logo"></a>
         </div>
+
         <div class="buttons">
             <div class="left">
-                <img src="icons/settings.png" alt="Settings" id="header-settings">
+                <span class="material-icons-outlined">settings</span>
             </div>
             <div class="center">
-                <img src="icons/terminal.png" alt="Console" id="header-console">
+                <span class="material-icons-outlined">terminal</span>
             </div>
             <div class="right">
-                <img src="icons/group.png" alt="Players" id="header-players">
+                <span class="material-icons-outlined">group</span>
+            </div>
+        </div>
+
+        <div class="supply">
+            <div class="color-mode">
+                <label class="switch">
+                    <input type="checkbox">
+                    <span class="slider round">
+                </label>
+            </div>
+    
+            <div class="download-iwtcms-cli">
+                <a href="iwtcms_client.zip">
+                    <div class="merger">
+                        <span class="material-icons-outlined">download</span>
+                        <div class="text">
+                            <p>Python CLI</p>
+                        </div>
+                    </div>
+                </a>
             </div>
         </div>
     </div>
+
     <div class="container">
         <div class="enable-js-message">If you see this message, enable javascript in your browser settings.</div>
         <div class="tabs">
@@ -42,6 +74,11 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <div class="login">
+        <div class="background"/>
+        <button>Login</button>
     </div>
 
     <script type="module" src="ts/main.js"></script>

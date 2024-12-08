@@ -1,20 +1,23 @@
-$header-height: 90px;
-$logos-size: 50px;
+@import "sass/variables";
+@import "css/switch.css";
 
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
-  background-color: #121212;
+  font-family: "Nunito", sans-serif;
+  font-weight: 700;
+  background-color: var(--background-color);
   color: white;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
+
+  transition: background-color 0.3s ease;
 }
 
 .header {
   position: absolute;
-  background-color: black;
+  background-color: var(--header-color);
   width: 100%;
   height: $header-height;
   top: 0;
@@ -23,21 +26,27 @@ body {
   justify-content: center;
   align-items: center;
 
-  img { 
-    height: #{$logos-size};
-    // hover holo effect and click effect
-    transition: filter 0.3s ease, box-shadow 0.3s ease, height 0.3s ease;
+  img, 
+  .material-icons-outlined,
+  .download-iwtcms-cli,
+  .color-mode { // hover holo effect and click effect
+    transition: filter 0.3s ease, box-shadow 0.3s ease;
     &:hover {
-      filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.8));
+      filter: drop-shadow(0 0 10px var(--holo-effect-color));
     }
-    &:active {
-      height: #{$logos-size - 5};
-    }
+  }
 
-    
+  .material-icons-outlined { // press effect
+    font-size: $logos-size;
+    transition: filter 0.3s ease, font-size 0.3s ease, color 0.3s ease;
+    color: var(--header-icons-color);
+    &:active {
+      font-size: #{$logos-size - 5};
+    }
   }
 
   .logo img {
+    height: $logos-size;
     position: absolute;
     top: #{calc(($header-height - $logos-size) / 2)};
     left: #{calc(($header-height - $logos-size) / 2)};
@@ -52,13 +61,94 @@ body {
       margin-left: 10px;
     }
 
+    .center .material-icons-outlined {
+      font-size: #{$logos-size + 20};
+      &:active {
+        font-size: #{$logos-size + 15};
+      }
+    }
+
     .left {
       margin-right: 10px;
     }
+  }
 
-    div {
-      display: flex;
-      gap: 10px;
+  .supply {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+
+    .color-mode .switch {
+      .slider {
+        background-color: var(--color-mode-switch-background-color);
+  
+        &:before {
+          background-color: var(--color-mode-switch-handle-color);
+          content: "brightness_4";
+          font-family: 'Material Icons Outlined';
+          font-size: 20px;
+          font-weight: 100;
+          color: var(--color-mode-switch-handle-icon-color);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+      }
+  
+      input {
+        &:checked + .slider:before {
+          content: "brightness_5";
+        }
+      }
+    }
+  
+    .download-iwtcms-cli {
+      margin-top: 10px;
+      margin-right: #{calc(($header-height - $logos-size) / 2)};
+      height: #{$logos-size + 20px};
+      transition: font-size 0.3s ease, height 0.3s ease;
+
+      div:not(:has(*)) {
+        margin-left: 10px;
+      }
+  
+      .merger {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+  
+      .text {
+        width: 70%;
+  
+        p {
+          margin: 0;
+          font-size: 15px;
+          text-align: center;
+          transition: color 0.3s ease;
+          color: var(--header-icons-color);
+        }
+      }
+  
+      a {
+        text-decoration: none;
+      }
+  
+      .material-icons-outlined {
+        font-size: #{$logos-size - 20px};
+      }
+  
+      &:active {
+        p {
+          font-size: 14px;
+        }
+        .material-icons-outlined {
+          font-size: #{$logos-size - 21px};
+        }
+      }
     }
   }
 }
@@ -77,6 +167,8 @@ body {
     left: translateX(50%);
     font-size: 20px;
     color: white;
+    z-index: 100;
+    background-color: var(--background-color);
   }
 
   .tabs {
@@ -92,7 +184,8 @@ body {
         display: flex;
         align-items: center;
         justify-content: center;
-        color: white;
+        color: var(--main-text-color);
+        transition: color 0.3s ease;
       }
     }
 
@@ -100,4 +193,26 @@ body {
       display: block;
     }
   }
+}
+
+.login {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  
+  z-index: 100;
+
+  .background {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    z-index: 99;
+  }
+}
+
+.material-icons-outlined {
+  user-select: none;
 }

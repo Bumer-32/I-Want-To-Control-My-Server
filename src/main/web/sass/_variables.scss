@@ -1,0 +1,26 @@
+$header-height: 90px;
+$logos-size: 50px;
+
+
+// color mode
+:root { // dark mode
+    --header-color: #121717;
+    --background-color: #1f2626;
+    --holo-effect-color: white;
+    --color-mode-switch-background-color: #2d2d2d;
+    --color-mode-switch-handle-color: #505050;
+    --color-mode-switch-handle-icon-color: white;
+    --main-text-color: white;
+    --header-icons-color: white;
+}
+.light-mode-impl { // light mode
+    --header-color: #e3b18d;
+    --background-color: #FFD3B6;
+    --holo-effect-color: black;
+    --color-mode-switch-background-color: #b1b1b1;
+    --color-mode-switch-handle-color: #505050;
+    --color-mode-switch-handle-icon-color: white;
+    --main-text-color: black;
+    --header-icons-color: black;
+}
+
