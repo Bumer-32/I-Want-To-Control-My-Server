@@ -4,24 +4,46 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>I want to control my server!</title>
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="header">
+        <div class="logo">
+            <a href="/"><img src="icon_clearbg.png" alt="IWTCMS logo"></a>
+        </div>
+        <div class="buttons">
+            <div class="left">
+                <img src="icons/settings.png" alt="Settings" id="header-settings">
+            </div>
+            <div class="center">
+                <img src="icons/terminal.png" alt="Console" id="header-console">
+            </div>
+            <div class="right">
+                <img src="icons/group.png" alt="Players" id="header-players">
+            </div>
+        </div>
+    </div>
     <div class="container">
-        <header>
-            <div class="header">
-                <img src="/icon_clearbg.png" alt="Icon" class="icon">
-                <div class="header_buttons">
-
+        <div class="enable-js-message">If you see this message, enable javascript in your browser settings.</div>
+        <div class="tabs">
+            <div id="console-tab" class="tab">
+                <div class="container">
+                    Console
                 </div>
             </div>
-        </header>
-        
-        <main>
-            <h1>I Want To Control My Server</h1>
-            <p>Oops! This content is not implemented yet.</p>
-            <a href="iwtcms_client.zip">Here you can download client</a>
-        </main>
+            <div id="settings-tab" class="tab">
+                <div class="container">
+                    Settings
+                </div>
+            </div>
+            <div id="players-tab" class="tab">
+                <div class="container">
+                    Players
+                </div>
+            </div>
+        </div>
     </div>
+
+    <script type="module" src="ts/main.js"></script>
 </body>
 </html>

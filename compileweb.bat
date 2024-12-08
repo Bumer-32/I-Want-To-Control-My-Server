@@ -17,7 +17,7 @@ copy package.json webc
 cd webc
 call npm install
 call npx tsc --init
-call npx tsc --rootDir .
+call npx tsc --rootDir . --module es2015
 call npx sass style.scss style.css
 
 cd ..

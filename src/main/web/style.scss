@@ -1,28 +1,103 @@
-
-root {
-  --header-height: 50px;
-}
+$header-height: 90px;
+$logos-size: 50px;
 
 body {
   margin: 0;
   font-family: Arial, sans-serif;
   background-color: #121212;
-  color: #ffffff;
+  color: white;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  overflow: hidden;
 }
 
-.header > .icon {
+.header {
   position: absolute;
-  top: 20px;
-  left: 20px;
-  width: 50px;
+  background-color: black;
+  width: 100%;
+  height: $header-height;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  img { 
+    height: #{$logos-size};
+    // hover holo effect and click effect
+    transition: filter 0.3s ease, box-shadow 0.3s ease, height 0.3s ease;
+    &:hover {
+      filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.8));
+    }
+    &:active {
+      height: #{$logos-size - 5};
+    }
+
+    
+  }
+
+  .logo img {
+    position: absolute;
+    top: #{calc(($header-height - $logos-size) / 2)};
+    left: #{calc(($header-height - $logos-size) / 2)};
+  }
+
+  .buttons {
+    display: flex;
+    justify-items: center;
+    align-items: center;
+
+    .right {
+      margin-left: 10px;
+    }
+
+    .left {
+      margin-right: 10px;
+    }
+
+    div {
+      display: flex;
+      gap: 10px;
+    }
+  }
 }
 
 .container {
-  text-align: center;
-  max-width: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+
+
+  .enable-js-message {
+    position: absolute;
+    top: translateY(50%);
+    left: translateX(50%);
+    font-size: 20px;
+    color: white;
+  }
+
+  .tabs {
+    width: 100vw;
+    height: 100vh;
+
+    .tab {
+      display: none;
+      width: 100vw;
+      height: 100vh;
+
+      .container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+      }
+    }
+
+    #console-tab {
+      display: block;
+    }
+  }
 }
