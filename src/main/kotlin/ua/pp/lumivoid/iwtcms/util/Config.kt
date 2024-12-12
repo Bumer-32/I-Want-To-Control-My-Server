@@ -79,6 +79,7 @@ object Config {
             sslAlias = config.getString("ssl.ssl Alias"),
             sslPass = config.getString("ssl.ssl Pass"),
             statisticsPeriod = config.getInt("stuff.statistics period"),
+            enableIWTCMSControlPanel = config.getBoolean("web.enable IWTCMS control panel"),
             useAuthentication = config.getBoolean("auth.use Authentication"),
             users = users
         )
@@ -95,6 +96,7 @@ data class ConfigData(
     val sslAlias: String,
     val sslPass: String,
     val statisticsPeriod: Int,
+    val enableIWTCMSControlPanel: Boolean,
     val useAuthentication: Boolean,
     val users: List<User>
 )

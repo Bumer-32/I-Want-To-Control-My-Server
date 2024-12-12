@@ -24,13 +24,13 @@
 
         <div class="buttons">
             <div class="left">
-                <span class="material-icons-outlined">settings</span>
+                <span class="material-icons-outlined" id="header-settings">settings</span>
             </div>
             <div class="center">
-                <span class="material-icons-outlined">terminal</span>
+                <span class="material-icons-outlined" id="header-console">terminal</span>
             </div>
             <div class="right">
-                <span class="material-icons-outlined">group</span>
+                <span class="material-icons-outlined" id="header-players">group</span>
             </div>
         </div>
 
@@ -43,7 +43,7 @@
             </div>
     
             <div class="download-iwtcms-cli">
-                <a href="iwtcms_client.zip">
+                <a href="files/iwtcms_client.zip">
                     <div class="merger">
                         <span class="material-icons-outlined">download</span>
                         <div class="text">
@@ -56,7 +56,6 @@
     </div>
 
     <div class="container">
-        <div class="enable-js-message">If you see this message, enable javascript in your browser settings.</div>
         <div class="tabs">
             <div id="console-tab" class="tab">
                 <div class="container">
@@ -81,6 +80,13 @@
         <button>Login</button>
     </div>
 
-    <script type="module" src="ts/main.js"></script>
+    <div class="enable-js-message">
+        <img src="icon_clearbg.png" alt="IWTCMS logo">
+        <p>If you see this message, enable javascript in your browser settings.</p>
+    </div>
+
+    <div class="toast-notifications"/>
+
+    <script type="module" src="main.js"></script>
 </body>
 </html>

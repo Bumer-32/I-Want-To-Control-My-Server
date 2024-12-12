@@ -63,6 +63,7 @@ dependencies {
 	implementation include("io.ktor:ktor-serialization-kotlinx-json:${project.ktor_version}")
 	implementation include("io.ktor:ktor-server-content-negotiation:${project.ktor_version}")
 	implementation include("io.ktor:ktor-server-status-pages:$ktor_version")
+	implementation include("io.ktor:ktor-server-cors:$ktor_version")
 	include "io.ktor:ktor-events:${project.ktor_version}"
 	include "io.ktor:ktor-utils:${project.ktor_version}"
 	include "io.ktor:ktor-network-tls:${project.ktor_version}"
@@ -105,6 +106,7 @@ java {
 }
 
 tasks.register("generatePythonRequirements") {
+	group = "build"
 
 	doFirst {
 		file("$buildDir/python").delete()
@@ -132,7 +134,7 @@ tasks.register("preparePythonClient") {
 
 	def clientDir = file("src/main/python")
 	def pyBuildDir = file("$buildDir/python")
-	def outputZip = file("$buildDir/resources/main/web/iwtcms_client.zip")
+	def outputZip = file("$buildDir/resources/main/files/iwtcms_client.zip")
 
 	copy {
 		from(clientDir)
@@ -149,22 +151,32 @@ tasks.register("preparePythonClient") {
 }
 
 tasks.register("compileTypeScript", NpxTask) {
+	group = "build"
 	dependsOn tasks.npmInstall
 	command = "tsc"
 }
 
 tasks.register("compileSASS", NpxTask) {
+	group = "build"
 	dependsOn tasks.npmInstall
 	command = "sass"
 	args = ["$buildDir/../src/main/web/style.scss", "$buildDir/resources/main/web/style.css"]
 }
 
 tasks.register("compileWeb"){
+	group = "build"
 	dependsOn tasks.compileTypeScript
 	dependsOn tasks.compileSASS
 	copy {
 		from(file("src/main/web"))
 		into(file("$buildDir/resources/main/web"))
+	}
+
+	doLast {
+		// By default web content in dev mode, to disable it we need to add dev.txt with "false" in root of web folder
+		def file = new File("$buildDir/resources/main/web/dev.txt")
+		file.createNewFile()
+		file.write("false")
 	}
 }
 

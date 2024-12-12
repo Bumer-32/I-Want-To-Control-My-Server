@@ -1,5 +1,8 @@
-@import "sass/variables";
-@import "css/switch.css";
+@use "sass/variables" as vars;
+@use "css/switch.css";
+@use "sass/header";
+@use "sass/container";
+@use "sass/login";
 
 body {
   margin: 0;
@@ -15,204 +18,40 @@ body {
   transition: background-color 0.3s ease;
 }
 
-.header {
-  position: absolute;
-  background-color: var(--header-color);
-  width: 100%;
-  height: $header-height;
-  top: 0;
-  z-index: 10;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  img, 
-  .material-icons-outlined,
-  .download-iwtcms-cli,
-  .color-mode { // hover holo effect and click effect
-    transition: filter 0.3s ease, box-shadow 0.3s ease;
-    &:hover {
-      filter: drop-shadow(0 0 10px var(--holo-effect-color));
-    }
-  }
-
-  .material-icons-outlined { // press effect
-    font-size: $logos-size;
-    transition: filter 0.3s ease, font-size 0.3s ease, color 0.3s ease;
-    color: var(--header-icons-color);
-    &:active {
-      font-size: #{$logos-size - 5};
-    }
-  }
-
-  .logo img {
-    height: $logos-size;
-    position: absolute;
-    top: #{calc(($header-height - $logos-size) / 2)};
-    left: #{calc(($header-height - $logos-size) / 2)};
-  }
-
-  .buttons {
-    display: flex;
-    justify-items: center;
-    align-items: center;
-
-    .right {
-      margin-left: 10px;
-    }
-
-    .center .material-icons-outlined {
-      font-size: #{$logos-size + 20};
-      &:active {
-        font-size: #{$logos-size + 15};
-      }
-    }
-
-    .left {
-      margin-right: 10px;
-    }
-  }
-
-  .supply {
-    position: absolute;
-    top: 0;
-    right: 0;
-    display: flex;
-    align-items: center;
-
-    .color-mode .switch {
-      .slider {
-        background-color: var(--color-mode-switch-background-color);
-  
-        &:before {
-          background-color: var(--color-mode-switch-handle-color);
-          content: "brightness_4";
-          font-family: 'Material Icons Outlined';
-          font-size: 20px;
-          font-weight: 100;
-          color: var(--color-mode-switch-handle-icon-color);
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-      }
-  
-      input {
-        &:checked + .slider:before {
-          content: "brightness_5";
-        }
-      }
-    }
-  
-    .download-iwtcms-cli {
-      margin-top: 10px;
-      margin-right: #{calc(($header-height - $logos-size) / 2)};
-      height: #{$logos-size + 20px};
-      transition: font-size 0.3s ease, height 0.3s ease;
-
-      div:not(:has(*)) {
-        margin-left: 10px;
-      }
-  
-      .merger {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-      }
-  
-      .text {
-        width: 70%;
-  
-        p {
-          margin: 0;
-          font-size: 15px;
-          text-align: center;
-          transition: color 0.3s ease;
-          color: var(--header-icons-color);
-        }
-      }
-  
-      a {
-        text-decoration: none;
-      }
-  
-      .material-icons-outlined {
-        font-size: #{$logos-size - 20px};
-      }
-  
-      &:active {
-        p {
-          font-size: 14px;
-        }
-        .material-icons-outlined {
-          font-size: #{$logos-size - 21px};
-        }
-      }
-    }
-  }
-}
-
-.container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100vw;
-  height: 100vh;
-
-
-  .enable-js-message {
-    position: absolute;
-    top: translateY(50%);
-    left: translateX(50%);
-    font-size: 20px;
-    color: white;
-    z-index: 100;
-    background-color: var(--background-color);
-  }
-
-  .tabs {
-    width: 100vw;
-    height: 100vh;
-
-    .tab {
-      display: none;
-      width: 100vw;
-      height: 100vh;
-
-      .container {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: var(--main-text-color);
-        transition: color 0.3s ease;
-      }
-    }
-
-    #console-tab {
-      display: block;
-    }
-  }
-}
-
-.login {
-  position: absolute;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100vw;
-  height: 100vh;
-  
-  z-index: 100;
-
-  .background {
-    position: absolute;
-    width: 100vw;
-    height: 100vh;
-    z-index: 99;
-  }
-}
-
 .material-icons-outlined {
   user-select: none;
+}
+
+.enable-js-message {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  font-size: 20px;
+  color: var(--main-text-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  background-color: var(--background-color);
+}
+
+.toast-notifications {
+  z-index: 1000;
+  background-color: transparent;
+  color: transparent;
+  border-radius: 10px;
+  width: 250px;
+  height: 75px;
+  overflow: hidden;
+  white-space: normal;
+  word-wrap: break-word;
+  word-break: break-word;
+  padding: 10px;
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  display: none;
+  transition: color 4s ease, background-color 4s ease;
 }
