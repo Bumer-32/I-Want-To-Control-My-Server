@@ -4,12 +4,15 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.*
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.server.plugins.cors.routing.*
 import io.ktor.server.plugins.statuspages.StatusPages
 import io.ktor.server.plugins.statuspages.statusFile
 import io.ktor.server.routing.*
 import io.ktor.server.sessions.*
 import io.ktor.server.websocket.*
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.ApiListGET
+import ua.pp.lumivoid.iwtcms.ktor.api.requests.FilesGET
+import ua.pp.lumivoid.iwtcms.ktor.api.requests.IsAuthEnabledGET
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.LoginPOST
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.LogsHistoryGET
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.MainGET
@@ -42,6 +45,10 @@ fun Application.configureRouting() {
         statusFile(HttpStatusCode.NotFound, filePattern = "/web/404.html")
     }
 
+    install(CORS) {
+        anyHost()
+    }
+
     val r = routing {
     }
 
@@ -50,6 +57,8 @@ fun Application.configureRouting() {
     LoginPOST.request.invoke(r)
     ApiListGET.request.invoke(r)
     PermitsGET.request.invoke(r)
+    IsAuthEnabledGET.request.invoke(r)
+    FilesGET.request.invoke(r)
 
     ConsoleWS.ws.invoke(r)
     ServerStatsWS.ws.invoke(r)

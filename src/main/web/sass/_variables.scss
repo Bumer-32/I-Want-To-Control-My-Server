@@ -3,7 +3,12 @@ $logos-size: 50px;
 
 
 // color mode
-:root { // dark mode
+:root { 
+    //global colors (light and dark modes together)
+    --login-background-color: rgba(255, 255, 255, 0.3);
+    --login-text-color: black;
+    
+    // dark mode
     --header-color: #121717;
     --background-color: #1f2626;
     --holo-effect-color: white;
@@ -12,15 +17,31 @@ $logos-size: 50px;
     --color-mode-switch-handle-icon-color: white;
     --main-text-color: white;
     --header-icons-color: white;
+
+    --toast-notification-info-color: black;
+    --toast-notification-info-text-color: white;
+    --toast-notification-warning-color: yellow;
+    --toast-notification-warning-text-color: white;
+    --toast-notification-error-color: red;
+    --toast-notification-error-text-color: white;
+
 }
-.light-mode-impl { // light mode
+.light-mode-impl { 
+    // light mode
     --header-color: #e3b18d;
     --background-color: #FFD3B6;
     --holo-effect-color: black;
     --color-mode-switch-background-color: #b1b1b1;
     --color-mode-switch-handle-color: #505050;
-    --color-mode-switch-handle-icon-color: white;
+    --color-mode-switch-handle-icon-color: black;
     --main-text-color: black;
     --header-icons-color: black;
+
+    --toast-notification-info-color: black;
+    --toast-notification-info-text-color: white;
+    --toast-notification-warning-color: yellow;
+    --toast-notification-warning-text-color: white;
+    --toast-notification-error-color: red;
+    --toast-notification-error-text-color: white;
 }
 

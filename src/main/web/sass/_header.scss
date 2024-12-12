@@ -1,0 +1,140 @@
+@use "variables" as vars;
+
+.header {
+    position: absolute;
+    background-color: var(--header-color);
+    width: 100%;
+    height: vars.$header-height;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s ease;
+
+    img, 
+    .material-icons-outlined,
+    .download-iwtcms-cli,
+    .color-mode { // hover holo effect and click effect
+        transition: filter 0.3s ease, box-shadow 0.3s ease;
+        &:hover {
+            filter: drop-shadow(0 0 10px var(--holo-effect-color));
+        }
+    }
+
+    .material-icons-outlined { // press effect
+        font-size: vars.$logos-size;
+        transition: filter 0.3s ease, font-size 0.3s ease, color 0.3s ease;
+        color: var(--header-icons-color);
+        &:active {
+        font-size: vars.$logos-size - 5;
+        }
+    }
+
+    .logo img {
+        height: vars.$logos-size;
+        position: absolute;
+        top: calc((vars.$header-height - vars.$logos-size) / 2);
+        left: calc((vars.$header-height - vars.$logos-size) / 2);
+    }
+
+    .buttons {
+        display: flex;
+        justify-items: center;
+        align-items: center;
+
+        .right {
+            margin-left: 10px;
+        }
+
+        .center .material-icons-outlined {
+            font-size: vars.$logos-size + 20;
+            &:active {
+                font-size: vars.$logos-size + 15;
+            }
+        }
+
+        .left {
+            margin-right: 10px;
+        }
+    }
+
+    .supply {
+        position: absolute;
+        top: 0;
+        right: 0;
+        display: flex;
+        align-items: center;
+
+        .color-mode .switch {
+            .slider {
+                background-color: var(--color-mode-switch-background-color);
+
+                &:before {
+                    background-color: var(--color-mode-switch-handle-color);
+                    content: "brightness_4";
+                    font-family: 'Material Icons Outlined';
+                    font-size: 20px;
+                    font-weight: 100;
+                    color: var(--color-mode-switch-handle-icon-color);
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+            }
+
+            input {
+                &:checked + .slider:before {
+                    content: "brightness_5";
+                }
+            }
+        }
+
+        .download-iwtcms-cli {
+            margin-top: 10px;
+            margin-right: calc((vars.$header-height - vars.$logos-size) / 2);
+            height: vars.$logos-size + 20px;
+            transition: font-size 0.3s ease, height 0.3s ease;
+
+            div:not(:has(*)) {
+                margin-left: 10px;
+            }
+
+            .merger {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .text {
+                width: 70%;
+
+                p {
+                    margin: 0;
+                    font-size: 15px;
+                    text-align: center;
+                    transition: color 0.3s ease;
+                    color: var(--header-icons-color);
+                }
+            }
+
+            a {
+                text-decoration: none;
+            }
+
+            .material-icons-outlined {
+                font-size: vars.$logos-size - 20px;
+            }
+
+            &:active {
+                p {
+                    font-size: 14px;
+                }
+                .material-icons-outlined {
+                    font-size: vars.$logos-size - 21px;
+                }
+            }
+        }
+    }
+}

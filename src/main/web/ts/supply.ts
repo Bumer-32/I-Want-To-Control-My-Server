@@ -1,3 +1,5 @@
+let isDev: boolean;
+
 export function getCookies(): Map<string, string> {
     const cookiesList = document.cookie.split(';');
     const cookies = new Map<string, string>();
@@ -16,4 +18,27 @@ export function editCookie(name: string, value: string, lifetime: number): void 
 
     const expires = `expires=${expirationDate.toUTCString()}`;
     document.cookie = `${name}=${value}; ${expires}; path=/`;
+}
+
+export async function isDEV(): Promise<boolean> {
+    if (isDev != undefined) return isDev;
+
+    console.log("Check DEV");
+
+    try {
+        const request = await fetch(`${document.baseURI}dev.txt`);
+        if (request.status == 200) {
+            console.log("DEV mode disabled");
+            isDev = false;
+            return false;
+        } else {
+            console.log("DEV mode enabled");
+            isDev = true;
+            return true;
+        }
+    } catch (e) {
+        console.log("DEV mode enabled");
+        isDev = true;
+        return true;
+    }
 }

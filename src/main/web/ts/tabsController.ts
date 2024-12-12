@@ -58,7 +58,7 @@ function handleAlignHeaderButtons() {
 }
 
 function handleTabSwitching() {
-    const buttons = document.querySelectorAll(".header > .buttons img") as NodeListOf<HTMLImageElement>;
+    const buttons = document.querySelectorAll(".header > .buttons span") as NodeListOf<HTMLImageElement>;
 
     buttons.forEach(button => {
         button.addEventListener("click", () => {
