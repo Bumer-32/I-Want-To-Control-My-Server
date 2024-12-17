@@ -1,14 +1,14 @@
-export function initTabsController() {
+export async function initTabsController() {
     alignHeaderButtons();
     handleAlignHeaderButtons();
     handleTabSwitching();
 }
 
-export function addTab() {
+export async function addTab() {
     // for plugins, in future
 }
 
-export function switchTab(id: string) {
+export async function switchTab(id: string) {
     console.log("switching to tab", id);
     const tabs = document.querySelectorAll(".container > .tabs > .tab") as NodeListOf<HTMLImageElement>;
     const tab = document.querySelector(`#${id}`) as HTMLDivElement;
@@ -21,7 +21,7 @@ export function switchTab(id: string) {
 
 }
 
-function alignHeaderButtons() {
+async function alignHeaderButtons() {
     const existingFillerDiv = document.querySelector(".header > .buttons .filler-div") as HTMLDivElement | null;
     if (existingFillerDiv != null) {
         existingFillerDiv.remove();
@@ -45,7 +45,7 @@ function alignHeaderButtons() {
     }
 }
 
-function handleAlignHeaderButtons() {
+async function handleAlignHeaderButtons() {
     const followDiv = document.querySelector(".header > .buttons") as HTMLDivElement;
 
     const handleMutation = (mutationsList: MutationRecord[]) => {
@@ -57,7 +57,7 @@ function handleAlignHeaderButtons() {
     observer.observe(followDiv, {childList: true, attributes: false, subtree: false});
 }
 
-function handleTabSwitching() {
+async function handleTabSwitching() {
     const buttons = document.querySelectorAll(".header > .buttons span") as NodeListOf<HTMLImageElement>;
 
     buttons.forEach(button => {

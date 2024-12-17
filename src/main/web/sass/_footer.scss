@@ -1,0 +1,47 @@
+@use "variables" as vars;
+
+.footer {
+    position: absolute;
+    background-color: var(--footer-color);
+    width: 100%;
+    height: vars.$footer-height;
+    bottom: 0;
+
+    .iwtcms-label {
+        position: absolute;
+        left: 55px;
+        bottom: -28px;
+        top: auto;
+        background: linear-gradient(to right, var(--footer-iwtcms-label-color-1) 0, var(--footer-iwtcms-label-color-2) 10%, var(--footer-iwtcms-label-color-3) 20%);
+        background-position: 0;
+        -webkit-background-clip: text;
+    }
+
+    .github {
+        // TODO finish github a
+        position: absolute;
+        bottom: -20px;
+        left: 50%;
+        font-size: 14px;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        color: var(--footer-github-title-color);
+
+        svg {
+            width: 20px;
+            filter: var(--footer-github-logo-color);
+        }
+
+        .material-icons-outlined {
+            margin-left: 5px;
+            font-size: 12px;
+            color: var(--footer-github-star-color);
+            transition: color ease 0.3s;
+        }
+
+        &:hover .material-icons-outlined {
+            color: var(--footer-github-star-hover-color);
+        }
+    }
+}

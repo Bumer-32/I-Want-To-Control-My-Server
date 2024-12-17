@@ -83,6 +83,10 @@ dependencies {
 	implementation include("commons-codec:commons-codec:${project.commons_codec}")
 
 	modImplementation "me.lucko:spark-api:${project.spark_api_version}"
+
+	implementation "org.shredzone.acme4j:acme4j:${project.acme4j_version}"
+	implementation "org.shredzone.acme4j:acme4j-utils:${project.acme4j_utils_version}"
+
 }
 
 tasks.withType(JavaCompile).configureEach {

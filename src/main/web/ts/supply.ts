@@ -1,3 +1,6 @@
+import { Constants } from "./constants.js";
+import { ToastSystem } from "./toastSystem.js";
+
 let isDev: boolean;
 
 export function getCookies(): Map<string, string> {
@@ -33,12 +36,24 @@ export async function isDEV(): Promise<boolean> {
             return false;
         } else {
             console.log("DEV mode enabled");
+            ToastSystem.showInfo("DEV mode enabled")
             isDev = true;
             return true;
         }
     } catch (e) {
         console.log("DEV mode enabled");
+        ToastSystem.showInfo("DEV mode enabled")
         isDev = true;
         return true;
+    }
+}
+
+export async function getVersion(): Promise<string> {
+    try {
+        const request = await fetch(Constants.VERSION_URL);
+        const version = await request.text();
+        return version;
+    } catch (e) {
+        return "";
     }
 }

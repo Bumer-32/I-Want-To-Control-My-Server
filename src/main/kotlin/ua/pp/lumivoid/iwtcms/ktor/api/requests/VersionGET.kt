@@ -6,18 +6,17 @@ import io.ktor.server.routing.Routing
 import io.ktor.server.routing.get
 import ua.pp.lumivoid.iwtcms.Constants
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.ApiListGET.registerAPI
-import ua.pp.lumivoid.iwtcms.util.Config
 
-object IsAuthEnabledGET: Request() {
+object VersionGET: Request() {
     override val logger = Constants.EMBEDDED_SERVER_LOGGER
-    override val PATH = "/api/isAuthEnabled"
+    override val PATH = "/api/iwtcmsVersion"
 
     override val request: Routing.() -> Unit = {
         logger.info("Initializing $PATH request")
-        registerAPI("IsAuthEnabledGET",  PATH)
+        registerAPI("VersionGET",  PATH)
 
         get(PATH) {
-            call.respondText(Config.readConfig().useAuthentication.toString(), ContentType.Text.Plain)
+            call.respondText(Constants.MOD_VERSION, ContentType.Text.Plain)
         }
     }
 }
