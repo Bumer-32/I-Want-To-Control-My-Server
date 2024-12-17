@@ -17,6 +17,7 @@ import ua.pp.lumivoid.iwtcms.ktor.api.requests.LoginPOST
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.LogsHistoryGET
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.MainGET
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.PermitsGET
+import ua.pp.lumivoid.iwtcms.ktor.api.requests.VersionGET
 import ua.pp.lumivoid.iwtcms.ktor.api.websockets.ConsoleWS
 import ua.pp.lumivoid.iwtcms.ktor.api.websockets.ServerStatsWS
 import ua.pp.lumivoid.iwtcms.ktor.cookie.UserSession
@@ -59,6 +60,7 @@ fun Application.configureRouting() {
     PermitsGET.request.invoke(r)
     IsAuthEnabledGET.request.invoke(r)
     FilesGET.request.invoke(r)
+    VersionGET.request.invoke(r)
 
     ConsoleWS.ws.invoke(r)
     ServerStatsWS.ws.invoke(r)

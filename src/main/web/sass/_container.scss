@@ -6,7 +6,7 @@
     align-items: center;
     justify-content: center;
     width: 100vw;
-    height: calc(100vh - vars.$header-height);
+    height: calc(100vh - vars.$header-height - vars.$footer-height);
     position: absolute;
     top: vars.$header-height;
   

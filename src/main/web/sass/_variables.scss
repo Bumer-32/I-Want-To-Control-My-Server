@@ -1,22 +1,39 @@
 $header-height: 90px;
+$footer-height: 30px;
 $logos-size: 50px;
 
 
 // color mode
 :root { 
+    // ! CONVERTER FOR SVG COLORS: https://codepen.io/sosuke/pen/Pjoqqp 
+
     //global colors (light and dark modes together)
     --login-background-color: rgba(255, 255, 255, 0.3);
     --login-text-color: black;
     
     // dark mode
     --header-color: #121717;
+    --footer-color: #121717;
     --background-color: #1f2626;
     --holo-effect-color: white;
+
     --color-mode-switch-background-color: #2d2d2d;
     --color-mode-switch-handle-color: #505050;
     --color-mode-switch-handle-icon-color: white;
+
     --main-text-color: white;
     --header-icons-color: white;
+
+    --loading-background-color: #1f2626;
+
+    --footer-iwtcms-label-color-1: #9f9f9f;
+    --footer-iwtcms-label-color-2: #fff;
+    --footer-iwtcms-label-color-3: #868686;
+
+    --footer-github-logo-color: invert(100%) sepia(100%) saturate(0%) hue-rotate(288deg) brightness(102%) contrast(102%); // #ffffff
+    --footer-github-title-color: white;
+    --footer-github-star-color: gray;
+    --footer-github-star-hover-color: #fde047;
 
     --toast-notification-info-color: black;
     --toast-notification-info-text-color: white;
@@ -29,13 +46,27 @@ $logos-size: 50px;
 .light-mode-impl { 
     // light mode
     --header-color: #e3b18d;
+    --footer-color: #e3b18d;
     --background-color: #FFD3B6;
     --holo-effect-color: black;
+
     --color-mode-switch-background-color: #b1b1b1;
     --color-mode-switch-handle-color: #505050;
     --color-mode-switch-handle-icon-color: black;
+
     --main-text-color: black;
     --header-icons-color: black;
+
+    --loading-background-color: #FFD3B6;
+
+    --footer-iwtcms-label-color-1: #9f9f9f;
+    --footer-iwtcms-label-color-2: #fff;
+    --footer-iwtcms-label-color-3: #868686;
+
+    --footer-github-logo-color: invert(100%) sepia(100%) saturate(0%) hue-rotate(288deg) brightness(102%) contrast(102%); // #ffffff
+    --footer-github-title-color: white;
+    --footer-github-star-color: gray;
+    --footer-github-star-hover-color: #fde047;
 
     --toast-notification-info-color: black;
     --toast-notification-info-text-color: white;

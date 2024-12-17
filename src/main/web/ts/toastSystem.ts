@@ -3,9 +3,21 @@ export class ToastSystem {
     private static isShowing: boolean = false;
     private static notification: HTMLDivElement = document.querySelector(".toast-notifications") as HTMLDivElement;
 
-    public static addToQueue(text: string, type: string): void {
+    private static addToQueue(text: string, type: string): void {
         this.queue.push({ text, type });
         this.showNext();
+    }
+
+    public static showError(text: string): void {
+        this.addToQueue(text, "error");
+    }
+
+    public static showWarning(text: string): void {
+        this.addToQueue(text, "warning");
+    }
+
+    public static showInfo(text: string): void {
+        this.addToQueue(text, "info");
     }
 
     private static async showNext() {
@@ -16,7 +28,7 @@ export class ToastSystem {
         setTimeout(() => {
             this.isShowing = false;
             this.showNext();
-        }, 5000);
+        }, 1500 + 15100);
     }
 
     private static async show(text: string, type: string) {
@@ -34,7 +46,7 @@ export class ToastSystem {
                 setTimeout(() => {
                     this.notification.innerHTML = "";
                     this.notification.style.display = "none";
-                }, 4000);
+                }, 1000);
             }, 15000);
         }, 100);
     }
