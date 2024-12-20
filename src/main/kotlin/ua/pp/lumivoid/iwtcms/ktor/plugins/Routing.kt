@@ -1,5 +1,6 @@
 package ua.pp.lumivoid.iwtcms.ktor.plugins
 
+import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.*
@@ -48,6 +49,7 @@ fun Application.configureRouting() {
 
     install(CORS) {
         anyHost()
+        allowHeader(HttpHeaders.ContentType)
     }
 
     val r = routing {

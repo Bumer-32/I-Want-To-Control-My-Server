@@ -160,7 +160,7 @@ tasks.register("compileSASS", NpxTask) {
 	group = "build"
 	dependsOn tasks.npmInstall
 	command = "sass"
-	args = ["$buildDir/../src/main/web/style.scss", "$buildDir/resources/main/web/style.css"]
+	args = ["$buildDir/../src/main/web/.", "$buildDir/resources/main/web/."]
 }
 
 tasks.register("compileWeb"){

@@ -15,7 +15,7 @@
     img, 
     .material-icons-outlined,
     .download-iwtcms-cli,
-    .color-mode { // hover holo effect and click effect
+    .color-mode { // hover holo effect
         transition: filter 0.3s ease, box-shadow 0.3s ease;
         &:hover {
             filter: drop-shadow(0 0 10px var(--holo-effect-color));
