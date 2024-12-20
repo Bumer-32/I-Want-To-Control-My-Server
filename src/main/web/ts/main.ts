@@ -1,6 +1,6 @@
-import { initTabsController } from "./ts/tabsController.js";
-import { initLogin } from "./ts/login.js";
-import { Constants } from "./ts/constants.js";
+import { initTabsController } from "./tabsController.js";
+import { initLogin } from "./login.js";
+import { Constants } from "./constants.js";
 
 async function loadGithubStars() {
     const request = fetch("https://api.github.com/repos/Bumer-32/I-Want-To-Control-My-Server");
@@ -13,9 +13,6 @@ async function loadGithubStars() {
 }
 
 async function main() {
-    // ? remove js message
-    (document.querySelector(".enable-js-message") as HTMLDivElement).style.display = "none";
-
     // ? color mode switch
     const color_mode_switch = document.querySelector(".header > .supply > .color-mode > .switch input") as HTMLInputElement
     color_mode_switch.onchange = () => {
@@ -37,6 +34,9 @@ async function main() {
 
     initTabsController();
     initLogin();
+
+    // ? remove loading screen
+    (document.querySelector(".loading") as HTMLDivElement).classList.add("disabled");
 }
 
 main();

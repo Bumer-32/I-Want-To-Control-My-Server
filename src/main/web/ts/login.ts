@@ -25,4 +25,36 @@ export async function initLogin() {
             window.location.assign(Constants.PAGE_BAD_CONNECTION_URL);
         }
     }
+
+
+
+
+    (document.getElementById("loginForm") as HTMLFormElement).addEventListener("submit", async function(event: Event) {
+        event.preventDefault();
+
+        const username = (document.getElementById("username") as HTMLInputElement).value;
+        const password = (document.getElementById("password") as HTMLInputElement).value;
+
+        const data = { username, password };
+
+        try {
+            console.log(JSON.stringify(data));
+            const response = await fetch(Constants.LOGIN_URL, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                console.log("Success:", result);
+            } else {
+                console.error("Error:", response.statusText);
+            }
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    });
 }

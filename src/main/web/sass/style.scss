@@ -1,13 +1,13 @@
 // sass imports
-@use "sass/variables" as vars;
-@use "sass/header";
-@use "sass/footer";
-@use "sass/container";
-@use "sass/login";
+@use "variables" as vars;
+@use "header";
+@use "footer";
+@use "container";
+@use "login";
 
 //css imports
-@use "css/switch.css";
-@use "css/btn-shine.css";
+@use "../css/switch.css";
+@use "../css/btn-shine.css";
 
 body {
   margin: 0;
@@ -60,17 +60,6 @@ body {
   right: 15px;
   display: none;
   transition: color 1s ease, background-color 1s ease;
-}
-
-.loading {
-  z-index: 50;
-  background-color: black;
-  display: none;
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100vh;
-  width: 100vw;
 }
 
 .disabled {
