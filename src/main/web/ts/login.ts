@@ -1,8 +1,19 @@
 import { Constants } from "./constants.js";
-import { isDEV } from "./supply.js";
+import { checkAuth, isDEV } from "./supply.js";
 import { ToastSystem } from "./toastSystem.js";
 
+
 export async function initLogin() {
+    checkIsLoginNeeded();
+    const auth = await checkAuth()
+    if (auth != null) {
+        ToastSystem.showInfo(`Hello ${auth}`)
+        document.querySelector(".login")?.classList.add("disabled");
+    }
+    handleLoginForm();
+}
+
+async function checkIsLoginNeeded() {
     try {
         const response = await fetch(Constants.IS_AUTH_ENABLED_URL)
 
@@ -19,42 +30,52 @@ export async function initLogin() {
             document.querySelector(".login")?.classList.add("disabled");
         }
     } catch (error) {
-        console.log(error);
-        ToastSystem.showError("Error fetching data");
+        console.error(error);
+        ToastSystem.showError(`Error: ${error}`);
         if (!await isDEV()) {
             window.location.assign(Constants.PAGE_BAD_CONNECTION_URL);
         }
     }
+}
 
-
-
-
+async function handleLoginForm() {
     (document.getElementById("loginForm") as HTMLFormElement).addEventListener("submit", async function(event: Event) {
         event.preventDefault();
 
-        const username = (document.getElementById("username") as HTMLInputElement).value;
-        const password = (document.getElementById("password") as HTMLInputElement).value;
+        const formData = new FormData(this);
 
-        const data = { username, password };
-
+        var object: { [key: string]: any } = {};
+        formData.forEach((value, key) => object[key] = value);
+        var json = JSON.stringify(object);
+        
         try {
-            console.log(JSON.stringify(data));
             const response = await fetch(Constants.LOGIN_URL, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify(data),
+                credentials: "include",
+                body: json,
             });
 
             if (response.ok) {
-                const result = await response.json();
-                console.log("Success:", result);
+                console.log("Success");
+                ToastSystem.showInfo("Success");
+                location.reload();
+            } else if (response.status == 401) {
+                console.error("Unauthorized");
+                ToastSystem.showError("Incorrect username or password");
+
             } else {
                 console.error("Error:", response.statusText);
+                ToastSystem.showError(`Error: ${response.statusText}`);
             }
         } catch (error) {
             console.error("Error:", error);
+            ToastSystem.showError(`Error: ${error}`);
+            if (!await isDEV()) {
+                window.location.assign(Constants.PAGE_BAD_CONNECTION_URL);
+            }
         }
     });
 }

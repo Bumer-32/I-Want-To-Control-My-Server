@@ -6,6 +6,8 @@
     width: 100%;
     height: vars.$footer-height;
     bottom: 0;
+    display: flex;
+    align-items: center;
 
     .iwtcms-label {
         position: absolute;
@@ -15,6 +17,19 @@
         background: linear-gradient(to right, var(--footer-iwtcms-label-color-1) 0, var(--footer-iwtcms-label-color-2) 10%, var(--footer-iwtcms-label-color-3) 20%);
         background-position: 0;
         -webkit-background-clip: text;
+    }
+
+    .authors {
+        font-size: 8px;
+        display: flex;
+        flex-direction: column;
+        margin-left: 110px;
+        color: var(--footer-authors-color);
+
+        a {
+            color: var(--footer-authors-url-color);
+            text-decoration: none;
+        }
     }
 
     .github {

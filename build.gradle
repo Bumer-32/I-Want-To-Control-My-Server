@@ -62,8 +62,8 @@ dependencies {
 	implementation include("io.ktor:ktor-server-sessions:${project.ktor_version}")
 	implementation include("io.ktor:ktor-serialization-kotlinx-json:${project.ktor_version}")
 	implementation include("io.ktor:ktor-server-content-negotiation:${project.ktor_version}")
-	implementation include("io.ktor:ktor-server-status-pages:$ktor_version")
-	implementation include("io.ktor:ktor-server-cors:$ktor_version")
+	implementation include("io.ktor:ktor-server-status-pages:${project.ktor_version}")
+	implementation include("io.ktor:ktor-server-cors:${project.ktor_version}")
 	include "io.ktor:ktor-events:${project.ktor_version}"
 	include "io.ktor:ktor-utils:${project.ktor_version}"
 	include "io.ktor:ktor-network-tls:${project.ktor_version}"
@@ -76,6 +76,11 @@ dependencies {
 	include "io.netty:netty-transport-classes-kqueue:${project.netty_version}"
 	include "io.netty:netty-codec-http2:${project.netty_version}"
 	include "io.netty:netty-codec-http:${project.netty_version}"
+
+	// ktor client
+	implementation include("io.ktor:ktor-client-core:${project.ktor_version}")
+	implementation include("io.ktor:ktor-client-cio:${project.ktor_version}")
+	implementation include("io.ktor:ktor-client-websockets:${project.ktor_version}")
 	// already launched ktor
 
 	implementation include("com.typesafe:config:${project.hocon_config_version}")
@@ -136,6 +141,10 @@ tasks.register("preparePythonClient") {
 	def pyBuildDir = file("$buildDir/python")
 	def outputZip = file("$buildDir/resources/main/files/iwtcms_client.zip")
 
+	doFirst {
+		outputZip.delete()
+	}
+
 	copy {
 		from(clientDir)
 		into(pyBuildDir)
@@ -150,33 +159,39 @@ tasks.register("preparePythonClient") {
 	}
 }
 
+tasks.register("cleanWebFolder") {
+	group = "build"
+
+	doFirst {
+		file("$buildDir/resources/main/web").deleteDir()
+	}
+}
+
 tasks.register("compileTypeScript", NpxTask) {
 	group = "build"
+	dependsOn tasks.cleanWebFolder
 	dependsOn tasks.npmInstall
 	command = "tsc"
 }
 
 tasks.register("compileSASS", NpxTask) {
 	group = "build"
+	dependsOn tasks.cleanWebFolder
 	dependsOn tasks.npmInstall
 	command = "sass"
-	args = ["$buildDir/../src/main/web/.", "$buildDir/resources/main/web/."]
+	args = ["$buildDir/../src/main/web/.:$buildDir/resources/main/web/.",]
 }
 
 tasks.register("compileWeb"){
 	group = "build"
 	dependsOn tasks.compileTypeScript
 	dependsOn tasks.compileSASS
-	copy {
-		from(file("src/main/web"))
-		into(file("$buildDir/resources/main/web"))
-	}
 
 	doLast {
-		// By default web content in dev mode, to disable it we need to add dev.txt with "false" in root of web folder
-		def file = new File("$buildDir/resources/main/web/dev.txt")
-		file.createNewFile()
-		file.write("false")
+		copy {
+			from(file("src/main/web"))
+			into(file("$buildDir/resources/main/web"))
+		}
 	}
 }
 

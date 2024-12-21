@@ -11,9 +11,13 @@ import io.ktor.server.plugins.statuspages.statusFile
 import io.ktor.server.routing.*
 import io.ktor.server.sessions.*
 import io.ktor.server.websocket.*
+import ua.pp.lumivoid.iwtcms.ktor.api.dev.DevRequests
+import ua.pp.lumivoid.iwtcms.ktor.api.dev.DevWS
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.ApiListGET
+import ua.pp.lumivoid.iwtcms.ktor.api.requests.CheckLoginGET
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.FilesGET
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.IsAuthEnabledGET
+import ua.pp.lumivoid.iwtcms.ktor.api.requests.IsDevEnabledGET
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.LoginPOST
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.LogsHistoryGET
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.MainGET
@@ -22,6 +26,7 @@ import ua.pp.lumivoid.iwtcms.ktor.api.requests.VersionGET
 import ua.pp.lumivoid.iwtcms.ktor.api.websockets.ConsoleWS
 import ua.pp.lumivoid.iwtcms.ktor.api.websockets.ServerStatsWS
 import ua.pp.lumivoid.iwtcms.ktor.cookie.UserSession
+import ua.pp.lumivoid.iwtcms.util.Config
 import kotlin.time.Duration.Companion.seconds
 
 fun Application.configureRouting() {
@@ -36,6 +41,7 @@ fun Application.configureRouting() {
         cookie<UserSession>("USER_SESSION") {
             cookie.httpOnly = true
             cookie.secure = true
+            cookie.sameSite = "None"
         }
     }
 
@@ -50,12 +56,12 @@ fun Application.configureRouting() {
     install(CORS) {
         anyHost()
         allowHeader(HttpHeaders.ContentType)
+        allowCredentials = true
     }
 
     val r = routing {
     }
 
-    MainGET.request.invoke(r)
     LogsHistoryGET.request.invoke(r)
     LoginPOST.request.invoke(r)
     ApiListGET.request.invoke(r)
@@ -63,7 +69,16 @@ fun Application.configureRouting() {
     IsAuthEnabledGET.request.invoke(r)
     FilesGET.request.invoke(r)
     VersionGET.request.invoke(r)
+    CheckLoginGET.request.invoke(r)
+    IsDevEnabledGET.request.invoke(r)
 
     ConsoleWS.ws.invoke(r)
     ServerStatsWS.ws.invoke(r)
+
+    if (!Config.readConfig().devMode) {
+        MainGET.request.invoke(r)
+    } else {
+        DevRequests.request.invoke(r)
+        DevWS.ws.invoke(r)
+    }
 }

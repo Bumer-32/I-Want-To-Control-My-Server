@@ -1,6 +1,7 @@
 import { initTabsController } from "./tabsController.js";
 import { initLogin } from "./login.js";
 import { Constants } from "./constants.js";
+import { isDEV } from "./supply.js";
 
 async function loadGithubStars() {
     const request = fetch("https://api.github.com/repos/Bumer-32/I-Want-To-Control-My-Server");
@@ -22,7 +23,6 @@ async function main() {
     if (localStorage.getItem("color-mode") == "light") {
         color_mode_switch.checked = true;
         document.body.classList.add("light-mode-impl");
-        window.getSelection()?.removeAllRanges();
     }
 
     await Constants.init(); // ! IMPORTANT TO LOAD FIRST
@@ -34,6 +34,8 @@ async function main() {
 
     initTabsController();
     initLogin();
+
+    isDEV(); // for caching
 
     // ? remove loading screen
     (document.querySelector(".loading") as HTMLDivElement).classList.add("disabled");

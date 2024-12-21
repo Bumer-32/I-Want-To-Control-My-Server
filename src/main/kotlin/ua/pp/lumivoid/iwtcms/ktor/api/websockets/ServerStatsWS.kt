@@ -76,7 +76,7 @@ object ServerStatsWS: WS() {
             runCatching {
                 incoming.consumeEach { frame ->
                     if (frame is Frame.Text) {
-                        // send on avery message
+                        // send on every message
                         val stats = ServerStats.getServerStats()
                         val statsJson = json.encodeToString(stats)
                         send(Frame.Text(statsJson))
