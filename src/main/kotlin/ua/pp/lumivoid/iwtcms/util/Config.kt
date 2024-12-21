@@ -50,6 +50,8 @@ object Config {
     private fun createConfigData(config: Config): ConfigData {
         val users: MutableList<User> = mutableListOf()
 
+        // TODO if launching with built jar and bad config in config folder it will crash, but it must to use default config instead
+
         config.getList("auth.users").forEach { configUser ->
             val user = (configUser as ConfigObject).toConfig()
             val newUsername = user.getString("name")
@@ -81,7 +83,11 @@ object Config {
             statisticsPeriod = config.getInt("stuff.statistics period"),
             enableIWTCMSControlPanel = config.getBoolean("web.enable IWTCMS control panel"),
             useAuthentication = config.getBoolean("auth.use Authentication"),
-            users = users
+            users = users,
+            devMode = config.getBoolean("dev.dev mode"),
+            proxyUrl = config.getString("dev.proxy url"),
+            proxyWsUrl = config.getString("dev.proxy ws url"),
+            proxyWsPort = config.getInt("dev.proxy ws port")
         )
     }
 }
@@ -98,5 +104,9 @@ data class ConfigData(
     val statisticsPeriod: Int,
     val enableIWTCMSControlPanel: Boolean,
     val useAuthentication: Boolean,
-    val users: List<User>
+    val users: List<User>,
+    val devMode: Boolean,
+    val proxyUrl: String,
+    val proxyWsUrl: String,
+    val proxyWsPort: Int
 )

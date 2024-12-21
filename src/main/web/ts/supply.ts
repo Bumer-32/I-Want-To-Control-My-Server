@@ -29,8 +29,16 @@ export async function isDEV(): Promise<boolean> {
     console.log("Check DEV");
 
     try {
-        const request = await fetch(`${document.baseURI}dev.txt`);
-        if (request.status == 200) {
+        const response = await fetch(Constants.IS_DEV_ENABLED_URL)
+
+        if (!response.ok) {
+            console.error("Error fetching data:", response.status, response.statusText);
+            ToastSystem.showError(`Error fetching data: ${response.status}`);
+            isDev = true;
+            return true;
+        }
+
+        if (await response.text() == "false") {
             console.log("DEV mode disabled");
             isDev = false;
             return false;
@@ -40,9 +48,9 @@ export async function isDEV(): Promise<boolean> {
             isDev = true;
             return true;
         }
-    } catch (e) {
-        console.log("DEV mode enabled");
-        ToastSystem.showInfo("DEV mode enabled")
+    } catch (error) {
+        console.error(error);
+        ToastSystem.showError(`Error: ${error}`);
         isDev = true;
         return true;
     }
@@ -56,4 +64,29 @@ export async function getVersion(): Promise<string> {
     } catch (e) {
         return "";
     }
+}
+
+export async function checkAuth(): Promise<string | null> {
+    try {
+        const request = await fetch(Constants.CHECK_LOGIN_URL);
+        if (request.status == 200) {
+            return await request.text();
+        } else if (request.status == 401) {
+            return null;
+        } else {
+            console.error("Error:", request.statusText);
+            ToastSystem.showError(`Error: ${request.statusText}`);
+            if (!await isDEV()) {
+                window.location.assign(Constants.PAGE_BAD_CONNECTION_URL);
+            }
+        }
+    } catch (error) {
+        console.error("Error:", error);
+        ToastSystem.showError(`Error: ${error}`);
+        if (!await isDEV()) {
+            window.location.assign(Constants.PAGE_BAD_CONNECTION_URL);
+        }
+    }
+
+    return null;
 }
