@@ -5,6 +5,7 @@ import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.websocket.WebSockets
 import io.ktor.client.plugins.websocket.webSocket
 import io.ktor.http.HttpMethod
+import io.ktor.server.request.uri
 import io.ktor.server.routing.Routing
 import io.ktor.server.websocket.webSocket
 import io.ktor.websocket.CloseReason
@@ -32,7 +33,7 @@ object DevWS: WS() {
         webSocket(PATH) {
             var running = true
 
-            val client = Client(this@DevWS)
+            val client = Client(this@DevWS, call.request.uri)
 
             WSinterface = object : WebSocketBaseInterface {
                 override fun sendMessage(message: String) {
@@ -60,7 +61,7 @@ object DevWS: WS() {
 
     override fun asWs(): WebSocketBaseInterface? = WSinterface
 
-    private class Client(parent: DevWS) {
+    private class Client(parent: DevWS, uri: String) {
         private var WSinterface: WebSocketBaseInterface? = null
 
         init {
@@ -73,7 +74,7 @@ object DevWS: WS() {
                     method = HttpMethod.Get,
                     host = Config.readConfig().proxyWsUrl,
                     port = Config.readConfig().proxyWsPort,
-                    path = "/ws"
+                    path = uri
                 ) {
                     var running = true
 

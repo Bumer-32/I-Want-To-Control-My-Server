@@ -12,30 +12,112 @@
     align-items: center;
     transition: background-color 0.3s ease;
 
-    img, 
-    .material-icons-outlined,
+    .material-symbols-rounded,
     .download-iwtcms-cli,
-    .color-mode { // hover holo effect
+    .color-mode,
+    .menu .menu-button,
+    .menu .menu-items ul li { // hover holo effect
         transition: filter 0.3s ease, box-shadow 0.3s ease;
         &:hover {
             filter: drop-shadow(0 0 10px var(--holo-effect-color));
         }
     }
 
-    .material-icons-outlined { // press effect
+    .material-symbols-rounded { // press effect
         font-size: vars.$logos-size;
         transition: filter 0.3s ease, font-size 0.3s ease, color 0.3s ease;
         color: var(--header-icons-color);
         &:active {
-        font-size: vars.$logos-size - 5;
+            font-size: calc(#{vars.$logos-size - 5px});
         }
     }
 
-    .logo img {
-        height: vars.$logos-size;
-        position: absolute;
-        top: calc((vars.$header-height - vars.$logos-size) / 2);
-        left: calc((vars.$header-height - vars.$logos-size) / 2);
+    .menu {
+        .menu-button {
+            position: absolute;
+            top: calc((#{vars.$header-height - vars.$logos-size}) / 2 - 10px);
+            left: calc((#{vars.$header-height - vars.$logos-size}) / 2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            &:active {
+                .material-symbols-rounded {
+                    font-size: 15px;
+                }
+                .text {
+                    font-size: 10px;
+                }
+                img {
+                    height: vars.$logos-size - 5px;
+                }
+            }
+
+            img {
+                height: vars.$logos-size;
+            }
+
+            .menu-text {
+                user-select: none;
+                display: flex;
+                align-items: center;
+
+                .material-symbols-rounded {
+                    transform: unset;
+                    font-size: 20px;
+
+                    &:hover {
+                        filter: unset
+                    }
+                    &:active {
+                        font-size: 20px;
+                    }
+                }
+
+                .text {
+                    font-size: 15px;
+                }
+            }
+        }
+
+        .menu-button input {
+            display: none;
+        }
+
+        .menu-button:has(input:checked) ~ .menu-items {
+            left: 25px;
+        }
+
+        .menu-items {
+            position: absolute;
+            top: 100px;
+            left: -100px;
+            background-color: var(--header-menu-background-color);
+            border-radius: 10px;
+            transition: left 0.3s ease;
+            padding: 10px;
+
+            ul {
+                margin: 0;
+                padding: 0;
+                list-style-type: none;
+
+                li {
+                    user-select: none;
+                    padding: 10px;
+                    border-radius: 10px;
+                    width: 125px;
+                    background-color: var(--header-menu-item-background-color);
+                    margin-bottom: 5px;
+
+                    // TODO add icons to menu items
+                
+                    &:hover {
+                        background-color: var(--header-menu-item-hover-background-color);
+                    }
+                }
+            }
+        }
     }
 
     .buttons {
@@ -47,7 +129,7 @@
             margin-left: 10px;
         }
 
-        .center .material-icons-outlined {
+        .center .material-symbols-rounded {
             font-size: vars.$logos-size + 20;
             &:active {
                 font-size: vars.$logos-size + 15;
@@ -73,7 +155,7 @@
                 &:before {
                     background-color: var(--color-mode-switch-handle-color);
                     content: "brightness_4";
-                    font-family: 'Material Icons Outlined';
+                    font-family: 'Material Symbols Rounded';
                     font-size: 20px;
                     font-weight: 100;
                     color: var(--color-mode-switch-handle-icon-color);
@@ -92,7 +174,7 @@
 
         .download-iwtcms-cli {
             margin-top: 10px;
-            margin-right: calc((vars.$header-height - vars.$logos-size) / 2);
+            margin-right: calc((#{vars.$header-height - vars.$logos-size}) / 2);
             height: vars.$logos-size + 20px;
             transition: font-size 0.3s ease, height 0.3s ease;
 
@@ -123,7 +205,7 @@
                 text-decoration: none;
             }
 
-            .material-icons-outlined {
+            .material-symbols-rounded {
                 font-size: vars.$logos-size - 20px;
             }
 
@@ -131,7 +213,7 @@
                 p {
                     font-size: 14px;
                 }
-                .material-icons-outlined {
+                .material-symbols-rounded {
                     font-size: vars.$logos-size - 21px;
                 }
             }

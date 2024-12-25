@@ -36,6 +36,7 @@ async function alignHeaderButtons() {
     const fillerDiv = document.createElement("div");
     fillerDiv.style.width = "50px";
     fillerDiv.style.height = "50px";
+    fillerDiv.style.display = "inline-block";
     fillerDiv.classList.add("filler-div");
     
     if (leftCount > rightCount) {
