@@ -20,18 +20,18 @@ export class ToastSystem {
         this.addToQueue(text, "info");
     }
 
-    private static async showNext() {
+    private static async showNext(showTime: number = 5000) {
         if (this.isShowing || this.queue.length === 0) return;
         this.isShowing = true;
         const { text, type } = this.queue.shift()!;
-        await this.show(text, type);
+        await this.show(text, type, showTime);
         setTimeout(() => {
             this.isShowing = false;
             this.showNext();
-        }, 1500 + 15100);
+        }, 1600 + showTime);
     }
 
-    private static async show(text: string, type: string) {
+    private static async show(text: string, type: string, showTime: number) {
         this.notification.style.color = "transparent";
         this.notification.style.backgroundColor = "transparent";
         this.notification.innerHTML = text;
@@ -47,7 +47,7 @@ export class ToastSystem {
                     this.notification.innerHTML = "";
                     this.notification.style.display = "none";
                 }, 1000);
-            }, 15000);
+            }, showTime);
         }, 100);
     }
 }

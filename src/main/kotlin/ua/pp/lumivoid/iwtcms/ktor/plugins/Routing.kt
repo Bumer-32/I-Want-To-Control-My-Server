@@ -40,8 +40,8 @@ fun Application.configureRouting() {
     install(Sessions) {
         cookie<UserSession>("USER_SESSION") {
             cookie.httpOnly = true
-            cookie.secure = true
-            cookie.sameSite = "None"
+            //cookie.secure = true
+            //cookie.sameSite = "None"
         }
     }
 
