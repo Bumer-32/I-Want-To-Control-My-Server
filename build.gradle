@@ -88,6 +88,8 @@ dependencies {
 	implementation include("commons-codec:commons-codec:${project.commons_codec}")
 
 	modImplementation "me.lucko:spark-api:${project.spark_api_version}"
+
+	implementation "io.github.irgaly.kfswatch:kfswatch:${project.kfswatch_version}"
 }
 
 tasks.withType(JavaCompile).configureEach {

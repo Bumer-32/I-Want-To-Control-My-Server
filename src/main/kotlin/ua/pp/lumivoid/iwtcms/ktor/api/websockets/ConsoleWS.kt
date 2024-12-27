@@ -83,7 +83,7 @@ object ConsoleWS: WS() {
                         }
                     }
                 }.onFailure { exception ->
-                    logger.error("WebSocket exception: ${exception}")
+                    logger.error("WebSocket exception: $exception")
                 }
             }
         }

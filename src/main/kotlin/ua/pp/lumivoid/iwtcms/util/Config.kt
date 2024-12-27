@@ -85,9 +85,6 @@ object Config {
             useAuthentication = config.getBoolean("auth.use Authentication"),
             users = users,
             devMode = config.getBoolean("dev.dev mode"),
-            proxyUrl = config.getString("dev.proxy url"),
-            proxyWsUrl = config.getString("dev.proxy ws url"),
-            proxyWsPort = config.getInt("dev.proxy ws port")
         )
     }
 }
@@ -106,7 +103,4 @@ data class ConfigData(
     val useAuthentication: Boolean,
     val users: List<User>,
     val devMode: Boolean,
-    val proxyUrl: String,
-    val proxyWsUrl: String,
-    val proxyWsPort: Int
 )
