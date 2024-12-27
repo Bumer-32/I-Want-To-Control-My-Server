@@ -15,8 +15,7 @@
     .material-symbols-rounded,
     .download-iwtcms-cli,
     .color-mode,
-    .menu .menu-button,
-    .menu .menu-items ul li { // hover holo effect
+    .menu .menu-button { // hover holo effect
         transition: filter 0.3s ease, box-shadow 0.3s ease;
         &:hover {
             filter: drop-shadow(0 0 10px var(--holo-effect-color));
@@ -28,7 +27,7 @@
         transition: filter 0.3s ease, font-size 0.3s ease, color 0.3s ease;
         color: var(--header-icons-color);
         &:active {
-            font-size: calc(#{vars.$logos-size - 5px});
+            font-size: #{vars.$logos-size - 5px};
         }
     }
 
@@ -91,11 +90,12 @@
         .menu-items {
             position: absolute;
             top: 100px;
-            left: -100px;
+            left: -225px;
             background-color: var(--header-menu-background-color);
             border-radius: 10px;
             transition: left 0.3s ease;
-            padding: 10px;
+            padding-top: 10px;
+            padding-bottom: 10px;
 
             ul {
                 margin: 0;
@@ -105,15 +105,40 @@
                 li {
                     user-select: none;
                     padding: 10px;
-                    border-radius: 10px;
-                    width: 125px;
-                    background-color: var(--header-menu-item-background-color);
-                    margin-bottom: 5px;
+                    width: 150px;
+                    font-size: 18px;
+                    display: flex;
+                    align-items: center;
+                    color: var(--header-menu-item-fg-color);
 
-                    // TODO add icons to menu items
-                
                     &:hover {
                         background-color: var(--header-menu-item-hover-background-color);
+                    }
+
+                    &:active ~ .material-symbols-rounded {
+                        font-size: 15px;
+                    }
+                    &:active ~ svg {
+                        width: 15px;
+                        height: 15px;
+                    }
+
+                    .material-symbols-rounded {
+                        font-size: 20px;
+                        margin-right: 10px;
+                        color: var(--header-menu-item-fg-color);
+                    }
+
+                    svg {
+                        width: 20px;
+                        height: 20px;
+                        margin-right: 10px;
+                        filter: var(--header-menu-item-fg-svg-color);
+                    }
+
+                    a {
+                        width: 170px; // 20px because we have padding 10px
+                        height: calc(100% + 20px); // 20px because we have padding 10px
                     }
                 }
             }
@@ -174,7 +199,7 @@
 
         .download-iwtcms-cli {
             margin-top: 10px;
-            margin-right: calc((#{vars.$header-height - vars.$logos-size}) / 2);
+            margin-right: #{(vars.$header-height - vars.$logos-size) / 2};
             height: vars.$logos-size + 20px;
             transition: font-size 0.3s ease, height 0.3s ease;
 

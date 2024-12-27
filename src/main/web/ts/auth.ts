@@ -2,7 +2,6 @@ import { Constants } from "./constants.js";
 import { checkAuth, isDEV } from "./supply.js";
 import { ToastSystem } from "./toastSystem.js";
 
-
 export async function initLogin() {
     checkIsLoginNeeded();
     const auth = await checkAuth()
@@ -11,6 +10,7 @@ export async function initLogin() {
         document.querySelector(".login")?.classList.add("disabled");
     }
     handleLoginForm();
+    handleLogout();
 }
 
 async function checkIsLoginNeeded() {
@@ -54,7 +54,7 @@ async function handleLoginForm() {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                credentials: "include",
+                // credentials: "include",
                 body: json,
             });
 
@@ -66,6 +66,31 @@ async function handleLoginForm() {
                 console.error("Unauthorized");
                 ToastSystem.showError("Incorrect username or password");
 
+            } else {
+                console.error("Error:", response.statusText);
+                ToastSystem.showError(`Error: ${response.statusText}`);
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            ToastSystem.showError(`Error: ${error}`);
+            if (!await isDEV()) {
+                window.location.assign(Constants.PAGE_BAD_CONNECTION_URL);
+            }
+        }
+    });
+}
+
+async function handleLogout() {
+    (document.getElementById("logout-button") as HTMLLIElement).addEventListener("click", async function() {
+        try {
+            const response = await fetch(Constants.LOGOUT_URL, {
+                method: "POST"
+            });
+
+            if (response.ok) {
+                console.log("Success");
+                ToastSystem.showInfo("Success");
+                location.reload();
             } else {
                 console.error("Error:", response.statusText);
                 ToastSystem.showError(`Error: ${response.statusText}`);

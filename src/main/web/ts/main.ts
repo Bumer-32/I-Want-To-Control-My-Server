@@ -1,5 +1,5 @@
 import { initTabsController } from "./tabsController.js";
-import { initLogin } from "./login.js";
+import { initLogin } from "./auth.js";
 import { Constants } from "./constants.js";
 import { isDEV } from "./supply.js";
 
