@@ -276,3 +276,4 @@ Since IWTCMS integrates a real ktor web server, it hosts a lot of static files w
 ---
 
 [//]: # (TODO: How to build in README.md)
+[//]: # (Note: needs sudo on linux)

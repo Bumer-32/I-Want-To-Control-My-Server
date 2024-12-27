@@ -165,7 +165,8 @@ tasks.register("cleanWebFolder") {
 	group = "build"
 
 	doFirst {
-		file("$buildDir/resources/main/web").deleteDir()
+		def f = file("$buildDir/resources/main/web")
+		if (f.exists()) f.deleteDir()
 	}
 }
 
@@ -181,7 +182,7 @@ tasks.register("compileSASS", NpxTask) {
 	dependsOn tasks.cleanWebFolder
 	dependsOn tasks.npmInstall
 	command = "sass"
-	args = ["$buildDir/../src/main/web/.:$buildDir/resources/main/web/.",]
+	args = ["$buildDir/../src/main/web/sass:$buildDir/resources/main/web/sass",]
 }
 
 tasks.register("compileWeb"){
