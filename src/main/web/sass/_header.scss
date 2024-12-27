@@ -199,7 +199,7 @@
 
         .download-iwtcms-cli {
             margin-top: 10px;
-            margin-right: #{(vars.$header-height - vars.$logos-size) / 2};
+            margin-right: calc((vars.$header-height - vars.$logos-size) / 2);
             height: vars.$logos-size + 20px;
             transition: font-size 0.3s ease, height 0.3s ease;
 

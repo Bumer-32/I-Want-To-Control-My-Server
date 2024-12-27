@@ -18,7 +18,7 @@ compileTS() {
 
 compileSASS() {
   echo "Compiling SASS"
-  npx sass src/main/web/sass/.:run/config/iwtcms/dev-web/sass/.
+  npx sass src/main/web/sass:run/config/iwtcms/dev-web/sass
 }
 
 for arg in "$@"; do
