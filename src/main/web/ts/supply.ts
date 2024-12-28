@@ -90,3 +90,35 @@ export async function checkAuth(): Promise<string | null> {
 
     return null;
 }
+
+export async function getPermits() {
+    try {
+        const request = await fetch(Constants.PERMITS_URL);
+        if (request.status == 200) {
+            return await request.json();
+        } else if (request.status == 403) {
+            return null;
+        } else {
+            console.error("Error:", request.statusText);
+            ToastSystem.showError(`Error: ${request.statusText}`);
+            if (!await isDEV()) {
+                window.location.assign(Constants.PAGE_BAD_CONNECTION_URL);
+            }
+        }
+    } catch (error) {
+        console.error("Error:", error);
+        ToastSystem.showError(`Error: ${error}`);
+        if (!await isDEV()) {
+            window.location.assign(Constants.PAGE_BAD_CONNECTION_URL);
+        }
+    }
+}
+
+export function isForbidden(permit: string, element: HTMLElement | null = null): boolean {
+    if (Constants.PERMITS == null || Constants.PERMITS[permit] == undefined || Constants.PERMITS[permit] == false) {
+        element?.classList.add("forbidden");
+        return true;
+    }
+    
+    return false;
+}

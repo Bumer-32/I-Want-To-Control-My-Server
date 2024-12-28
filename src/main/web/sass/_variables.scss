@@ -10,8 +10,6 @@ $logos-size: 50px;
     // * CONVERTER FOR SVG COLORS: https://codepen.io/sosuke/pen/Pjoqqp 
 
     //global colors (light and dark modes together)
-    --login-background-color: rgba(255, 255, 255, 0.3);
-    --login-text-color: black;
 
     // dark mode
     --header-color: #121717;
@@ -33,6 +31,10 @@ $logos-size: 50px;
 
     --loading-background-color: #1f2626;
 
+    --login-background-color: rgba(255, 255, 255, 0.3);
+    --login-text-color: black;
+    --login-panel-background-color: #121717;
+
     --footer-iwtcms-label-color-1: #9f9f9f;
     --footer-iwtcms-label-color-2: #fff;
     --footer-iwtcms-label-color-3: #868686;
@@ -51,6 +53,9 @@ $logos-size: 50px;
     --toast-notification-warning-text-color: white;
     --toast-notification-error-color: red;
     --toast-notification-error-text-color: white;
+
+    --console-background-color: #171717;
+    --console-text-color: white;
 
 }
 .light-mode-impl { 

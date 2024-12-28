@@ -76,11 +76,6 @@ dependencies {
 	include "io.netty:netty-transport-classes-kqueue:${project.netty_version}"
 	include "io.netty:netty-codec-http2:${project.netty_version}"
 	include "io.netty:netty-codec-http:${project.netty_version}"
-
-	// ktor client
-	implementation include("io.ktor:ktor-client-core:${project.ktor_version}")
-	implementation include("io.ktor:ktor-client-cio:${project.ktor_version}")
-	implementation include("io.ktor:ktor-client-websockets:${project.ktor_version}")
 	// already launched ktor
 
 	implementation include("com.typesafe:config:${project.hocon_config_version}")
