@@ -56,10 +56,22 @@ body {
   word-break: break-word;
   padding: 10px;
   position: absolute;
-  top: 15px;
+  top: 100px;
   right: 15px;
   display: none;
   transition: color 1s ease, background-color 1s ease;
+}
+
+.forbidden::after {
+  content: "FORBIDDEN";
+  position: absolute;
+  top: 50%;
+  left: 40%;
+  transform: translate(-25%);
+  font-size: 70px;
+  color: red;
+  font-weight: 900;
+  rotate: 45deg;
 }
 
 .disabled {

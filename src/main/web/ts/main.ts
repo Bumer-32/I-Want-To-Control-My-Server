@@ -2,6 +2,7 @@ import { initTabsController } from "./tabsController.js";
 import { initLogin } from "./auth.js";
 import { Constants } from "./constants.js";
 import { isDEV } from "./supply.js";
+import { consoleInit } from "./server-connection/console.js";
 
 async function loadGithubStars() {
     const request = fetch("https://api.github.com/repos/Bumer-32/I-Want-To-Control-My-Server");
@@ -36,6 +37,8 @@ async function main() {
     initLogin();
 
     isDEV(); // for caching
+
+    consoleInit();
 
     // ? remove loading screen
     (document.querySelector(".loading") as HTMLDivElement).classList.add("disabled");

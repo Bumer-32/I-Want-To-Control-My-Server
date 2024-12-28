@@ -32,10 +32,13 @@
     }
 
     .menu {
+        position: absolute;
+        top: 0;
+        left: 0;
+
         .menu-button {
-            position: absolute;
-            top: calc((#{vars.$header-height - vars.$logos-size}) / 2 - 10px);
-            left: calc((#{vars.$header-height - vars.$logos-size}) / 2);
+            margin-top: calc((#{vars.$header-height - vars.$logos-size}) / 2 - 10px);
+            margin-left: calc((#{vars.$header-height - vars.$logos-size}) / 2);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -129,16 +132,15 @@
                         color: var(--header-menu-item-fg-color);
                     }
 
+                    .modrinth-icon {
+                        filter: unset;
+                    }
+
                     svg {
                         width: 20px;
                         height: 20px;
                         margin-right: 10px;
                         filter: var(--header-menu-item-fg-svg-color);
-                    }
-
-                    a {
-                        width: 170px; // 20px because we have padding 10px
-                        height: calc(100% + 20px); // 20px because we have padding 10px
                     }
                 }
             }
@@ -172,8 +174,11 @@
         right: 0;
         display: flex;
         align-items: center;
+        height: 100%;
 
         .color-mode .switch {
+            margin-right: calc((#{vars.$header-height - vars.$logos-size}) / 2);
+
             .slider {
                 background-color: var(--color-mode-switch-background-color);
 
@@ -193,53 +198,6 @@
             input {
                 &:checked + .slider:before {
                     content: "brightness_5";
-                }
-            }
-        }
-
-        .download-iwtcms-cli {
-            margin-top: 10px;
-            margin-right: calc((vars.$header-height - vars.$logos-size) / 2);
-            height: vars.$logos-size + 20px;
-            transition: font-size 0.3s ease, height 0.3s ease;
-
-            div:not(:has(*)) {
-                margin-left: 10px;
-            }
-
-            .merger {
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-            }
-
-            .text {
-                width: 70%;
-
-                p {
-                    margin: 0;
-                    font-size: 15px;
-                    text-align: center;
-                    transition: color 0.3s ease;
-                    color: var(--header-icons-color);
-                }
-            }
-
-            a {
-                text-decoration: none;
-            }
-
-            .material-symbols-rounded {
-                font-size: vars.$logos-size - 20px;
-            }
-
-            &:active {
-                p {
-                    font-size: 14px;
-                }
-                .material-symbols-rounded {
-                    font-size: vars.$logos-size - 21px;
                 }
             }
         }

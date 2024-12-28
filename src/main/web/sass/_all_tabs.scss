@@ -1,5 +1,54 @@
-@mixin console-tab {
+@use "variables" as vars;
 
+@mixin console-tab {
+    $console-width: calc(100vw * 0.85);
+    $console-height: calc($console-width * 0.8);
+    $console-input-height: 24px;
+
+    .container {
+        width: 100%;
+        
+        .console {
+            width: $console-width;
+            height: 80%;
+            background-color: var(--console-background-color);
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            align-items: center;
+
+            .console-text {
+                position: absolute;
+                width: calc(100% - 32px);
+                height: calc(100% - $console-input-height - 16px);
+                top: 8px;
+                display: flex;
+                flex-direction: column;
+                overflow-y: auto;
+                scroll-behavior: smooth;
+            }
+
+            .input {
+                position: absolute;
+                bottom: 0;
+                display: flex;
+                align-items: center;
+
+                input {
+                    width: calc($console-width - 32px);
+                    height: $console-input-height;
+                    background-color: transparent;
+                    border: none;
+                    color: var(--console-text-color);
+                    
+                    &:focus {
+                        outline: none;
+                    }
+                }
+            }
+        }
+    }
 }
 
 @mixin settings-tab {
