@@ -31,6 +31,9 @@ async function main() {
     // ? place iwtcms version at footer
     (document.querySelector(".footer > .iwtcms-label") as HTMLLabelElement).innerHTML = `IWTCMS ${Constants.IWTCMS_VERSION}`;
 
+    // ? closing menu
+    (document.querySelector(".header > .menu > .menu-button > input") as HTMLInputElement).checked = false;
+
     loadGithubStars()
 
     initTabsController();
