@@ -22,7 +22,48 @@ async function autoScroll() {
 
 async function addLog(text: string) {
     const log = document.createElement("span");
-    log.innerHTML = text;
+
+    const logPattern = /\[(\d{2}:\d{2}:\d{2})\] \[(.*?\/\w+)\] \((.*?)\) (.*)/;
+    const match = text.match(logPattern);
+
+    if (!match) {
+        log.textContent = text;  // If no match, just display the text
+    } else {
+        const timestamp = match[1];
+        const level = match[2].split('/')[1].toLowerCase();
+        const logger = match[3];
+        const message = match[4];
+
+        // timestamp
+        const timestampSpan = document.createElement("span");
+        timestampSpan.textContent = `[${timestamp}] `;
+        timestampSpan.style.color = "var(--console-timestamp-color)";
+        log.appendChild(timestampSpan);
+
+        // log level
+        const levelSpan = document.createElement("span");
+        levelSpan.textContent = `[${match[2]}] `;
+        if (level === 'info') {
+            levelSpan.style.color = "var(--console-log-level-info-color)";
+        } else if (level === 'warn') {
+            levelSpan.style.color = "var(--console-log-level-warn-color)";
+        } else if (level === 'error') {
+            levelSpan.style.color = "var(--console-log-level-error-color)";
+        }
+        log.appendChild(levelSpan);
+
+        // logger
+        const loggerSpan = document.createElement("span");
+        loggerSpan.textContent = `(${logger}) `;
+        loggerSpan.style.color = "var(--console-logger-color)";
+        log.appendChild(loggerSpan);
+
+        // message
+        const messageSpan = document.createElement("span");
+        messageSpan.textContent = message;
+        log.appendChild(messageSpan);
+    }
+
     consoleEl.appendChild(log);
 
     if (allowAutoScroll) {

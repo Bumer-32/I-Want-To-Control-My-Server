@@ -10,7 +10,6 @@ $logos-size: 50px;
     // * CONVERTER FOR SVG COLORS: https://codepen.io/sosuke/pen/Pjoqqp 
 
     //global colors (light and dark modes together)
-
     // dark mode
     --header-color: #121717;
     --footer-color: #121717;
@@ -56,6 +55,11 @@ $logos-size: 50px;
 
     --console-background-color: #171717;
     --console-text-color: white;
+    --console-timestamp-color: #c4c4f6;
+    --console-log-level-info-color: #4edf5c;
+    --console-log-level-warn-color: #f2c55c;
+    --console-log-level-error-color: #f08f6e;
+    --console-logger-color: #1697b5;
 
 }
 .light-mode-impl { 
