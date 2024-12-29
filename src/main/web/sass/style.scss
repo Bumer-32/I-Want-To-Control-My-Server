@@ -66,14 +66,13 @@ body {
   content: "FORBIDDEN";
   position: absolute;
   top: 50%;
-  left: 40%;
-  transform: translate(-25%);
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(45deg);
   font-size: 70px;
   color: red;
   font-weight: 900;
-  rotate: 45deg;
 }
 
 .disabled {
-  display: none;
+  display: none !important;
 }
