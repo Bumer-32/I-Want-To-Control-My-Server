@@ -50,7 +50,6 @@ object DevReloadWS: WS() {
             }.onFailure { exception ->
                 logger.error("WebSocket exception: $exception")
             }
-
         }
     }
 

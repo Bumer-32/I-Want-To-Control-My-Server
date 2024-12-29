@@ -33,6 +33,7 @@
     height: 250px;
     background-color: var(--login-panel-background-color);
     border-radius: 10px;
+    padding-right: 10px;
 
     h1 {
       position: absolute;
@@ -44,6 +45,10 @@
     input {
       border: none;
       border-radius: 5px;
+
+      &:focus {
+        outline: none;
+      }
     }
 
     label {
@@ -65,7 +70,7 @@
     input, button, img { // hover holo effect
       transition: filter 0.3s ease, box-shadow 0.3s ease;
       &:hover {
-          filter: drop-shadow(0 0 10px var(--holo-effect-color));
+        filter: drop-shadow(0 0 10px var(--holo-effect-color));
       }
     }
   }
