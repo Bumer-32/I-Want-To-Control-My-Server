@@ -1,0 +1,19 @@
+@use "../variables" as vars;
+
+@mixin dev-menu {
+    .container {
+        .dev-menu {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background-color: #121717;
+            padding: 10px;
+            border-radius: 10px;
+            width: 220px;
+
+            button {
+                margin-bottom: 10px;
+            }
+        }
+    }
+}

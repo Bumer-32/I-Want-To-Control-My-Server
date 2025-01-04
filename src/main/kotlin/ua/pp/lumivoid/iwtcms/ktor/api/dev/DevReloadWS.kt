@@ -11,10 +11,10 @@ import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import ua.pp.lumivoid.iwtcms.Constants
-import ua.pp.lumivoid.iwtcms.ktor.api.websockets.WS
+import ua.pp.lumivoid.iwtcms.ktor.api.websockets.WebSocket
 import ua.pp.lumivoid.iwtcms.ktor.api.websockets.WebSocketBaseInterface
 
-object DevReloadWS: WS() {
+object DevReloadWS: WebSocket() {
     override val logger = Constants.EMBEDDED_SERVER_LOGGER
     override var WSinterface: WebSocketBaseInterface? = null
     override val PATH = "/dev/reloadWS"

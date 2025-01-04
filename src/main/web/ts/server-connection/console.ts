@@ -78,8 +78,8 @@ export let sendCommand = function (command: string) {}
 
 async function connect() {
 
-    const logsCount = (document.querySelector(".container > .tabs > #console-tab > .container > .console > .total-messages > .count") as HTMLSpanElement);
-    const inputDiv = (document.querySelector(".container > .tabs > #console-tab > .container > .console > .input") as HTMLDivElement)
+    const logsCount = document.querySelector("#console-tab > .container > .windows > .console > .total-messages > .count") as HTMLSpanElement;
+    const inputDiv = document.querySelector("#console-tab > .container > .windows > .console > .input") as HTMLDivElement;
     const inputField = inputDiv.querySelector(".input-field") as HTMLInputElement;
 
     consoleEl.innerHTML = ""

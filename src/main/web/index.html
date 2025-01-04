@@ -122,7 +122,8 @@
                 <span class="material-symbols-rounded" id="header-settings">settings</span>
             </div>
             <div class="center">
-                <span class="material-symbols-rounded" id="header-console">terminal</span>
+                <!-- ! DEFAULT TAB -->
+                <span class="material-symbols-rounded hover-holo-effect" id="header-console">terminal</span>
             </div>
             <div class="right">
                 <span class="material-symbols-rounded" id="header-players">group</span>
@@ -159,25 +160,77 @@
 
     <div class="container">
         <div class="tabs">
-            <div id="console-tab" class="tab">
+            <div id="console-tab" class="tab" style="display: block; /* DEFAULT TAB */">
+                <!-- ! DEFAULT TAB -->
                 <div class="container">
                     <h1>Console</h1>
-                    <div class="console">
-                        <div class="console-text"></div>
-                        <div class="total-messages">
-                            <span>Total messages: </span>
-                            <span class="count"></span>
+                    <div class="windows">
+                        <div class="statistics">
+                            <h3>Statistics</h3>
+                            <div class="cpuload">
+                                <span>CPU Load: </span>
+                                <span class="value">0%</span>
+                            </div>
+                            <div class="ramusage">
+                                <span>RAM Usage: </span>
+                                <span class="value">0%</span>
+                                <span class="value">0/16000</span>
+                            </div>
+                            <div class="uptime">
+                                <span>Uptime: </span>
+                                <span class="value">0s</span>
+                            </div>
+                            <div class="players">
+                                <span>Players: </span>
+                                <span class="value">0</span>
+                                <span>/</span>
+                                <span class="max">0</span>
+                            </div>
+                            <div class="ipaddr">
+                                <span>IP: </span>
+                                <span class="value">127.0.0.1</span>
+                            </div>
+                            <div class="tps">
+                                <span>TPS: </span>
+                                <span class="value">0</span>
+                            </div>
+
                         </div>
-                        <div class="input disabled">
-                            <span class="material-symbols-rounded">keyboard_arrow_right</span>
-                            <input class="input-field" type="text" placeholder="help"></input>
+                        <div class="console">
+                            <div class="console-text"></div>
+                            <div class="total-messages">
+                                <span>Total messages: </span>
+                                <span class="count"></span>
+                            </div>
+                            <div class="input disabled">
+                                <span class="material-symbols-rounded">keyboard_arrow_right</span>
+                                <input class="input-field" type="text" placeholder="help"></input>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div id="settings-tab" class="tab">
                 <div class="container">
-                    Settings
+                    <div class="dev-menu disabled">
+                        <h3>Developer mode settings</h3>
+                        <hr>
+                        <span>Default tab</span>
+                        <input type="text" name="default tab (id)" id="dev-set-default-tab-input">
+                        <button id="dev-set-default-tab-button">Set default tab</button>
+
+                        <hr>
+
+                        <span>Notification testing</span>
+                        <input type="type" name="notification text" id="dev-notification-info-input" value="This is a info notification">
+                        <button id="dev-notification-info-button">Test info notification</button>
+
+                        <input type="type" name="notification text" id="dev-notification-warning-input" value="This is a warning notification">
+                        <button id="dev-notification-warning-button">Test warning notification</button>
+
+                        <input type="type" name="notification text" id="dev-notification-error-input" value="This is a error notification">
+                        <button id="dev-notification-error-button">Test error notification</button>
+                    </div>
                 </div>
             </div>
             <div id="players-tab" class="tab">
@@ -194,10 +247,10 @@
             <h1>Login</h1>
             <a href="https://modrinth.com/mod/i-want-to-control-my-server"><img src="icon_clearbg.png" alt="IWTCMS logo"></a>
             <form id="loginForm">
-                <label for="username">Username:</label>
+                <label for="username" id="username">Username:</label>
                 <input type="text" name="username" required>
                 <br>
-                <label for="password">Password:</label>
+                <label for="password" id="password">Password:</label>
                 <input type="password" name="password" required>
                 <br>
                 <button type="submit">Login</button>

@@ -1,0 +1,43 @@
+.forbidden {
+    $width: 423px;
+    $height: 96px;
+    position: relative;
+
+    &:before {
+        content: "";
+        background-color: red;
+        width: #{$width + 35px};
+        height: #{$height + 35px};
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) rotate(-45deg);
+        border-radius: 15px;
+    }
+
+    &:after {
+        content: "FORBIDDEN";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) rotate(-45deg);
+        font-size: 70px;
+        color: white;
+        background: red;
+        border: solid 10px white;
+        border-radius: 10px;
+        font-weight: 900;
+        width: #{$width + 3px};
+        height: #{$height + 3px};
+        text-align: center;
+    }
+}
+
+.disabled {
+    display: none !important;
+}
+
+.hover-holo-effect {
+    filter: drop-shadow(0 0 10px var(--holo-effect-color));
+}
+

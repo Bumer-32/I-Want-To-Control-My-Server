@@ -34,15 +34,18 @@ export class ToastSystem {
     private static async show(text: string, type: string, showTime: number) {
         this.notification.style.color = "transparent";
         this.notification.style.backgroundColor = "transparent";
+        this.notification.style.boxShadow = "5px 5px transparent"
         this.notification.innerHTML = text;
         this.notification.style.display = "block";
 
         setTimeout(() => {
             this.notification.style.color = `var(--toast-notification-${type}-text-color)`;
             this.notification.style.backgroundColor = `var(--toast-notification-${type}-color)`;
+            this.notification.style.boxShadow = `5px 5px var(--toast-notification-${type}-shadow-color)`
             setTimeout(() => {
                 this.notification.style.color = "transparent";
                 this.notification.style.backgroundColor = "transparent";
+                this.notification.style.boxShadow = "5px 5px transparent"
                 setTimeout(() => {
                     this.notification.innerHTML = "";
                     this.notification.style.display = "none";

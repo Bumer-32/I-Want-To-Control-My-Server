@@ -4,6 +4,8 @@
 @use "footer";
 @use "container";
 @use "login";
+@use "tabs/allTabs" as tabs;
+@use "stuff";
 
 //css imports
 @use "../css/switch.css";
@@ -59,36 +61,7 @@ body {
   top: 100px;
   right: 15px;
   display: none;
-  transition: color 1s ease, background-color 1s ease;
+  transition: color 1s ease, background-color 1s ease, box-shadow 1s ease;
+  box-shadow: 5px 5px transparent;
 }
 
-.forbidden::after {
-  content: "FORBIDDEN";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) rotate(45deg);
-  font-size: 70px;
-  color: red;
-  font-weight: 900;
-}
-
-.disabled {
-  display: none !important;
-}
-
-::-webkit-scrollbar {
-  width: 10px;
-}
-
-::-webkit-scrollbar-track {
-  background: #F2F2F2;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #BDBDBD;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #6E6E6E;
-}

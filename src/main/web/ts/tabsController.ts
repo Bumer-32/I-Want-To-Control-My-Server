@@ -10,7 +10,7 @@ export async function addTab() {
 
 export async function switchTab(id: string) {
     console.log("switching to tab", id);
-    const tabs = document.querySelectorAll(".container > .tabs > .tab") as NodeListOf<HTMLImageElement>;
+    const tabs = document.querySelectorAll(".container > .tabs > .tab") as NodeListOf<HTMLDivElement>;
     const tab = document.querySelector(`#${id}`) as HTMLDivElement;
 
     tabs.forEach(tab => {
@@ -18,6 +18,13 @@ export async function switchTab(id: string) {
     });
 
     tab.style.display = "block";
+
+    const buttons = document.querySelectorAll(".header > .buttons span") as NodeListOf<HTMLDivElement>;
+    buttons.forEach(button => {
+        button.classList.remove("hover-holo-effect")
+    });
+
+    (document.querySelector(`#header-${id.replace("-tab", "")}`) as HTMLSpanElement).classList.add("hover-holo-effect");
 
 }
 
