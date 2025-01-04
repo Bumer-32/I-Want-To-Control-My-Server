@@ -1,0 +1,5 @@
+@use "../dev/settings-tab-dev" as dev-menu;
+
+#settings-tab {
+    @include dev-menu.dev-menu;
+}

@@ -3,15 +3,20 @@ import { initLogin } from "./auth.js";
 import { Constants } from "./constants.js";
 import { isDEV } from "./supply.js";
 import { consoleInit } from "./server-connection/console.js";
+import { initDevFunctions } from "./dev-mode/dev-mode.js";
 
 async function loadGithubStars() {
-    const request = fetch("https://api.github.com/repos/Bumer-32/I-Want-To-Control-My-Server");
-    request.then(response => response.text())
-    .then(text => {
-        const stars: number = JSON.parse(text).stargazers_count;
-        (document.querySelector(".footer > .github > .stars") as HTMLSpanElement).innerHTML = stars.toString();
-    });
-    
+    try {
+        const request = fetch("https://api.github.com/repos/Bumer-32/I-Want-To-Control-My-Server");
+        request.then(response => response.text())
+        .then(text => {
+            const stars: number = JSON.parse(text).stargazers_count;
+            (document.querySelector(".footer > .github > .stars") as HTMLSpanElement).innerHTML = stars.toString();
+        });
+    } catch (error) {
+        console.error("Failed to load github stars");
+        console.error(error);
+    }
 }
 
 async function main() {
@@ -42,6 +47,8 @@ async function main() {
     isDEV(); // for caching
 
     consoleInit();
+
+    initDevFunctions();
 
     // ? remove loading screen
     (document.querySelector(".loading") as HTMLDivElement).classList.add("disabled");

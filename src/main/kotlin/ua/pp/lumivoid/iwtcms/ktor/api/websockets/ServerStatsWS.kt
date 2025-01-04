@@ -18,7 +18,7 @@ import ua.pp.lumivoid.iwtcms.ktor.api.requests.ApiListGET.registerAPI
 import ua.pp.lumivoid.iwtcms.util.Config
 import ua.pp.lumivoid.iwtcms.util.ServerStats
 
-object ServerStatsWS: WS() {
+object ServerStatsWS: WebSocket() {
     override val logger = Constants.EMBEDDED_SERVER_LOGGER
     override var WSinterface: WebSocketBaseInterface? = null
     override val PATH = "/ws/serverStats"
@@ -83,7 +83,7 @@ object ServerStatsWS: WS() {
                     }
                 }
             }.onFailure { exception ->
-                logger.error("WebSocket exception: ${exception}")
+                logger.error("WebSocket exception: $exception")
             }.also {
                 job.cancel()
             }

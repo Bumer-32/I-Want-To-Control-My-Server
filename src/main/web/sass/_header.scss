@@ -1,4 +1,5 @@
 @use "variables" as vars;
+@use "stuff";
 
 .header {
     position: absolute;
@@ -11,6 +12,7 @@
     justify-content: center;
     align-items: center;
     transition: background-color 0.3s ease;
+    border-bottom: solid var(--header-bottom-border-color);
 
     .material-symbols-rounded,
     .download-iwtcms-cli,
@@ -18,7 +20,7 @@
     .menu .menu-button { // hover holo effect
         transition: filter 0.3s ease, box-shadow 0.3s ease;
         &:hover {
-            filter: drop-shadow(0 0 10px var(--holo-effect-color));
+            @extend .hover-holo-effect;
         }
     }
 

@@ -13,12 +13,12 @@ npmInstall() {
 
 compileTS() {
   echo "Compiling TS"
-  npx tsc --outDir "run/config/iwtcms/dev-web"
+  npx tsc --outDir "run/iwtcms/dev-web"
 }
 
 compileSASS() {
   echo "Compiling SASS"
-  npx sass src/main/web/sass:run/config/iwtcms/dev-web/sass
+  npx sass src/main/web/sass:run/iwtcms/dev-web/sass
 }
 
 for arg in "$@"; do

@@ -52,6 +52,11 @@ object WebCompile {
         val newContent = htmlContent.toMutableList()
         val bodyCloserIndex = htmlContent.indexOf("</body>")
 
+        if (bodyCloserIndex == -1) {
+            logger.error("Can't find </body> tag in ${html.name}")
+            return
+        }
+
         val jsScript = """
             <!--INSERTED BY IWTCMS DEV MODE-->
             <script>
