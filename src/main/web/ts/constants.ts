@@ -12,6 +12,7 @@ export class Constants {
     static LOGOUT_URL = this.BASE_URL + "/api/logout";
     static LOGS_HISTORY_URL = this.BASE_URL + "/api/logsHistory";
     static CONSOLE_URL = this.BASE_URL + "/ws/console";
+    static STATS_URL = this.BASE_URL + "/ws/serverStats";
 
     static PERMITS_URL: string;
 

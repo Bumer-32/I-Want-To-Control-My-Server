@@ -8,6 +8,7 @@ const consoleEl = document.querySelector(".container .tabs #console-tab .contain
 export async function consoleInit() {
     autoScroll();
     connect();
+    connectStats();
 }
 
 async function autoScroll() {
@@ -103,7 +104,7 @@ async function connect() {
         inputField.addEventListener("keypress", event => onEnter(event));
     }
 
-    if (!isForbidden("read logs history", consoleEl)) {
+    if (!isForbidden("read logs history")) {
         try {
             const response = await fetch(Constants.LOGS_HISTORY_URL);
             if (!response.ok) {
@@ -124,7 +125,7 @@ async function connect() {
     if (!isForbidden("read real time logs", consoleEl)) {
         const ws = new WebSocket(Constants.CONSOLE_URL);
         ws.onmessage = (event) => {
-            if (event.data != "Connected to /ws/console") {
+            if (!event.data.includes("Connected to /")) {
                 addLog(event.data);
                 logsCount.innerHTML = consoleEl.children.length.toString();
             }
@@ -147,6 +148,59 @@ async function connect() {
         sendCommand = function (command: string) {
             ws.send(command);
         }
+    }
+}
+
+async function connectStats() {
+    const statsDiv = document.querySelector("#console-tab > .container > .windows > .statistics") as HTMLDivElement;
+
+    const cpuLoadValue = statsDiv.querySelector(".cpu-load .value") as HTMLSpanElement;
+
+    const ramUsageValue = statsDiv.querySelector(".ram-usage .value") as HTMLSpanElement;
+
+    const uptimeValue = statsDiv.querySelector(".uptime .value") as HTMLSpanElement;
+
+    const playersValue = statsDiv.querySelector(".players .value") as HTMLSpanElement;
+    const playersMaxValue = statsDiv.querySelector(".players .max") as HTMLSpanElement;
+
+    const ipAddrValue = statsDiv.querySelector(".ip-addr .value") as HTMLSpanElement;
+
+    const tpsValue = statsDiv.querySelector(".tps .value") as HTMLSpanElement;
+
+    cpuLoadValue.innerHTML = "none"
+    ramUsageValue.innerHTML = "none"
+    uptimeValue.innerHTML = "none"
+    playersValue.innerHTML = "none"
+    playersMaxValue.innerHTML = "none"
+    ipAddrValue.innerHTML = "none"
+    tpsValue.innerHTML = "none"
+
+    if (!isForbidden("access to server stats", statsDiv)) {
+        const ws = new WebSocket(Constants.STATS_URL);
+        ws.onmessage = (event) => {
+            if (!event.data.includes("Connected to /")) {
+                //console.log(event.data);
+                const jsonData = JSON.parse(event.data);
+
+                cpuLoadValue.innerHTML = jsonData.cpuUsage != null ? jsonData.cpuUsage : "<a href='https://modrinth.com/mod/spark'>Needs Spark</a>";
+                ramUsageValue.innerHTML = jsonData.memoryUsage.toString().split(".")[0] + "%";
+                uptimeValue.innerHTML = new Date(jsonData.uptime).toISOString().slice(11, -1).split(".")[0];
+                playersValue.innerHTML = jsonData.playerCount;
+                playersMaxValue.innerHTML = jsonData.maxPlayerCount;
+                ipAddrValue.innerHTML = jsonData.ip;
+                tpsValue.innerHTML = jsonData.tps != null ? Math.ceil(jsonData.tps).toString() : "<a href='https://modrinth.com/mod/spark'>Needs Spark</a>";
+            }
+        };
+
+        ws.onclose = () => {
+            setTimeout(() => {
+                connect();
+            }, 30000);
+        };
+
+        ws.onerror = (error) => {
+            console.error(error);
+        };
     }
 
 }
