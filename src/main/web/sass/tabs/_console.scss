@@ -22,12 +22,22 @@ $console-input-height: 24px; //
                 border-radius: 10px;
                 height: fit-content;
                 margin-left: 60px;
+                width: 250px;
 
                 h3 {
                     margin-top: 0;
                     margin-bottom: 10px;
                     display: flex;
                     justify-content: center;
+                }
+
+                a {
+                    text-decoration: none;
+                    color: #597cef;
+                }
+
+                .ip-addr .value {
+                    // TODO add spoiler
                 }
             }
             
