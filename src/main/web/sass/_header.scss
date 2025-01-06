@@ -101,10 +101,9 @@ $logos-size: 50px;
             left: -225px;
             background-color: var(--header-menu-background-color);
             border-radius: 10px;
-            transition: left 0.3s ease;
+            transition: left 0.3s ease, background-color 0.3s ease;
             padding-top: 10px;
             padding-bottom: 10px;
-            transition: background-color 0.3s ease;
 
             ul {
                 margin: 0;
