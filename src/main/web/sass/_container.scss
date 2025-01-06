@@ -1,13 +1,14 @@
-@use "variables" as vars;
+@use "header" as header;
+@use "footer" as footer;
 
 .container {
     display: flex;
     align-items: center;
     justify-content: center;
     width: 100vw;
-    height: calc(100vh - #{vars.$header-height} - #{vars.$footer-height});
+    height: calc(100vh - #{header.$header-height} - #{footer.$footer-height});
     position: absolute;
-    top: vars.$header-height;
+    top: header.$header-height;
   
   .tabs {
     width: 100%;
