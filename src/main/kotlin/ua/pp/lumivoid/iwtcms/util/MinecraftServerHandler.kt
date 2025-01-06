@@ -8,8 +8,6 @@ import net.minecraft.server.MinecraftServer
  * So I created this handler
  * When server starting variable server initializing with Minecraft Server instance
  *
- * Also, you can request stop server BEFORE it launch
- *
  * Ez way to get Minecraft Server instance
  */
 object MinecraftServerHandler {
@@ -22,10 +20,5 @@ object MinecraftServerHandler {
             this.server = server
             if (requestStop) server.stop(false)
         }
-    }
-
-    fun stop() {
-        requestStop = true
-        server?.stop(false)
     }
 }

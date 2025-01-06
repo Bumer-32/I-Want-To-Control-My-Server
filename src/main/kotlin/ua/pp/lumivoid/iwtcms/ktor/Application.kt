@@ -36,9 +36,35 @@ fun ApplicationEngine.Configuration.envConfig() {
                     keyStore.load(inputStream, modConfig.sslPass.toCharArray())
                 }
             } else {
-                logger.error("SSL keys not found")
-                KtorServer.shutdown()
-                MinecraftServerHandler.stop()
+                logger.error("SSL keys are not found")
+                logger.error("###########################################################################################")
+
+                logger.error("")
+                logger.error("")
+                logger.error("")
+                logger.error("")
+                logger.error("")
+
+                logger.error("+-----------------------------------------------------------------------------------------+")
+                logger.error("|                                                                                         |")
+                logger.error("|                       IWTCMS STOPPED SERVER FOR SECURITY REASONS                        |")
+                logger.error("|                              ERROR: CAN'T READ CONFIG FILE                              |")
+                logger.error("|                        FIX CONFIG FILE AND THEN RESTART SERVER                          |")
+                logger.error("|                                                                                         |")
+                logger.error("|                     OLD CONFIG FILE RENAMED WITH *-BAD SUFFIX                           |")
+                logger.error("|                              NEW CONFIG MUST BE GENERATED                               |")
+                logger.error("|                                                                                         |")
+                logger.error("|                IF YOU FIXED THE CONFIG FILE BUT STILL GET THIS ERROR,                   |")
+                logger.error("|                          CONTACT THE DEVELOPERS ON GITHUB                               |")
+                logger.error("|                                                                                         |")
+                logger.error("|                          IWTCMS CARES ABOUT YOUR SECURITY!                              |")
+                logger.error("|                                                                                         |")
+                logger.error("+-----------------------------------------------------------------------------------------+")
+
+
+
+                System.exit(1)
+
                 return
             }
         } else {
