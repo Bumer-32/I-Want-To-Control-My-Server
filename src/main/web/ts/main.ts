@@ -51,7 +51,7 @@ async function main() {
     initDevFunctions();
 
     // ? remove loading screen
-    (document.querySelector(".loading") as HTMLDivElement).classList.add("disabled");
+    (document.querySelector(".loading") as HTMLDivElement).style.display = "none";
 }
 
 main();

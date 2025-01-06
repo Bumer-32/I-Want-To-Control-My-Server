@@ -1,10 +1,10 @@
 // sass imports
-@use "variables" as vars;
+@use "variables";
 @use "header";
 @use "footer";
 @use "container";
 @use "login";
-@use "tabs/allTabs" as tabs;
+@use "tabs/allTabs";
 @use "stuff";
 
 //css imports
@@ -23,7 +23,7 @@ body {
   height: 100vh;
   overflow: hidden;
 
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .material-symbols-rounded {

@@ -1,11 +1,13 @@
-@use "variables" as vars;
 @use "stuff";
+
+$header-height: 90px;
+$logos-size: 50px;
 
 .header {
     position: absolute;
     background-color: var(--header-color);
     width: 100%;
-    height: vars.$header-height;
+    height: $header-height;
     top: 0;
     z-index: 10;
     display: flex;
@@ -24,12 +26,13 @@
         }
     }
 
-    .material-symbols-rounded { // press effect
-        font-size: vars.$logos-size;
-        transition: filter 0.3s ease, font-size 0.3s ease, color 0.3s ease;
+    .material-symbols-rounded {
+        font-size: $logos-size;
+        transition: font-size 0.3s ease, color 0.3s ease;
         color: var(--header-icons-color);
-        &:active {
-            font-size: #{vars.$logos-size - 5px};
+
+        &:active { // press effect
+            font-size: #{$logos-size - 5px};
         }
     }
 
@@ -39,8 +42,8 @@
         left: 0;
 
         .menu-button {
-            margin-top: calc((#{vars.$header-height - vars.$logos-size}) / 2 - 10px);
-            margin-left: calc((#{vars.$header-height - vars.$logos-size}) / 2);
+            margin-top: calc((#{$header-height - $logos-size}) / 2 - 10px);
+            margin-left: calc((#{$header-height - $logos-size}) / 2);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -53,12 +56,12 @@
                     font-size: 10px;
                 }
                 img {
-                    height: vars.$logos-size - 5px;
+                    height: $logos-size - 5px;
                 }
             }
 
             img {
-                height: vars.$logos-size;
+                height: $logos-size;
             }
 
             .menu-text {
@@ -101,6 +104,7 @@
             transition: left 0.3s ease;
             padding-top: 10px;
             padding-bottom: 10px;
+            transition: background-color 0.3s ease;
 
             ul {
                 margin: 0;
@@ -115,6 +119,7 @@
                     display: flex;
                     align-items: center;
                     color: var(--header-menu-item-fg-color);
+                    transition: color 0.3s ease;
 
                     &:hover {
                         background-color: var(--header-menu-item-hover-background-color);
@@ -132,6 +137,7 @@
                         font-size: 20px;
                         margin-right: 10px;
                         color: var(--header-menu-item-fg-color);
+                        transition: color 0.3s ease;
                     }
 
                     .modrinth-icon {
@@ -143,6 +149,7 @@
                         height: 20px;
                         margin-right: 10px;
                         filter: var(--header-menu-item-fg-svg-color);
+                        transition: filter 0.3s ease, color 0.3s ease;
                     }
                 }
             }
@@ -159,9 +166,9 @@
         }
 
         .center .material-symbols-rounded {
-            font-size: vars.$logos-size + 20;
+            font-size: $logos-size + 20;
             &:active {
-                font-size: vars.$logos-size + 15;
+                font-size: $logos-size + 15;
             }
         }
 
@@ -179,10 +186,11 @@
         height: 100%;
 
         .color-mode .switch {
-            margin-right: calc((#{vars.$header-height - vars.$logos-size}) / 2);
+            margin-right: calc((#{$header-height - $logos-size}) / 2);
 
             .slider {
                 background-color: var(--color-mode-switch-background-color);
+                transition: background-color 0.3s ease;
 
                 &:before {
                     background-color: var(--color-mode-switch-handle-color);
@@ -194,6 +202,7 @@
                     display: flex;
                     justify-content: center;
                     align-items: center;
+                    transition: background-color 0.3s ease, color 0.3s ease;
                 }
             }
 
