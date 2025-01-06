@@ -182,13 +182,13 @@ async function connectStats() {
                 //console.log(event.data);
                 const jsonData = JSON.parse(event.data);
 
-                cpuLoadValue.innerHTML = jsonData.cpuUsage != null ? jsonData.cpuUsage : "<a href='https://modrinth.com/mod/spark'>Needs Spark</a>";
+                cpuLoadValue.innerHTML = jsonData.cpuUsage != null ? (jsonData.cpuUsage * 100).toString().split(".")[0] + "%" : "<a href='https://modrinth.com/mod/spark'>Needs Spark</a>";
                 ramUsageValue.innerHTML = jsonData.memoryUsage.toString().split(".")[0] + "%";
                 uptimeValue.innerHTML = new Date(jsonData.uptime).toISOString().slice(11, -1).split(".")[0];
                 playersValue.innerHTML = jsonData.playerCount;
                 playersMaxValue.innerHTML = jsonData.maxPlayerCount;
                 ipAddrValue.innerHTML = jsonData.ip;
-                tpsValue.innerHTML = jsonData.tps != null ? Math.ceil(jsonData.tps).toString() : "<a href='https://modrinth.com/mod/spark'>Needs Spark</a>";
+                tpsValue.innerHTML = jsonData.tps != null ? Math.floor(jsonData.tps).toString() : "<a href='https://modrinth.com/mod/spark'>Needs Spark</a>";
             }
         };
 

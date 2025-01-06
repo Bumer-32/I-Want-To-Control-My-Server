@@ -97,9 +97,10 @@ $console-input-height: 24px; //
                     left: 0;
                     display: flex;
                     align-items: center;
+                    width: 100%;
 
                     input {
-                        width: calc($console-width - 32px);
+                        width: 100%;
                         height: $console-input-height;
                         background-color: transparent;
                         border: none;
