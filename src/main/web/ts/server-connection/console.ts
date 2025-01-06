@@ -167,13 +167,13 @@ async function connectStats() {
 
     const tpsValue = statsDiv.querySelector(".tps .value") as HTMLSpanElement;
 
-    cpuLoadValue.innerHTML = "none"
-    ramUsageValue.innerHTML = "none"
-    uptimeValue.innerHTML = "none"
-    playersValue.innerHTML = "none"
-    playersMaxValue.innerHTML = "none"
-    ipAddrValue.innerHTML = "none"
-    tpsValue.innerHTML = "none"
+    cpuLoadValue.innerHTML = "none";
+    ramUsageValue.innerHTML = "none";
+    uptimeValue.innerHTML = "none";
+    playersValue.innerHTML = "none";
+    playersMaxValue.innerHTML = "none";
+    ipAddrValue.innerHTML = "none";
+    tpsValue.innerHTML = "none";
 
     if (!isForbidden("access to server stats", statsDiv)) {
         const ws = new WebSocket(Constants.STATS_URL);
