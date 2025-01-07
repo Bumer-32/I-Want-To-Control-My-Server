@@ -12,6 +12,7 @@ import ua.pp.lumivoid.iwtcms.util.Config
 import ua.pp.lumivoid.iwtcms.util.MinecraftServerHandler
 import java.io.File
 import java.security.KeyStore
+import kotlin.system.exitProcess
 
 private val logger = Constants.EMBEDDED_SERVER_LOGGER
 private val modConfig = Config.readConfig()
@@ -24,7 +25,7 @@ fun ApplicationEngine.Configuration.envConfig() {
     logger.info("Configuring environment")
 
     if (Config.readConfig().useSSL) {
-        val keyStoreFile = File(Constants.SSL_SERTIFICATE_FILE)
+        val keyStoreFile = File(Constants.SSL_CERTIFICATE_FILE)
         val keyStore: KeyStore
 
         if (Config.readConfig().customSertificate) {
@@ -63,7 +64,7 @@ fun ApplicationEngine.Configuration.envConfig() {
 
 
 
-                System.exit(1)
+                exitProcess(1)
 
                 return
             }
