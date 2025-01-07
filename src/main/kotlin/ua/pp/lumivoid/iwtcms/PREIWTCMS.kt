@@ -6,6 +6,7 @@ import ua.pp.lumivoid.iwtcms.ktor.KtorServer
 import ua.pp.lumivoid.iwtcms.util.Config
 import ua.pp.lumivoid.iwtcms.util.CustomLogger
 import java.io.File
+import kotlin.system.exitProcess
 
 object PREIWTCMS: PreLaunchEntrypoint {
     private val logger = LoggerFactory.getLogger("iwtcms pre launch")
@@ -64,7 +65,7 @@ object PREIWTCMS: PreLaunchEntrypoint {
                 logger.error("|                                                                                         |")
                 logger.error("+-----------------------------------------------------------------------------------------+")
 
-                System.exit(1)
+                exitProcess(1)
             }
         }
     }

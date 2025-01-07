@@ -9,6 +9,7 @@ import org.apache.commons.codec.digest.DigestUtils
 import ua.pp.lumivoid.iwtcms.Constants
 import ua.pp.lumivoid.iwtcms.ktor.api.User
 import java.io.File
+import kotlin.system.exitProcess
 
 object Config {
     private val logger = Constants.LOGGER
@@ -44,37 +45,24 @@ object Config {
 
             config.getList("auth.users").forEach { configUser ->
                 val user = (configUser as ConfigObject).toConfig()
-                val newUsername = user.getString("name")
-                val newPassword = if (user.hasPath("password") && user.getString("password").isNotEmpty()) {
+
+                val username = user.getString("name")
+                val password = if (user.hasPath("password") && user.getString("password").isNotEmpty()) {
                     user.getString("password")
                 } else {
                     null
                 }
-                val newPermits: MutableMap<String, Boolean> = mutableMapOf()
 
 
-                val permits = user.getConfig("permits")
+                val permits: MutableMap<String, Boolean> = user.getConfig("permits").entrySet().associate {
+                    it.key.replace("\"", "") to it.value.unwrapped() as Boolean
+                } as MutableMap<String, Boolean>
 
-                if (permits.hasPath("read real time logs")) newPermits.put(
-                    "read real time logs",
-                    permits.getBoolean("read real time logs")
-                )
-                if (permits.hasPath("read logs history")) newPermits.put(
-                    "read logs history",
-                    permits.getBoolean("read logs history")
-                )
-                if (permits.hasPath("execute commands")) newPermits.put(
-                    "execute commands",
-                    permits.getBoolean("execute commands")
-                )
-                if (permits.hasPath("access to server stats")) newPermits.put(
-                    "access to server stats",
-                    permits.getBoolean("access to server stats")
-                )
+                println(permits)
 
-                val newId: String = DigestUtils.sha256Hex((newUsername + newPassword.toString()))
+                val id: String = DigestUtils.sha256Hex((username + password.toString()))
 
-                val newUser = User(newId, newUsername, newPassword, newPermits)
+                val newUser = User(id, username, password, permits)
                 users.add(newUser)
             }
 
@@ -135,11 +123,13 @@ object Config {
         logger.error("|                                                                                         |")
         logger.error("+-----------------------------------------------------------------------------------------+")
 
-        System.exit(1) // STOP
+        exitProcess(1) // STOP
 
         return createConfigData(ConfigFactory.parseFile(File(defaultConfig.file))) // it never will be launched
     }
 }
+
+data class TESDFSDFS(val s: String,  val i: Boolean)
 
 @Serializable
 data class ConfigData(
