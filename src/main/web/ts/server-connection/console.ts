@@ -21,8 +21,10 @@ async function autoScroll() {
     });
 }
 
-async function addLog(text: string) {
+async function addLog(logStr: string) {
     const log = document.createElement("span");
+
+    const text = logStr//.replace("<", "&lt;").replace(">", "&gt;")
 
     const logPattern = /\[(\d{2}:\d{2}:\d{2})\] \[(.*?\/\w+)\] \((.*?)\) (.*)/;
     const match = text.match(logPattern);

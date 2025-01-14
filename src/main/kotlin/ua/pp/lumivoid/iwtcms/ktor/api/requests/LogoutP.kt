@@ -6,19 +6,12 @@ import io.ktor.server.routing.post
 import io.ktor.server.sessions.clear
 import io.ktor.server.sessions.get
 import io.ktor.server.sessions.sessions
-import ua.pp.lumivoid.iwtcms.Constants
-import ua.pp.lumivoid.iwtcms.ktor.api.requests.ApiListGET.registerAPI
 import ua.pp.lumivoid.iwtcms.ktor.cookie.UserSession
 
-object LogoutPOST: Request() {
-    override val logger = Constants.EMBEDDED_SERVER_LOGGER
+object LogoutP: Request() {
     override val PATH = "/api/logout"
 
     override val request: Routing.() -> Unit = {
-        logger.info("Initializing $PATH request")
-
-        registerAPI("LogoutPOST", PATH)
-
         post(PATH) {
             val session = call.sessions.get<UserSession>()
             if (session == null) {
