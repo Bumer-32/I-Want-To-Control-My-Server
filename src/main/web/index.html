@@ -80,7 +80,7 @@
     <link rel="stylesheet" href="sass/style.css">
 </head>
 <body>
-    <div class="header">
+    <header class="header">
         <div class="menu">
             <label class="menu-button">
                 <input type="checkbox">
@@ -138,9 +138,9 @@
                 </label>
             </div>
         </div>
-    </div>
+    </header>
 
-    <div class="footer">
+    <footer class="footer">
         <label class="iwtcms-label btn-shine">IWTCMS</label>
 
         <div class="authors">
@@ -156,9 +156,9 @@
             <span class="material-symbols-rounded">star</span>
             <span class="stars"></span>
         </a>
-    </div>
+    </footer>
 
-    <div class="container">
+    <main class="container">
         <div class="tabs">
             <div id="console-tab" class="tab" style="display: block; /* DEFAULT TAB */">
                 <!-- ! DEFAULT TAB -->
@@ -203,7 +203,7 @@
                             </div>
                             <div class="input disabled">
                                 <span class="material-symbols-rounded">keyboard_arrow_right</span>
-                                <input class="input-field" type="text" placeholder="help"></input>
+                                <input class="input-field" type="text" placeholder="help">
                             </div>
                         </div>
                     </div>
@@ -221,13 +221,13 @@
                         <hr>
 
                         <span>Notification testing</span>
-                        <input type="type" name="notification text" id="dev-notification-info-input" value="This is a info notification">
+                        <input type="text" name="notification text" id="dev-notification-info-input" value="This is a info notification">
                         <button id="dev-notification-info-button">Test info notification</button>
 
-                        <input type="type" name="notification text" id="dev-notification-warning-input" value="This is a warning notification">
+                        <input type="text" name="notification text" id="dev-notification-warning-input" value="This is a warning notification">
                         <button id="dev-notification-warning-button">Test warning notification</button>
 
-                        <input type="type" name="notification text" id="dev-notification-error-input" value="This is a error notification">
+                        <input type="text" name="notification text" id="dev-notification-error-input" value="This is a error notification">
                         <button id="dev-notification-error-button">Test error notification</button>
                     </div>
                 </div>
@@ -238,7 +238,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </main>
 
     <div class="login">
         <div class="background"></div>
@@ -257,10 +257,10 @@
         </div>
     </div>
 
-    <div class="enable-js-message">
+    <noscript>
         <img src="icon_clearbg.png" alt="IWTCMS logo">
         <p>If you see this message, enable javascript in your browser settings.</p>
-    </div>
+    </noscript>
 
     <div class="loading">
         <div class="loader">
@@ -273,10 +273,6 @@
     <div class="toast-notifications"></div>
 
     <!-- ! Scripts -->
-    <script>
-        // remove js message as soon as possible
-        document.querySelector(".enable-js-message").style.display = "none";
-    </script>
     <script type="module" src="ts/main.js"></script>
 </body>
 </html>

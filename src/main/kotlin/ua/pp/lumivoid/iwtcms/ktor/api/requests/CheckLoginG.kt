@@ -6,19 +6,13 @@ import io.ktor.server.routing.Routing
 import io.ktor.server.routing.get
 import io.ktor.server.sessions.get
 import io.ktor.server.sessions.sessions
-import ua.pp.lumivoid.iwtcms.Constants
-import ua.pp.lumivoid.iwtcms.ktor.api.requests.ApiListGET.registerAPI
 import ua.pp.lumivoid.iwtcms.ktor.cookie.UserSession
 import ua.pp.lumivoid.iwtcms.util.Config
 
-object CheckLoginGET: Request() {
-    override val logger = Constants.EMBEDDED_SERVER_LOGGER
+object CheckLoginG: Request() {
     override val PATH = "/api/checkLogin"
 
     override val request: Routing.() -> Unit = {
-        logger.info("Initializing $PATH request")
-        registerAPI("CheckLoginGET",  PATH)
-
         get(PATH) {
             val session = call.sessions.get<UserSession>()
             if (session == null) {

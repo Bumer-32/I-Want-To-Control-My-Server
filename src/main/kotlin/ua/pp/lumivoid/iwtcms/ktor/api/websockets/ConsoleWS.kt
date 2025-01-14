@@ -9,18 +9,14 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import ua.pp.lumivoid.iwtcms.Constants
 import ua.pp.lumivoid.iwtcms.ktor.api.UserAuthentication
-import ua.pp.lumivoid.iwtcms.ktor.api.requests.ApiListGET.registerAPI
+import ua.pp.lumivoid.iwtcms.ktor.api.requests.ApiListG.registerAPI
 import ua.pp.lumivoid.iwtcms.util.MinecraftServerHandler
 
 object ConsoleWS: WebSocket() {
-    override val logger = Constants.EMBEDDED_SERVER_LOGGER
     override var WSinterface: WebSocketBaseInterface? = null
     override val PATH = "/ws/console" // why console? because we use this socket same as console, receive logs and send commands
 
     override val ws: Routing.() -> Unit = {
-        logger.info("Initializing $PATH websocket")
-        registerAPI("ConsoleWS", PATH)
-
         webSocket(PATH) {
             val status = UserAuthentication.doAuth(
                 call = call,

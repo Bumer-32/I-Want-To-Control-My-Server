@@ -6,10 +6,8 @@ import io.ktor.server.routing.Routing
 import io.ktor.server.routing.get
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import ua.pp.lumivoid.iwtcms.Constants
 
-object ApiListGET: Request() {
-    override val logger = Constants.EMBEDDED_SERVER_LOGGER
+object ApiListG: Request() {
     override val PATH = "/apiList"
 
     private val json = Json { prettyPrint = true }
@@ -17,9 +15,6 @@ object ApiListGET: Request() {
     private val apis = mutableMapOf<String, String>()
 
     override val request: Routing.() -> Unit = {
-        logger.info("Initializing $PATH request")
-        registerAPI("ApiListGET", PATH)
-
         get(PATH) {
             val response = json.encodeToString(apis)
             call.respondText(response, contentType = ContentType.Text.Plain)

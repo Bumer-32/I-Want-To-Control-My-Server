@@ -14,21 +14,17 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import ua.pp.lumivoid.iwtcms.Constants
 import ua.pp.lumivoid.iwtcms.ktor.api.UserAuthentication
-import ua.pp.lumivoid.iwtcms.ktor.api.requests.ApiListGET.registerAPI
+import ua.pp.lumivoid.iwtcms.ktor.api.requests.ApiListG.registerAPI
 import ua.pp.lumivoid.iwtcms.util.Config
 import ua.pp.lumivoid.iwtcms.util.ServerStats
 
 object ServerStatsWS: WebSocket() {
-    override val logger = Constants.EMBEDDED_SERVER_LOGGER
     override var WSinterface: WebSocketBaseInterface? = null
     override val PATH = "/ws/serverStats"
 
     private val json = Json { prettyPrint = true }
 
     override val ws: Routing.() -> Unit = {
-        logger.info("Initializing $PATH websocket")
-        registerAPI("ServerStatsWS", PATH)
-
         webSocket(PATH) {
             val status = UserAuthentication.doAuth(
                 call = call,

@@ -15,13 +15,10 @@ import ua.pp.lumivoid.iwtcms.ktor.api.websockets.WebSocket
 import ua.pp.lumivoid.iwtcms.ktor.api.websockets.WebSocketBaseInterface
 
 object DevReloadWS: WebSocket() {
-    override val logger = Constants.EMBEDDED_SERVER_LOGGER
     override var WSinterface: WebSocketBaseInterface? = null
     override val PATH = "/dev/reloadWS"
 
     override val ws: Routing.() -> Unit = {
-        logger.info("Initializing $PATH websocket")
-
         webSocket(PATH) {
             send(Frame.Text("Connected to $PATH"))
 
