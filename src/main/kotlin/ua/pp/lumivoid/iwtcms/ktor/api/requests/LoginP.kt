@@ -10,7 +10,7 @@ import io.ktor.server.sessions.set
 import kotlinx.serialization.Serializable
 import ua.pp.lumivoid.iwtcms.ktor.api.User
 import ua.pp.lumivoid.iwtcms.ktor.cookie.UserSession
-import ua.pp.lumivoid.iwtcms.util.Config
+import ua.pp.lumivoid.iwtcms.ktor.util.Config
 
 object LoginP: Request() {
     override val PATH = "/api/login"

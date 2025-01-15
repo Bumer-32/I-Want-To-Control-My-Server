@@ -9,6 +9,7 @@ object Constants {
     val EMBEDDED_SERVER_LOGGER = LoggerFactory.getLogger("iwtcms embedded server")
     val CONFIG_FOLDER = "${System.getProperty("user.dir")}/$MOD_ID" // FabricLoader.getInstance().configDir.toString() // Temporary, idk why but FabricLoader works wrongly at jar https://github.com/Bumer-32/I-Want-To-Control-My-Server/issues/7
     val CONFIG_FILE = "$CONFIG_FOLDER/iwtcms.conf"
+    val CONFIG_AUTH_FILE = "$CONFIG_FOLDER/auth.conf"
     val SSL_CERTIFICATE_FILE = "$CONFIG_FOLDER/keystore.jks"
     const val SPARK_FABRIC_ID = "spark"
     val MOD_VERSION = FabricLoader.getInstance().getModContainer(MOD_ID).get().metadata.version.toString()

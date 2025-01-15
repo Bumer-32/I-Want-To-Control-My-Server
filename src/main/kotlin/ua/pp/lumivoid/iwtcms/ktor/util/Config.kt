@@ -1,4 +1,4 @@
-package ua.pp.lumivoid.iwtcms.util
+package ua.pp.lumivoid.iwtcms.ktor.util
 
 import com.typesafe.config.Config
 import com.typesafe.config.ConfigException
@@ -15,13 +15,18 @@ object Config {
     private val logger = Constants.LOGGER
     private var cachedConfig: ConfigData? = null
     private val defaultConfig = this.javaClass.getResource(Constants.CONFIG_FILE.replace(Constants.CONFIG_FOLDER, ""))!!
+    private val defaultAuthConfig = this.javaClass.getResource(Constants.CONFIG_AUTH_FILE.replace(Constants.CONFIG_FOLDER, ""))!!
     private val configFile = File(Constants.CONFIG_FILE)
+    private val authConfigFile = File(Constants.CONFIG_AUTH_FILE)
 
     init {
         if (!File(Constants.CONFIG_FOLDER).exists()) File(Constants.CONFIG_FOLDER).mkdirs()
 
         if (!configFile.exists()) {
             configFile.writeText(defaultConfig.readText(), Charsets.UTF_8)
+        }
+        if (!authConfigFile.exists()) {
+            authConfigFile.writeText(defaultAuthConfig.readText(), Charsets.UTF_8)
         }
     }
 
@@ -30,20 +35,22 @@ object Config {
 
         try {
             val config = ConfigFactory.parseFile(configFile)
-            val data = createConfigData(config)
+            val authConfig = ConfigFactory.parseFile(authConfigFile)
+            val data = createConfigData(config, authConfig)!!
 
             cachedConfig = data
             return data
         } catch (e: ConfigException) {
-            return badConfig(e)
+            badConfig(e)
+            return createConfigData(ConfigFactory.empty(), ConfigFactory.empty())!! // never be launched
         }
     }
 
-    private fun createConfigData(config: Config): ConfigData {
+    private fun createConfigData(config: Config, authConfig: Config): ConfigData? {
         try {
             val users: MutableList<User> = mutableListOf()
 
-            config.getList("auth.users").forEach { configUser ->
+            authConfig.getList("auth.users").forEach { configUser ->
                 val user = (configUser as ConfigObject).toConfig()
 
                 val username = user.getString("name")
@@ -53,12 +60,9 @@ object Config {
                     null
                 }
 
-
                 val permits: MutableMap<String, Boolean> = user.getConfig("permits").entrySet().associate {
                     it.key.replace("\"", "") to it.value.unwrapped() as Boolean
                 } as MutableMap<String, Boolean>
-
-                println(permits)
 
                 val id: String = DigestUtils.sha256Hex((username + password.toString()))
 
@@ -81,13 +85,13 @@ object Config {
                 devMode = config.getBoolean("dev.dev mode"),
             )
         } catch (e: ConfigException) {
-            return badConfig(e)
+            badConfig(e)
+            return null
         }
     }
 
-    private fun badConfig(e: ConfigException? = null): ConfigData {
+    private fun badConfig(e: ConfigException? = null) {
         logger.error("Error while reading config file: ${e?.message}")
-        logger.error("STOPPING SERVER BECAUSE IT CAN CAUSE SECURITY ISSUES")
 
         logger.error("###########################################################################################")
 
@@ -99,37 +103,11 @@ object Config {
         if (File(Constants.CONFIG_FILE).exists()) File(Constants.CONFIG_FILE).delete()
         File(Constants.CONFIG_FILE).writeText(defaultConfig.readText(), Charsets.UTF_8)
 
-        logger.error("###########################################################################################")
+        ErrorMessages.BAD_CONFIG.launch(logger)
 
-        logger.error("")
-        logger.error("")
-        logger.error("")
-        logger.error("")
-        logger.error("")
-
-        logger.error("+-----------------------------------------------------------------------------------------+")
-        logger.error("|                                                                                         |")
-        logger.error("|                       IWTCMS STOPPED SERVER FOR SECURITY REASONS                        |")
-        logger.error("|                              ERROR: CAN'T READ CONFIG FILE                              |")
-        logger.error("|                        FIX CONFIG FILE AND THEN RESTART SERVER                          |")
-        logger.error("|                                                                                         |")
-        logger.error("|                     OLD CONFIG FILE RENAMED WITH *-BAD SUFFIX                           |")
-        logger.error("|                              NEW CONFIG MUST BE GENERATED                               |")
-        logger.error("|                                                                                         |")
-        logger.error("|                IF YOU FIXED THE CONFIG FILE BUT STILL GET THIS ERROR,                   |")
-        logger.error("|                          CONTACT THE DEVELOPERS ON GITHUB                               |")
-        logger.error("|                                                                                         |")
-        logger.error("|                          IWTCMS CARES ABOUT YOUR SECURITY!                              |")
-        logger.error("|                                                                                         |")
-        logger.error("+-----------------------------------------------------------------------------------------+")
-
-        exitProcess(1) // STOP
-
-        return createConfigData(ConfigFactory.parseFile(File(defaultConfig.file))) // it never will be launched
+        exitProcess(1)
     }
 }
-
-data class TESDFSDFS(val s: String,  val i: Boolean)
 
 @Serializable
 data class ConfigData(

@@ -8,7 +8,7 @@ import io.ktor.server.routing.get
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import ua.pp.lumivoid.iwtcms.ktor.api.User
-import ua.pp.lumivoid.iwtcms.util.Config
+import ua.pp.lumivoid.iwtcms.ktor.util.Config
 
 object PermitsG: Request() {
     override val PATH = "/api/permits/{username}"

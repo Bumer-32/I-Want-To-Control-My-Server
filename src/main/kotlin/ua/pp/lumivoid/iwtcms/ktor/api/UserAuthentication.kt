@@ -7,7 +7,7 @@ import io.ktor.server.sessions.get
 import io.ktor.server.sessions.sessions
 import kotlinx.coroutines.runBlocking
 import ua.pp.lumivoid.iwtcms.ktor.cookie.UserSession
-import ua.pp.lumivoid.iwtcms.util.Config
+import ua.pp.lumivoid.iwtcms.ktor.util.Config
 
 object UserAuthentication {
 

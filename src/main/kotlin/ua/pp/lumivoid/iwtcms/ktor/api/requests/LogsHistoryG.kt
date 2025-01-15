@@ -22,8 +22,7 @@ object LogsHistoryG: Request() {
                 success = {
                     val response = json.encodeToString(logs)
                     runBlocking { call.respondText(response, contentType = ContentType.Text.Plain) }
-                },
-                forbidden = { runBlocking { call.respondText("Forbidden", status = HttpStatusCode.Forbidden) } }
+                }
             )
         }
     }
