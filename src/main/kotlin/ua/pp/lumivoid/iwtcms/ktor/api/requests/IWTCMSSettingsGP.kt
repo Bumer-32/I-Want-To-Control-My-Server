@@ -12,16 +12,17 @@ import ua.pp.lumivoid.iwtcms.Constants
 import ua.pp.lumivoid.iwtcms.ktor.api.UserAuthentication
 import java.io.File
 
-object MCSettingsGP: Request() {
-    override val PATH = "/api/mcSettings"
-    private val file = File("${System.getProperty("user.dir")}/server.properties")
+@Suppress("DuplicatedCode")
+object IWTCMSSettingsGP: Request() {
+    override val PATH = "/api/iwtcmsSettings"
+    private val file = File(Constants.CONFIG_FILE)
     private val backupFile = File("${Constants.CONFIG_FOLDER}/__BACKUP__${file.name}")
 
     override val request: Routing.() -> Unit = {
         get(PATH) {
             UserAuthentication.doAuth(
                 call = call,
-                permit = "read minecraft server config",
+                permit = "read iwtcms config",
                 success = {
                     runBlocking { call.respondFile(file) }
                 }
@@ -31,7 +32,7 @@ object MCSettingsGP: Request() {
         put(PATH) {
             UserAuthentication.doAuth(
                 call = call,
-                permit = "edit minecraft server config",
+                permit = "edit iwtcms config",
                 success = {
                     val text = runBlocking { call.receiveText() }
 

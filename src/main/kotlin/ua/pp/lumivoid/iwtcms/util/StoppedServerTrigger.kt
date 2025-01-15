@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
 import ua.pp.lumivoid.iwtcms.ktor.KtorServer
 import ua.pp.lumivoid.iwtcms.ktor.api.dev.DevReloadWS
 import ua.pp.lumivoid.iwtcms.ktor.api.dev.KFSWFileWatcher
+import ua.pp.lumivoid.iwtcms.ktor.util.Config
 
 object StoppedServerTrigger {
     fun register() {

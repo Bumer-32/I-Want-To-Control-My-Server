@@ -12,10 +12,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import ua.pp.lumivoid.iwtcms.Constants
 import ua.pp.lumivoid.iwtcms.ktor.api.UserAuthentication
-import ua.pp.lumivoid.iwtcms.ktor.api.requests.ApiListG.registerAPI
-import ua.pp.lumivoid.iwtcms.util.Config
+import ua.pp.lumivoid.iwtcms.ktor.util.Config
 import ua.pp.lumivoid.iwtcms.util.ServerStats
 
 object ServerStatsWS: WebSocket() {

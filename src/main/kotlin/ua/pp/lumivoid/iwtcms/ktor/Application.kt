@@ -8,8 +8,8 @@ import io.ktor.server.engine.connector
 import io.ktor.server.engine.sslConnector
 import ua.pp.lumivoid.iwtcms.Constants
 import ua.pp.lumivoid.iwtcms.ktor.plugins.configureRouting
-import ua.pp.lumivoid.iwtcms.util.Config
-import ua.pp.lumivoid.iwtcms.util.MinecraftServerHandler
+import ua.pp.lumivoid.iwtcms.ktor.util.Config
+import ua.pp.lumivoid.iwtcms.ktor.util.ErrorMessages
 import java.io.File
 import java.security.KeyStore
 import kotlin.system.exitProcess
@@ -38,35 +38,10 @@ fun ApplicationEngine.Configuration.envConfig() {
                 }
             } else {
                 logger.error("SSL keys are not found")
-                logger.error("###########################################################################################")
-
-                logger.error("")
-                logger.error("")
-                logger.error("")
-                logger.error("")
-                logger.error("")
-
-                logger.error("+-----------------------------------------------------------------------------------------+")
-                logger.error("|                                                                                         |")
-                logger.error("|                       IWTCMS STOPPED SERVER FOR SECURITY REASONS                        |")
-                logger.error("|                              ERROR: CAN'T READ CONFIG FILE                              |")
-                logger.error("|                        FIX CONFIG FILE AND THEN RESTART SERVER                          |")
-                logger.error("|                                                                                         |")
-                logger.error("|                     OLD CONFIG FILE RENAMED WITH *-BAD SUFFIX                           |")
-                logger.error("|                              NEW CONFIG MUST BE GENERATED                               |")
-                logger.error("|                                                                                         |")
-                logger.error("|                IF YOU FIXED THE CONFIG FILE BUT STILL GET THIS ERROR,                   |")
-                logger.error("|                          CONTACT THE DEVELOPERS ON GITHUB                               |")
-                logger.error("|                                                                                         |")
-                logger.error("|                          IWTCMS CARES ABOUT YOUR SECURITY!                              |")
-                logger.error("|                                                                                         |")
-                logger.error("+-----------------------------------------------------------------------------------------+")
-
-
+                ErrorMessages.BAD_CERTIFICATE.launch(logger)
 
                 exitProcess(1)
-
-                return
+                return // needs to avoid errors
             }
         } else {
             keyStore = buildKeyStore {

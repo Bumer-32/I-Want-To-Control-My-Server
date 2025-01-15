@@ -14,6 +14,7 @@ import org.apache.logging.log4j.core.layout.PatternLayout
 import ua.pp.lumivoid.iwtcms.Constants
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.LogsHistoryG
 import ua.pp.lumivoid.iwtcms.ktor.api.websockets.ConsoleWS
+import ua.pp.lumivoid.iwtcms.ktor.util.Config
 import java.io.IOException
 import java.io.OutputStreamWriter
 

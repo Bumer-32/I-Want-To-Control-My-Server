@@ -1,23 +1,23 @@
-import { Constants } from "../constants.js";
-import { isForbidden } from "../supply.js";
-import { ToastSystem } from "../toastSystem.js";
+// noinspection JSUnusedLocalSymbols
+
+import {Constants} from "../constants.js";
+import {isForbidden} from "../supply.js";
+import {ToastSystem} from "../toastSystem.js";
 
 let allowAutoScroll = true;
 const consoleEl = document.querySelector(".container .tabs #console-tab .container .console .console-text") as HTMLDivElement;
 
 export async function consoleInit() {
     autoScroll();
-    connect();
-    connectStats();
+    await connect();
+    await connectStats();
 }
 
-async function autoScroll() {
+function autoScroll() {
     
 
     consoleEl.addEventListener("scroll", () => {
-        const isAtBottom = consoleEl.scrollTop + consoleEl.clientHeight >= consoleEl.scrollHeight - 5;
-
-        allowAutoScroll = isAtBottom;
+        allowAutoScroll = consoleEl.scrollTop + consoleEl.clientHeight >= consoleEl.scrollHeight - 5;
     });
 }
 
@@ -26,7 +26,7 @@ async function addLog(logStr: string) {
 
     const text = logStr//.replace("<", "&lt;").replace(">", "&gt;")
 
-    const logPattern = /\[(\d{2}:\d{2}:\d{2})\] \[(.*?\/\w+)\] \((.*?)\) (.*)/;
+    const logPattern = /\[(\d{2}:\d{2}:\d{2})] \[(.*?\/\w+)] \((.*?)\) (.*)/;
     const match = text.match(logPattern);
 
     if (!match) {

@@ -190,6 +190,7 @@ Btw 3
 Here's postman workspace for iwtcms: https://www.postman.com/bumer-32/iwtcms-api/
 
 ### Fucking API (I'm already tired of writing this documentation, but I still need to write a whole chapter about Api)
+<img src="https://media1.tenor.com/m/pFz1Q12_hXEAAAAd/cat-holding-head-cat.gif">
 
 Here as examples, I will use enabled SSL and localhost with port 25566 (127.0.0.1:25566),
 replace 127.0.0.1 with your ip, 25566 with your port and use appropriate prefixes for the appropriate protocols

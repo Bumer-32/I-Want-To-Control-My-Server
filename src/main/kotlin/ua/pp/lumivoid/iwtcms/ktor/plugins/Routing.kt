@@ -16,18 +16,20 @@ import ua.pp.lumivoid.iwtcms.ktor.api.dev.DevReloadWS
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.ApiListG
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.CheckLoginG
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.FilesG
+import ua.pp.lumivoid.iwtcms.ktor.api.requests.IWTCMSSettingsGP
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.IsAuthEnabledG
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.IsDevEnabledG
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.LoginP
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.LogoutP
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.LogsHistoryG
+import ua.pp.lumivoid.iwtcms.ktor.api.requests.MCSettingsGP
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.MainG
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.PermitsG
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.VersionG
 import ua.pp.lumivoid.iwtcms.ktor.api.websockets.ConsoleWS
 import ua.pp.lumivoid.iwtcms.ktor.api.websockets.ServerStatsWS
 import ua.pp.lumivoid.iwtcms.ktor.cookie.UserSession
-import ua.pp.lumivoid.iwtcms.util.Config
+import ua.pp.lumivoid.iwtcms.ktor.util.Config
 import kotlin.time.Duration.Companion.seconds
 
 fun Application.configureRouting() {
@@ -78,6 +80,8 @@ fun Application.configureRouting() {
     CheckLoginG.register(r)
     IsDevEnabledG.register(r)
     LogoutP.register(r)
+    MCSettingsGP.register(r)
+    IWTCMSSettingsGP.register(r)
 
     ConsoleWS.register(r)
     ServerStatsWS.register(r)

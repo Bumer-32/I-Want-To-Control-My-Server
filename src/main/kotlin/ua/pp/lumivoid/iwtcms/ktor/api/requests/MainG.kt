@@ -6,7 +6,7 @@ import io.ktor.server.routing.Routing
 import kotlinx.coroutines.runBlocking
 import ua.pp.lumivoid.iwtcms.Constants
 import ua.pp.lumivoid.iwtcms.ktor.api.dev.KFSWFileWatcher
-import ua.pp.lumivoid.iwtcms.util.Config
+import ua.pp.lumivoid.iwtcms.ktor.util.Config
 import java.io.File
 
 object MainG: Request() {
