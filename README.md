@@ -186,6 +186,9 @@ if you need example
 of client look to [About Clients](#clients-) and [Official IWTCMS CLI client
 (written on python)](https://github.com/Bumer-32/I-Want-To-Control-My-Server/blob/main/python/iwtcms_client.py)
 
+Btw 3  
+Here's postman workspace for iwtcms: https://www.postman.com/bumer-32/iwtcms-api/
+
 ### Fucking API (I'm already tired of writing this documentation, but I still need to write a whole chapter about Api)
 
 Here as examples, I will use enabled SSL and localhost with port 25566 (127.0.0.1:25566),
@@ -194,84 +197,84 @@ replace 127.0.0.1 with your ip, 25566 with your port and use appropriate prefixe
 
 Let's start:
 
-### If you want to see all avail pages for requests (and websockets also), go to:
-``https://127.0.0.1/apiList``
-
-I'd recommend finding links in your clients here, names of pages unlikely to be changed,
-but urls can be changed (sorry but IWTCMS still WIP)
-
-| page name  | type | response type | uses auth api (needs cookies)? | needs body |
-|:----------:|:----:|:-------------:|:------------------------------:|:----------:|
-| ApiListGET | GET  |     JSON      |               No               |     No     |
-
-&nbsp;
-
-### If you want to see the history of all logs since server launch, go to:
-``https://127.0.0.1/api/logsHistory``
-
-Returns list of all logs since server launch
-
-|   page name    | type | response type | uses auth api (needs cookies)? | needs body |
-|:--------------:|:----:|:-------------:|:------------------------------:|:----------:|
-| LogsHistoryGET | GET  |     JSON      |              Yes               |     No     |
+> ### If you want to see all avail pages for requests (and websockets also), go to:
+> ``https://127.0.0.1/apiList``
+> 
+> I'd recommend finding links in your clients here, names of pages unlikely to be changed,
+> but urls can be changed (sorry but IWTCMS still WIP)
+>
+> | page name  | type | response type | uses auth api (needs cookies)? | needs body |
+> |:----------:|:----:|:-------------:|:------------------------------:|:----------:|
+> | ApiListGET | GET  |     JSON      |               No               |     No     |
 
 &nbsp;
 
-### If you want to log in, go to:
-``https://127.0.0.1/api/login``
-
-Put to your request body JSON with username and password and get logged
-
-body example:
-```json
-{
-    "username": "guest",
-    "password": "guest"
-}
-```
-
-| page name | type |              response type              | uses auth api (needs cookies)? | needs body |
-|:---------:|:----:|:---------------------------------------:|:------------------------------:|:----------:|
-| LoginPOST | POST | Plain (Login successful / Login failed) |       No (sets cookies)        |    Yes     |
+> ### If you want to see the history of all logs since server launch, go to:
+> ``https://127.0.0.1/api/logsHistory``
+>
+> Returns list of all logs since server launch
+>
+> |   page name    | type | response type | uses auth api (needs cookies)? | needs body |
+> |:--------------:|:----:|:-------------:|:------------------------------:|:----------:|
+> | LogsHistoryGET | GET  |     JSON      |              Yes               |     No     |
 
 &nbsp;
 
-### If you want to see all permits of user, go to:
-``https://127.0.0.1/api/permits/{username}``
-
-replace "{username}" with the name of the user you want to learn permissions from
-
-| page name  | type | response type | uses auth api (needs cookies)? | needs body |
-|:----------:|:----:|:-------------:|:------------------------------:|:----------:|
-| PermitsGET | GET  |     JSON      |               No               |     No     |
-
-&nbsp;
-
-### If you want to reach the server console, go to:
-``wss://127.0.0.1/ws/console``
-
-Main feature of IWTCMS, connect to websocket and get all logs!
-If you want to execute minecraft command, send command as plain text to server through websocket,
-and it will be executed by IWTCMS
-
-| page name |   type    |          response type          | uses auth api (needs cookies)? | needs body |
-|:---------:|:---------:|:-------------------------------:|:------------------------------:|:----------:|
-| WsConsole | Websocket | Websocket plain messages (logs) |              Yes               |     No     |
+> ### If you want to log in, go to:
+> ``https://127.0.0.1/api/login``
+>
+> Put to your request body JSON with username and password and get logged
+>
+> body example:
+> ```json
+> {
+>     "username": "guest",
+>     "password": "guest"
+> }
+> ```
+>
+> | page name | type |              response type              | uses auth api (needs cookies)? | needs body |
+> |:---------:|:----:|:---------------------------------------:|:------------------------------:|:----------:|
+> | LoginPOST | POST | Plain (Login successful / Login failed) |       No (sets cookies)        |    Yes     |
 
 &nbsp;
 
-### Static files
+> ### If you want to see all permits of user, go to:
+> ``https://127.0.0.1/api/permits/{username}``
+>
+> replace "{username}" with the name of the user you want to learn permissions from
+>
+> | page name  | type | response type | uses auth api (needs cookies)? | needs body |
+> |:----------:|:----:|:-------------:|:------------------------------:|:----------:|
+> | PermitsGET | GET  |     JSON      |               No               |     No     |
 
-Since IWTCMS integrates a real ktor web server, it hosts a lot of static files with it, here is their list:
+&nbsp;
 
-|     file name     |        path         |       alternative paths        | file type |
-|:-----------------:|:-------------------:|:------------------------------:|:---------:|
-|     style.css     |     /style.css      |                                |    css    |
-|     404.html      |      /404.html      | any path witch not found (404) |   html    |
-|    index.html     |     /index.html     |               /                |   html    |
-|    favicon.ico    |                     |                                |    ico    |
-| icon_clearbg.png  | /  icon_clearbg.png |                                |    png    |
-| iwtcms_client.zip | /iwtcms_client.zip  |                                |    zip    |
+> ### If you want to reach the server console, go to:
+> ``wss://127.0.0.1/ws/console``
+>
+> Main feature of IWTCMS, connect to websocket and get all logs!
+> If you want to execute minecraft command, send command as plain text to server through websocket,
+> and it will be executed by IWTCMS
+>
+> | page name |   type    |          response type          | uses auth api (needs cookies)? | needs body |
+> |:---------:|:---------:|:-------------------------------:|:------------------------------:|:----------:|
+> | WsConsole | Websocket | Websocket plain messages (logs) |              Yes               |     No     |
+
+&nbsp;
+
+> ### Static files
+>
+> Since IWTCMS integrates a real ktor web server, it hosts a lot of static files with it, here is their list:
+>
+> |     file name     |        path         |       alternative paths        | file type |
+> |:-----------------:|:-------------------:|:------------------------------:|:---------:|
+> |     style.css     |     /style.css      |                                |    css    |
+> |     404.html      |      /404.html      | any path witch not found (404) |   html    |
+> |    index.html     |     /index.html     |               /                |   html    |
+> |    favicon.ico    |                     |                                |    ico    |
+> | icon_clearbg.png  | /  icon_clearbg.png |                                |    png    |
+> | iwtcms_client.zip | /iwtcms_client.zip  |                                |    zip    |
 
 ---
 
