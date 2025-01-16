@@ -7,7 +7,7 @@ import {ToastSystem} from "../toastSystem.js";
 let allowAutoScroll = true;
 const consoleEl = document.querySelector(".container .tabs #console-tab .container .console .console-text") as HTMLDivElement;
 
-export async function consoleInit() {
+export default async function consoleInit() {
     autoScroll();
     await connect();
     await connectStats();
@@ -21,10 +21,8 @@ function autoScroll() {
     });
 }
 
-async function addLog(logStr: string) {
+async function addLog(text: string) {
     const log = document.createElement("span");
-
-    const text = logStr//.replace("<", "&lt;").replace(">", "&gt;")
 
     const logPattern = /\[(\d{2}:\d{2}:\d{2})] \[(.*?\/\w+)] \((.*?)\) (.*)/;
     const match = text.match(logPattern);

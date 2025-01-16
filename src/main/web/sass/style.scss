@@ -30,7 +30,7 @@ body {
   user-select: none;
 }
 
-.enable-js-message {
+noscript {
   position: absolute;
   top: 0;
   left: 0;
@@ -58,7 +58,7 @@ body {
   word-break: break-word;
   padding: 10px;
   position: absolute;
-  top: 10px;
+  top: 100px;
   right: 15px;
   display: none;
   transition: color 1s ease, background-color 1s ease, box-shadow 1s ease;
