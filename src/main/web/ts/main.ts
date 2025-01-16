@@ -2,8 +2,9 @@ import { initTabsController } from "./tabsController.js";
 import { initLogin } from "./auth.js";
 import { Constants } from "./constants.js";
 import { isDEV } from "./supply.js";
-import { consoleInit } from "./server-connection/console.js";
+import consoleInit from "./tabs/console.js";
 import { initDevFunctions } from "./dev-mode/dev-mode.js";
+import settingsInit from "./tabs/settings.js";
 
 async function loadGithubStars() {
     try {
@@ -11,7 +12,9 @@ async function loadGithubStars() {
         request.then(response => response.text())
         .then(text => {
             const stars: number = JSON.parse(text).stargazers_count;
-            (document.querySelector(".footer > .github > .stars") as HTMLSpanElement).innerHTML = stars.toString();
+            if (stars !== undefined) { 
+                (document.querySelector(".footer > .github > .stars") as HTMLSpanElement).innerHTML = stars.toString();
+            }
         });
     } catch (error) {
         console.error("Failed to load github stars");
@@ -47,6 +50,7 @@ async function main() {
     isDEV(); // for caching
 
     consoleInit();
+    settingsInit();
 
     initDevFunctions();
 
