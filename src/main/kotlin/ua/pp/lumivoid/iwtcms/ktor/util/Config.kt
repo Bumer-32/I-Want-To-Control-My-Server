@@ -80,7 +80,7 @@ object Config {
                 sslPass = config.getString("ssl.ssl Pass"),
                 statisticsPeriod = config.getInt("stuff.statistics period"),
                 enableIWTCMSControlPanel = config.getBoolean("web.enable IWTCMS control panel"),
-                useAuthentication = config.getBoolean("auth.use Authentication"),
+                useAuthentication = authConfig.getBoolean("auth.use Authentication"),
                 users = users,
                 devMode = config.getBoolean("dev.dev mode"),
             )
@@ -102,6 +102,8 @@ object Config {
         logger.info("Generating new config file")
         if (File(Constants.CONFIG_FILE).exists()) File(Constants.CONFIG_FILE).delete()
         File(Constants.CONFIG_FILE).writeText(defaultConfig.readText(), Charsets.UTF_8)
+
+        if (e != null) ErrorMessages.printStackTrace(logger, e)
 
         ErrorMessages.BAD_CONFIG.launch(logger)
 
