@@ -133,17 +133,30 @@ async function connect() {
 
         ws.onclose = () => {
             inputField.removeEventListener("keypress", event => onEnter(event));
-            ToastSystem.showInfo("Connection closed");
-            ToastSystem.showInfo("Reconnecting... In 30 seconds");
-            setTimeout(() => {
-                connect();
-                console.log("Reconnecting...");
-            }, 30000);
+
+            if (!document.hidden) {
+                ToastSystem.showInfo("Connection closed");
+                ToastSystem.showInfo("Reconnecting... In 30 seconds");
+                setTimeout(() => {
+                    connect();
+                    console.log("Reconnecting...");
+                }, 30000);
+            }
         };
 
         ws.onerror = () => {
             ToastSystem.showError("Connection error");
         };
+
+        const visibilitychangeListener = (event: Event) => {
+            if (document.hidden) {
+                ws.close();
+            } else {
+                connect();
+                document.removeEventListener('visibilitychange', visibilitychangeListener);
+            }
+          };
+          document.addEventListener('visibilitychange', visibilitychangeListener);
 
         sendCommand = function (command: string) {
             ws.send(command);
@@ -193,14 +206,27 @@ async function connectStats() {
         };
 
         ws.onclose = () => {
-            setTimeout(() => {
-                connect();
-            }, 30000);
+            if (!document.hidden) {
+                setTimeout(() => {
+                    connectStats();
+                }, 30000);
+            }
         };
 
         ws.onerror = (error) => {
             console.error(error);
         };
+
+        const visibilitychangeListener = (event: Event) => {
+            if (document.hidden) {
+                ws.close();
+            } else {
+                connectStats();
+                document.removeEventListener('visibilitychange', visibilitychangeListener);
+            }
+        };
+        document.addEventListener('visibilitychange', visibilitychangeListener);
+        
     }
 
 }
