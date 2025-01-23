@@ -24,10 +24,6 @@ function underlineProcessing() {
         underline.style.width = `${width}px`
     }
 
-    setTimeout(() => {
-        updateUnderline();
-    }, 100) //Needs to default check, idk normal solutions, seems like we just waiting for styling
-
     container.addEventListener("change", updateUnderline);
     window.addEventListener("resize", updateUnderline);
 }

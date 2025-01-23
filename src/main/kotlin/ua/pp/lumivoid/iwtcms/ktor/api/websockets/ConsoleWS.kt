@@ -59,28 +59,26 @@ object ConsoleWS: WebSocket() {
                 forbidden = { allowExecution = false }
             )
 
-            if (allowExecution) {
-                runCatching {
-                    incoming.consumeEach { frame ->
-                        if (frame is Frame.Text) {
-                            val receivedText = frame.readText()
-                            logger.info("Launching command: $receivedText")
+            runCatching {
+                incoming.consumeEach { frame ->
+                    if (frame is Frame.Text && allowExecution) {
+                        val receivedText = frame.readText()
+                        logger.info("Launching command: $receivedText")
 
-                            try {
-                                if (MinecraftServerHandler.server != null) {
-                                    MinecraftServerHandler.server!!.commandManager.executeWithPrefix(
-                                        MinecraftServerHandler.server!!.commandSource,
-                                        receivedText
-                                    )
-                                }
-                            } catch (e: Exception) {
-                                e.stackTrace.forEach { logger.error(it.toString()) }
+                        try {
+                            if (MinecraftServerHandler.server != null) {
+                                MinecraftServerHandler.server!!.commandManager.executeWithPrefix(
+                                    MinecraftServerHandler.server!!.commandSource,
+                                    receivedText
+                                )
                             }
+                        } catch (e: Exception) {
+                            e.stackTrace.forEach { logger.error(it.toString()) }
                         }
                     }
-                }.onFailure { exception ->
-                    logger.error("WebSocket exception: $exception")
                 }
+            }.onFailure { exception ->
+                logger.error("WebSocket exception: $exception")
             }
         }
     }

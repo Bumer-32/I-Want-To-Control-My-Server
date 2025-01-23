@@ -1,8 +1,9 @@
 @use "../variables" as vars;
+@use "../stuff" as stuff;
 
 $console-width: 100%;
 $console-height: calc($console-width * 0.8);
-$console-input-height: 24px; // 
+$console-input-height: 24px;
 
 #console-tab {
     .container {
@@ -37,6 +38,7 @@ $console-input-height: 24px; //
                     color: #597cef;
                 }
             }
+            @include stuff.forbidden(130px);
             
             .console {
                 width: $console-width;
@@ -82,6 +84,7 @@ $console-input-height: 24px; //
                     overflow-x: hidden;
                     scroll-behavior: smooth;
                 }
+                @include stuff.forbidden(423px);
 
                 .total-messages {
                     position: absolute;
