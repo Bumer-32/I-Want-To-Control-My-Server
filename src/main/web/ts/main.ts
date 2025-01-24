@@ -47,7 +47,7 @@ async function main() {
     initTabsController();
     initLogin();
 
-    isDEV(); // for caching
+    //isDEV(); // for caching
 
     consoleInit();
     settingsInit();

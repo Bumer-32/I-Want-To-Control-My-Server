@@ -216,16 +216,39 @@
                         <span class="underline"></span>
 
                         <!-- ? Then all radios for tabs -->
-                        <input type="radio" id="settings-tab-subtab-selector-option1" name = "settings-tab-subtub-selector" value="1" checked>
-                        <input type="radio" id="settings-tab-subtab-selector-option2" name = "settings-tab-subtub-selector" value="2">
+                        <input type="radio" id="settings-tab-subtab-selector-option1" name="settings-tab-subtub-selector" value="1" checked>
+                        <input type="radio" id="settings-tab-subtab-selector-option2" name="settings-tab-subtub-selector" value="2">
 
                         <!-- ? And add labels for radios -->
                          <!-- * Comments needs to remove whitespaces -->
                         <label for="settings-tab-subtab-selector-option1">server.properties</label><!--
                         --><label for="settings-tab-subtab-selector-option2">iwtcms.conf</label><!--
                         -->
+
+                        <div class="controls-buttons">
+                            <span class="material-symbols-rounded update" title="Update">update</span>
+                            <span class="material-symbols-rounded file-mode" title="File mode">file_open</span>
+                            <span class="material-symbols-rounded save" title="Save">save</span>
+                        </div>
                     </div>
+
+                    <div class="settings-tab-tabs">
+                        <div class="tab" id="server.properties">
+                            <div class="settings">
+                                <!-- * For generating, generation something like this: 
+                                <div>
+                                    <label for="server-properties-input">server.properties</label>
+                                    <input type="text" name="server.properties" id="server-properties-input">
+                                </div>
+                                -->
+                            </div>
+                            <div class="file"></div>
+                        </div>
+                    </div>
+
                     <div class="dev-menu disabled">
+                        <input type="checkbox">
+
                         <h3>Developer mode settings</h3>
                         <hr>
                         <span>Default tab</span>
