@@ -155,8 +155,8 @@ async function connect() {
                 connect();
                 document.removeEventListener('visibilitychange', visibilitychangeListener);
             }
-          };
-          document.addEventListener('visibilitychange', visibilitychangeListener);
+        }
+        document.addEventListener('visibilitychange', visibilitychangeListener);
 
         sendCommand = function (command: string) {
             ws.send(command);

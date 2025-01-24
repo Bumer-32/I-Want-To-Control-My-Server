@@ -5,15 +5,25 @@
         .dev-menu {
             position: absolute;
             bottom: 20px;
-            left: 20px;
+            left: -215px;
             background-color: #121717;
             padding: 10px;
             border-radius: 10px;
             width: 220px;
+            transition: left 0.3s ease;
+
+            input[type="checkbox"] {
+                position: absolute;
+                top: 5px;
+                right: 5px;
+            }
 
             button {
                 margin-bottom: 10px;
             }
+        }
+        .dev-menu:has(input[type="checkbox"]:checked) {
+            left: 20px;
         }
     }
 }
