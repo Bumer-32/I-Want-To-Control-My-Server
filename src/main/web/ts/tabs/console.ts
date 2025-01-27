@@ -1,5 +1,6 @@
 // noinspection JSUnusedLocalSymbols
 
+import { server } from "../../../../../node_modules/typescript/lib/typescript.js";
 import {Constants} from "../constants.js";
 import {isForbidden} from "../supply.js";
 import {ToastSystem} from "../toastSystem.js";
@@ -180,6 +181,8 @@ async function connectStats() {
 
     const tpsValue = statsDiv.querySelector(".tps .value") as HTMLSpanElement;
 
+    const serverTimeValue = statsDiv.querySelector(".server-time .value") as HTMLSpanElement;
+
     cpuLoadValue.innerHTML = "none";
     ramUsageValue.innerHTML = "none";
     uptimeValue.innerHTML = "none";
@@ -187,6 +190,7 @@ async function connectStats() {
     playersMaxValue.innerHTML = "none";
     ipAddrValue.innerHTML = "none";
     tpsValue.innerHTML = "none";
+    serverTimeValue.innerHTML = "none";
 
     if (!isForbidden("access to server stats", statsDiv)) {
         const ws = new WebSocket(Constants.STATS_URL);
@@ -202,6 +206,7 @@ async function connectStats() {
                 playersMaxValue.innerHTML = jsonData.maxPlayerCount;
                 ipAddrValue.innerHTML = jsonData.ip;
                 tpsValue.innerHTML = jsonData.tps != null ? Math.floor(jsonData.tps).toString() : "<a href='https://modrinth.com/mod/spark'>Needs Spark</a>";
+                serverTimeValue.innerHTML = new Date(jsonData.serverTime).toISOString().slice(11, -1).split(".")[0];
             }
         };
 
