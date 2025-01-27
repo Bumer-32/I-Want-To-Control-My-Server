@@ -29,6 +29,7 @@ object ServerStats {
         val maxPlayerCount = MinecraftServerHandler.server?.playerManager?.maxPlayerCount
         var tps: Double? = null
         val ip = "${MinecraftServerHandler.server?.serverIp}:${MinecraftServerHandler.server?.serverPort}"
+        val serverTime = System.currentTimeMillis()
 
         if (FabricLoader.getInstance().isModLoaded(Constants.SPARK_FABRIC_ID)) {
             val spark = SparkProvider.get()
@@ -46,7 +47,8 @@ object ServerStats {
             playerCount = playerCount,
             maxPlayerCount = maxPlayerCount,
             tps = tps,
-            ip = ip
+            ip = ip,
+            serverTime = serverTime
         )
     }
 }
@@ -62,5 +64,6 @@ data class ServerStatsData(
     val playerCount: Int?,
     val maxPlayerCount: Int?,
     val tps: Double?,
-    val ip: String?
+    val ip: String?,
+    val serverTime: Long
 )
