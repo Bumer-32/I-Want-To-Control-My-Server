@@ -128,7 +128,7 @@ async function connect() {
                 addLog(event.data);
                 logsCount.innerHTML = consoleEl.children.length.toString();
             }
-        };
+        }
 
         ws.onclose = () => {
             inputField.removeEventListener("keypress", event => onEnter(event));
@@ -141,13 +141,13 @@ async function connect() {
                     console.log("Reconnecting...");
                 }, 30000);
             }
-        };
+        }
 
         ws.onerror = () => {
             ToastSystem.showError("Connection error");
-        };
+        }
 
-        const visibilitychangeListener = (event: Event) => {
+        const visibilitychangeListener = (_: Event) => {
             if (document.hidden) {
                 ws.close();
             } else {
@@ -206,7 +206,7 @@ async function connectStats() {
                 tpsValue.innerHTML = jsonData.tps != null ? Math.floor(jsonData.tps).toString() : "<a href='https://modrinth.com/mod/spark'>Needs Spark</a>";
                 serverTimeValue.innerHTML = new Date(jsonData.serverTime).toISOString().slice(11, -1).split(".")[0];
             }
-        };
+        }
 
         ws.onclose = () => {
             if (!document.hidden) {
@@ -214,22 +214,20 @@ async function connectStats() {
                     connectStats();
                 }, 30000);
             }
-        };
+        }
 
         ws.onerror = (error) => {
             console.error(error);
-        };
+        }
 
-        const visibilitychangeListener = (event: Event) => {
+        const visibilitychangeListener = () => {
             if (document.hidden) {
                 ws.close();
             } else {
                 connectStats();
                 document.removeEventListener('visibilitychange', visibilitychangeListener);
             }
-        };
+        }
         document.addEventListener('visibilitychange', visibilitychangeListener);
-        
     }
-
 }

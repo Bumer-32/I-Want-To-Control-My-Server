@@ -14,10 +14,10 @@ export function switchTab(id: string) {
     const tab = document.querySelector(`#${id}`) as HTMLDivElement;
 
     tabs.forEach(tab => {
-        tab.style.display = "none";
+        tab.classList.add("disabled");
     });
 
-    tab.style.display = "block";
+    tab.classList.remove("disabled");
 
     const buttons = document.querySelectorAll(".header > .buttons span") as NodeListOf<HTMLDivElement>;
     buttons.forEach(button => {

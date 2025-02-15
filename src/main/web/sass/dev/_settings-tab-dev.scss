@@ -12,7 +12,7 @@
             width: 220px;
             transition: left 0.3s ease;
 
-            input[type="checkbox"] {
+            .open-dev-menu {
                 position: absolute;
                 top: 5px;
                 right: 5px;
@@ -22,7 +22,7 @@
                 margin-bottom: 10px;
             }
         }
-        .dev-menu:has(input[type="checkbox"]:checked) {
+        .dev-menu:has(.open-dev-menu[type="checkbox"]:checked) {
             left: 20px;
         }
     }

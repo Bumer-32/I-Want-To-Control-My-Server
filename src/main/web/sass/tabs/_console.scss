@@ -54,24 +54,7 @@ $console-input-height: 24px;
                 max-width: 1200px;
                 transition: background-color ease 0.3s;
 
-                ::-webkit-scrollbar {
-                    width: 5px;
-                }
-                
-                ::-webkit-scrollbar-track {
-                    background: var(--console-scrollbar-track-color);
-                    border-radius: 10px;
-                    transition: background ease 0.3s;
-                }
-                
-                ::-webkit-scrollbar-thumb {
-                    background: var(--console-scrollbar-thumb-color);
-                    border-radius: 10px;
-
-                    &:hover {
-                        background: var(--console-scrollbar-thumb-hover-color);
-                    }
-                }
+                @include stuff.scrollbar;
 
                 .console-text {
                     position: absolute;

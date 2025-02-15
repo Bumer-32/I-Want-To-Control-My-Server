@@ -1,4 +1,5 @@
 @use "../dev/settings-tab-dev" as dev-menu;
+@use "../stuff";
 
 #settings-tab {
     @include dev-menu.dev-menu;
@@ -13,14 +14,51 @@
             align-items: center;
             //position: relative;
 
+            .selector {
+                display: flex;
+                align-items: center;
+
+                .separator {
+                    margin-right: 5px;
+                    margin-left: 5px;
+                    opacity: 50%;
+                }
+
+                label {
+                    transition: filter 0.3s ease, box-shadow 0.3s ease;
+                    &:hover {
+                        @extend .hover-holo-effect;
+                    }
+                }
+            }
+
             .controls-buttons {
                 display: flex;
                 position: absolute;
                 right: -100px;
                 gap: 10px;
+                font-size: 24px;
 
                 .material-symbols-rounded {
                     cursor: pointer;
+                    width: 24px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+
+                    // hover holo effect
+                    transition: filter 0.3s ease, box-shadow 0.3s ease;
+                    &:hover {
+                        @extend .hover-holo-effect;
+                    }
+
+                    &:active { // press effect
+                        font-size: 19px;
+                    }
+                }
+
+                .file-view {
+                    display: none; // temporary
                 }
             }
 
@@ -39,12 +77,6 @@
 
                 left: 0px; width: 126px; // needs for initial position, idk why, but first time function sets left 0 and width 0
             }
-
-            .separator {
-                margin-right: 5px;
-                margin-left: 5px;
-                opacity: 50%;
-            }
         }
 
         .settings-tab-tabs {
@@ -57,7 +89,9 @@
             overflow-y: auto;
 
             .tab {
-                .settings {
+                height: 100%;
+
+                .eazy-view {
                     display: grid;
                     grid-template-columns: repeat(3, 300px);
                     gap: 10px;
@@ -72,6 +106,31 @@
                     @media (max-width: 700px) {
                         grid-template-columns: 300px;
                     }
+                }
+                
+                .file-view {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    height: 100%;
+                    
+                    textarea {
+                        width: 80%;
+                        height: 80%;
+                        resize: none;
+                        background-color: var(--file-view-background-color);
+                        color: var(--file-view-text-color);
+                        border: none;
+                        border-radius: 10px;
+                        font-size: 15px;
+                        padding: 15px;
+
+                        &:focus {
+                            outline: none;
+                        }
+                    }
+
+                    @include stuff.scrollbar;
                 }
             }
         }

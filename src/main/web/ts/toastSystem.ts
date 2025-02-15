@@ -3,6 +3,8 @@ export class ToastSystem {
     private static isShowing: boolean = false;
     private static notification: HTMLDivElement = document.querySelector(".toast-notifications") as HTMLDivElement;
 
+    public static enabled = true;
+
     private static addToQueue(text: string, type: string): void {
         this.queue.push({ text, type });
         this.showNext();
@@ -32,6 +34,8 @@ export class ToastSystem {
     }
 
     private static async show(text: string, type: string, showTime: number) {
+        if (!this.enabled) return;
+
         this.notification.style.color = "transparent";
         this.notification.style.backgroundColor = "transparent";
         this.notification.style.boxShadow = "5px 5px transparent"

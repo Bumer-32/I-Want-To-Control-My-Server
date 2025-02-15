@@ -1,5 +1,6 @@
 import { Constants } from "./constants.js";
-import { checkAuth, isDEV } from "./supply.js";
+import { isDEV } from "./dev-mode/dev-mode.js";
+import { checkAuth } from "./supply.js";
 import { ToastSystem } from "./toastSystem.js";
 
 export async function initLogin() {
