@@ -100,7 +100,6 @@ object WebCompile {
             newContent.forEach { out.println(it) }
         }
 
-        DevReloadWS.asWs()?.sendMessage("reload")
         logger.info("Modified ${html.name}")
     }
 
@@ -115,6 +114,7 @@ object WebCompile {
         }
         compileSASS()
         compileTS()
+        DevReloadWS.asWs()?.sendMessage("reload")
     }
 
     fun compile(event: KfsDirectoryWatcherEvent) {
@@ -128,13 +128,16 @@ object WebCompile {
             return
         }
 
-        if (file.name.endsWith(".ts")) {
-            compileTS()
-        } else if (file.name.endsWith(".scss") || file.name.endsWith(".sass")) {
-            compileSASS()
-        } else if (file.name.endsWith(".html") && event.event != KfsEvent.Delete) {
-            modifyHtml(file.absolutePath)
-            return
+        val name = file.name
+
+        when {
+            name.endsWith(".ts") -> compileTS()
+            name.endsWith(".scss") || name.endsWith(".sass") -> compileSASS()
+            name.endsWith(".html") && event.event != KfsEvent.Delete -> {
+                modifyHtml(file.absolutePath)
+                DevReloadWS.asWs()?.sendMessage("reload")
+                return
+            }
         }
 
         // and copy it

@@ -28,7 +28,6 @@ $logos-size: 50px;
 
     .material-symbols-rounded {
         font-size: $logos-size;
-        transition: font-size 0.3s ease, color 0.3s ease;
         color: var(--header-icons-color);
 
         &:active { // press effect

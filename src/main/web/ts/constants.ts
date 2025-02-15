@@ -2,7 +2,6 @@ import { checkAuth, getPermits, getVersion } from "./supply.js";
 export class Constants {
     // URLS
     static BASE_URL = document.baseURI;
-    static PAGE_404_URL = this.BASE_URL + "/404.html";
     static PAGE_BAD_CONNECTION_URL = this.BASE_URL + "/BadConnection.html";
     static IS_AUTH_ENABLED_URL = this.BASE_URL + "/api/isAuthEnabled";
     static IS_DEV_ENABLED_URL = this.BASE_URL + "/api/isDevEnabled";

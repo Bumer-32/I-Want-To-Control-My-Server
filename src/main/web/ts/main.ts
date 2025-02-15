@@ -1,21 +1,21 @@
 import { initTabsController } from "./tabsController.js";
 import { initLogin } from "./auth.js";
 import { Constants } from "./constants.js";
-import { isDEV } from "./supply.js";
 import consoleInit from "./tabs/console.js";
 import { initDevFunctions } from "./dev-mode/dev-mode.js";
 import settingsInit from "./tabs/settings.js";
 
 async function loadGithubStars() {
     try {
-        const request = fetch("https://api.github.com/repos/Bumer-32/I-Want-To-Control-My-Server");
-        request.then(response => response.text())
-        .then(text => {
-            const stars: number = JSON.parse(text).stargazers_count;
-            if (stars !== undefined) { 
-                (document.querySelector(".footer > .github > .stars") as HTMLSpanElement).innerHTML = stars.toString();
-            }
-        });
+        const request = fetch("https://corsproxy.io/?url=https://github.com/Bumer-32/I-Want-To-Control-My-Server");
+        const html = (await request).text()
+
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(await html, "text/html");
+
+        const starsSpan = doc.querySelector("a[href$=\"/stargazers\"] span") as HTMLSpanElement;
+
+        (document.querySelector(".footer > .github > .stars") as HTMLSpanElement).innerHTML = starsSpan.innerHTML.trim();
     } catch (error) {
         console.error("Failed to load github stars");
         console.error(error);
@@ -42,17 +42,15 @@ async function main() {
     // ? closing menu
     (document.querySelector(".header > .menu > .menu-button > input") as HTMLInputElement).checked = false;
 
+    initDevFunctions(); // earlier then other functions because dev functions can influence to it
+
     loadGithubStars()
 
     initTabsController();
     initLogin();
 
-    //isDEV(); // for caching
-
     consoleInit();
     settingsInit();
-
-    initDevFunctions();
 
     // ? remove loading screen
     (document.querySelector(".loading") as HTMLDivElement).style.display = "none";
