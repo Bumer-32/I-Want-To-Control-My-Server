@@ -1,0 +1,44 @@
+server.ip:
+  type: string
+  default: "127.0.0.1"
+server.port:
+  type: "int"
+  default: 25566
+  min: 1024
+  max: 65535
+server.log Level:
+  type: "choose"
+  default: "INFO"
+  options:
+    - "OFF"
+    - "FATAL"
+    - "ERROR"
+    - "WARN"
+    - "INFO"
+    - "DEBUG"
+    - "TRACE"
+    - "ALL"
+ssl.use SSL:
+  type: "bool"
+  default: false
+ssl.custom Certificate:
+  type: "bool"
+  default: false
+ssl.ssl Alias:
+  type: string
+  default: "iwtcms"
+ssl.ssl Pass:
+  type: string
+  default: "keystorePassword"
+stuff.statistics period:
+  type: "int"
+  default: 1000
+web.enable IWTCMS control panel:
+  type: "bool"
+  default: true
+web.auto open IWTCMS page on startup:
+  type: "bool"
+  default: false
+dev.dev mode:
+  type: "bool"
+  default: false
