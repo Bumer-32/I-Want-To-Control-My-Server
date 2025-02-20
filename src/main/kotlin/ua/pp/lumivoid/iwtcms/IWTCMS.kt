@@ -6,6 +6,8 @@ import ua.pp.lumivoid.iwtcms.ktor.api.dev.WebCompile
 import ua.pp.lumivoid.iwtcms.ktor.util.Config
 import ua.pp.lumivoid.iwtcms.util.StoppedServerTrigger
 import ua.pp.lumivoid.iwtcms.util.MinecraftServerHandler
+import java.awt.Desktop
+import java.net.URI
 
 object IWTCMS : ModInitializer {
 	private val logger = Constants.LOGGER
@@ -22,6 +24,13 @@ object IWTCMS : ModInitializer {
 
 		if (Config.readConfig().devMode) {
 			WebCompile.compileAll()
+		}
+
+		if (Config.readConfig().autoOpenIWTCMSPageOnStartup) {
+			logger.info("Open IWTCMS page")
+			@Suppress("HttpUrlsUsage")
+			val prefix = if (Config.readConfig().useSSL) "https://" else "http://"
+			Desktop.getDesktop().browse(URI("$prefix${Config.readConfig().ip}:${Config.readConfig().port}"))
 		}
 	}
 }
