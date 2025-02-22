@@ -237,8 +237,8 @@ Let's start:
 >
 > ```json
 > {
->   "username": "guest",
->   "password": "guest"
+>     "username": "guest",
+>     "password": "guest"
 > }
 > ```
 >

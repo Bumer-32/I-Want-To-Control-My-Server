@@ -1,65 +1,65 @@
 @use "colors";
 
 body {
-  margin: 0;
-  font-family: "Nunito", sans-serif;
-  font-weight: 700;
-  background-color: var(--background-color);
-  color: var(--main-text-color);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  overflow: hidden;
+    margin: 0;
+    font-family: "Nunito", sans-serif;
+    font-weight: 700;
+    background-color: var(--background-color);
+    color: var(--main-text-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
 
-  transition:
-    background-color 0.3s ease,
-    color 0.3s ease;
+    transition:
+        background-color 0.3s ease,
+        color 0.3s ease;
 }
 
 #app {
-  height: 100%;
-  width: 100%;
+    height: 100%;
+    width: 100%;
 }
 
 .material-symbols-rounded {
-  user-select: none;
+    user-select: none;
 }
 
 noscript {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  font-size: 20px;
-  color: var(--main-text-color);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 100;
-  background-color: var(--background-color);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    font-size: 20px;
+    color: var(--main-text-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    background-color: var(--background-color);
 }
 
 .toast-notifications {
-  z-index: 1000;
-  background-color: transparent;
-  color: transparent;
-  border-radius: 10px;
-  width: 250px;
-  height: 75px;
-  overflow: hidden;
-  white-space: normal;
-  word-wrap: break-word;
-  word-break: break-word;
-  padding: 10px;
-  position: absolute;
-  top: 100px;
-  right: 15px;
-  display: none;
-  transition:
-    color 1s ease,
-    background-color 1s ease,
-    box-shadow 1s ease;
-  box-shadow: 5px 5px transparent;
+    z-index: 1000;
+    background-color: transparent;
+    color: transparent;
+    border-radius: 10px;
+    width: 250px;
+    height: 75px;
+    overflow: hidden;
+    white-space: normal;
+    word-wrap: break-word;
+    word-break: break-word;
+    padding: 10px;
+    position: absolute;
+    top: 100px;
+    right: 15px;
+    display: none;
+    transition:
+        color 1s ease,
+        background-color 1s ease,
+        box-shadow 1s ease;
+    box-shadow: 5px 5px transparent;
 }

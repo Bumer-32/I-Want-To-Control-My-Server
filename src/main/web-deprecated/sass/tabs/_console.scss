@@ -6,98 +6,98 @@ $console-height: calc($console-width * 0.8);
 $console-input-height: 24px;
 
 #console-tab {
-  .container {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-
-    .windows {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      justify-content: center;
-
-      .statistics {
-        background-color: var(--console-background-color);
-        padding: 10px;
-        border-radius: 10px;
-        height: fit-content;
-        margin-left: 60px;
-        width: 250px;
-        transition: background-color ease 0.3s;
-
-        h3 {
-          margin-top: 0;
-          margin-bottom: 10px;
-          display: flex;
-          justify-content: center;
-        }
-
-        a {
-          text-decoration: none;
-          color: #597cef;
-        }
-      }
-      @include stuff.forbidden(130px);
-
-      .console {
-        width: $console-width;
-        height: 90%;
-        background-color: var(--console-background-color);
-        border-radius: 10px;
+    .container {
+        width: 100%;
         display: flex;
         flex-direction: column;
-        position: relative;
-        align-items: center;
-        margin-left: 25px;
-        margin-right: 60px;
-        max-width: 1200px;
-        transition: background-color ease 0.3s;
 
-        @include stuff.scrollbar;
-
-        .console-text {
-          position: absolute;
-          width: calc(100% - 32px);
-          height: calc(100% - $console-input-height - 24px);
-          top: 8px;
-          display: flex;
-          flex-direction: column;
-          overflow-y: auto;
-          overflow-x: hidden;
-          scroll-behavior: smooth;
-        }
-        @include stuff.forbidden(423px);
-
-        .total-messages {
-          position: absolute;
-          right: 35px;
-          bottom: $console-input-height;
-          font-size: 12px;
-        }
-
-        .input {
-          position: absolute;
-          bottom: 0;
-          left: 0;
-          display: flex;
-          align-items: center;
-          width: 100%;
-
-          input {
+        .windows {
             width: 100%;
-            height: $console-input-height;
-            background-color: transparent;
-            border: none;
-            color: var(--console-text-color);
-            transition: color ease 0.3s;
+            height: 100%;
+            display: flex;
+            justify-content: center;
 
-            &:focus {
-              outline: none;
+            .statistics {
+                background-color: var(--console-background-color);
+                padding: 10px;
+                border-radius: 10px;
+                height: fit-content;
+                margin-left: 60px;
+                width: 250px;
+                transition: background-color ease 0.3s;
+
+                h3 {
+                    margin-top: 0;
+                    margin-bottom: 10px;
+                    display: flex;
+                    justify-content: center;
+                }
+
+                a {
+                    text-decoration: none;
+                    color: #597cef;
+                }
             }
-          }
+            @include stuff.forbidden(130px);
+
+            .console {
+                width: $console-width;
+                height: 90%;
+                background-color: var(--console-background-color);
+                border-radius: 10px;
+                display: flex;
+                flex-direction: column;
+                position: relative;
+                align-items: center;
+                margin-left: 25px;
+                margin-right: 60px;
+                max-width: 1200px;
+                transition: background-color ease 0.3s;
+
+                @include stuff.scrollbar;
+
+                .console-text {
+                    position: absolute;
+                    width: calc(100% - 32px);
+                    height: calc(100% - $console-input-height - 24px);
+                    top: 8px;
+                    display: flex;
+                    flex-direction: column;
+                    overflow-y: auto;
+                    overflow-x: hidden;
+                    scroll-behavior: smooth;
+                }
+                @include stuff.forbidden(423px);
+
+                .total-messages {
+                    position: absolute;
+                    right: 35px;
+                    bottom: $console-input-height;
+                    font-size: 12px;
+                }
+
+                .input {
+                    position: absolute;
+                    bottom: 0;
+                    left: 0;
+                    display: flex;
+                    align-items: center;
+                    width: 100%;
+
+                    input {
+                        width: 100%;
+                        height: $console-input-height;
+                        background-color: transparent;
+                        border: none;
+                        color: var(--console-text-color);
+                        transition: color ease 0.3s;
+
+                        &:focus {
+                            outline: none;
+                        }
+                    }
+                }
+            }
         }
-      }
     }
-  }
 }

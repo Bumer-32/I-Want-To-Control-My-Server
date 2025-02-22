@@ -1,20 +1,20 @@
 .spoiler {
-  position: relative;
-  &:after {
-    content: "";
-    display: block;
-    background-color: black;
-    width: calc(100% + 10px);
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translate(-50%);
-    border-radius: 10px;
-    transition: background-color 0.3s ease;
-  }
+    position: relative;
+    &:after {
+        content: "";
+        display: block;
+        background-color: black;
+        width: calc(100% + 10px);
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translate(-50%);
+        border-radius: 10px;
+        transition: background-color 0.3s ease;
+    }
 
-  &:hover:after {
-    background-color: transparent;
-  }
+    &:hover:after {
+        background-color: transparent;
+    }
 }

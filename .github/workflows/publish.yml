@@ -3,38 +3,38 @@
 name: publish
 
 on:
-  push:
-    branches:
-      - main
-    tags-ignore:
-      - skip-ci
+    push:
+        branches:
+            - main
+        tags-ignore:
+            - skip-ci
 
 jobs:
-  publish:
-    if: "!contains(github.ref, 'refs/tags/skip-ci')"
+    publish:
+        if: "!contains(github.ref, 'refs/tags/skip-ci')"
 
-    name: build and publish to modrinth
-    runs-on: ubuntu-latest
+        name: build and publish to modrinth
+        runs-on: ubuntu-latest
 
-    steps:
-      - name: checkout repository
-        uses: actions/checkout@v4
+        steps:
+            - name: checkout repository
+              uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.13"
+            - uses: actions/setup-python@v5
+              with:
+                  python-version: "3.13"
 
-      - name: validate gradle wrapper
-        uses: gradle/actions/wrapper-validation@v3
+            - name: validate gradle wrapper
+              uses: gradle/actions/wrapper-validation@v3
 
-      - name: setup jdk
-        uses: actions/setup-java@v4
-        with:
-          java-version: 21
-          distribution: "microsoft"
+            - name: setup jdk
+              uses: actions/setup-java@v4
+              with:
+                  java-version: 21
+                  distribution: "microsoft"
 
-      - name: make gradle wrapper executable
-        run: chmod +x ./gradlew
+            - name: make gradle wrapper executable
+              run: chmod +x ./gradlew
 
-      - name: building and publishing
-        run: ./gradlew modrinth -PmodrinthToken=${{ secrets.MODRINTH_TOKEN }}
+            - name: building and publishing
+              run: ./gradlew modrinth -PmodrinthToken=${{ secrets.MODRINTH_TOKEN }}
