@@ -12,7 +12,6 @@ import io.ktor.server.routing.*
 import io.ktor.server.sessions.*
 import io.ktor.server.websocket.*
 import ua.pp.lumivoid.iwtcms.Constants
-import ua.pp.lumivoid.iwtcms.ktor.api.dev.DevReloadWS
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.ApiListG
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.CheckLoginG
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.FilesG
@@ -85,10 +84,6 @@ fun Application.configureRouting() {
 
     ConsoleWS.register(r)
     ServerStatsWS.register(r)
-
-    if (Config.readConfig().devMode) {
-        DevReloadWS.register(r)
-    }
 
     logger.info("-=-=-=-=-=-=-=-=-=- Routes registered -=-=-=-=-=-=-=-=-=-")
 }

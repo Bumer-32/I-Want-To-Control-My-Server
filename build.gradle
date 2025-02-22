@@ -115,11 +115,11 @@ tasks.register("generatePythonRequirements") {
 
 		if (System.getProperty("os.name").toLowerCase().contains("win")) {
 			exec {
-				commandLine 'cmd', '/c', 'genpyreqs.bat'
+				commandLine "cmd", "/c", "genpyreqs.bat"
 			}
 		} else {
 			exec {
-				commandLine 'bash', 'genpyreqs.sh'
+				commandLine "bash", "genpyreqs.sh"
 			}
 		}
 	}
@@ -156,39 +156,18 @@ tasks.register("preparePythonClient") {
 	}
 }
 
-tasks.register("cleanWebFolder") {
+tasks.register("compileVite"){
 	group = "build"
-
-	doFirst {
-		def f = file("$buildDir/resources/main/web")
-		if (f.exists()) f.deleteDir()
-	}
-}
-
-tasks.register("compileTypeScript", NpxTask) {
-	group = "build"
-	dependsOn tasks.cleanWebFolder
-	dependsOn tasks.npmInstall
-	command = "tsc"
-}
-
-tasks.register("compileSASS", NpxTask) {
-	group = "build"
-	dependsOn tasks.cleanWebFolder
-	dependsOn tasks.npmInstall
-	command = "sass"
-	args = ["$buildDir/../src/main/web/sass:$buildDir/resources/main/web/sass",]
-}
-
-tasks.register("compileWeb"){
-	group = "build"
-	dependsOn tasks.compileTypeScript
-	dependsOn tasks.compileSASS
-
+	
 	doLast {
-		copy {
-			from(file("src/main/web"))
-			into(file("$buildDir/resources/main/web"))
+		if (System.getProperty("os.name").toLowerCase().contains("win")) {
+			exec {
+				commandLine "cmd", "/c", "npm run build"
+			}
+		} else {
+			exec {
+				commandLine "bash", "npm run build"
+			}
 		}
 	}
 }
@@ -199,7 +178,7 @@ jar {
 
 processResources {
 	dependsOn tasks.preparePythonClient
-	dependsOn tasks.compileWeb
+	dependsOn tasks.compileVite
 
 	inputs.property "version", project.version
 

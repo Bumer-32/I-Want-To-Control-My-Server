@@ -24,7 +24,7 @@ fun Application.module() {
 fun ApplicationEngine.Configuration.envConfig() {
     logger.info("Configuring environment")
 
-    if (Config.readConfig().useSSL) {
+    if (Config.readConfig().useSSL && !Config.readConfig().devMode) {
         val keyStoreFile = File(Constants.SSL_CERTIFICATE_FILE)
         val keyStore: KeyStore
 
@@ -63,9 +63,16 @@ fun ApplicationEngine.Configuration.envConfig() {
             keyStorePath = keyStoreFile
         }
     } else {
-        connector {
-            host = modConfig.ip
-            port = modConfig.port
+        if (!Config.readConfig().devMode) {
+            connector {
+                host = modConfig.ip
+                port = modConfig.port
+            }
+        } else {
+            connector {
+                host = "localhost"
+                port = 25566
+            }
         }
     }
 }

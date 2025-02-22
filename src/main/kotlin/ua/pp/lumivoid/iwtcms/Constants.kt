@@ -13,7 +13,4 @@ object Constants {
     val SSL_CERTIFICATE_FILE = "$CONFIG_FOLDER/keystore.jks"
     const val SPARK_FABRIC_ID = "spark"
     val MOD_VERSION = FabricLoader.getInstance().getModContainer(MOD_ID).get().metadata.version.toString()
-    val DEV_WEB_FOLDER = "$CONFIG_FOLDER/dev-web"
-    val KFSW_SRC_WEB_FOLDER = "${System.getProperty("user.dir")}/../src/main/web"
-    val IWTCMS_DEV_FOLDER = "${System.getProperty("user.dir")}/.."
 }
