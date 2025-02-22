@@ -1,29 +1,17 @@
 import { Constants } from "../constants.js";
-const selectorContainer = document.querySelector(
-    "#settings-tab .container .tab-selector",
-) as HTMLDivElement;
-const tabsContainer = document.querySelector(
-    "#settings-tab .container .settings-tab-tabs",
-) as HTMLDivElement;
+const selectorContainer = document.querySelector("#settings-tab .container .tab-selector") as HTMLDivElement;
+const tabsContainer = document.querySelector("#settings-tab .container .settings-tab-tabs") as HTMLDivElement;
 
 export default async function settingsInit() {
     selector();
 
-    createSettingsFileTab(
-        "server.properties",
-        `${Constants.BASE_URL}/api/mcSettings`,
-    );
-    createSettingsFileTab(
-        "iwtcms.conf",
-        `${Constants.BASE_URL}/api/iwtcmsSettings`,
-    );
+    createSettingsFileTab("server.properties", `${Constants.BASE_URL}/api/mcSettings`);
+    createSettingsFileTab("iwtcms.conf", `${Constants.BASE_URL}/api/iwtcmsSettings`);
 }
 
 function selector() {
     function processing() {
-        const underline = selectorContainer.querySelector(
-            ".underline",
-        ) as HTMLSpanElement;
+        const underline = selectorContainer.querySelector(".underline") as HTMLSpanElement;
 
         function clickHandler() {
             changeTab();
@@ -32,18 +20,10 @@ function selector() {
         }
 
         function changeTab() {
-            const checkedInput = selectorContainer.querySelector(
-                'input[type="radio"]:checked',
-            ) as HTMLInputElement;
-            const checkedLabel = selectorContainer.querySelector(
-                `label[for="${checkedInput.id}"]`,
-            ) as HTMLLabelElement;
-            const tabDiv = document.getElementById(
-                `settings_file|${checkedLabel.innerHTML}`,
-            ) as HTMLDivElement;
-            const tabs = tabsContainer.querySelectorAll(
-                ".tab",
-            ) as NodeListOf<HTMLDivElement>;
+            const checkedInput = selectorContainer.querySelector('input[type="radio"]:checked') as HTMLInputElement;
+            const checkedLabel = selectorContainer.querySelector(`label[for="${checkedInput.id}"]`) as HTMLLabelElement;
+            const tabDiv = document.getElementById(`settings_file|${checkedLabel.innerHTML}`) as HTMLDivElement;
+            const tabs = tabsContainer.querySelectorAll(".tab") as NodeListOf<HTMLDivElement>;
 
             tabs.forEach((tab) => {
                 tab.classList.add("disabled");
@@ -52,15 +32,9 @@ function selector() {
         }
 
         function hoverHoloEffect() {
-            const labels = selectorContainer.querySelectorAll(
-                "label",
-            ) as NodeListOf<HTMLLabelElement>;
-            const checkedInput = selectorContainer.querySelector(
-                'input[type="radio"]:checked',
-            ) as HTMLInputElement;
-            const checkedLabel = selectorContainer.querySelector(
-                `label[for="${checkedInput.id}"]`,
-            ) as HTMLLabelElement;
+            const labels = selectorContainer.querySelectorAll("label") as NodeListOf<HTMLLabelElement>;
+            const checkedInput = selectorContainer.querySelector('input[type="radio"]:checked') as HTMLInputElement;
+            const checkedLabel = selectorContainer.querySelector(`label[for="${checkedInput.id}"]`) as HTMLLabelElement;
             labels.forEach((label) => {
                 label.classList.remove("hover-holo-effect");
             });
@@ -68,20 +42,14 @@ function selector() {
         }
 
         function updateUnderline() {
-            const checkedInput = selectorContainer.querySelector(
-                'input[type="radio"]:checked',
-            ) as HTMLInputElement;
-            const checkedLabel = selectorContainer.querySelector(
-                `label[for="${checkedInput.id}"]`,
-            ) as HTMLLabelElement;
+            const checkedInput = selectorContainer.querySelector('input[type="radio"]:checked') as HTMLInputElement;
+            const checkedLabel = selectorContainer.querySelector(`label[for="${checkedInput.id}"]`) as HTMLLabelElement;
 
             const { offsetLeft, offsetWidth } = checkedLabel;
 
             let width = offsetWidth;
 
-            const separator = checkedLabel.querySelector(
-                ".separator",
-            ) as HTMLSpanElement | null;
+            const separator = checkedLabel.querySelector(".separator") as HTMLSpanElement | null;
             if (separator != null) {
                 width = offsetWidth - separator!.offsetWidth - 10; // - 10px because we have margins
             }
@@ -95,16 +63,10 @@ function selector() {
     }
 
     function separators() {
-        const container = document.querySelector(
-            "#settings-tab .container .tab-selector .selector",
-        ) as HTMLDivElement;
+        const container = document.querySelector("#settings-tab .container .tab-selector .selector") as HTMLDivElement;
         function updateSeparators() {
-            const tabs = container.querySelectorAll(
-                "div",
-            ) as NodeListOf<HTMLDivElement>;
-            const separators = container.querySelectorAll(
-                ".separator",
-            ) as NodeListOf<HTMLSpanElement>;
+            const tabs = container.querySelectorAll("div") as NodeListOf<HTMLDivElement>;
+            const separators = container.querySelectorAll(".separator") as NodeListOf<HTMLSpanElement>;
 
             separators.forEach((separator) => {
                 separator.remove();
@@ -138,21 +100,11 @@ function selector() {
 }
 
 function createSettingsFileTab(fileName: string, url: string) {
-    const tabsSelectorDiv = document.querySelector(
-        "#settings-tab .container .tab-selector .selector",
-    ) as HTMLDivElement;
-    const tabsDiv = document.querySelector(
-        "#settings-tab .container .settings-tab-tabs",
-    ) as HTMLDivElement;
-    const fileViewButton = document.querySelector(
-        "#settings-tab .container .tab-selector .controls-buttons .file-view",
-    ) as HTMLSpanElement;
-    const updateButton = document.querySelector(
-        "#settings-tab .container .tab-selector .controls-buttons .update",
-    ) as HTMLSpanElement;
-    const saveButton = document.querySelector(
-        "#settings-tab .container .tab-selector .controls-buttons .save",
-    ) as HTMLSpanElement;
+    const tabsSelectorDiv = document.querySelector("#settings-tab .container .tab-selector .selector") as HTMLDivElement;
+    const tabsDiv = document.querySelector("#settings-tab .container .settings-tab-tabs") as HTMLDivElement;
+    const fileViewButton = document.querySelector("#settings-tab .container .tab-selector .controls-buttons .file-view") as HTMLSpanElement;
+    const updateButton = document.querySelector("#settings-tab .container .tab-selector .controls-buttons .update") as HTMLSpanElement;
+    const saveButton = document.querySelector("#settings-tab .container .tab-selector .controls-buttons .save") as HTMLSpanElement;
 
     // add button to selector
     const buttonDiv = document.createElement("div") as HTMLDivElement;
@@ -198,9 +150,7 @@ function createSettingsFileTab(fileName: string, url: string) {
     // update
     updateButton.addEventListener("click", () => {
         if (!tab.classList.contains("disabled")) {
-            const sure = confirm(
-                "Are you sure you want to update this file?\nThis will overwrite any changes you have made!",
-            );
+            const sure = confirm("Are you sure you want to update this file?\nThis will overwrite any changes you have made!");
             if (sure) {
                 update(tab, url);
             }
@@ -231,9 +181,7 @@ function createSettingsFileTab(fileName: string, url: string) {
 async function update(tabContainer: HTMLDivElement, url: string) {
     console.log("updating", tabContainer.id, ":", url);
 
-    const fileViewTextArea = tabContainer.querySelector(
-        ".file-view textarea",
-    ) as HTMLTextAreaElement;
+    const fileViewTextArea = tabContainer.querySelector(".file-view textarea") as HTMLTextAreaElement;
 
     const response = await fetch(url);
     const text = await response.text();
@@ -243,9 +191,7 @@ async function update(tabContainer: HTMLDivElement, url: string) {
 }
 
 async function updateEazyView(tabContainer: HTMLDivElement, url: string) {
-    const fileViewTextArea = tabContainer.querySelector(
-        ".file-view textarea",
-    ) as HTMLTextAreaElement;
+    const fileViewTextArea = tabContainer.querySelector(".file-view textarea") as HTMLTextAreaElement;
     const eazyView = tabContainer.querySelector(".eazy-view") as HTMLDivElement;
 
     const response = await fetch(url + "/types");

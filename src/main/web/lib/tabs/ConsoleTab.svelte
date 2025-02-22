@@ -47,9 +47,7 @@
                     </span>
                 </div>
                 <div class="input disabled">
-                    <span class="material-symbols-rounded"
-                        >keyboard_arrow_right</span
-                    >
+                    <span class="material-symbols-rounded">keyboard_arrow_right</span>
                     <input class="input-field" type="text" placeholder="help" />
                 </div>
             </div>

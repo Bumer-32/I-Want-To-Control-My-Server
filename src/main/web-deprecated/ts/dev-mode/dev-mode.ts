@@ -4,9 +4,7 @@ import { Constants } from "../constants.js";
 
 let isDev: boolean;
 
-const menu = document.querySelector(
-    "#settings-tab > .container > .dev-menu",
-) as HTMLDivElement;
+const menu = document.querySelector("#settings-tab > .container > .dev-menu") as HTMLDivElement;
 
 export function initDevFunctions() {
     isDEV().then((isDEV) => {
@@ -23,11 +21,8 @@ export function initDevFunctions() {
         }
 
         // ? remove notifications
-        const removeNotificationsCheckbox = menu.querySelector(
-            ".dev-remove-notifications",
-        ) as HTMLInputElement;
-        const isNotificationsRemoved =
-            localStorage.getItem("remove-notifications") == "true";
+        const removeNotificationsCheckbox = menu.querySelector(".dev-remove-notifications") as HTMLInputElement;
+        const isNotificationsRemoved = localStorage.getItem("remove-notifications") == "true";
         ToastSystem.enabled = !isNotificationsRemoved;
         removeNotificationsCheckbox.checked = isNotificationsRemoved;
     });
@@ -42,11 +37,7 @@ export async function isDEV(): Promise<boolean> {
         const response = await fetch(Constants.IS_DEV_ENABLED_URL);
 
         if (!response.ok) {
-            console.error(
-                "Error fetching data:",
-                response.status,
-                response.statusText,
-            );
+            console.error("Error fetching data:", response.status, response.statusText);
             ToastSystem.showError(`Error fetching data: ${response.status}`);
             isDev = true;
             return true;
@@ -76,12 +67,8 @@ function settingsDevMenu() {
 
     // ? default tab
 
-    const defaultTabInput = menu.querySelector(
-        ".dev-set-default-tab-input",
-    ) as HTMLInputElement;
-    const defaultTabButton = menu.querySelector(
-        ".dev-set-default-tab-button",
-    ) as HTMLButtonElement;
+    const defaultTabInput = menu.querySelector(".dev-set-default-tab-input") as HTMLInputElement;
+    const defaultTabButton = menu.querySelector(".dev-set-default-tab-button") as HTMLButtonElement;
 
     defaultTabButton.onclick = () => {
         const tabName = defaultTabInput.value;
@@ -95,26 +82,14 @@ function settingsDevMenu() {
 
     // ? notifications
 
-    const notificationInfoInput = menu.querySelector(
-        ".dev-notification-info-input",
-    ) as HTMLInputElement;
-    const notificationInfoButton = menu.querySelector(
-        ".dev-notification-info-button",
-    ) as HTMLButtonElement;
+    const notificationInfoInput = menu.querySelector(".dev-notification-info-input") as HTMLInputElement;
+    const notificationInfoButton = menu.querySelector(".dev-notification-info-button") as HTMLButtonElement;
 
-    const notificationWarningInput = menu.querySelector(
-        ".dev-notification-warning-input",
-    ) as HTMLInputElement;
-    const notificationWarningButton = menu.querySelector(
-        ".dev-notification-warning-button",
-    ) as HTMLButtonElement;
+    const notificationWarningInput = menu.querySelector(".dev-notification-warning-input") as HTMLInputElement;
+    const notificationWarningButton = menu.querySelector(".dev-notification-warning-button") as HTMLButtonElement;
 
-    const notificationErrorInput = menu.querySelector(
-        ".dev-notification-error-input",
-    ) as HTMLInputElement;
-    const notificationErrorButton = menu.querySelector(
-        ".dev-notification-error-button",
-    ) as HTMLButtonElement;
+    const notificationErrorInput = menu.querySelector(".dev-notification-error-input") as HTMLInputElement;
+    const notificationErrorButton = menu.querySelector(".dev-notification-error-button") as HTMLButtonElement;
 
     notificationInfoButton.onclick = () => {
         const message = notificationInfoInput.value;
@@ -132,13 +107,8 @@ function settingsDevMenu() {
     };
 
     // ? remove notifications
-    const removeNotificationsCheckbox = menu.querySelector(
-        ".dev-remove-notifications",
-    ) as HTMLInputElement;
+    const removeNotificationsCheckbox = menu.querySelector(".dev-remove-notifications") as HTMLInputElement;
     removeNotificationsCheckbox.onchange = () => {
-        localStorage.setItem(
-            "remove-notifications",
-            removeNotificationsCheckbox.checked.toString(),
-        );
+        localStorage.setItem("remove-notifications", removeNotificationsCheckbox.checked.toString());
     };
 }

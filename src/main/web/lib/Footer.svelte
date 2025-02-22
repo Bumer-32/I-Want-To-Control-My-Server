@@ -7,21 +7,15 @@
     onMount(() => {
         async function loadGithubStars() {
             try {
-                const request = fetch(
-                    "https://corsproxy.io/?url=https://github.com/Bumer-32/I-Want-To-Control-My-Server",
-                );
+                const request = fetch("https://corsproxy.io/?url=https://github.com/Bumer-32/I-Want-To-Control-My-Server");
                 const html = (await request).text();
 
                 const parser = new DOMParser();
                 const doc = parser.parseFromString(await html, "text/html");
 
-                const starsSpan = doc.querySelector<HTMLSpanElement>(
-                    'a[href$="/stargazers"] span',
-                )!;
+                const starsSpan = doc.querySelector<HTMLSpanElement>('a[href$="/stargazers"] span')!;
 
-                document.querySelector<HTMLSpanElement>(
-                    ".footer .github .stars",
-                )!.innerHTML = starsSpan.innerHTML.trim();
+                document.querySelector<HTMLSpanElement>(".footer .github .stars")!.innerHTML = starsSpan.innerHTML.trim();
             } catch (error) {
                 console.error("Failed to load github stars");
                 console.error(error);
@@ -33,8 +27,7 @@
         //? happy birthday Bumer_32
         if (new Date().getMonth() == 1 && new Date().getDate() == 21) {
             console.log("Happy birthday Bumer_32! 🎉🎉🎉");
-            creatorElement.innerHTML =
-                creatorElement.innerHTML + " | Happy birthday Bumer_32! 🎉🎉🎉";
+            creatorElement.innerHTML = creatorElement.innerHTML + " | Happy birthday Bumer_32! 🎉🎉🎉";
         }
     });
 </script>
@@ -43,16 +36,11 @@
     <span class="iwtcms-label btn-shine">IWTCMS</span>
 
     <div class="authors">
-        <span bind:this={creatorElement}
-            >Created by <a href="https://github.com/Bumer-32">Bumer_32</a></span
-        >
+        <span bind:this={creatorElement}>Created by <a href="https://github.com/Bumer-32">Bumer_32</a></span>
         <span>Spatial thanks for Crazy Potatto</span>
     </div>
 
-    <a
-        href="https://github.com/Bumer-32/I-Want-To-Control-My-Server"
-        class="github"
-    >
+    <a href="https://github.com/Bumer-32/I-Want-To-Control-My-Server" class="github">
         <img src={githubIcon} alt="GitHub icon" />
         <span>Star on GitHub</span>
         <span class="material-symbols-rounded">star</span>
@@ -80,13 +68,7 @@
             left: 45px;
             bottom: -28px;
             top: auto;
-            background: linear-gradient(
-                    to right,
-                    var(--footer-iwtcms-label-color-1) 0,
-                    var(--footer-iwtcms-label-color-2) 10%,
-                    var(--footer-iwtcms-label-color-3) 20%
-                )
-                0;
+            background: linear-gradient(to right, var(--footer-iwtcms-label-color-1) 0, var(--footer-iwtcms-label-color-2) 10%, var(--footer-iwtcms-label-color-3) 20%) 0;
             -webkit-background-clip: text;
             background-clip: text;
         }

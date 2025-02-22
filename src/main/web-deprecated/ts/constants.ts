@@ -22,8 +22,7 @@ export class Constants {
     static async init() {
         console.log("Constants init");
 
-        this.PERMITS_URL =
-            this.BASE_URL + "/api/permits/" + (await checkAuth());
+        this.PERMITS_URL = this.BASE_URL + "/api/permits/" + (await checkAuth());
 
         this.IWTCMS_VERSION = await getVersion();
         this.PERMITS = await getPermits();

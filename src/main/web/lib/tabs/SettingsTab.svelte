@@ -9,16 +9,9 @@
             </div>
 
             <div class="controls-buttons">
-                <span class="material-symbols-rounded update" title="Update"
-                    >update</span
-                >
-                <span
-                    class="material-symbols-rounded file-view"
-                    title="File view">file_open</span
-                >
-                <span class="material-symbols-rounded save" title="Save"
-                    >save</span
-                >
+                <span class="material-symbols-rounded update" title="Update">update</span>
+                <span class="material-symbols-rounded file-view" title="File view">file_open</span>
+                <span class="material-symbols-rounded save" title="Save">save</span>
             </div>
         </div>
 
@@ -32,45 +25,20 @@
             <h3>Developer mode settings</h3>
             <hr />
             <span>Default tab</span>
-            <input
-                type="text"
-                name="default tab (id)"
-                class="dev-set-default-tab-input"
-            />
+            <input type="text" name="default tab (id)" class="dev-set-default-tab-input" />
             <button class="dev-set-default-tab-button">Set default tab</button>
 
             <hr />
 
             <span>Notification testing</span>
-            <input
-                type="text"
-                name="notification text"
-                class="dev-notification-info-input"
-                value="This is a info notification"
-            />
-            <button class="dev-notification-info-button"
-                >Test info notification</button
-            >
+            <input type="text" name="notification text" class="dev-notification-info-input" value="This is a info notification" />
+            <button class="dev-notification-info-button">Test info notification</button>
 
-            <input
-                type="text"
-                name="notification text"
-                class="dev-notification-warning-input"
-                value="This is a warning notification"
-            />
-            <button class="dev-notification-warning-button"
-                >Test warning notification</button
-            >
+            <input type="text" name="notification text" class="dev-notification-warning-input" value="This is a warning notification" />
+            <button class="dev-notification-warning-button">Test warning notification</button>
 
-            <input
-                type="text"
-                name="notification text"
-                class="dev-notification-error-input"
-                value="This is a error notification"
-            />
-            <button class="dev-notification-error-button"
-                >Test error notification</button
-            >
+            <input type="text" name="notification text" class="dev-notification-error-input" value="This is a error notification" />
+            <button class="dev-notification-error-button">Test error notification</button>
 
             <hr />
 

@@ -34,9 +34,7 @@
         align-items: center;
         justify-content: center;
         width: 100vw;
-        height: calc(
-            100vh - #{variables.$header-height} - #{variables.$footer-height}
-        );
+        height: calc(100vh - #{variables.$header-height} - #{variables.$footer-height});
         position: absolute;
         top: variables.$header-height;
 
