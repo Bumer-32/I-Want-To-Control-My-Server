@@ -1,15 +1,4 @@
-// sass imports
 @use "variables";
-@use "header";
-@use "footer";
-@use "container";
-@use "login";
-@use "tabs/allTabs";
-@use "stuff";
-
-//css imports
-@use "../css/switch.css";
-@use "../css/btn-shine.css";
 
 body {
   margin: 0;
@@ -24,6 +13,11 @@ body {
   overflow: hidden;
 
   transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+#app {
+  height: 100%;
+  width: 100%;
 }
 
 .material-symbols-rounded {

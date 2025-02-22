@@ -54,13 +54,6 @@ async function main() {
 
     // ? remove loading screen
     (document.querySelector(".loading") as HTMLDivElement).style.display = "none";
-
-    //? happy birthday Bumer_32
-    if (new Date().getMonth() == 1 && new Date().getDate() == 21) {
-        console.log("Happy birthday Bumer_32! 🎉🎉🎉");
-        const creatorElement = document.querySelector(".footer > .authors > .creator") as HTMLSpanElement
-        creatorElement.innerHTML = creatorElement.innerHTML + " | Happy birthday Bumer_32! 🎉🎉🎉";
-    }
 }
 
 main();

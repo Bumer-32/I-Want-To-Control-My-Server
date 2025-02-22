@@ -1,0 +1,41 @@
+
+
+
+
+
+
+@mixin scrollbar {
+    ::-webkit-scrollbar {
+        width: 5px;
+
+        &:horizontal {
+            height: 5px;
+        }
+    }
+    
+    ::-webkit-scrollbar-track {
+        background: var(--console-scrollbar-track-color);
+        border-radius: 10px;
+        transition: background ease 0.3s;
+        
+        &:vertical {
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
+
+        &:horizontal {
+            margin-left: 5px;
+            margin-right: 5px;
+        }
+    }
+    
+    ::-webkit-scrollbar-thumb {
+        background: var(--console-scrollbar-thumb-color);
+        border-radius: 10px;
+
+        &:hover {
+            background: var(--console-scrollbar-thumb-hover-color);
+        }
+    }
+}
+
