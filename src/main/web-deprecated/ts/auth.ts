@@ -19,11 +19,7 @@ async function checkIsLoginNeeded() {
         const response = await fetch(Constants.IS_AUTH_ENABLED_URL);
 
         if (!response.ok) {
-            console.error(
-                "Error fetching data:",
-                response.status,
-                response.statusText,
-            );
+            console.error("Error fetching data:", response.status, response.statusText);
             ToastSystem.showError(`Error fetching data: ${response.status}`);
             if (!(await isDEV())) {
                 window.location.assign(Constants.PAGE_BAD_CONNECTION_URL);
@@ -44,53 +40,48 @@ async function checkIsLoginNeeded() {
 }
 
 async function handleLoginForm() {
-    (document.getElementById("loginForm") as HTMLFormElement).addEventListener(
-        "submit",
-        async function (event: Event) {
-            event.preventDefault();
+    (document.getElementById("loginForm") as HTMLFormElement).addEventListener("submit", async function (event: Event) {
+        event.preventDefault();
 
-            const formData = new FormData(this);
+        const formData = new FormData(this);
 
-            var object: { [key: string]: any } = {};
-            formData.forEach((value, key) => (object[key] = value));
-            var json = JSON.stringify(object);
+        var object: { [key: string]: any } = {};
+        formData.forEach((value, key) => (object[key] = value));
+        var json = JSON.stringify(object);
 
-            try {
-                const response = await fetch(Constants.LOGIN_URL, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    // credentials: "include",
-                    body: json,
-                });
+        try {
+            const response = await fetch(Constants.LOGIN_URL, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                // credentials: "include",
+                body: json,
+            });
 
-                if (response.ok) {
-                    console.log("Success");
-                    ToastSystem.showInfo("Success");
-                    location.reload();
-                } else if (response.status == 401) {
-                    console.error("Unauthorized");
-                    ToastSystem.showError("Incorrect username or password");
-                } else {
-                    console.error("Error:", response.statusText);
-                    ToastSystem.showError(`Error: ${response.statusText}`);
-                }
-            } catch (error) {
-                console.error("Error:", error);
-                ToastSystem.showError(`Error: ${error}`);
-                if (!(await isDEV())) {
-                    window.location.assign(Constants.PAGE_BAD_CONNECTION_URL);
-                }
+            if (response.ok) {
+                console.log("Success");
+                ToastSystem.showInfo("Success");
+                location.reload();
+            } else if (response.status == 401) {
+                console.error("Unauthorized");
+                ToastSystem.showError("Incorrect username or password");
+            } else {
+                console.error("Error:", response.statusText);
+                ToastSystem.showError(`Error: ${response.statusText}`);
             }
-        },
-    );
+        } catch (error) {
+            console.error("Error:", error);
+            ToastSystem.showError(`Error: ${error}`);
+            if (!(await isDEV())) {
+                window.location.assign(Constants.PAGE_BAD_CONNECTION_URL);
+            }
+        }
+    });
 }
 
 async function handleLogout() {
-    (
-        document.getElementById("logout-button") as HTMLLIElement
-    ).addEventListener("click", async function () {
+    (document.getElementById("logout-button") as HTMLLIElement).addEventListener("click", async function () {
         try {
             const response = await fetch(Constants.LOGOUT_URL, {
                 method: "POST",

@@ -9,9 +9,7 @@
     let rightDiv: HTMLDivElement;
 
     function alignHeaderButtons() {
-        const existingFillerDiv = document.querySelector(
-            ".header .buttons .filler-div",
-        ) as HTMLDivElement | null;
+        const existingFillerDiv = document.querySelector(".header .buttons .filler-div") as HTMLDivElement | null;
         if (existingFillerDiv != null) {
             existingFillerDiv.remove();
         }
@@ -33,8 +31,7 @@
     }
 
     function handleAlignHeaderButtons() {
-        const followDiv =
-            document.querySelector<HTMLDivElement>(".header .buttons")!;
+        const followDiv = document.querySelector<HTMLDivElement>(".header .buttons")!;
 
         const handleMutation = (_: MutationRecord[]) => {
             alignHeaderButtons();
@@ -50,9 +47,7 @@
     }
 
     function handleTabSwitching() {
-        const buttons = document.querySelectorAll(
-            ".header .buttons span",
-        ) as NodeListOf<HTMLImageElement>;
+        const buttons = document.querySelectorAll(".header .buttons span") as NodeListOf<HTMLImageElement>;
 
         buttons.forEach((button) => {
             button.addEventListener("click", () => {
@@ -83,15 +78,8 @@
                 <li>
                     <button
                         type="button"
-                        on:click={() =>
-                            window.location.assign(
-                                "https://modrinth.com/mod/i-want-to-control-my-server",
-                            )}
-                        on:keydown={(e) =>
-                            e.key === "Enter" &&
-                            window.location.assign(
-                                "https://modrinth.com/mod/i-want-to-control-my-server",
-                            )}
+                        on:click={() => window.location.assign("https://modrinth.com/mod/i-want-to-control-my-server")}
+                        on:keydown={(e) => e.key === "Enter" && window.location.assign("https://modrinth.com/mod/i-want-to-control-my-server")}
                     >
                         <img src={modrinthIcon} alt="modrinth" />
                         Modrinth
@@ -100,15 +88,8 @@
                 <li>
                     <button
                         type="button"
-                        on:click={() =>
-                            window.location.assign(
-                                "https://github.com/Bumer-32/I-Want-To-Control-My-Server",
-                            )}
-                        on:keydown={(e) =>
-                            e.key === "Enter" &&
-                            window.location.assign(
-                                "https://github.com/Bumer-32/I-Want-To-Control-My-Server",
-                            )}
+                        on:click={() => window.location.assign("https://github.com/Bumer-32/I-Want-To-Control-My-Server")}
+                        on:keydown={(e) => e.key === "Enter" && window.location.assign("https://github.com/Bumer-32/I-Want-To-Control-My-Server")}
                     >
                         <img src={githubIcon} alt="GitHub icon" />
                         GitHub
@@ -117,11 +98,8 @@
                 <li>
                     <button
                         type="button"
-                        on:click={() =>
-                            window.location.assign("files/iwtcms_client.zip")}
-                        on:keydown={(e) =>
-                            e.key === "Enter" &&
-                            window.location.assign("files/iwtcms_client.zip")}
+                        on:click={() => window.location.assign("files/iwtcms_client.zip")}
+                        on:keydown={(e) => e.key === "Enter" && window.location.assign("files/iwtcms_client.zip")}
                     >
                         <span class="material-symbols-rounded">download</span>
                         Python CLI
@@ -139,21 +117,14 @@
 
     <div class="buttons">
         <div class="left" bind:this={leftDiv}>
-            <span class="material-symbols-rounded" id="header-settings"
-                >settings</span
-            >
+            <span class="material-symbols-rounded" id="header-settings">settings</span>
         </div>
         <div class="center">
             <!-- ! DEFAULT TAB -->
-            <span
-                class="material-symbols-rounded hover-holo-effect"
-                id="header-console">terminal</span
-            >
+            <span class="material-symbols-rounded hover-holo-effect" id="header-console">terminal</span>
         </div>
         <div class="right" bind:this={rightDiv}>
-            <span class="material-symbols-rounded" id="header-players"
-                >group</span
-            >
+            <span class="material-symbols-rounded" id="header-players">group</span>
         </div>
     </div>
 
@@ -214,13 +185,8 @@
             left: 0;
 
             .menu-button {
-                margin-top: calc(
-                    (#{variables.$header-height - variables.$logos-size}) / 2 -
-                        10px
-                );
-                margin-left: calc(
-                    (#{variables.$header-height - variables.$logos-size}) / 2
-                );
+                margin-top: calc((#{variables.$header-height - variables.$logos-size}) / 2 - 10px);
+                margin-left: calc((#{variables.$header-height - variables.$logos-size}) / 2);
                 display: flex;
                 flex-direction: column;
                 align-items: center;
@@ -308,9 +274,7 @@
                         font-weight: 700;
 
                         &:hover {
-                            background-color: var(
-                                --header-menu-item-hover-background-color
-                            );
+                            background-color: var(--header-menu-item-hover-background-color);
                         }
 
                         .material-symbols-rounded {
@@ -364,9 +328,7 @@
             height: 100%;
 
             .color-mode .switch {
-                margin-right: calc(
-                    (#{variables.$header-height - variables.$logos-size}) / 2
-                );
+                margin-right: calc((#{variables.$header-height - variables.$logos-size}) / 2);
 
                 .slider {
                     background-color: var(--color-mode-switch-background-color);

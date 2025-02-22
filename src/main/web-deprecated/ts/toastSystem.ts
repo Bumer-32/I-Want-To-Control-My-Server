@@ -1,9 +1,7 @@
 export class ToastSystem {
     private static queue: { text: string; type: string }[] = [];
     private static isShowing: boolean = false;
-    private static notification: HTMLDivElement = document.querySelector(
-        ".toast-notifications",
-    ) as HTMLDivElement;
+    private static notification: HTMLDivElement = document.querySelector(".toast-notifications") as HTMLDivElement;
 
     public static enabled = true;
 

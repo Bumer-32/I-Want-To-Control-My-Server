@@ -14,11 +14,7 @@ export function getCookies(): Map<string, string> {
     return cookies;
 }
 
-export function editCookie(
-    name: string,
-    value: string,
-    lifetime: number,
-): void {
+export function editCookie(name: string, value: string, lifetime: number): void {
     const expirationDate = new Date();
     expirationDate.setTime(expirationDate.getTime() + lifetime * 1000);
 
@@ -84,15 +80,8 @@ export async function getPermits() {
     }
 }
 
-export function isForbidden(
-    permit: string,
-    element: HTMLElement | null = null,
-): boolean {
-    if (
-        Constants.PERMITS == null ||
-        Constants.PERMITS[permit] == undefined ||
-        Constants.PERMITS[permit] == false
-    ) {
+export function isForbidden(permit: string, element: HTMLElement | null = null): boolean {
+    if (Constants.PERMITS == null || Constants.PERMITS[permit] == undefined || Constants.PERMITS[permit] == false) {
         element?.classList.add("forbidden");
         return true;
     }

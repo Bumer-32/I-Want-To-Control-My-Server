@@ -4,9 +4,7 @@ import { isForbidden } from "../supply.js";
 import { ToastSystem } from "../toastSystem.js";
 
 let allowAutoScroll = true;
-const consoleEl = document.querySelector(
-    ".container .tabs #console-tab .container .console .console-text",
-) as HTMLDivElement;
+const consoleEl = document.querySelector(".container .tabs #console-tab .container .console .console-text") as HTMLDivElement;
 
 export default async function consoleInit() {
     autoScroll();
@@ -16,9 +14,7 @@ export default async function consoleInit() {
 
 function autoScroll() {
     consoleEl.addEventListener("scroll", () => {
-        allowAutoScroll =
-            consoleEl.scrollTop + consoleEl.clientHeight >=
-            consoleEl.scrollHeight - 5;
+        allowAutoScroll = consoleEl.scrollTop + consoleEl.clientHeight >= consoleEl.scrollHeight - 5;
     });
 }
 
@@ -79,24 +75,16 @@ async function addLog(text: string) {
 export let sendCommand = function (command: string) {};
 
 async function connect() {
-    const logsCount = document.querySelector(
-        "#console-tab > .container > .windows > .console > .total-messages > .count",
-    ) as HTMLSpanElement;
-    const inputDiv = document.querySelector(
-        "#console-tab > .container > .windows > .console > .input",
-    ) as HTMLDivElement;
-    const inputField = inputDiv.querySelector(
-        ".input-field",
-    ) as HTMLInputElement;
+    const logsCount = document.querySelector("#console-tab > .container > .windows > .console > .total-messages > .count") as HTMLSpanElement;
+    const inputDiv = document.querySelector("#console-tab > .container > .windows > .console > .input") as HTMLDivElement;
+    const inputField = inputDiv.querySelector(".input-field") as HTMLInputElement;
 
     consoleEl.innerHTML = "";
 
     function onEnter(event: KeyboardEvent) {
         if (event.key === "Enter") {
             if (inputField.value.toLowerCase().trim() == "stop") {
-                const sure = window.confirm(
-                    "Are you sure you want to stop the server?",
-                );
+                const sure = window.confirm("Are you sure you want to stop the server?");
                 if (!sure) {
                     return;
                 }
@@ -140,9 +128,7 @@ async function connect() {
         };
 
         ws.onclose = () => {
-            inputField.removeEventListener("keypress", (event) =>
-                onEnter(event),
-            );
+            inputField.removeEventListener("keypress", (event) => onEnter(event));
 
             if (!document.hidden) {
                 ToastSystem.showInfo("Connection closed");
@@ -163,10 +149,7 @@ async function connect() {
                 ws.close();
             } else {
                 connect();
-                document.removeEventListener(
-                    "visibilitychange",
-                    visibilitychangeListener,
-                );
+                document.removeEventListener("visibilitychange", visibilitychangeListener);
             }
         };
         document.addEventListener("visibilitychange", visibilitychangeListener);
@@ -178,38 +161,22 @@ async function connect() {
 }
 
 async function connectStats() {
-    const statsDiv = document.querySelector(
-        "#console-tab > .container > .windows > .statistics",
-    ) as HTMLDivElement;
+    const statsDiv = document.querySelector("#console-tab > .container > .windows > .statistics") as HTMLDivElement;
 
-    const cpuLoadValue = statsDiv.querySelector(
-        ".cpu-load .value",
-    ) as HTMLSpanElement;
+    const cpuLoadValue = statsDiv.querySelector(".cpu-load .value") as HTMLSpanElement;
 
-    const ramUsageValue = statsDiv.querySelector(
-        ".ram-usage .value",
-    ) as HTMLSpanElement;
+    const ramUsageValue = statsDiv.querySelector(".ram-usage .value") as HTMLSpanElement;
 
-    const uptimeValue = statsDiv.querySelector(
-        ".uptime .value",
-    ) as HTMLSpanElement;
+    const uptimeValue = statsDiv.querySelector(".uptime .value") as HTMLSpanElement;
 
-    const playersValue = statsDiv.querySelector(
-        ".players .value",
-    ) as HTMLSpanElement;
-    const playersMaxValue = statsDiv.querySelector(
-        ".players .max",
-    ) as HTMLSpanElement;
+    const playersValue = statsDiv.querySelector(".players .value") as HTMLSpanElement;
+    const playersMaxValue = statsDiv.querySelector(".players .max") as HTMLSpanElement;
 
-    const ipAddrValue = statsDiv.querySelector(
-        ".ip-addr .value",
-    ) as HTMLSpanElement;
+    const ipAddrValue = statsDiv.querySelector(".ip-addr .value") as HTMLSpanElement;
 
     const tpsValue = statsDiv.querySelector(".tps .value") as HTMLSpanElement;
 
-    const serverTimeValue = statsDiv.querySelector(
-        ".server-time .value",
-    ) as HTMLSpanElement;
+    const serverTimeValue = statsDiv.querySelector(".server-time .value") as HTMLSpanElement;
 
     cpuLoadValue.innerHTML = "none";
     ramUsageValue.innerHTML = "none";
@@ -228,27 +195,14 @@ async function connectStats() {
                 const jsonData = JSON.parse(event.data);
 
                 cpuLoadValue.innerHTML =
-                    jsonData.cpuUsage != null
-                        ? (jsonData.cpuUsage * 100).toString().split(".")[0] +
-                          "%"
-                        : "<a href='https://modrinth.com/mod/spark'>Needs Spark</a>";
-                ramUsageValue.innerHTML =
-                    jsonData.memoryUsage.toString().split(".")[0] + "%";
-                uptimeValue.innerHTML = new Date(jsonData.uptime)
-                    .toISOString()
-                    .slice(11, -1)
-                    .split(".")[0];
+                    jsonData.cpuUsage != null ? (jsonData.cpuUsage * 100).toString().split(".")[0] + "%" : "<a href='https://modrinth.com/mod/spark'>Needs Spark</a>";
+                ramUsageValue.innerHTML = jsonData.memoryUsage.toString().split(".")[0] + "%";
+                uptimeValue.innerHTML = new Date(jsonData.uptime).toISOString().slice(11, -1).split(".")[0];
                 playersValue.innerHTML = jsonData.playerCount;
                 playersMaxValue.innerHTML = jsonData.maxPlayerCount;
                 ipAddrValue.innerHTML = jsonData.ip;
-                tpsValue.innerHTML =
-                    jsonData.tps != null
-                        ? Math.floor(jsonData.tps).toString()
-                        : "<a href='https://modrinth.com/mod/spark'>Needs Spark</a>";
-                serverTimeValue.innerHTML = new Date(jsonData.serverTime)
-                    .toISOString()
-                    .slice(11, -1)
-                    .split(".")[0];
+                tpsValue.innerHTML = jsonData.tps != null ? Math.floor(jsonData.tps).toString() : "<a href='https://modrinth.com/mod/spark'>Needs Spark</a>";
+                serverTimeValue.innerHTML = new Date(jsonData.serverTime).toISOString().slice(11, -1).split(".")[0];
             }
         };
 
@@ -269,10 +223,7 @@ async function connectStats() {
                 ws.close();
             } else {
                 connectStats();
-                document.removeEventListener(
-                    "visibilitychange",
-                    visibilitychangeListener,
-                );
+                document.removeEventListener("visibilitychange", visibilitychangeListener);
             }
         };
         document.addEventListener("visibilitychange", visibilitychangeListener);

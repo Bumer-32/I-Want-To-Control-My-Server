@@ -10,9 +10,7 @@ export function addTab() {
 
 export function switchTab(id: string) {
     console.log("switching to tab", id);
-    const tabs = document.querySelectorAll(
-        ".container > .tabs > .tab",
-    ) as NodeListOf<HTMLDivElement>;
+    const tabs = document.querySelectorAll(".container > .tabs > .tab") as NodeListOf<HTMLDivElement>;
     const tab = document.querySelector(`#${id}`) as HTMLDivElement;
 
     tabs.forEach((tab) => {
@@ -21,34 +19,22 @@ export function switchTab(id: string) {
 
     tab.classList.remove("disabled");
 
-    const buttons = document.querySelectorAll(
-        ".header > .buttons span",
-    ) as NodeListOf<HTMLDivElement>;
+    const buttons = document.querySelectorAll(".header > .buttons span") as NodeListOf<HTMLDivElement>;
     buttons.forEach((button) => {
         button.classList.remove("hover-holo-effect");
     });
 
-    (
-        document.querySelector(
-            `#header-${id.replace("-tab", "")}`,
-        ) as HTMLSpanElement
-    ).classList.add("hover-holo-effect");
+    (document.querySelector(`#header-${id.replace("-tab", "")}`) as HTMLSpanElement).classList.add("hover-holo-effect");
 }
 
 function alignHeaderButtons() {
-    const existingFillerDiv = document.querySelector(
-        ".header > .buttons .filler-div",
-    ) as HTMLDivElement | null;
+    const existingFillerDiv = document.querySelector(".header > .buttons .filler-div") as HTMLDivElement | null;
     if (existingFillerDiv != null) {
         existingFillerDiv.remove();
     }
 
-    const leftDiv = document.querySelector(
-        ".header > .buttons > .left",
-    ) as HTMLDivElement;
-    const rightDiv = document.querySelector(
-        ".header > .buttons > .right",
-    ) as HTMLDivElement;
+    const leftDiv = document.querySelector(".header > .buttons > .left") as HTMLDivElement;
+    const rightDiv = document.querySelector(".header > .buttons > .right") as HTMLDivElement;
 
     const leftCount = leftDiv.children.length;
     const rightCount = rightDiv.children.length;
@@ -67,9 +53,7 @@ function alignHeaderButtons() {
 }
 
 function handleAlignHeaderButtons() {
-    const followDiv = document.querySelector(
-        ".header > .buttons",
-    ) as HTMLDivElement;
+    const followDiv = document.querySelector(".header > .buttons") as HTMLDivElement;
 
     const handleMutation = (mutationsList: MutationRecord[]) => {
         alignHeaderButtons();
@@ -85,9 +69,7 @@ function handleAlignHeaderButtons() {
 }
 
 function handleTabSwitching() {
-    const buttons = document.querySelectorAll(
-        ".header > .buttons span",
-    ) as NodeListOf<HTMLImageElement>;
+    const buttons = document.querySelectorAll(".header > .buttons span") as NodeListOf<HTMLImageElement>;
 
     buttons.forEach((button) => {
         button.addEventListener("click", () => {

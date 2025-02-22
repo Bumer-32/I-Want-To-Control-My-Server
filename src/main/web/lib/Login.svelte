@@ -2,9 +2,7 @@
     <div class="background"></div>
     <div class="container">
         <h1>Login</h1>
-        <a href="https://modrinth.com/mod/i-want-to-control-my-server"
-            ><img src="icon_clearbg.png" alt="IWTCMS logo" /></a
-        >
+        <a href="https://modrinth.com/mod/i-want-to-control-my-server"><img src="icon_clearbg.png" alt="IWTCMS logo" /></a>
         <form id="loginForm">
             <label for="username" id="username">Username:</label>
             <input type="text" name="username" required />

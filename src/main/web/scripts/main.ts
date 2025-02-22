@@ -3,8 +3,7 @@ export default function main() {
 
     window.addEventListener("load", () => {
         // ? remove loading screen
-        document.querySelector<HTMLDivElement>(".loading")!.style.display =
-            "none";
+        document.querySelector<HTMLDivElement>(".loading")!.style.display = "none";
         console.log("Loaded");
     });
 }
