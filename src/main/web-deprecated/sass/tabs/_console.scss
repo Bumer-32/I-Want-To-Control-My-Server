@@ -1,5 +1,5 @@
 @use "../variables" as vars;
-@use "../stuff" as stuff;
+@use "../../../web/styles/stuff" as stuff;
 
 $console-width: 100%;
 $console-height: calc($console-width * 0.8);

@@ -162,11 +162,11 @@ tasks.register("compileVite"){
 	doLast {
 		if (System.getProperty("os.name").toLowerCase().contains("win")) {
 			exec {
-				commandLine "cmd", "/c", "npm run build"
+				commandLine "cmd", "/c", "npm run build -- --emptyOutDir"
 			}
 		} else {
 			exec {
-				commandLine "bash", "npm run build"
+				commandLine "bash", "npm run build -- --emptyOutDir"
 			}
 		}
 	}
