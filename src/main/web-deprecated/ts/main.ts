@@ -6,71 +6,74 @@ import { initDevFunctions } from "./dev-mode/dev-mode.js";
 import settingsInit from "./tabs/settings.js";
 
 async function loadGithubStars() {
-  try {
-    const request = fetch(
-      "https://corsproxy.io/?url=https://github.com/Bumer-32/I-Want-To-Control-My-Server",
-    );
-    const html = (await request).text();
+    try {
+        const request = fetch(
+            "https://corsproxy.io/?url=https://github.com/Bumer-32/I-Want-To-Control-My-Server",
+        );
+        const html = (await request).text();
 
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(await html, "text/html");
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(await html, "text/html");
 
-    const starsSpan = doc.querySelector(
-      'a[href$="/stargazers"] span',
-    ) as HTMLSpanElement;
+        const starsSpan = doc.querySelector(
+            'a[href$="/stargazers"] span',
+        ) as HTMLSpanElement;
 
-    (
-      document.querySelector(".footer > .github > .stars") as HTMLSpanElement
-    ).innerHTML = starsSpan.innerHTML.trim();
-  } catch (error) {
-    console.error("Failed to load github stars");
-    console.error(error);
-  }
+        (
+            document.querySelector(
+                ".footer > .github > .stars",
+            ) as HTMLSpanElement
+        ).innerHTML = starsSpan.innerHTML.trim();
+    } catch (error) {
+        console.error("Failed to load github stars");
+        console.error(error);
+    }
 }
 
 async function main() {
-  // ? color mode switch
-  const color_mode_switch = document.querySelector(
-    ".header > .supply > .color-mode > .switch input",
-  ) as HTMLInputElement;
-  color_mode_switch.onchange = () => {
-    document.body.classList.toggle("light-mode-impl");
-    localStorage.setItem(
-      "color-mode",
-      color_mode_switch.checked ? "light" : "dark",
-    );
-  };
-  if (localStorage.getItem("color-mode") == "light") {
-    color_mode_switch.checked = true;
-    document.body.classList.add("light-mode-impl");
-  }
+    // ? color mode switch
+    const color_mode_switch = document.querySelector(
+        ".header > .supply > .color-mode > .switch input",
+    ) as HTMLInputElement;
+    color_mode_switch.onchange = () => {
+        document.body.classList.toggle("light-mode-impl");
+        localStorage.setItem(
+            "color-mode",
+            color_mode_switch.checked ? "light" : "dark",
+        );
+    };
+    if (localStorage.getItem("color-mode") == "light") {
+        color_mode_switch.checked = true;
+        document.body.classList.add("light-mode-impl");
+    }
 
-  await Constants.init(); // ! IMPORTANT TO LOAD FIRST
+    await Constants.init(); // ! IMPORTANT TO LOAD FIRST
 
-  // ? place iwtcms version at footer
-  (
-    document.querySelector(".footer > .iwtcms-label") as HTMLLabelElement
-  ).innerHTML = `IWTCMS ${Constants.IWTCMS_VERSION}`;
+    // ? place iwtcms version at footer
+    (
+        document.querySelector(".footer > .iwtcms-label") as HTMLLabelElement
+    ).innerHTML = `IWTCMS ${Constants.IWTCMS_VERSION}`;
 
-  // ? closing menu
-  (
-    document.querySelector(
-      ".header > .menu > .menu-button > input",
-    ) as HTMLInputElement
-  ).checked = false;
+    // ? closing menu
+    (
+        document.querySelector(
+            ".header > .menu > .menu-button > input",
+        ) as HTMLInputElement
+    ).checked = false;
 
-  initDevFunctions(); // earlier then other functions because dev functions can influence to it
+    initDevFunctions(); // earlier then other functions because dev functions can influence to it
 
-  loadGithubStars();
+    loadGithubStars();
 
-  initTabsController();
-  initLogin();
+    initTabsController();
+    initLogin();
 
-  consoleInit();
-  settingsInit();
+    consoleInit();
+    settingsInit();
 
-  // ? remove loading screen
-  (document.querySelector(".loading") as HTMLDivElement).style.display = "none";
+    // ? remove loading screen
+    (document.querySelector(".loading") as HTMLDivElement).style.display =
+        "none";
 }
 
 main();
