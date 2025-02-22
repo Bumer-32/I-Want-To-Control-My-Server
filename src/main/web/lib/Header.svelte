@@ -1,84 +1,178 @@
 <script lang="ts">
-  import iwtcmsIcon from "../assets/icon_clearbg.png"
-  import githubIcon from "../assets/github.svg"
-  import modrinthIcon from "../assets/modrinth.svg"
+  import iwtcmsIcon from "../assets/icon_clearbg.png";
+  import githubIcon from "../assets/github.svg";
+  import modrinthIcon from "../assets/modrinth.svg";
+  import { switchTab } from "../scripts/tabsController";
+  import { onMount } from "svelte";
+
+  let leftDiv: HTMLDivElement;
+  let rightDiv: HTMLDivElement;
+
+  function alignHeaderButtons() {
+    const existingFillerDiv = document.querySelector(
+      ".header .buttons .filler-div",
+    ) as HTMLDivElement | null;
+    if (existingFillerDiv != null) {
+      existingFillerDiv.remove();
+    }
+
+    const leftCount = leftDiv!.children.length;
+    const rightCount = rightDiv!.children.length;
+
+    const fillerDiv = document.createElement("div");
+    fillerDiv.style.width = "50px";
+    fillerDiv.style.height = "50px";
+    fillerDiv.style.display = "inline-block";
+    fillerDiv.classList.add("filler-div");
+
+    if (leftCount > rightCount) {
+      rightDiv!.appendChild(fillerDiv);
+    } else if (leftCount < rightCount) {
+      rightDiv!.appendChild(fillerDiv);
+    }
+  }
+
+  function handleAlignHeaderButtons() {
+    const followDiv =
+      document.querySelector<HTMLDivElement>(".header .buttons")!;
+
+    const handleMutation = (_: MutationRecord[]) => {
+      alignHeaderButtons();
+    };
+
+    const observer = new MutationObserver(handleMutation);
+
+    observer.observe(followDiv, {
+      childList: true,
+      attributes: false,
+      subtree: false,
+    });
+  }
+
+  function handleTabSwitching() {
+    const buttons = document.querySelectorAll(
+      ".header .buttons span",
+    ) as NodeListOf<HTMLImageElement>;
+
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => {
+        switchTab(`${button.id.replace("header-", "")}-tab`);
+      });
+    });
+  }
+
+  onMount(() => {
+    alignHeaderButtons();
+    handleAlignHeaderButtons();
+    handleTabSwitching();
+  });
 </script>
 
 <header>
-    <div class="menu">
-        <label class="menu-button">
-            <input type="checkbox">
-            <img src={iwtcmsIcon} alt="IWTCMS logo">
-            <span class="menu-text">
-                <span class="material-symbols-rounded">menu</span>
-                <span class="text">menu</span>
-            </span>
-        </label>
-        <div class="menu-items">
-            <ul>
-                <li>
-                    <button type="button" on:click={ () => window.location.assign("https://modrinth.com/mod/i-want-to-control-my-server") } on:keydown={ (e) => e.key === 'Enter' && window.location.assign("https://modrinth.com/mod/i-want-to-control-my-server") }>
-                        <img src={modrinthIcon} alt="modrinth"/>
-                        Modrinth
-                    </button>
-                </li>
-                <li>
-                    <button type="button" on:click={ () => window.location.assign("https://github.com/Bumer-32/I-Want-To-Control-My-Server") } on:keydown={ (e) => e.key === 'Enter' && window.location.assign("https://github.com/Bumer-32/I-Want-To-Control-My-Server") }>
-                        <img src={githubIcon} alt="GitHub icon"/>
-                        GitHub
-                    </button>
-                </li>
-                <li>
-                    <button type="button" on:click={ () => window.location.assign("files/iwtcms_client.zip") } on:keydown={ (e) => e.key === 'Enter' && window.location.assign("files/iwtcms_client.zip") }>
-                        <span class="material-symbols-rounded">download</span>
-                        Python CLI
-                    </button>
-                </li>
-                <li id="logout-button">
-                    <button type="button">
-                        <span class="material-symbols-rounded">logout</span>
-                        Logout
-                    </button>
-                </li>
-            </ul>
-        </div>
+  <div class="menu">
+    <label class="menu-button">
+      <input type="checkbox" />
+      <img src={iwtcmsIcon} alt="IWTCMS logo" />
+      <span class="menu-text">
+        <span class="material-symbols-rounded">menu</span>
+        <span class="text">menu</span>
+      </span>
+    </label>
+    <div class="menu-items">
+      <ul>
+        <li>
+          <button
+            type="button"
+            on:click={() =>
+              window.location.assign(
+                "https://modrinth.com/mod/i-want-to-control-my-server",
+              )}
+            on:keydown={(e) =>
+              e.key === "Enter" &&
+              window.location.assign(
+                "https://modrinth.com/mod/i-want-to-control-my-server",
+              )}
+          >
+            <img src={modrinthIcon} alt="modrinth" />
+            Modrinth
+          </button>
+        </li>
+        <li>
+          <button
+            type="button"
+            on:click={() =>
+              window.location.assign(
+                "https://github.com/Bumer-32/I-Want-To-Control-My-Server",
+              )}
+            on:keydown={(e) =>
+              e.key === "Enter" &&
+              window.location.assign(
+                "https://github.com/Bumer-32/I-Want-To-Control-My-Server",
+              )}
+          >
+            <img src={githubIcon} alt="GitHub icon" />
+            GitHub
+          </button>
+        </li>
+        <li>
+          <button
+            type="button"
+            on:click={() => window.location.assign("files/iwtcms_client.zip")}
+            on:keydown={(e) =>
+              e.key === "Enter" &&
+              window.location.assign("files/iwtcms_client.zip")}
+          >
+            <span class="material-symbols-rounded">download</span>
+            Python CLI
+          </button>
+        </li>
+        <li id="logout-button">
+          <button type="button">
+            <span class="material-symbols-rounded">logout</span>
+            Logout
+          </button>
+        </li>
+      </ul>
     </div>
+  </div>
 
-    <div class="buttons">
-        <div class="left">
-            <span class="material-symbols-rounded" id="header-settings">settings</span>
-        </div>
-        <div class="center">
-            <!-- ! DEFAULT TAB -->
-            <span class="material-symbols-rounded hover-holo-effect" id="header-console">terminal</span>
-        </div>
-        <div class="right">
-            <span class="material-symbols-rounded" id="header-players">group</span>
-        </div>
+  <div class="buttons">
+    <div class="left" bind:this={leftDiv}>
+      <span class="material-symbols-rounded" id="header-settings">settings</span
+      >
     </div>
+    <div class="center">
+      <!-- ! DEFAULT TAB -->
+      <span
+        class="material-symbols-rounded hover-holo-effect"
+        id="header-console">terminal</span
+      >
+    </div>
+    <div class="right" bind:this={rightDiv}>
+      <span class="material-symbols-rounded" id="header-players">group</span>
+    </div>
+  </div>
 
-    <div class="supply">
-        <div class="color-mode">
-            <label class="switch">
-                <input type="checkbox">
-                <span class="slider round"></span>
-            </label>
-        </div>
+  <div class="supply">
+    <div class="color-mode">
+      <label class="switch">
+        <input type="checkbox" />
+        <span class="slider round"></span>
+      </label>
     </div>
+  </div>
 </header>
 
 <style lang="scss">
   @use "../styles/hover-holo-effect";
+  @use "../styles/variables";
   @use "../styles/switch.css";
-
-  $header-height: 90px;
-  $logos-size: 50px;
 
   header {
     position: absolute;
     top: 0;
     width: 100%;
-    height: $header-height;
+    height: variables.$header-height;
     z-index: 10;
     display: flex;
     align-items: center;
@@ -89,8 +183,11 @@
 
     .material-symbols-rounded,
     .color-mode,
-    .menu .menu-button { // hover holo effect
-      transition: filter 0.3s ease, box-shadow 0.3s ease;
+    .menu .menu-button {
+      // hover holo effect
+      transition:
+        filter 0.3s ease,
+        box-shadow 0.3s ease;
 
       &:hover {
         @extend .hover-holo-effect;
@@ -98,11 +195,12 @@
     }
 
     .material-symbols-rounded {
-      font-size: $logos-size;
+      font-size: variables.$logos-size;
       color: var(--header-icons-color);
 
-      &:active { // press effect
-        font-size: #{$logos-size - 5px};
+      &:active {
+        // press effect
+        font-size: #{variables.$logos-size - 5px};
       }
     }
 
@@ -112,8 +210,12 @@
       left: 0;
 
       .menu-button {
-        margin-top: calc((#{$header-height - $logos-size}) / 2 - 10px);
-        margin-left: calc((#{$header-height - $logos-size}) / 2);
+        margin-top: calc(
+          (#{variables.$header-height - variables.$logos-size}) / 2 - 10px
+        );
+        margin-left: calc(
+          (#{variables.$header-height - variables.$logos-size}) / 2
+        );
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -128,12 +230,12 @@
           }
 
           img {
-            height: $logos-size - 5px;
+            height: variables.$logos-size - 5px;
           }
         }
 
         img {
-          height: $logos-size;
+          height: variables.$logos-size;
         }
 
         .menu-text {
@@ -146,7 +248,7 @@
             font-size: 20px;
 
             &:hover {
-              filter: unset
+              filter: unset;
             }
 
             &:active {
@@ -174,7 +276,9 @@
         left: -225px;
         background-color: var(--header-menu-background-color);
         border-radius: 10px;
-        transition: left 0.3s ease, background-color 0.3s ease;
+        transition:
+          left 0.3s ease,
+          background-color 0.3s ease;
         padding-top: 10px;
         padding-bottom: 10px;
         z-index: 50;
@@ -213,7 +317,9 @@
               width: 20px;
               height: 20px;
               margin-right: 10px;
-              transition: filter 0.3s ease, color 0.3s ease;
+              transition:
+                filter 0.3s ease,
+                color 0.3s ease;
             }
           }
         }
@@ -230,10 +336,10 @@
       }
 
       .center .material-symbols-rounded {
-        font-size: $logos-size + 20;
+        font-size: variables.$logos-size + 20;
 
         &:active {
-          font-size: $logos-size + 15;
+          font-size: variables.$logos-size + 15;
         }
       }
 
@@ -251,7 +357,9 @@
       height: 100%;
 
       .color-mode .switch {
-        margin-right: calc((#{$header-height - $logos-size}) / 2);
+        margin-right: calc(
+          (#{variables.$header-height - variables.$logos-size}) / 2
+        );
 
         .slider {
           background-color: var(--color-mode-switch-background-color);
@@ -260,14 +368,17 @@
           &:before {
             background-color: var(--color-mode-switch-handle-color);
             content: "brightness_4";
-            font-family: 'Material Symbols Rounded', sans-serif;
+            font-family: "Material Symbols Rounded", sans-serif;
             font-size: 20px;
             font-weight: 100;
             color: var(--color-mode-switch-handle-icon-color);
             display: flex;
             justify-content: center;
             align-items: center;
-            transition: background-color 0.3s ease, color 0.3s ease, transform 0.4s;
+            transition:
+              background-color 0.3s ease,
+              color 0.3s ease,
+              transform 0.4s;
           }
         }
 

@@ -12,11 +12,9 @@ jobs:
       matrix:
         # Use these Java versions
         java: [
-          21,    # Current Java LTS
-        ]
-        python: [
-          3.13,
-        ]
+            21, # Current Java LTS
+          ]
+        python: [3.13]
     runs-on: ubuntu-22.04
     steps:
       - name: checkout repository
@@ -24,7 +22,7 @@ jobs:
 
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.13'
+          python-version: "3.13"
 
       - name: validate gradle wrapper
         uses: gradle/actions/wrapper-validation@v3
@@ -33,7 +31,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           java-version: ${{ matrix.java }}
-          distribution: 'microsoft'
+          distribution: "microsoft"
 
       - name: make gradle wrapper executable
         run: chmod +x ./gradlew
