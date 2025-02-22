@@ -16,5 +16,5 @@
     "isolatedModules": true,
     "moduleDetection": "force"
   },
-  "include": ["src/web/**/*.ts", "src/web/**/*.js", "src/web/**/*.svelte"]
+  "include": ["src/main/web/**/*.ts", "src/main/web/**/*.js", "src/main/web/**/*.svelte"]
 }
