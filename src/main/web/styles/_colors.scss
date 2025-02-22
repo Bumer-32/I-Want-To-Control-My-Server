@@ -1,0 +1,76 @@
+// color mode
+:root {
+  // ! REMEMBER if you want to change loading animation colors, look for this colors in top of intex.html in style tag
+  // ? Almost all colors by Crazy Potatto
+  // * CONVERTER FOR SVG COLORS: https://codepen.io/sosuke/pen/Pjoqqp
+
+  //global colors (light and dark modes together)
+  // dark mode
+  --header-color: #121717;
+  --footer-color: #121717;
+  --background-color: #1f2626;
+  --holo-effect-color: white;
+
+  --color-mode-switch-background-color: #2d2d2d;
+  --color-mode-switch-handle-color: #505050;
+  --color-mode-switch-handle-icon-color: white;
+
+  --main-text-color: white;
+  --header-icons-color: white;
+
+  --header-menu-background-color: #171c1c;
+  --header-menu-item-hover-background-color: #2d2d2d;
+  --header-menu-item-fg-color: white;
+  --loading-background-color: #1f2626;
+
+  --login-background-color: #ffffff4d;
+  --login-text-color: black;
+  --login-panel-background-color: #121717;
+
+  --footer-iwtcms-label-color-1: #9f9f9f;
+  --footer-iwtcms-label-color-2: #fff;
+  --footer-iwtcms-label-color-3: #868686;
+
+  --footer-authors-color: gray;
+  --footer-authors-url-color: white;
+
+  --footer-github-logo-svg-color: invert(100%) sepia(100%) saturate(0%)
+    hue-rotate(288deg) brightness(102%) contrast(102%); // #ffffff
+  --footer-github-title-color: white;
+  --footer-github-star-color: grey;
+  --footer-github-star-hover-color: #ebca5e;
+
+  --spoiler-color: black;
+
+  --toast-notification-info-color: #171c1c;
+  --toast-notification-info-shadow-color: #111414;
+  --toast-notification-info-text-color: white;
+  --toast-notification-warning-color: #e6b239;
+  --toast-notification-warning-shadow-color: #bf8600;
+  --toast-notification-warning-text-color: white;
+  --toast-notification-error-color: #d95763;
+  --toast-notification-error-shadow-color: #8c0000;
+  --toast-notification-error-text-color: white;
+
+  --console-background-color: #121717;
+  --console-text-color: white;
+  --console-timestamp-color: #c4c4f6;
+  --console-log-level-info-color: #6ede54;
+  --console-log-level-warn-color: #faf264;
+  --console-log-level-error-color: #d95763;
+  --console-logger-color: #1697b5;
+  --console-scrollbar-track-color: transparent;
+  --console-scrollbar-thumb-color: #636363;
+  --console-scrollbar-thumb-hover-color: #5c5c5c;
+
+  --file-view-background-color: #121717;
+  --file-view-text-color: white;
+}
+.light-mode-impl {
+  // light mode
+  --header-color: #e3b18d;
+  --footer-color: #e3b18d;
+  --background-color: #ffd3b6;
+
+  // later
+}

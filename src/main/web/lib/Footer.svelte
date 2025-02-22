@@ -1,62 +1,75 @@
 <script lang="ts">
-    import githubIcon from "../assets/github.svg";
+  import { onMount } from "svelte";
+  import githubIcon from "../assets/github.svg";
 
-    window.addEventListener("load", () => {
-        async function loadGithubStars() {
-            try {
-                const request = fetch("https://corsproxy.io/?url=https://github.com/Bumer-32/I-Want-To-Control-My-Server")
-                const html = (await request).text()
+  let creatorElement: HTMLSpanElement;
 
-                const parser = new DOMParser()
-                const doc = parser.parseFromString(await html, "text/html")
+  onMount(() => {
+    async function loadGithubStars() {
+      try {
+        const request = fetch(
+          "https://corsproxy.io/?url=https://github.com/Bumer-32/I-Want-To-Control-My-Server",
+        );
+        const html = (await request).text();
 
-                const starsSpan = doc.querySelector<HTMLSpanElement>("a[href$=\"/stargazers\"] span")!
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(await html, "text/html");
 
-                document.querySelector<HTMLSpanElement>(".footer .github .stars")!.innerHTML = starsSpan.innerHTML.trim()
-            } catch (error) {
-                console.error("Failed to load github stars")
-                console.error(error)
-            }
-        }
+        const starsSpan = doc.querySelector<HTMLSpanElement>(
+          'a[href$="/stargazers"] span',
+        )!;
 
-        loadGithubStars();
+        document.querySelector<HTMLSpanElement>(
+          ".footer .github .stars",
+        )!.innerHTML = starsSpan.innerHTML.trim();
+      } catch (error) {
+        console.error("Failed to load github stars");
+        console.error(error);
+      }
+    }
 
-        //? happy birthday Bumer_32
-        if (new Date().getMonth() == 1 && new Date().getDate() == 21) {
-            console.log("Happy birthday Bumer_32! 🎉🎉🎉");
-            const creatorElement = document.querySelector<HTMLSpanElement>(".footer > .authors > .creator")!
-            creatorElement.innerHTML = creatorElement.innerHTML + " | Happy birthday Bumer_32! 🎉🎉🎉";
-        }
-    })
+    loadGithubStars();
+
+    //? happy birthday Bumer_32
+    if (new Date().getMonth() == 1 && new Date().getDate() == 21) {
+      console.log("Happy birthday Bumer_32! 🎉🎉🎉");
+      creatorElement.innerHTML =
+        creatorElement.innerHTML + " | Happy birthday Bumer_32! 🎉🎉🎉";
+    }
+  });
 </script>
 
 <footer class="footer">
-    <span class="iwtcms-label btn-shine">IWTCMS</span>
+  <span class="iwtcms-label btn-shine">IWTCMS</span>
 
-    <div class="authors">
-        <span class="creator">Created by <a href="https://github.com/Bumer-32">Bumer_32</a></span>
-        <span>Spatial thanks for Crazy Potatto</span>
-    </div>
+  <div class="authors">
+    <span bind:this={creatorElement}
+      >Created by <a href="https://github.com/Bumer-32">Bumer_32</a></span
+    >
+    <span>Spatial thanks for Crazy Potatto</span>
+  </div>
 
-    <a href="https://github.com/Bumer-32/I-Want-To-Control-My-Server" class="github">
-        <img src={githubIcon} alt="GitHub icon">
-        <span>Star on GitHub</span>
-        <span class="material-symbols-rounded">star</span>
-        <span class="stars"></span>
-    </a>
+  <a
+    href="https://github.com/Bumer-32/I-Want-To-Control-My-Server"
+    class="github"
+  >
+    <img src={githubIcon} alt="GitHub icon" />
+    <span>Star on GitHub</span>
+    <span class="material-symbols-rounded">star</span>
+    <span class="stars"></span>
+  </a>
 </footer>
 
 <style lang="scss">
   @use "../styles/hover-holo-effect";
+  @use "../styles/variables";
   @use "../styles/btn-shine.css";
-
-  $footer-height: 30px;
 
   .footer {
     position: absolute;
     background-color: var(--footer-color);
     width: 100%;
-    height: $footer-height;
+    height: variables.$footer-height;
     bottom: 0;
     display: flex;
     align-items: center;
@@ -67,7 +80,13 @@
       left: 45px;
       bottom: -28px;
       top: auto;
-      background: linear-gradient(to right, var(--footer-iwtcms-label-color-1) 0, var(--footer-iwtcms-label-color-2) 10%, var(--footer-iwtcms-label-color-3) 20%) 0;
+      background: linear-gradient(
+          to right,
+          var(--footer-iwtcms-label-color-1) 0,
+          var(--footer-iwtcms-label-color-2) 10%,
+          var(--footer-iwtcms-label-color-3) 20%
+        )
+        0;
       -webkit-background-clip: text;
       background-clip: text;
     }
@@ -76,7 +95,7 @@
       font-size: 8px;
       display: flex;
       flex-direction: column;
-      margin-left: 90px;
+      margin-left: 92px;
       color: var(--footer-authors-color);
       transition: color 0.3s ease;
 
@@ -97,7 +116,10 @@
       align-items: center;
       color: var(--footer-github-title-color);
       gap: 5px;
-      transition: filter 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
+      transition:
+        filter 0.3s ease,
+        box-shadow 0.3s ease,
+        color 0.3s ease;
 
       &:hover {
         @extend .hover-holo-effect;
