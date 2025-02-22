@@ -1,5 +1,4 @@
 import { Constants } from "../constants.js";
-
 const selectorContainer = document.querySelector("#settings-tab .container .tab-selector") as HTMLDivElement;
 const tabsContainer = document.querySelector("#settings-tab .container .settings-tab-tabs") as HTMLDivElement;
 
@@ -130,7 +129,7 @@ function createSettingsFileTab(fileName: string, url: string) {
 
     const fileView = document.createElement("div") as HTMLDivElement;
     fileView.classList.add("file-view");
-    //fileView.classList.add("disabled");
+    fileView.classList.add("disabled");
     tab.appendChild(fileView);
     const textarea = document.createElement("textarea") as HTMLTextAreaElement;
     textarea.spellcheck = false;
@@ -177,11 +176,20 @@ async function update(tabContainer: HTMLDivElement, url: string) {
     console.log("updating", tabContainer.id, ":", url);
 
     const fileViewTextArea = tabContainer.querySelector(".file-view textarea") as HTMLTextAreaElement;
-    //const eazyView = tabContainer.querySelector(".eazy-view") as HTMLDivElement;
 
     const response = await fetch(url);
     const text = await response.text();
     fileViewTextArea.value = text;
+
+    updateEazyView(tabContainer, url);
+}
+
+async function updateEazyView(tabContainer: HTMLDivElement, url: string) {
+    const fileViewTextArea = tabContainer.querySelector(".file-view textarea") as HTMLTextAreaElement;
+    const eazyView = tabContainer.querySelector(".eazy-view") as HTMLDivElement;
+
+    const response = await fetch(url + "/types");
+    const text = await response.text();
 }
 
 
