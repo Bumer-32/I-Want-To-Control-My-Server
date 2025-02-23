@@ -1,4 +1,4 @@
-import { Constants } from "../constants.js";
+import { Constants } from "../../../web/scripts/constants";
 const selectorContainer = document.querySelector("#settings-tab .container .tab-selector") as HTMLDivElement;
 const tabsContainer = document.querySelector("#settings-tab .container .settings-tab-tabs") as HTMLDivElement;
 

@@ -1,39 +1,35 @@
-export class ToastSystem {
-    private static queue: { text: string; type: string }[] = [];
+enum ToastType {
+    INFO = "info",
+    WARNING = "warning",
+    ERROR = "error",
+}
+
+export default class ToastSystem {
+    private static queue: { text: string; type: ToastType }[] = [];
     private static isShowing: boolean = false;
-    private static notification: HTMLDivElement = document.querySelector(".toast-notifications") as HTMLDivElement;
+    public static notification: HTMLDivElement; // = document.querySelector<HTMLDivElement>(".toast-notifications")!;
 
     public static enabled = true;
 
-    private static addToQueue(text: string, type: string): void {
+    static ToastType = ToastType;
+
+    public static addToQueue(text: string, type: ToastType): void {
         this.queue.push({ text, type });
         this.showNext();
     }
 
-    public static showError(text: string): void {
-        this.addToQueue(text, "error");
-    }
-
-    public static showWarning(text: string): void {
-        this.addToQueue(text, "warning");
-    }
-
-    public static showInfo(text: string): void {
-        this.addToQueue(text, "info");
-    }
-
-    private static async showNext(showTime: number = 5000) {
+    private static showNext(showTime: number = 5000) {
         if (this.isShowing || this.queue.length === 0) return;
         this.isShowing = true;
         const { text, type } = this.queue.shift()!;
-        await this.show(text, type, showTime);
+        this.show(text, type, showTime);
         setTimeout(() => {
             this.isShowing = false;
             this.showNext();
         }, 1600 + showTime);
     }
 
-    private static async show(text: string, type: string, showTime: number) {
+    private static show(text: string, type: ToastType, showTime: number) {
         if (!this.enabled) return;
 
         this.notification.style.color = "transparent";

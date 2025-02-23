@@ -1,13 +1,18 @@
 <script lang="ts">
-    import main from "./scripts/main";
     import Header from "./lib/Header.svelte";
     import Footer from "./lib/Footer.svelte";
     import ConsoleTab from "./lib/tabs/ConsoleTab.svelte";
     import SettingsTab from "./lib/tabs/SettingsTab.svelte";
     import PlayersTab from "./lib/tabs/PlayersTab.svelte";
     import Login from "./lib/Login.svelte";
+    import ToastSystem from "./scripts/toastSystem";
 
-    main();
+    window.addEventListener("load", async () => {
+        // ? remove loading screen
+        document.querySelector<HTMLDivElement>(".loading")!.style.display = "none";
+
+        console.log("Loaded");
+    });
 </script>
 
 <Header />
@@ -22,9 +27,9 @@
 
 <Footer />
 
-<!--<Login/>-->
+<Login />
 
-<div class="toast-notifications"></div>
+<div class="toast-notifications" bind:this={ToastSystem.notification}></div>
 
 <style lang="scss">
     @use "./styles/variables";
@@ -34,7 +39,7 @@
         align-items: center;
         justify-content: center;
         width: 100vw;
-        height: calc(100vh - #{variables.$header-height} - #{variables.$footer-height});
+        height: variables.$container-height;
         position: absolute;
         top: variables.$header-height;
 
