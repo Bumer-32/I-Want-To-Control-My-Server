@@ -4,12 +4,15 @@
     import modrinthIcon from "../assets/modrinth.svg";
     import { switchTab } from "../scripts/tabsController";
     import { onMount } from "svelte";
+    import { logout } from "../scripts/auth";
 
     let leftDiv: HTMLDivElement;
     let rightDiv: HTMLDivElement;
+    let buttonsDiv: HTMLDivElement;
+    let colorModeSwitchInput: HTMLInputElement;
 
     function alignHeaderButtons() {
-        const existingFillerDiv = document.querySelector(".header .buttons .filler-div") as HTMLDivElement | null;
+        const existingFillerDiv = document.querySelector("header .buttons .filler-div") as HTMLDivElement | null;
         if (existingFillerDiv != null) {
             existingFillerDiv.remove();
         }
@@ -31,15 +34,13 @@
     }
 
     function handleAlignHeaderButtons() {
-        const followDiv = document.querySelector<HTMLDivElement>(".header .buttons")!;
-
         const handleMutation = (_: MutationRecord[]) => {
             alignHeaderButtons();
         };
 
         const observer = new MutationObserver(handleMutation);
 
-        observer.observe(followDiv, {
+        observer.observe(buttonsDiv, {
             childList: true,
             attributes: false,
             subtree: false,
@@ -47,7 +48,7 @@
     }
 
     function handleTabSwitching() {
-        const buttons = document.querySelectorAll(".header .buttons span") as NodeListOf<HTMLImageElement>;
+        const buttons = document.querySelectorAll("header .buttons span") as NodeListOf<HTMLImageElement>;
 
         buttons.forEach((button) => {
             button.addEventListener("click", () => {
@@ -60,13 +61,22 @@
         alignHeaderButtons();
         handleAlignHeaderButtons();
         handleTabSwitching();
+
+        colorModeSwitchInput.onchange = () => {
+            document.body.classList.toggle("light-mode-impl");
+            localStorage.setItem("color-mode", colorModeSwitchInput.checked ? "light" : "dark");
+        };
+        if (localStorage.getItem("color-mode") == "light") {
+            colorModeSwitchInput.checked = true;
+            document.body.classList.add("light-mode-impl");
+        }
     });
 </script>
 
 <header>
     <div class="menu">
         <label class="menu-button">
-            <input type="checkbox" />
+            <input type="checkbox" checked={false} />
             <img src={iwtcmsIcon} alt="IWTCMS logo" />
             <span class="menu-text">
                 <span class="material-symbols-rounded">menu</span>
@@ -106,7 +116,7 @@
                     </button>
                 </li>
                 <li id="logout-button">
-                    <button type="button">
+                    <button type="button" on:click={logout}>
                         <span class="material-symbols-rounded">logout</span>
                         Logout
                     </button>
@@ -115,7 +125,7 @@
         </div>
     </div>
 
-    <div class="buttons">
+    <div class="buttons" bind:this={buttonsDiv}>
         <div class="left" bind:this={leftDiv}>
             <span class="material-symbols-rounded" id="header-settings">settings</span>
         </div>
@@ -131,7 +141,7 @@
     <div class="supply">
         <div class="color-mode">
             <label class="switch">
-                <input type="checkbox" />
+                <input type="checkbox" bind:this={colorModeSwitchInput} />
                 <span class="slider round"></span>
             </label>
         </div>

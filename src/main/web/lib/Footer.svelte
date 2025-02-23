@@ -1,8 +1,11 @@
 <script lang="ts">
     import { onMount } from "svelte";
     import githubIcon from "../assets/github.svg";
+    import Constants from "../scripts/constants";
+    import { getVersion } from "../scripts/supply";
 
     let creatorElement: HTMLSpanElement;
+    let iwtcmsLabel: HTMLSpanElement;
 
     onMount(() => {
         async function loadGithubStars() {
@@ -24,20 +27,27 @@
 
         loadGithubStars();
 
-        //? happy birthday Bumer_32
+        // ? happy birthday Bumer_32
         if (new Date().getMonth() == 1 && new Date().getDate() == 21) {
             console.log("Happy birthday Bumer_32! 🎉🎉🎉");
             creatorElement.innerHTML = creatorElement.innerHTML + " | Happy birthday Bumer_32! 🎉🎉🎉";
         }
+
+        // ? iwtcms version
+        getVersion().then((version) => {
+            iwtcmsLabel.innerHTML = iwtcmsLabel.innerHTML + " " + version;
+        });
     });
 </script>
 
 <footer class="footer">
-    <span class="iwtcms-label btn-shine">IWTCMS</span>
+    <div class="left">
+        <span class="iwtcms-label btn-shine" bind:this={iwtcmsLabel}>IWTCMS</span>
 
-    <div class="authors">
-        <span bind:this={creatorElement}>Created by <a href="https://github.com/Bumer-32">Bumer_32</a></span>
-        <span>Spatial thanks for Crazy Potatto</span>
+        <div class="authors">
+            <span bind:this={creatorElement}>Created by <a href="https://github.com/Bumer-32">Bumer_32</a></span>
+            <span>Spatial thanks for Crazy Potatto</span>
+        </div>
     </div>
 
     <a href="https://github.com/Bumer-32/I-Want-To-Control-My-Server" class="github">
@@ -63,28 +73,32 @@
         align-items: center;
         transition: background-color 0.3s ease;
 
-        .iwtcms-label {
-            position: absolute;
-            left: 45px;
-            bottom: -28px;
-            top: auto;
-            background: linear-gradient(to right, var(--footer-iwtcms-label-color-1) 0, var(--footer-iwtcms-label-color-2) 10%, var(--footer-iwtcms-label-color-3) 20%) 0;
-            -webkit-background-clip: text;
-            background-clip: text;
-        }
-
-        .authors {
-            font-size: 8px;
+        .left {
             display: flex;
-            flex-direction: column;
-            margin-left: 92px;
-            color: var(--footer-authors-color);
-            transition: color 0.3s ease;
+            align-items: center;
+            justify-content: center;
 
-            a {
-                color: var(--footer-authors-url-color);
-                text-decoration: none;
+            .iwtcms-label {
+                position: static;
+                transform: translate(-15%, 0);
+                background: linear-gradient(to right, var(--footer-iwtcms-label-color-1) 0, var(--footer-iwtcms-label-color-2) 10%, var(--footer-iwtcms-label-color-3) 20%) 0;
+                -webkit-background-clip: text;
+                background-clip: text;
+            }
+
+            .authors {
+                font-size: 8px;
+                display: flex;
+                flex-direction: column;
+                transform: translateX(-50%);
+                color: var(--footer-authors-color);
                 transition: color 0.3s ease;
+
+                a {
+                    color: var(--footer-authors-url-color);
+                    text-decoration: none;
+                    transition: color 0.3s ease;
+                }
             }
         }
 

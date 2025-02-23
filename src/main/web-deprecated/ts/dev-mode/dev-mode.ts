@@ -1,6 +1,6 @@
 import { switchTab } from "../tabsController.js";
-import { ToastSystem } from "../toastSystem.js";
-import { Constants } from "../constants.js";
+import { ToastSystem } from "../../../web/scripts/toastSystem.js";
+import { Constants } from "../../../web/scripts/constants";
 
 let isDev: boolean;
 
