@@ -18,6 +18,7 @@ export default defineConfig({
         proxy: {
             "/apiList": "http://localhost:25566",
             "/api": "http://localhost:25566",
+            "/ws": "ws://localhost:25566",
         },
     },
 });
