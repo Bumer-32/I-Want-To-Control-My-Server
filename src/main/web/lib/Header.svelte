@@ -86,34 +86,28 @@
         <div class="menu-items">
             <ul>
                 <li>
-                    <button
-                        type="button"
-                        on:click={() => window.location.assign("https://modrinth.com/mod/i-want-to-control-my-server")}
-                        on:keydown={(e) => e.key === "Enter" && window.location.assign("https://modrinth.com/mod/i-want-to-control-my-server")}
-                    >
+                    <a href="https://modrinth.com/mod/i-want-to-control-my-server">
                         <img src={modrinthIcon} alt="modrinth" />
                         Modrinth
-                    </button>
+                    </a>
                 </li>
                 <li>
-                    <button
-                        type="button"
-                        on:click={() => window.location.assign("https://github.com/Bumer-32/I-Want-To-Control-My-Server")}
-                        on:keydown={(e) => e.key === "Enter" && window.location.assign("https://github.com/Bumer-32/I-Want-To-Control-My-Server")}
-                    >
+                    <a href="https://github.com/Bumer-32/I-Want-To-Control-My-Server">
                         <img src={githubIcon} alt="GitHub icon" />
                         GitHub
-                    </button>
+                    </a>
                 </li>
                 <li>
-                    <button
-                        type="button"
-                        on:click={() => window.location.assign("files/iwtcms_client.zip")}
-                        on:keydown={(e) => e.key === "Enter" && window.location.assign("files/iwtcms_client.zip")}
-                    >
+                    <a href="files/iwtcms_client.zip">
                         <span class="material-symbols-rounded">download</span>
                         Python CLI
-                    </button>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://github.com/Bumer-32/I-Want-To-Control-My-Server/issues">
+                        <span class="material-symbols-rounded">bug_report</span>
+                        Bug tracker
+                    </a>
                 </li>
                 <li id="logout-button">
                     <button type="button" on:click={logout}>
@@ -269,7 +263,8 @@
                     padding: 0;
                     list-style: none;
 
-                    li button {
+                    li button,
+                    li a {
                         user-select: none;
                         padding: 10px;
                         width: 150px;
@@ -282,6 +277,8 @@
                         transition: color 0.3s ease;
                         font-family: "Nunito", sans-serif;
                         font-weight: 700;
+                        text-decoration: none;
+                        box-sizing: border-box;
 
                         &:hover {
                             background-color: var(--header-menu-item-hover-background-color);
@@ -292,6 +289,7 @@
                             margin-right: 10px;
                             color: var(--header-menu-item-fg-color);
                             transition: color 0.3s ease;
+                            filter: none;
                         }
 
                         img {
