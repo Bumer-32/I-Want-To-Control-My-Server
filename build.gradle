@@ -125,7 +125,7 @@ tasks.register("generatePythonRequirements") {
 	}
 
 	doLast {
-		println("generated requirements.txt")
+		logger.info("generated requirements.txt")
 	}
 }
 
@@ -152,7 +152,7 @@ tasks.register("preparePythonClient") {
 
 	doLast {
 		ant.zip(destfile: outputZip, basedir: pyBuildDir)
-		println("Python client files have been archived as: $outputZip")
+		logger.info("Python client files have been archived as: $outputZip")
 	}
 }
 

@@ -112,8 +112,10 @@ export async function getPermits() {
 
 export async function isForbidden(permit: string, element: HTMLElement | null = null): Promise<boolean> {
     const permits = await getPermits();
+    console.log(permits);
     if (permits == null || permits[permit] == undefined || permits[permit] == false) {
         element?.classList.add("forbidden");
+        console.log(element);
         return true;
     }
 

@@ -160,9 +160,7 @@ function createSettingsFileTab(fileName: string, url: string) {
     // save
     saveButton.addEventListener("click", () => {
         if (!tab.classList.contains("disabled")) {
-            const sure = confirm(
-                "Are you sure you want to save this file?\nThis will overwrite the file on the server!\n\nIf something went wrong you can find a backup file in IWTCMS folder.",
-            );
+            const sure = confirm("Are you sure you want to save this file?\nThis will overwrite the file on the server!\n\nIf something went wrong you can find a backup file in IWTCMS folder.");
             if (sure) {
                 fetch(url, {
                     method: "PUT",

@@ -37,3 +37,11 @@
         }
     }
 }
+
+#console-tab .container .windows {
+    @include forbidden(130px);
+
+    .console {
+        @include forbidden(423px);
+    }
+}
