@@ -4,9 +4,6 @@ const tabsContainer = document.querySelector("#settings-tab .container .settings
 
 export default async function settingsInit() {
     selector();
-
-    createSettingsFileTab("server.properties", `${Constants.BASE_URL}/api/mcSettings`);
-    createSettingsFileTab("iwtcms.conf", `${Constants.BASE_URL}/api/iwtcmsSettings`);
 }
 
 function selector() {

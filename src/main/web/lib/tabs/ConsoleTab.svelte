@@ -282,6 +282,7 @@
 <style lang="scss">
     @use "../../styles/variables";
     @use "../../styles/scrollbar";
+    @use "../../styles/forbidden";
 
     #console-tab {
         .container {
@@ -323,6 +324,7 @@
                         color: #597cef;
                     }
                 }
+                @include forbidden.forbidden(130px);
 
                 .console {
                     width: variables.$console-width;
@@ -339,6 +341,7 @@
                     transition: background-color ease 0.3s;
 
                     @include scrollbar.scrollbar;
+                    @include forbidden.forbidden(423px);
 
                     .console-text {
                         position: absolute;
