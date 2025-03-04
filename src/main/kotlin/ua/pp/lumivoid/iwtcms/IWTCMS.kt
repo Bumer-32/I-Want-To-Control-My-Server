@@ -41,16 +41,11 @@ object IWTCMS : ModInitializer {
 			})
 		}
 
-		if (Config.readConfig().autoOpenIWTCMSPageOnStartup) {
+		if (Config.readConfig().autoOpenIWTCMSPageOnStartup && !Config.readConfig().devMode) { // If dev mode enabled, it will be opened by vite
 			logger.info("Open IWTCMS page")
-			if (!Config.readConfig().devMode) {
-				@Suppress("HttpUrlsUsage")
-				val prefix = if (Config.readConfig().useSSL) "https://" else "http://"
-				Desktop.getDesktop().browse(URI("$prefix${Config.readConfig().ip}:${Config.readConfig().port}"))
-			} else {
-				@Suppress("HttpUrlsUsage")
-				Desktop.getDesktop().browse(URI("http://localhost:5173"))
-			}
+			@Suppress("HttpUrlsUsage")
+			val prefix = if (Config.readConfig().useSSL) "https://" else "http://"
+			Desktop.getDesktop().browse(URI("$prefix${Config.readConfig().ip}:${Config.readConfig().port}"))
 		}
 	}
 }

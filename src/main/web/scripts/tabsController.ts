@@ -4,7 +4,7 @@ export function addTab() {
 
 export function switchTab(id: string) {
     console.log("switching to tab", id);
-    const tabs = document.querySelectorAll("main .tabs .tab") as NodeListOf<HTMLDivElement>;
+    const tabs = document.querySelectorAll("main > .tabs > .tab") as NodeListOf<HTMLDivElement>;
     const tab = document.querySelector<HTMLDivElement>(`#${id}`)!;
 
     tabs.forEach((tab) => {

@@ -1,5 +1,5 @@
 @mixin forbidden($width) {
-    .forbidden {
+    :global(.forbidden) {
         $height: calc($width / 4);
         position: relative;
 
@@ -35,13 +35,5 @@
             align-items: center;
             z-index: 10;
         }
-    }
-}
-
-#console-tab .container .windows {
-    @include forbidden(130px);
-
-    .console {
-        @include forbidden(423px);
     }
 }

@@ -60,7 +60,7 @@
     <div class="container">
         <h1>Login</h1>
         <a href="https://modrinth.com/mod/i-want-to-control-my-server"><img src={icon} alt="IWTCMS logo" /></a>
-        <form id="loginForm" bind:this={loginForm}>
+        <form id="loginForm" method="post" bind:this={loginForm}>
             <label for="username" id="username">Username:</label>
             <input type="text" name="username" required />
             <br />
