@@ -1,6 +1,7 @@
 package ua.pp.lumivoid.iwtcms.ktor.plugins
 
 import io.ktor.http.HttpHeaders
+import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.*
@@ -57,14 +58,13 @@ fun Application.configureRouting() {
         statusFile(HttpStatusCode.NotFound, filePattern = "/web/404.html")
     }
 
-    install(CORS) {
-        anyHost()
-        allowHeader(HttpHeaders.ContentType)
-        allowCredentials = true
+    if (Config.readConfig().devMode){
+        install(CORS) {
+            anyHost()
+        }
     }
 
-    val r = routing {
-    }
+    val r = routing {}
 
     logger.info("-=-=-=-=-=-=-=-=-=- Registering routes -=-=-=-=-=-=-=-=-=-")
 
