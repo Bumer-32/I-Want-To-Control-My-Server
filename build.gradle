@@ -158,6 +158,7 @@ tasks.register("preparePythonClient") {
 
 tasks.register("compileVite"){
 	group = "build"
+	dependsOn tasks.npmInstall
 	
 	doLast {
 		if (System.getProperty("os.name").toLowerCase().contains("win")) {
