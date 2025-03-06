@@ -179,8 +179,7 @@
         const fileViewTextArea = tabContainer.querySelector(".file-view textarea") as HTMLTextAreaElement;
 
         const response = await fetch(url);
-        const text = await response.text();
-        fileViewTextArea.value = text;
+        fileViewTextArea.value = await response.text();
 
         updateEazyView(tabContainer, url);
     }
@@ -259,12 +258,11 @@
                     }
 
                     :global(label) {
-                        transition:
-                            filter 0.3s ease,
-                            box-shadow 0.3s ease;
-                        &:hover {
-                            @extend .hover-holo-effect;
-                        }
+                        transition: filter 0.3s ease, box-shadow 0.3s ease;
+                    }
+
+                    :global(label:hover) {
+                        @include hover-holo-effect.hover-holo-effect;
                     }
 
                     :global(input) {
@@ -291,7 +289,7 @@
                             filter 0.3s ease,
                             box-shadow 0.3s ease;
                         &:hover {
-                            @extend .hover-holo-effect;
+                            @include hover-holo-effect.hover-holo-effect;
                         }
 
                         &:active {

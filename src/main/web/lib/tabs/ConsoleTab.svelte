@@ -75,6 +75,7 @@
         }
     }
 
+    // noinspection JSUnusedLocalSymbols
     export let sendCommand = function (command: string) {};
 
     async function connect() {
@@ -319,7 +320,7 @@
                         justify-content: center;
                     }
 
-                    a {
+                    :global(a) {
                         text-decoration: none;
                         color: #597cef;
                     }
@@ -346,7 +347,7 @@
                     .console-text {
                         position: absolute;
                         width: calc(100% - 32px);
-                        height: calc(100% - variables.$console-input-height - 24px);
+                        height: calc(100% - #{variables.$console-input-height} - 24px);
                         top: 8px;
                         display: flex;
                         flex-direction: column;
