@@ -1,7 +1,6 @@
 <script lang="ts">
     import { onMount } from "svelte";
     import githubIcon from "../assets/github.svg";
-    import Constants from "../scripts/constants";
     import { getVersion } from "../scripts/supply";
 
     let creatorElement: HTMLSpanElement;
@@ -118,7 +117,7 @@
                 color 0.3s ease;
 
             &:hover {
-                @extend .hover-holo-effect;
+                @include hover-holo-effect.hover-holo-effect;
 
                 .material-symbols-rounded {
                     color: var(--footer-github-star-hover-color);
