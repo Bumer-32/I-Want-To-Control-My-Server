@@ -10,7 +10,11 @@ genPyReqs() {
   deactivate
 }
 
-buildDEV() {
+runDev() {
+  npm run dev
+}
+
+buildWeb() {
   npm run build -- --emptyOutDir
 }
 

@@ -1,8 +1,9 @@
 @echo off
 
 cd /d "%~dp0"
+goto :start
 
-:getpyreqs
+:genPyReqs
     python -m venv .gradle\python\venv
     call .gradle\python\venv\Scripts\activate.bat
     pip install --upgrade pipreqs
@@ -10,8 +11,13 @@ cd /d "%~dp0"
     deactivate
     goto :eof
 
-:buildDEV
+:runDev
+    npm run dev
+    goto :eof
+
+:buildWeb
     npm run build -- --emptyOutDir
     goto :eof
 
-call %1
+:start
+    goto %1
