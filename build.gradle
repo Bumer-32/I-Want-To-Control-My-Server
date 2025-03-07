@@ -119,7 +119,7 @@ tasks.register("generatePythonRequirements") {
 		} else {
 			exec {
 				workingDir  projectDir
-				commandLine "bash", "chmod +x ${projectDir}/devRunner.sh && ${projectDir}/devRunner.sh genPyReqs"
+				commandLine "bash", "-c", "chmod +x ${projectDir}/devRunner.sh && ${projectDir}/devRunner.sh genPyReqs"
 			}
 		}
 	}
