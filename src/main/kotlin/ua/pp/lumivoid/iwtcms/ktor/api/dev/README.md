@@ -1,1 +1,0 @@
-This directory created for dev features like file watcher for compiling sass and ts while developing

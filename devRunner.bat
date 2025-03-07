@@ -1,27 +1,17 @@
 @echo off
 
-REM This script created to easy start different programs/script right from kotlin
-REM and it was not designed for manual use
-REM if you want to see it usage look at src/main/kotlin/ua/pp/lumivoid/ktor/api/dev/WebCompile.kt
-
 cd /d "%~dp0"
 
-goto :start
+:getpyreqs
+    python -m venv .gradle\python\venv
+    call .gradle\python\venv\Scripts\activate.bat
+    pip install --upgrade pipreqs
+    python -m pipreqs.pipreqs --force build\python
+    deactivate
+    goto :eof
 
-:npmInstall
-echo Installing all npm dependencies
-npm install
-exit /b
+:buildDEV
+    npm run build -- --emptyOutDir
+    goto :eof
 
-:compileTS
-echo Compiling TS
-npx tsc --outDir "run/iwtcms/dev-web"
-exit /b
-
-:compileSASS
-echo Compiling SASS
-npx sass src/main/web/sass:run/iwtcms/dev-web/sass
-exit /b
-
-:start
-for %%A in (%*) do goto :%%A
+call %1

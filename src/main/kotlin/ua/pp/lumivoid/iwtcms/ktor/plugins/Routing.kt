@@ -1,6 +1,7 @@
 package ua.pp.lumivoid.iwtcms.ktor.plugins
 
 import io.ktor.http.HttpHeaders
+import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.*
@@ -12,7 +13,6 @@ import io.ktor.server.routing.*
 import io.ktor.server.sessions.*
 import io.ktor.server.websocket.*
 import ua.pp.lumivoid.iwtcms.Constants
-import ua.pp.lumivoid.iwtcms.ktor.api.dev.DevReloadWS
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.ApiListG
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.CheckLoginG
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.FilesG
@@ -58,14 +58,13 @@ fun Application.configureRouting() {
         statusFile(HttpStatusCode.NotFound, filePattern = "/web/404.html")
     }
 
-    install(CORS) {
-        anyHost()
-        allowHeader(HttpHeaders.ContentType)
-        allowCredentials = true
+    if (Config.readConfig().devMode){
+        install(CORS) {
+            anyHost()
+        }
     }
 
-    val r = routing {
-    }
+    val r = routing {}
 
     logger.info("-=-=-=-=-=-=-=-=-=- Registering routes -=-=-=-=-=-=-=-=-=-")
 
@@ -85,10 +84,6 @@ fun Application.configureRouting() {
 
     ConsoleWS.register(r)
     ServerStatsWS.register(r)
-
-    if (Config.readConfig().devMode) {
-        DevReloadWS.register(r)
-    }
 
     logger.info("-=-=-=-=-=-=-=-=-=- Routes registered -=-=-=-=-=-=-=-=-=-")
 }

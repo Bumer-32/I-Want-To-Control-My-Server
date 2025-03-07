@@ -83,8 +83,6 @@ dependencies {
 	implementation include("commons-codec:commons-codec:${project.commons_codec}")
 
 	modImplementation "me.lucko:spark-api:${project.spark_api_version}"
-
-	implementation "io.github.irgaly.kfswatch:kfswatch:${project.kfswatch_version}"
 }
 
 tasks.withType(JavaCompile).configureEach {
@@ -115,17 +113,19 @@ tasks.register("generatePythonRequirements") {
 
 		if (System.getProperty("os.name").toLowerCase().contains("win")) {
 			exec {
-				commandLine 'cmd', '/c', 'genpyreqs.bat'
+				workingDir  projectDir
+				commandLine "cmd", "/c", "${projectDir}/devRunner.bat genPyReqs"
 			}
 		} else {
 			exec {
-				commandLine 'bash', 'genpyreqs.sh'
+				workingDir  projectDir
+				commandLine "bash", "-c", "chmod +x ${projectDir}/devRunner.sh && ${projectDir}/devRunner.sh genPyReqs"
 			}
 		}
 	}
 
 	doLast {
-		println("generated requirements.txt")
+		logger.info("generated requirements.txt")
 	}
 }
 
@@ -152,43 +152,25 @@ tasks.register("preparePythonClient") {
 
 	doLast {
 		ant.zip(destfile: outputZip, basedir: pyBuildDir)
-		println("Python client files have been archived as: $outputZip")
+		logger.info("Python client files have been archived as: $outputZip")
 	}
 }
 
-tasks.register("cleanWebFolder") {
+tasks.register("compileVite"){
 	group = "build"
-
-	doFirst {
-		def f = file("$buildDir/resources/main/web")
-		if (f.exists()) f.deleteDir()
-	}
-}
-
-tasks.register("compileTypeScript", NpxTask) {
-	group = "build"
-	dependsOn tasks.cleanWebFolder
 	dependsOn tasks.npmInstall
-	command = "tsc"
-}
-
-tasks.register("compileSASS", NpxTask) {
-	group = "build"
-	dependsOn tasks.cleanWebFolder
-	dependsOn tasks.npmInstall
-	command = "sass"
-	args = ["$buildDir/../src/main/web/sass:$buildDir/resources/main/web/sass",]
-}
-
-tasks.register("compileWeb"){
-	group = "build"
-	dependsOn tasks.compileTypeScript
-	dependsOn tasks.compileSASS
-
+	
 	doLast {
-		copy {
-			from(file("src/main/web"))
-			into(file("$buildDir/resources/main/web"))
+		if (System.getProperty("os.name").toLowerCase().contains("win")) {
+			exec {
+				workingDir  projectDir
+				commandLine "cmd", "/c", "${projectDir}/devRunner.bat buildDEV"
+			}
+		} else {
+			exec {
+				workingDir  projectDir
+				commandLine "bash", "-c", "chmod +x ${projectDir}/devRunner.sh && ${projectDir}/devRunner.sh buildDEV"
+			}
 		}
 	}
 }
@@ -199,7 +181,7 @@ jar {
 
 processResources {
 	dependsOn tasks.preparePythonClient
-	dependsOn tasks.compileWeb
+	dependsOn tasks.compileVite
 
 	inputs.property "version", project.version
 
