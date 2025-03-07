@@ -11,7 +11,6 @@ genPyReqs() {
 
 buildDEV() {
   npm run build -- --emptyOutDir
-  echo "BUILDEDEV"
 }
 
 $1
