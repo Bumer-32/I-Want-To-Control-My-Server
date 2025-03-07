@@ -1,11 +1,11 @@
 # I-Want-To-Control-My-Server
+
 ### or just IWTCMS
-
-
 
 Simple minecraft mod, which allows you to connect to your server and control it
 
 ### miniDocumentation structure:
+
 [About Clients](#clients-)
 
 [About SSL](#SSL)
@@ -16,19 +16,19 @@ Simple minecraft mod, which allows you to connect to your server and control it
 
 ---
 
-## Clients 
+## Clients
+
 [Go to top](#minidocumentation-structure)
 
 &nbsp;
 
 ### [Official IWTCMS CLI client](https://github.com/Bumer-32/I-Want-To-Control-My-Server/blob/main/src/main/python/iwtcms_client.py)
 
-To launch an official client, type: ``python iwtcms_client.py --help``
+To launch an official client, type: `python iwtcms_client.py --help`
 
 ### [Unofficial IWTCMS GUI client by AXCWG](https://github.com/AXCWG/IWTCMS-Client)
 
 &nbsp;
-
 
 <details>
     <summary>You also can download an official client if you go to the main page of server in the browser</summary>
@@ -38,6 +38,7 @@ To launch an official client, type: ``python iwtcms_client.py --help``
 ---
 
 ## SSL
+
 [Go to top](#minidocumentation-structure)
 
 &nbsp;
@@ -66,22 +67,23 @@ ssl {
 
 In fact, everything is already written here in the comments, but I want to add:
 
-``use SSL`` - I always recommend enabling it even if you don't have generated certificate, if ``custom Sertificate`` disabled IWTCMS will generate new certificate every launch and SSL should work fine.
+`use SSL` - I always recommend enabling it even if you don't have generated certificate, if `custom Sertificate` disabled IWTCMS will generate new certificate every launch and SSL should work fine.
 
-Btw if ``use SSL`` enabled non ssl connections disabled at all, you cant connect to it.
+Btw if `use SSL` enabled non ssl connections disabled at all, you cant connect to it.
 Use https:// instead of http:// and wss:// instead of ws://
 
 &nbsp;
 
-``custom Sertificate`` - Just disables auto generation of certificates and instead in reads certificate from config/iwtcms/keystore.jks
+`custom Sertificate` - Just disables auto generation of certificates and instead in reads certificate from config/iwtcms/keystore.jks
 
 &nbsp;
 
-``ssl Alias`` and ``ssl Pass`` must match with alias and password in generated certificates
+`ssl Alias` and `ssl Pass` must match with alias and password in generated certificates
 
 ---
 
 ## Users
+
 [Go to top](#minidocumentation-structure)
 
 &nbsp;
@@ -137,11 +139,11 @@ auth {
 
 The auth block in the config is responsible for all authentications
 
-``use Authentication`` - enables auth, if it disabled anyone can connect, listen, send commands, and any other shit with server with IWTCMS can do.
+`use Authentication` - enables auth, if it disabled anyone can connect, listen, send commands, and any other shit with server with IWTCMS can do.
 
 &nbsp;
 
-``users`` - list of all users, there's no limits for users count
+`users` - list of all users, there's no limits for users count
 
 Every user has their own permits, False forbids action for user, True allows action.
 
@@ -156,6 +158,7 @@ Anonymous didn't need password if his password exists, IWTCMS will ignore this p
 ---
 
 ## Api
+
 [Go to top](#minidocumentation-structure)
 
 &nbsp;
@@ -190,6 +193,7 @@ Btw 3
 Here's postman workspace for iwtcms: https://www.postman.com/bumer-32/iwtcms-api/
 
 ### Fucking API (I'm already tired of writing this documentation, but I still need to write a whole chapter about Api)
+
 <img src="https://media1.tenor.com/m/pFz1Q12_hXEAAAAd/cat-holding-head-cat.gif">
 
 Here as examples, I will use enabled SSL and localhost with port 25566 (127.0.0.1:25566),
@@ -199,34 +203,38 @@ replace 127.0.0.1 with your ip, 25566 with your port and use appropriate prefixe
 Let's start:
 
 > ### If you want to see all avail pages for requests (and websockets also), go to:
-> ``https://127.0.0.1/apiList``
-> 
+>
+> `https://127.0.0.1/apiList`
+>
 > I'd recommend finding links in your clients here, names of pages unlikely to be changed,
 > but urls can be changed (sorry but IWTCMS still WIP)
 >
 > | page name  | type | response type | uses auth api (needs cookies)? | needs body |
-> |:----------:|:----:|:-------------:|:------------------------------:|:----------:|
+> | :--------: | :--: | :-----------: | :----------------------------: | :--------: |
 > | ApiListGET | GET  |     JSON      |               No               |     No     |
 
 &nbsp;
 
 > ### If you want to see the history of all logs since server launch, go to:
-> ``https://127.0.0.1/api/logsHistory``
+>
+> `https://127.0.0.1/api/logsHistory`
 >
 > Returns list of all logs since server launch
 >
 > |   page name    | type | response type | uses auth api (needs cookies)? | needs body |
-> |:--------------:|:----:|:-------------:|:------------------------------:|:----------:|
+> | :------------: | :--: | :-----------: | :----------------------------: | :--------: |
 > | LogsHistoryGET | GET  |     JSON      |              Yes               |     No     |
 
 &nbsp;
 
 > ### If you want to log in, go to:
-> ``https://127.0.0.1/api/login``
+>
+> `https://127.0.0.1/api/login`
 >
 > Put to your request body JSON with username and password and get logged
 >
 > body example:
+>
 > ```json
 > {
 >     "username": "guest",
@@ -235,31 +243,33 @@ Let's start:
 > ```
 >
 > | page name | type |              response type              | uses auth api (needs cookies)? | needs body |
-> |:---------:|:----:|:---------------------------------------:|:------------------------------:|:----------:|
+> | :-------: | :--: | :-------------------------------------: | :----------------------------: | :--------: |
 > | LoginPOST | POST | Plain (Login successful / Login failed) |       No (sets cookies)        |    Yes     |
 
 &nbsp;
 
 > ### If you want to see all permits of user, go to:
-> ``https://127.0.0.1/api/permits/{username}``
+>
+> `https://127.0.0.1/api/permits/{username}`
 >
 > replace "{username}" with the name of the user you want to learn permissions from
 >
 > | page name  | type | response type | uses auth api (needs cookies)? | needs body |
-> |:----------:|:----:|:-------------:|:------------------------------:|:----------:|
+> | :--------: | :--: | :-----------: | :----------------------------: | :--------: |
 > | PermitsGET | GET  |     JSON      |               No               |     No     |
 
 &nbsp;
 
 > ### If you want to reach the server console, go to:
-> ``wss://127.0.0.1/ws/console``
+>
+> `wss://127.0.0.1/ws/console`
 >
 > Main feature of IWTCMS, connect to websocket and get all logs!
 > If you want to execute minecraft command, send command as plain text to server through websocket,
 > and it will be executed by IWTCMS
 >
 > | page name |   type    |          response type          | uses auth api (needs cookies)? | needs body |
-> |:---------:|:---------:|:-------------------------------:|:------------------------------:|:----------:|
+> | :-------: | :-------: | :-----------------------------: | :----------------------------: | :--------: |
 > | WsConsole | Websocket | Websocket plain messages (logs) |              Yes               |     No     |
 
 &nbsp;
@@ -268,16 +278,16 @@ Let's start:
 >
 > Since IWTCMS integrates a real ktor web server, it hosts a lot of static files with it, here is their list:
 >
-> |     file name     |        path         |       alternative paths        | file type |
-> |:-----------------:|:-------------------:|:------------------------------:|:---------:|
-> |     style.css     |     /style.css      |                                |    css    |
-> |     404.html      |      /404.html      | any path witch not found (404) |   html    |
-> |    index.html     |     /index.html     |               /                |   html    |
-> |    favicon.ico    |                     |                                |    ico    |
-> | icon_clearbg.png  | /  icon_clearbg.png |                                |    png    |
-> | iwtcms_client.zip | /iwtcms_client.zip  |                                |    zip    |
+> |     file name     |        path        |       alternative paths        | file type |
+> | :---------------: | :----------------: | :----------------------------: | :-------: |
+> |     style.css     |     /style.css     |                                |    css    |
+> |     404.html      |     /404.html      | any path witch not found (404) |   html    |
+> |    index.html     |    /index.html     |               /                |   html    |
+> |    favicon.ico    |                    |                                |    ico    |
+> | icon_clearbg.png  | / icon_clearbg.png |                                |    png    |
+> | iwtcms_client.zip | /iwtcms_client.zip |                                |    zip    |
 
 ---
 
-[//]: # (TODO: How to build in README.md)
-[//]: # (Note: needs sudo on linux)
+[//]: # "TODO: How to build in README.md"
+[//]: # "Note: needs sudo on linux"

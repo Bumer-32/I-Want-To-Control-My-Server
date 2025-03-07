@@ -16,6 +16,7 @@ object MCSettingsGP: Request() {
     override val PATH = "/api/mcSettings"
     private val file = File("${System.getProperty("user.dir")}/server.properties")
     private val backupFile = File("${Constants.CONFIG_FOLDER}/__BACKUP__${file.name}")
+    private const val TYPES_FILE = "/server.properties.types.yaml"
 
     override val request: Routing.() -> Unit = {
         get(PATH) {
@@ -51,6 +52,16 @@ object MCSettingsGP: Request() {
                     logger.info("New ${file.name} file saved")
 
                     runBlocking { call.respondText("Created", status = HttpStatusCode.Created) }
+                }
+            )
+        }
+
+        get("$PATH/types") {
+            UserAuthentication.doAuth(
+                call = call,
+                permit = "read minecraft server config",
+                success = {
+                    runBlocking { call.respondFile(File(this.javaClass.getResource(TYPES_FILE)!!.file)) }
                 }
             )
         }

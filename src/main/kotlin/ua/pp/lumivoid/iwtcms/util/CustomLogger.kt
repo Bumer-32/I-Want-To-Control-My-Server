@@ -31,14 +31,14 @@ object CustomLogger {
             .withPattern("[%d{HH:mm:ss}] [%t/%level] (%logger{1}) %msg%n")
             .build()
 
-        val appender = FileAppender.newBuilder()
+        val fileCustomAppender = FileAppender.newBuilder()
             .withFileName("logs/iwtcms.log")
             .setName("CustomFileAppender")
             .setLayout(layout)
             .withAppend(false)
             .build()
-
-        // custom appender
+        fileCustomAppender.start()
+        rootLogger.addAppender(fileCustomAppender)
 
         val customAppender = WriterAppender.newBuilder()
             .setLayout(layout)
@@ -46,7 +46,6 @@ object CustomLogger {
             .setIgnoreExceptions(false)
             .setTarget(OutputStreamWriter(output))
             .build()
-
         customAppender.start()
         rootLogger.addAppender(customAppender)
 
@@ -65,9 +64,6 @@ object CustomLogger {
             } catch (_: IOException) {
             }
         }
-
-        appender.start()
-        rootLogger.addAppender(appender)
 
         Configurator.setLevel(rootLogger.name, Level.getLevel(Config.readConfig().logLevel))
 
