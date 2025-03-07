@@ -113,11 +113,13 @@ tasks.register("generatePythonRequirements") {
 
 		if (System.getProperty("os.name").toLowerCase().contains("win")) {
 			exec {
-				commandLine "cmd", "/c", "devRunner.bat genPyReqs"
+				workingDir  projectDir
+				commandLine "cmd", "/c", "${projectDir}/devRunner.bat genPyReqs"
 			}
 		} else {
 			exec {
-				commandLine "bash", "devRunner.sh genPyReqs"
+				workingDir  projectDir
+				commandLine "bash", "${projectDir}/devRunner.sh genPyReqs"
 			}
 		}
 	}
@@ -161,11 +163,13 @@ tasks.register("compileVite"){
 	doLast {
 		if (System.getProperty("os.name").toLowerCase().contains("win")) {
 			exec {
-				commandLine "cmd", "/c", "devRunner.bat buildDEV"
+				workingDir  projectDir
+				commandLine "cmd", "/c", "${projectDir}/devRunner.bat buildDEV"
 			}
 		} else {
 			exec {
-				commandLine "bash", "devRunner.sh buildDEV"
+				workingDir  projectDir
+				commandLine "bash", "-c", "${projectDir}/devRunner.sh buildDEV"
 			}
 		}
 	}
