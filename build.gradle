@@ -169,7 +169,7 @@ tasks.register("compileVite"){
 		} else {
 			exec {
 				workingDir  projectDir
-				commandLine "bash", "-c", "${projectDir}/devRunner.sh buildDEV"
+				commandLine "bash", "-c", "chmod +x ${projectDir}/devRunner.sh && ${projectDir}/devRunner.sh buildDEV"
 			}
 		}
 	}
