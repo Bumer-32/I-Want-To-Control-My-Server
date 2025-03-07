@@ -13,7 +13,7 @@ jobs:
                 # Use these Java versions
                 java: [
                         21, # Current Java LTS
-                ]
+                    ]
                 python: [3.13]
                 os: [ubuntu-22.04, windows-2022]
         runs-on: ${{ matrix.os }}
