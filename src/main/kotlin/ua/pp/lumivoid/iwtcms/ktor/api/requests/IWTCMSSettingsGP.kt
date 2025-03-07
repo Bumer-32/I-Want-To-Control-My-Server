@@ -17,7 +17,7 @@ object IWTCMSSettingsGP: Request() {
     override val PATH = "/api/iwtcmsSettings"
     private val file = File(Constants.CONFIG_FILE)
     private val backupFile = File("${Constants.CONFIG_FOLDER}/__BACKUP__${file.name}")
-    private const val TYPES_FILE = "/iwtcms.conf.types.yaml"
+    private const val STRATEGY_FILE = "/iwtcms.conf.strategy.yaml"
 
     override val request: Routing.() -> Unit = {
         get(PATH) {
@@ -57,12 +57,12 @@ object IWTCMSSettingsGP: Request() {
             )
         }
 
-        get("$PATH/types") {
+        get("$PATH/strategy") {
             UserAuthentication.doAuth(
                 call = call,
                 permit = "read iwtcms config",
                 success = {
-                    runBlocking { call.respondFile(File(this.javaClass.getResource(TYPES_FILE)!!.file)) }
+                    runBlocking { call.respondFile(File(this.javaClass.getResource(STRATEGY_FILE)!!.file)) }
                 }
             )
         }
