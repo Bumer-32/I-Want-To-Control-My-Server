@@ -25,12 +25,12 @@ object IWTCMS : ModInitializer {
 		// ? run "npm run dev" if dev mode enabled
 		if (Config.readConfig().devMode) {
 			val runnerFile = if (System.getProperty("os.name").startsWith("Win")) {
-				"npmRunDev.bat"
+				"devRunner.bat"
 			} else {
-				"npmRunDev.sh"
+				"devRunner.sh"
 			}
 
-			val process = ProcessBuilder("${Constants.CONFIG_FOLDER}/../../$runnerFile")
+			val process = ProcessBuilder("${Constants.CONFIG_FOLDER}/../../$runnerFile", "runDev")
 				.redirectOutput(Redirect.INHERIT)
 				.redirectError(Redirect.INHERIT)
 				.start()
