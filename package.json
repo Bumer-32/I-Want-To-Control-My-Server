@@ -22,5 +22,9 @@
         "svelte-preprocess": "^6.0.3",
         "typescript": "~5.7.3",
         "vite": "^6.1.1"
+    },
+    "dependencies": {
+        "@tkint/hocon-parser": "^0.0.0-alpha.0",
+        "ts-yaml": "^1.0.0"
     }
 }

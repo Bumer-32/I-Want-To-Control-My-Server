@@ -258,7 +258,9 @@
                     }
 
                     :global(label) {
-                        transition: filter 0.3s ease, box-shadow 0.3s ease;
+                        transition:
+                            filter 0.3s ease,
+                            box-shadow 0.3s ease;
                     }
 
                     :global(label:hover) {

@@ -296,7 +296,9 @@
                             width: 20px;
                             height: 20px;
                             margin-right: 10px;
-                            transition: filter 0.3s ease, color 0.3s ease;
+                            transition:
+                                filter 0.3s ease,
+                                color 0.3s ease;
                         }
                     }
                 }
