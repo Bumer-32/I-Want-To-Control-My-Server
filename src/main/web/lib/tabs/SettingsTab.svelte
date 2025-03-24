@@ -2,6 +2,7 @@
     import Constants from "../../scripts/constants";
     import DevMenu from "../DevMenu.svelte";
     import { onMount } from "svelte";
+    import YAML from "yaml";
 
     let selectorContainer: HTMLDivElement;
     let selectorUnderline: HTMLSpanElement;
@@ -114,25 +115,35 @@
         buttonDiv.appendChild(buttonLabel);
         // add button to selector
 
-        // add tab
+        // * add tab
         const tab = document.createElement("div") as HTMLDivElement;
         tab.classList.add("tab");
         if (fileName != "server.properties") tab.classList.add("disabled");
         tab.id = `settings_file|${fileName}`;
 
         const eazyView = document.createElement("div") as HTMLDivElement;
+        const eazyViewTextDiv = document.createElement("div") as HTMLDivElement;
+        const eazyViewText1 = document.createElement("span") as HTMLSpanElement;
+        const eazyViewText2 = document.createElement("span") as HTMLSpanElement;
         eazyView.classList.add("eazy-view");
+        eazyViewTextDiv.classList.add("eazy-view-text");
+        eazyViewText1.innerHTML = "Eazy view enabled, but seems like there's no strategy for this file.";
+        eazyViewText2.innerHTML = "Please switch to file view.";
+        eazyViewTextDiv.appendChild(eazyViewText1);
+        eazyViewTextDiv.appendChild(eazyViewText2);
+        eazyView.appendChild(eazyViewTextDiv);
         tab.appendChild(eazyView);
 
         const fileView = document.createElement("div") as HTMLDivElement;
         fileView.classList.add("file-view");
         fileView.classList.add("disabled");
         tab.appendChild(fileView);
+
         const textarea = document.createElement("textarea") as HTMLTextAreaElement;
         textarea.spellcheck = false;
         textarea.wrap = "off";
         fileView.appendChild(textarea);
-        // add tab
+        // * add tab
 
         // file view
         fileViewButton.addEventListener("click", () => {
@@ -188,17 +199,33 @@
         const fileViewTextArea = tabContainer.querySelector(".file-view textarea") as HTMLTextAreaElement;
         const eazyView = tabContainer.querySelector(".eazy-view") as HTMLDivElement;
 
-        const response = await fetch(url + "/types");
-        const text = await response.text();
+        const response = await fetch(url + "/strategy");
+        const strategyYaml = await response.text();
     }
 
     // TODO: add FORBIDDEN message to settings tab
 
+    interface AvailableConfigSetting {
+        selector_name: string;
+        config_name: string;
+        config_type: string;
+        config_path: string;
+        make_backup: boolean;
+        read_permission_name: string;
+        edit_permission_name: string;
+    }
+
+    type Configs = Record<string, AvailableConfigSetting>;
+
     onMount(() => {
         selector();
 
-        createSettingsFileTab("server.properties", `${Constants.BASE_URL}api/mcSettings`);
-        createSettingsFileTab("iwtcms.conf", `${Constants.BASE_URL}api/iwtcmsSettings`);
+        fetch(Constants.CONFIG_URL).then(async (response) => {
+            const configs: Configs = YAML.parse(await response.text());
+            Object.values(configs).forEach((config: AvailableConfigSetting) => {
+                createSettingsFileTab(config.selector_name, `${Constants.BASE_URL}api/config/${config.selector_name}`);
+            });
+        });
     });
 </script>
 
@@ -344,6 +371,23 @@
 
                     @media (max-width: 700px) {
                         grid-template-columns: 300px;
+                    }
+                }
+
+                :global(.eazy-view-text) {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 10px;
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    text-align: center;
+
+                    &:not(:only-child) {
+                        display: none;
                     }
                 }
 

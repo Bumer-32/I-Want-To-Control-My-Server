@@ -15,6 +15,7 @@ export default class Constants {
     static CONSOLE_URL = this.BASE_URL + "ws/console";
     static STATS_URL = this.BASE_URL + "ws/serverStats";
     static PERMITS_BASE_URL = this.BASE_URL + "api/permits/";
+    static CONFIG_URL = this.BASE_URL + "api/config";
 
     // OTHER
     static IWTCMS_VERSION: string;

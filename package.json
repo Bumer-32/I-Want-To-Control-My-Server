@@ -25,6 +25,6 @@
     },
     "dependencies": {
         "@tkint/hocon-parser": "^0.0.0-alpha.0",
-        "ts-yaml": "^1.0.0"
+        "yaml": "^2.7.0"
     }
 }
