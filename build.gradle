@@ -82,6 +82,8 @@ dependencies {
 
 	implementation include("commons-codec:commons-codec:${project.commons_codec}")
 
+	implementation include("com.charleskorn.kaml:kaml:${project.kaml_version}")
+
 	modImplementation "me.lucko:spark-api:${project.spark_api_version}"
 }
 

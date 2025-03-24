@@ -1,0 +1,98 @@
+package ua.pp.lumivoid.iwtcms.ktor.api.requests
+
+import com.charleskorn.kaml.Yaml
+import io.ktor.http.*
+import io.ktor.server.request.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
+import kotlinx.coroutines.runBlocking
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.decodeFromString
+import ua.pp.lumivoid.iwtcms.Constants
+import ua.pp.lumivoid.iwtcms.ktor.api.UserAuthentication
+import ua.pp.lumivoid.iwtcms.ktor.api.requests.ApiListG.registerAPI
+import java.io.File
+
+object Configs: Request() {
+    override val PATH = "/api/config"
+    private val availableConfigsSettingsFile = this.javaClass.getResource(Constants.AVAILABLE_CONFIGS_SETTINGS_FILE)!!
+
+    override val request: Routing.() -> Unit = {
+        val availableConfigsSettings: Map<String, AvailableConfigSetting> = Yaml.default.decodeFromString(availableConfigsSettingsFile.readText())
+
+        get(PATH) {
+            call.respondText(availableConfigsSettingsFile.readText(), contentType = ContentType.Text.Plain)
+        }
+
+        availableConfigsSettings.forEach {
+            val configPath = "$PATH/${it.value.selector_name}"
+            logger.info("       - config ${it.key} url: $configPath")
+            registerAPI("${it.value.selector_name}GPUT", configPath)
+            registerAPI("${it.value.selector_name}StrategyG", configPath)
+
+            get(configPath) {
+                UserAuthentication.doAuth(
+                    call = call,
+                    permit = it.value.read_permission_name,
+                    success = {
+                        val filePath = "${System.getProperty("user.dir")}${it.value.config_path}"
+                        val file = File(filePath)
+                        val fileContent = file.readText()
+                        runBlocking { call.respondText(fileContent, contentType = ContentType.Text.Plain) }
+                    }
+                )
+            }
+
+            put(configPath) {
+                UserAuthentication.doAuth(
+                    call = call,
+                    permit = it.value.edit_permission_name,
+                    success = {
+                        val filePath = "${System.getProperty("user.dir")}${it.value.config_path}"
+                        val file = File(filePath)
+                        val backupFilePath = "${Constants.CONFIG_FOLDER}/__BACKUP__${file.name}"
+                        val backupFile = File(backupFilePath)
+
+                        if (it.value.make_backup) {
+                            if (!backupFile.exists()) backupFile.createNewFile()
+                            backupFile.writeText(file.readText())
+                            logger.info("Backup created")
+                        }
+
+                        val fileContent = runBlocking { call.receiveText() }
+                        file.writeText(fileContent)
+
+                        runBlocking { call.respondText("Created", status = HttpStatusCode.Created) }
+                    }
+                )
+            }
+
+            get("$PATH/${it.value.selector_name}/strategy") {
+
+                UserAuthentication.doAuth(
+                    call = call,
+                    permit = it.value.read_permission_name,
+                    success = {
+                        val filePath = "/${it.value.config_path.split("/").last()}.strategy.yaml"
+                        val file = this.javaClass.getResource(filePath)!!
+                        val fileContent = file.readText()
+                        runBlocking { call.respondText(fileContent, contentType = ContentType.Text.Plain) }
+                    }
+                )
+            }
+        }
+
+    }
+}
+
+@Suppress("PropertyName")
+@Serializable
+data class AvailableConfigSetting(
+    val selector_name: String,
+    val config_name: String,
+    val config_type: String,
+    val config_path: String,
+    val make_backup: Boolean,
+    val read_permission_name: String,
+    val edit_permission_name: String
+)

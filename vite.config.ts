@@ -3,6 +3,7 @@ import { svelte } from "@sveltejs/vite-plugin-svelte";
 import { sveltePreprocess } from "svelte-preprocess";
 
 // https://vite.dev/config/
+// noinspection JSUnusedGlobalSymbols
 export default defineConfig({
     plugins: [
         svelte({
@@ -36,6 +37,10 @@ export default defineConfig({
                         console.log("Received Response from the Target:", proxyRes.statusCode, req.url);
                     });
                 },
+            },
+            "/files": {
+                target: "http://localhost:25566",
+                changeOrigin: true,
             },
             "/ws": {
                 target: "ws://localhost:25566",
