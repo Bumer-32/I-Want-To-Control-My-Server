@@ -1,220 +1,220 @@
 online-mode:
-  type: "bool"
+  type: bool
   default: true
 prevent-proxy-connections:
-  type: "bool"
+  type: bool
   default: false
 server-ip:
-  type: "string"
-  default: ""
+  type: string
+  default: 
 pvp:
-  type: "bool"
+  type: bool
   default: true
 allow-flight:
-  type: "bool"
+  type: bool
   default: false
 motd:
-  type: "string"
-  default: "A Minecraft Server"
+  type: string
+  default: A Minecraft Server
 bug-report-link:
-  type: "string"
-  default: ""
+  type: string
+  default: 
 force-gamemode:
-  type: "bool"
+  type: bool
   default: false
 enforce-whitelist:
-  type: "bool"
+  type: bool
   default: false
 difficulty:
-  type: "choose"
-  default: "easy"
+  type: choose
+  default: easy
   options:
-    - "peaceful"
-    - "easy"
-    - "normal"
-    - "hard"
+    - peaceful
+    - easy
+    - normal
+    - hard
 gamemode:
-  type: "choose"
-  default: "survival"
+  type: choose
+  default: survival
   options:
-    - "survival"
-    - "creative"
-    - "adventure"
-    - "spectator"
+    - survival
+    - creative
+    - adventure
+    - spectator
 level-name:
-  type: "string"
-  default: "world"
+  type: string
+  default: world
 server-port:
-  type: "int"
+  type: int
   default: 25565
   min: 1024
   max: 65535
 enable-query:
-  type: "bool"
+  type: bool
   default: false
 query.port:
-  type: "int"
+  type: int
   default: 25565
   min: 1024
   max: 65535
 enable-rcon:
-  type: "bool"
+  type: bool
   default: false
 rcon.port:
-  type: "int"
+  type: int
   default: 25575
   min: 1024
   max: 65535
 rcon.password:
-  type: "string"
-  default: ""
+  type: string
+  default: 
 hardcore:
-  type: "bool"
+  type: bool
   default: false
 allow-nether:
-  type: "bool"
+  type: bool
   default: true
 spawn-monsters:
-  type: "bool"
+  type: bool
   default: true
 use-native-transport:
-  type: "bool"
+  type: bool
   default: true
 enable-command-block:
-  type: "bool"
+  type: bool
   default: false
 spawn-protection:
-  type: "int"
+  type: int
   default: 16
   min: 0
 op-permission-level:
-  type: "int"
+  type: int
   default: 4
   min: 0
   max: 4
 function-permission-level:
-  type: "int"
+  type: int
   default: 2
   min: 0
   max: 4
 max-tick-time:
-  type: "int"
+  type: int
   default: 60000
 max-chained-neighbor-updates:
-  type: "int"
+  type: int
   default: 1000000
 rate-limit:
-  type: "int"
+  type: int
   default: 0
 view-distance:
-  type: "int"
+  type: int
   default: 10
   min: 3
   max: 32
 simulation-distance:
-  type: "int"
+  type: int
   default: 10
   min: 3
   max: 32
 max-players:
-  type: "int"
+  type: int
   default: 20
   min: 1
 network-compression-threshold:
-  type: "int"
+  type: int
   default: 256
   min: 0
 broadcast-rcon-to-ops:
-  type: "bool"
+  type: bool
   default: true
 broadcast-console-to-ops:
-  type: "bool"
+  type: bool
   default: true
 max-world-size:
-  type: "int"
+  type: int
   default: 29999984
 sync-chunk-writes:
-  type: "bool"
+  type: bool
   default: true
 region-file-compression:
-  type: "choose"
+  type: choose
   default: deflate
   options:
-    - "deflate"
-    - "lz4"
-    - "none"
+    - deflate
+    - lz4
+    - none
 enable-jmx-monitoring:
-  type: "bool"
+  type: bool
   default: false
 enable-status:
-  type: "bool"
+  type: bool
   default: true
 hide-online-players:
-  type: "bool"
+  type: bool
   default: false
 entity-broadcast-range-percentage:
-  type: "int"
+  type: int
   default: 100
   min: 10
   max: 1000
   step: 1
 text-filtering-config:
-  type: "string"
-  default: ""
+  type: string
+  default: 
 text-filtering-version:
-  type: "int"
+  type: int
   default: 0
   min: 0
   max: 1
 player-idle-timeout:
-  type: "int"
+  type: int
   default: 0
   min: 0
 white-list:
-  type: "bool"
+  type: bool
   default: false
 enforce-secure-profile:
-  type: "bool"
+  type: bool
   default: true
 pause-when-empty-seconds:
-  type: "int"
+  type: int
   default: 60
 accept-transfers:
-  type: "bool"
+  type: bool
   default: true
 level-seed:
-  type: "string"
-  default: ""
+  type: string
+  default: 
 generate-structures:
-  type: "bool"
+  type: bool
   default: true
 generator-settings:
-  type: "string"
-  default: "{}"
+  type: string
+  default: {}
 level-type:
-  type: "string"
-  default: "minecraft\:normal+"
+  type: string
+  default: minecraft\:normal+
 resource-pack:
-  type: "string"
-  default: ""
+  type: string
+  default: 
 resource-pack-id:
-  type: "string"
-  default: ""
+  type: string
+  default: 
 resource-pack-prompt:
-  type: "string"
-  default: ""
+  type: string
+  default: 
 resource-pack-sha1:
-  type: "string"
-  default: ""
+  type: string
+  default: 
 require-resource-pack:
-  type: "bool"
+  type: bool
   default: false
 resource-pack-hash:
-  type: "string"
-  default: ""
+  type: string
+  default: 
 initial-disabled-packs:
-  type: "string"
-  default: ""
+  type: string
+  default: 
 initial-enabled-packs:
-  type: "string"
-  default: ""
+  type: string
+  default: 
