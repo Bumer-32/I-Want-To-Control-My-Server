@@ -6,6 +6,8 @@ import me.lucko.spark.api.statistic.StatisticWindow
 import net.fabricmc.loader.api.FabricLoader
 import ua.pp.lumivoid.iwtcms.Constants
 import java.lang.management.ManagementFactory
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 
 object ServerStats {
     private fun getMemoryUsage(): Double {
@@ -29,7 +31,7 @@ object ServerStats {
         val maxPlayerCount = MinecraftServerHandler.server?.playerManager?.maxPlayerCount
         var tps: Double? = null
         val ip = "${MinecraftServerHandler.server?.serverIp}:${MinecraftServerHandler.server?.serverPort}"
-        val serverTime = System.currentTimeMillis()
+        val serverTime = ZonedDateTime.now().format(DateTimeFormatter.ISO_ZONED_DATE_TIME)
 
         if (FabricLoader.getInstance().isModLoaded(Constants.SPARK_FABRIC_ID)) {
             val spark = SparkProvider.get()
@@ -65,5 +67,5 @@ data class ServerStatsData(
     val maxPlayerCount: Int?,
     val tps: Double?,
     val ip: String?,
-    val serverTime: Long
+    val serverTime: String
 )
