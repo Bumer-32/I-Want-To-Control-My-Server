@@ -184,7 +184,9 @@
                     playersMaxValue.innerHTML = jsonData.maxPlayerCount;
                     ipAddrValue.innerHTML = jsonData.ip;
                     tpsValue.innerHTML = jsonData.tps != null ? Math.floor(jsonData.tps).toString() : "<a href='https://modrinth.com/mod/spark'>Needs Spark</a>";
-                    serverTimeValue.innerHTML = new Date(jsonData.serverTime).toISOString().slice(11, -1).split(".")[0];
+                    serverTimeValue.innerHTML = jsonData.serverTime
+                                                    .split(".")[0]
+                                                    .split("T")[1];
                 }
             };
 
