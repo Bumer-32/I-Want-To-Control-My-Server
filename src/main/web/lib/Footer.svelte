@@ -5,6 +5,7 @@
 
     let creatorElement: HTMLSpanElement;
     let iwtcmsLabel: HTMLSpanElement;
+    let starsElement: HTMLSpanElement;
 
     onMount(() => {
         async function loadGithubStars() {
@@ -17,7 +18,7 @@
 
                 const starsSpan = doc.querySelector<HTMLSpanElement>('a[href$="/stargazers"] span')!;
 
-                document.querySelector<HTMLSpanElement>(".footer .github .stars")!.innerHTML = starsSpan.innerHTML.trim();
+                starsElement.innerHTML = starsSpan.innerHTML.trim();
             } catch (error) {
                 console.error("Failed to load github stars");
                 console.error(error);
@@ -27,6 +28,7 @@
         loadGithubStars();
 
         // ? happy birthday Bumer_32
+        // TODO: fix position
         if (new Date().getMonth() == 1 && new Date().getDate() == 21) {
             console.log("Happy birthday Bumer_32! 🎉🎉🎉");
             creatorElement.innerHTML = creatorElement.innerHTML + " | Happy birthday Bumer_32! 🎉🎉🎉";
@@ -53,7 +55,7 @@
         <img src={githubIcon} alt="GitHub icon" />
         <span>Star on GitHub</span>
         <span class="material-symbols-rounded">star</span>
-        <span class="stars"></span>
+        <span bind:this={starsElement}></span>
     </a>
 </footer>
 

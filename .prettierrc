@@ -1,7 +1,7 @@
 {
     "plugins": ["prettier-plugin-svelte"],
     "pluginSearchDirs": ["."],
-    "overrides": [{ "files": "*.svelte *.ts", "options": { "parser": "svelte" } }],
+    "overrides": [{ "files": "*.svelte *.ts *.js", "options": { "parser": "svelte" } }],
     "svelteAllowShorthand": false,
     "tabWidth": 4,
     "singleQuote": false,
