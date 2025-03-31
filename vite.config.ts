@@ -6,7 +6,7 @@ import fs from "fs";
 
 let apiURL = "http://localhost:25566";
 let apiWsURL = "ws://localhost:25566";
-let autoOpen = ""
+let autoOpen = "";
 
 try {
     const hoconInstance = await hocon();
@@ -44,7 +44,7 @@ export default defineConfig({
         outDir: "../../../build/resources/main/web",
         sourcemap: true,
     },
-    server: { 
+    server: {
         open: autoOpen,
         proxy: {
             "/apiList": {
