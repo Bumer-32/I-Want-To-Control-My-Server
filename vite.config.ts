@@ -6,13 +6,13 @@ import fs from "fs";
 
 let apiURL = "http://localhost:25566";
 let apiWsURL = "ws://localhost:25566";
+let autoOpen = ""
 
 try {
     const hoconInstance = await hocon();
     const file = fs.readFileSync("./run/iwtcms/iwtcms.conf", "utf-8");
     const cfg = new hoconInstance.Config(file);
     const json = JSON.parse(cfg.toJSON());
-    console.log(json);
 
     console.log("Config file loaded");
 
@@ -20,6 +20,8 @@ try {
     const wsPrefix = json.ssl["use SSL"] ? "wss" : "ws";
     apiURL = `${prefix}://${json.server.ip}:${json.server.port}`;
     apiWsURL = `${wsPrefix}://${json.server.ip}:${json.server.port}`;
+
+    autoOpen = json.web["auto open IWTCMS page on startup"] ? "/" : "";
 
     cfg.delete();
 } catch (e) {
@@ -42,8 +44,8 @@ export default defineConfig({
         outDir: "../../../build/resources/main/web",
         sourcemap: true,
     },
-    server: {
-        open: "/",
+    server: { 
+        open: autoOpen,
         proxy: {
             "/apiList": {
                 target: apiURL,
