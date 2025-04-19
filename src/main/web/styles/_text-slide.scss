@@ -1,0 +1,24 @@
+@mixin text-slide {
+    transition: 3s linear;
+    display: inline-block;
+
+    &:hover {
+        text-indent: calc(-100% + 200px);
+    }
+
+    text-wrap: nowrap;
+    overflow: hidden;
+    // animation: text-slide 10s infinite linear;
+
+    // @keyframes text-slide {
+    //     0% {
+    //         text-indent: 0;
+    //     }
+    //     50% {
+    //         text-indent: -20%;
+    //     }
+    //     100% {
+    //         text-indent: 0;
+    //     }
+    // }
+}

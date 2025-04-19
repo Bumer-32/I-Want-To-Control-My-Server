@@ -1,5 +1,7 @@
 <script lang="ts">
+    import readConfig, { type AvailableConfigs, type AvailableConfigSetting } from "../../scripts/configsManager";
     import Constants from "../../scripts/constants";
+    import ToastSystem from "../../scripts/toastSystem";
     import DevMenu from "../DevMenu.svelte";
     import { onMount } from "svelte";
     import YAML from "yaml";
@@ -125,12 +127,17 @@
         const eazyViewTextDiv = document.createElement("div") as HTMLDivElement;
         const eazyViewText1 = document.createElement("span") as HTMLSpanElement;
         const eazyViewText2 = document.createElement("span") as HTMLSpanElement;
+        const separator = document.createElement("hr") as HTMLHRElement;
+        const eazyViewText3 = document.createElement("span") as HTMLSpanElement;
         eazyView.classList.add("eazy-view");
         eazyViewTextDiv.classList.add("eazy-view-text");
         eazyViewText1.innerHTML = "Eazy view enabled, but seems like there's no strategy for this file.";
         eazyViewText2.innerHTML = "Please switch to file view.";
+        eazyViewText3.innerHTML = "If you need more info please check console.";
         eazyViewTextDiv.appendChild(eazyViewText1);
         eazyViewTextDiv.appendChild(eazyViewText2);
+        eazyViewTextDiv.appendChild(separator);
+        eazyViewTextDiv.appendChild(eazyViewText3);
         eazyView.appendChild(eazyViewTextDiv);
         tab.appendChild(eazyView);
 
@@ -156,7 +163,8 @@
             if (!tab.classList.contains("disabled")) {
                 const sure = confirm("Are you sure you want to update this file?\nThis will overwrite any changes you have made!");
                 if (sure) {
-                    update(tab, url);
+                    updateFileView(tab, url);
+                    updateEazyView(tab, url, fileName);
                 }
             }
         });
@@ -178,54 +186,80 @@
             }
         });
 
-        update(tab, url);
+        updateFileView(tab, url);
+        updateEazyView(tab, url, fileName);
 
         selectorContainer.appendChild(buttonDiv);
         tabsContainer.appendChild(tab);
     }
 
-    async function update(tabContainer: HTMLDivElement, url: string) {
-        console.log("updating", tabContainer.id, ":", url);
+    async function updateFileView(tabContainer: HTMLDivElement, url: string) {
+        try {
+            console.log("updating", tabContainer.id, ":", url);
 
-        const fileViewTextArea = tabContainer.querySelector(".file-view textarea") as HTMLTextAreaElement;
+            const fileViewTextArea = tabContainer.querySelector(".file-view textarea") as HTMLTextAreaElement;
 
-        const response = await fetch(url);
-        fileViewTextArea.value = await response.text();
-
-        updateEazyView(tabContainer, url);
+            const response = await fetch(url);
+            fileViewTextArea.value = await response.text();
+        } catch (error) {
+            ToastSystem.addToQueue(`Error: ${error}`, ToastSystem.ToastType.ERROR);
+        }
     }
 
-    async function updateEazyView(tabContainer: HTMLDivElement, url: string) {
-        const fileViewTextArea = tabContainer.querySelector(".file-view textarea") as HTMLTextAreaElement;
-        const eazyView = tabContainer.querySelector(".eazy-view") as HTMLDivElement;
+    async function updateEazyView(tabContainer: HTMLDivElement, url: string, selectorName: string) {
+        try {
+            const availableConfigsResponse = await fetch(Constants.CONFIG_URL);
+            if (availableConfigsResponse.status != 200) return;
 
-        const response = await fetch(url + "/strategy");
-        const strategyYaml = await response.text();
+            const strategyResponse = await fetch(url + "/strategy");
+            if (strategyResponse.status != 200) return;
+
+            const configFileResponse = await fetch(url);
+            if (configFileResponse.status != 200) return;
+
+            const fileViewTextArea = tabContainer.querySelector(".file-view textarea") as HTMLTextAreaElement;
+            const eazyView = tabContainer.querySelector(".eazy-view") as HTMLDivElement;
+            const availableConfigs: AvailableConfigs = YAML.parse(await availableConfigsResponse.text());
+            const strategy = YAML.parse(await strategyResponse.text());
+
+            (eazyView.querySelectorAll("div") as NodeListOf<HTMLDivElement>).forEach((div) => {
+                if (!div.classList.contains("eazy-view-text")) div.remove();
+            });
+
+            const configs = await readConfig(selectorName, availableConfigs, strategy, await configFileResponse.text());
+
+            if (configs == null) return;
+
+            Object.keys(configs).forEach((key) => {
+                const settingDiv = document.createElement("div");
+                const settingText = document.createElement("span");
+                const settingInput = document.createElement("input");
+                settingDiv.classList.add("setting");
+                settingText.innerHTML = key;
+                settingDiv.appendChild(settingText);
+                settingDiv.appendChild(settingInput);
+                eazyView.appendChild(settingDiv);
+            })
+        } catch (error) {
+            ToastSystem.addToQueue(`Error: ${error}`, ToastSystem.ToastType.ERROR);
+        }
     }
 
     // TODO: add FORBIDDEN message to settings tab
 
-    interface AvailableConfigSetting {
-        selector_name: string;
-        config_name: string;
-        config_type: string;
-        config_path: string;
-        make_backup: boolean;
-        read_permission_name: string;
-        edit_permission_name: string;
-    }
-
-    type Configs = Record<string, AvailableConfigSetting>;
-
     onMount(() => {
-        selector();
+        try {
+            selector();
 
-        fetch(Constants.CONFIG_URL).then(async (response) => {
-            const configs: Configs = YAML.parse(await response.text());
-            Object.values(configs).forEach((config: AvailableConfigSetting) => {
-                createSettingsFileTab(config.selector_name, `${Constants.BASE_URL}api/config/${config.selector_name}`);
+            fetch(Constants.CONFIG_URL).then(async (response) => {
+                const configs: AvailableConfigs = YAML.parse(await response.text());
+                Object.values(configs).forEach((config: AvailableConfigSetting) => {
+                    createSettingsFileTab(config.selector_name, `${Constants.BASE_URL}api/config/${config.selector_name}`);
+                });
             });
-        });
+        } catch (error) {
+            ToastSystem.addToQueue(`Error: ${error}`, ToastSystem.ToastType.ERROR);
+        }
     });
 </script>
 
@@ -258,6 +292,7 @@
     @use "../../styles/hover-holo-effect";
     @use "../../styles/scrollbar";
     @use "../../styles/variables";
+    @use "../../styles/text-slide";
 
     #settings-tab {
         .container {
@@ -349,9 +384,11 @@
 
                 width: 100%;
                 height: calc(100% - $space);
-                padding-top: $space;
+                margin-top: $space;
                 overflow-x: hidden;
                 overflow-y: auto;
+
+                @include scrollbar.scrollbar;
 
                 :global(.tab) {
                     height: 100%;
@@ -374,7 +411,7 @@
                     }
                 }
 
-                :global(.eazy-view-text) {
+                :global(.eazy-view .eazy-view-text) {
                     display: flex;
                     flex-direction: column;
                     justify-content: center;
@@ -389,6 +426,16 @@
                     &:not(:only-child) {
                         display: none;
                     }
+                }
+
+                :global(.eazy-view .setting) {
+                    display: flex;
+                    flex-direction: column;
+                }
+                :global(.eazy-view .setting span) {
+                    font-size: 18px;
+                    
+                    @include text-slide.text-slide;
                 }
 
                 :global(.file-view) {

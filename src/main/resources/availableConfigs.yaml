@@ -14,7 +14,7 @@
 minecraft_properties:
     selector_name: server.properties
     config_name: Minecraft Server Properties
-    config_type: hocon
+    config_type: minecraft # custom reader
     config_path: /server.properties
     make_backup: true
     read_permission_name: read minecraft server config
