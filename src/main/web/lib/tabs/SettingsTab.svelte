@@ -1,6 +1,7 @@
 <script lang="ts">
     import readConfig, { type AvailableConfigs, type AvailableConfigSetting } from "../../scripts/configsManager";
     import Constants from "../../scripts/constants";
+    import { slideOnOverflow } from "../../scripts/slideOnOverflow";
     import ToastSystem from "../../scripts/toastSystem";
     import DevMenu from "../DevMenu.svelte";
     import { onMount } from "svelte";
@@ -238,7 +239,10 @@
                 settingText.innerHTML = key;
                 settingDiv.appendChild(settingText);
                 settingDiv.appendChild(settingInput);
+
                 eazyView.appendChild(settingDiv);
+                
+                slideOnOverflow(settingText);
             })
         } catch (error) {
             ToastSystem.addToQueue(`Error: ${error}`, ToastSystem.ToastType.ERROR);
@@ -292,7 +296,6 @@
     @use "../../styles/hover-holo-effect";
     @use "../../styles/scrollbar";
     @use "../../styles/variables";
-    @use "../../styles/text-slide";
 
     #settings-tab {
         .container {
@@ -434,8 +437,8 @@
                 }
                 :global(.eazy-view .setting span) {
                     font-size: 18px;
-                    
-                    @include text-slide.text-slide;
+                    text-wrap: nowrap;
+                    overflow: hidden;
                 }
 
                 :global(.file-view) {
