@@ -11,11 +11,6 @@
     window.addEventListener("load", async () => {
         // ? remove loading screen
         document.querySelector<HTMLDivElement>(".loading")!.style.display = "none";
-
-        console.log("Loaded");
-
-        const status = (performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming)?.responseStart;
-        console.log(`Page loaded in ${status}`);
     });
 </script>
 
