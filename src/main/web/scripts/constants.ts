@@ -1,6 +1,3 @@
-import { checkAuth, getPermits } from "./auth";
-import { getVersion } from "./supply";
-
 export default class Constants {
     // URLS
     static BASE_URL = document.location.origin + "/";

@@ -1,0 +1,20 @@
+.slide-on-overflow {
+    --slide-on-overflow: 0px;
+
+    animation: slide-on-overflow 3s infinite;
+    display: inline-block;
+
+    @keyframes slide-on-overflow {
+        0% {
+            text-indent: 0px;
+        }
+
+        50% {
+            text-indent: var(--slide-on-overflow);
+        }
+
+        100% {
+            text-indent: 0px;
+        }
+    }
+}
