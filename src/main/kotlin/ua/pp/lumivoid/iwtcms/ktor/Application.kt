@@ -41,7 +41,6 @@ fun ApplicationEngine.Configuration.envConfig() {
                 ErrorMessages.BAD_CERTIFICATE.launch(logger)
 
                 exitProcess(1)
-                return // needs to avoid errors
             }
         } else {
             keyStore = buildKeyStore {
