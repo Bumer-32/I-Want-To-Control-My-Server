@@ -41,7 +41,6 @@ fun ApplicationEngine.Configuration.envConfig() {
                 ErrorMessages.BAD_CERTIFICATE.launch(logger)
 
                 exitProcess(1)
-                return // needs to avoid errors
             }
         } else {
             keyStore = buildKeyStore {
@@ -63,16 +62,9 @@ fun ApplicationEngine.Configuration.envConfig() {
             keyStorePath = keyStoreFile
         }
     } else {
-        if (!Config.readConfig().devMode) {
-            connector {
-                host = modConfig.ip
-                port = modConfig.port
-            }
-        } else {
-            connector {
-                host = "localhost"
-                port = 25566
-            }
+        connector {
+            host = modConfig.ip
+            port = modConfig.port
         }
     }
 }
