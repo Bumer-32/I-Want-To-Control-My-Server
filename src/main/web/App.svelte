@@ -7,6 +7,7 @@
     import Login from "./lib/Login.svelte";
     import ToastSystem from "./scripts/toastSystem";
     import icon from "./assets/icon_clearbg.png";
+    import "./styles/tailwind.css"
 
     window.addEventListener("load", async () => {
         // ? remove loading screen

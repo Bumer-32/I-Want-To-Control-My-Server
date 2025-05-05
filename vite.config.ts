@@ -3,6 +3,7 @@ import { svelte } from "@sveltejs/vite-plugin-svelte";
 import { sveltePreprocess } from "svelte-preprocess";
 import { hocon } from "hocon-web";
 import fs from "fs";
+import tailwindcss from "@tailwindcss/vite";
 
 let apiURL = "http://localhost:25566";
 let apiWsURL = "ws://localhost:25566";
@@ -38,6 +39,7 @@ export default defineConfig({
         svelte({
             preprocess: sveltePreprocess(),
         }),
+        tailwindcss()
     ],
     root: "src/main/web",
     build: {
@@ -55,15 +57,8 @@ export default defineConfig({
                 target: apiURL,
                 changeOrigin: true,
                 configure: (proxy) => {
-                    proxy.on("error", (err, _req, _res) => {
-                        console.log("proxy error", err);
-                    });
-                    proxy.on("proxyReq", (proxyReq, req, _res) => {
+                    proxy.on("proxyReq", (proxyReq, _req, _res) => {
                         proxyReq.removeHeader("origin");
-                        console.log("Sending Request to the Target:", req.method, req.url);
-                    });
-                    proxy.on("proxyRes", (proxyRes, req, _res) => {
-                        console.log("Received Response from the Target:", proxyRes.statusCode, req.url);
                     });
                 },
             },
