@@ -24,6 +24,8 @@ bin/
 .classpath
 .project
 
+.bevel
+
 # macos
 
 *.DS_Store

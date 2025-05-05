@@ -1,9 +1,9 @@
 <script lang="ts">
     import Header from "./lib/Header.svelte";
     import Footer from "./lib/Footer.svelte";
-    import ConsoleTab from "./lib/tabs/ConsoleTab.svelte";
-    import SettingsTab from "./lib/tabs/SettingsTab.svelte";
-    import PlayersTab from "./lib/tabs/PlayersTab.svelte";
+    import ConsoleTab from "./lib/tabs/ConsoleTab/ConsoleTab.svelte";
+    import SettingsTab from "./lib/tabs/SettingsTab/SettingsTab.svelte";
+    import PlayersTab from "./lib/tabs/PlayersTab/PlayersTab.svelte";
     import Login from "./lib/Login.svelte";
     import ToastSystem from "./scripts/toastSystem";
     import icon from "./assets/icon_clearbg.png";

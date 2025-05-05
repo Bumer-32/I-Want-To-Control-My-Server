@@ -1,9 +1,9 @@
 <script lang="ts">
-    import readConfig, { type AvailableConfigs, type AvailableConfigSetting } from "../../scripts/configsManager";
-    import Constants from "../../scripts/constants";
-    import { slideOnOverflow } from "../../scripts/slideOnOverflow";
-    import ToastSystem from "../../scripts/toastSystem";
-    import DevMenu from "../DevMenu.svelte";
+    import readConfig, { type AvailableConfigs, type AvailableConfigSetting, type Strategy } from "../../../scripts/configsManager";
+    import Constants from "../../../scripts/constants";
+    import { slideOnOverflow } from "../../../scripts/slideOnOverflow";
+    import ToastSystem from "../../../scripts/toastSystem";
+    import DevMenu from "../../DevMenu.svelte";
     import { onMount } from "svelte";
     import YAML from "yaml";
 
@@ -221,7 +221,7 @@
             const fileViewTextArea = tabContainer.querySelector(".file-view textarea") as HTMLTextAreaElement;
             const eazyView = tabContainer.querySelector(".eazy-view") as HTMLDivElement;
             const availableConfigs: AvailableConfigs = YAML.parse(await availableConfigsResponse.text());
-            const strategy = YAML.parse(await strategyResponse.text());
+            const strategy: Strategy = YAML.parse(await strategyResponse.text());
 
             (eazyView.querySelectorAll("div") as NodeListOf<HTMLDivElement>).forEach((div) => {
                 if (!div.classList.contains("eazy-view-text")) div.remove();
@@ -237,6 +237,30 @@
                 const settingInput = document.createElement("input");
                 settingDiv.classList.add("setting");
                 settingText.innerHTML = key;
+                settingDiv.style.backgroundColor = "var(--eazy-view-setting-background-color)";
+
+                switch(configs[key].type) {
+                    case "string":
+                        settingInput.placeholder = (strategy[key].default !== null ? strategy[key].default.toString() : "");
+                        settingInput.value = (configs[key].default !== null ? configs[key].default.toString() : "");
+                        break;
+                    case "bool":
+                        settingInput.type = "checkbox";
+                        settingInput.checked = configs[key]!.default as boolean
+                        break;
+                    case "int":
+                        settingInput.type = "number";
+                        settingInput.placeholder = (strategy[key].default !== null ? strategy[key].default.toString() : "");
+                        settingInput.value = (configs[key].default !== null ? configs[key].default.toString() : "");
+                        if (configs[key].max != null) settingInput.max = configs[key].max.toString();
+                        if (configs[key].min != null) settingInput.min = configs[key].min.toString();
+                        if (configs[key].step != null && configs[key].max != null && configs[key].min != null) {
+                            settingInput.type = "range";
+                            settingInput.step = configs[key].step.toString();
+                        }
+                        break;
+                }
+
                 settingDiv.appendChild(settingText);
                 settingDiv.appendChild(settingInput);
 
@@ -293,9 +317,9 @@
 </div>
 
 <style lang="scss">
-    @use "../../styles/hover-holo-effect";
-    @use "../../styles/scrollbar";
-    @use "../../styles/variables";
+    @use "../../../styles/hover-holo-effect";
+    @use "../../../styles/scrollbar";
+    @use "../../../styles/variables";
 
     #settings-tab {
         .container {
