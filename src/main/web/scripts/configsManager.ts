@@ -15,14 +15,14 @@ export default async function readConfig(configSelectorName: string, availableCo
 
 interface StrategyConfig {
     type: string;
-    default: string | number | boolean;
+    default: string | number | boolean | null;
     min: number;
     max: number;
     step: number;
     options: Array<string>;
 }
 
-type Strategy = Record<string, StrategyConfig>;
+export type Strategy = Record<string, StrategyConfig>;
 
 export interface AvailableConfigSetting {
     selector_name: string;
