@@ -84,6 +84,7 @@ object Config {
                 useAuthentication = authConfig.getBoolean("auth.use Authentication"),
                 users = users,
                 devMode = config.getBoolean("dev.dev mode"),
+                autoOpenVite = config.getBoolean("dev.auto open vite")
             )
         } catch (e: ConfigException) {
             badConfig(e)
@@ -127,4 +128,5 @@ data class ConfigData(
     val useAuthentication: Boolean,
     val users: List<User>,
     val devMode: Boolean,
+    val autoOpenVite: Boolean,
 )

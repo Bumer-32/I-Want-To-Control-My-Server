@@ -29,16 +29,23 @@ object IWTCMS : ModInitializer {
 			} else {
 				"devRunner.sh"
 			}
+			if (Config.readConfig().autoOpenVite) {
+				val runnerFile = if (System.getProperty("os.name").startsWith("Win")) {
+					"devRunner.bat"
+				} else {
+					"devRunner.sh"
+				}
 
-			val process = ProcessBuilder("${Constants.CONFIG_FOLDER}/../../$runnerFile", "runDev")
-				.redirectOutput(Redirect.INHERIT)
-				.redirectError(Redirect.INHERIT)
-				.start()
+				val process = ProcessBuilder("${Constants.CONFIG_FOLDER}/../../$runnerFile", "runDev")
+					.redirectOutput(Redirect.INHERIT)
+					.redirectError(Redirect.INHERIT)
+					.start()
 
-			// wait for shutdown
-			Runtime.getRuntime().addShutdownHook(Thread {
-				process.destroy()
-			})
+				// wait for shutdown
+				Runtime.getRuntime().addShutdownHook(Thread {
+					process.destroy()
+				})
+			}
 		}
 
 		if (Config.readConfig().autoOpenIWTCMSPageOnStartup && !Config.readConfig().devMode) { // If dev mode enabled, it will be opened by vite
