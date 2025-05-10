@@ -24,11 +24,6 @@ object IWTCMS : ModInitializer {
 
 		// ? run "npm run dev" if dev mode enabled
 		if (Config.readConfig().devMode) {
-			val runnerFile = if (System.getProperty("os.name").startsWith("Win")) {
-				"devRunner.bat"
-			} else {
-				"devRunner.sh"
-			}
 			if (Config.readConfig().autoOpenVite) {
 				val runnerFile = if (System.getProperty("os.name").startsWith("Win")) {
 					"devRunner.bat"
