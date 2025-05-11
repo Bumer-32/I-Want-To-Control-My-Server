@@ -15,56 +15,61 @@ import ua.pp.lumivoid.iwtcms.ktor.api.UserAuthentication.doAuth
 import ua.pp.lumivoid.iwtcms.ktor.util.Config
 import ua.pp.lumivoid.iwtcms.util.ServerStats
 
-object ServerStatsWS: WebSocket() {
-    override var WSinterface: WebSocketBaseInterface? = null
-    override val PATH = "/ws/serverStats"
+object ServerStatsWS : WebSocket() {
+    override var wsInterface: WebSocketBaseInterface? = null
+    override val path = "/ws/serverStats"
 
     private val json = Json { prettyPrint = true }
 
     override val ws: Routing.() -> Unit = {
-        webSocket(PATH) {
-            val status = doAuth(
-                call = call,
-                permission = "access to server stats",
-                success = {},
-                unauthorized = {
-                    logger.debug("Unauthorized user tried to connect to $PATH websocket")
-                    runBlocking{ close(CloseReason(CloseReason.Codes.VIOLATED_POLICY, "Unauthorized")) } },
-                forbidden = {
-                    logger.debug("Forbidden user tried to connect to $PATH websocket")
-                    runBlocking{ close(CloseReason(CloseReason.Codes.VIOLATED_POLICY, "Forbidden")) }
-                }
-            )
+        webSocket(path) {
+            val status =
+                doAuth(
+                    call = call,
+                    permission = "access to server stats",
+                    success = {},
+                    unauthorized = {
+                        logger.debug("Unauthorized user tried to connect to $path websocket")
+                        runBlocking { close(CloseReason(CloseReason.Codes.VIOLATED_POLICY, "Unauthorized")) }
+                    },
+                    forbidden = {
+                        logger.debug("Forbidden user tried to connect to $path websocket")
+                        runBlocking { close(CloseReason(CloseReason.Codes.VIOLATED_POLICY, "Forbidden")) }
+                    },
+                )
 
             if (status != HttpStatusCode.OK) return@webSocket
 
             // and ws
 
-            send(Frame.Text("Connected to $PATH"))
+            send(Frame.Text("Connected to $path"))
 
             var running = true
 
-            WSinterface = object : WebSocketBaseInterface {
-                override fun sendMessage(message: String) {
-                    launch {
-                        send(Frame.Text(message))
+            wsInterface =
+                object : WebSocketBaseInterface {
+                    override fun sendMessage(message: String) {
+                        launch {
+                            send(Frame.Text(message))
+                        }
+                    }
+
+                    override fun shutdown() {
+                        logger.info("Сlosing $path websocket")
+                        running = false
+                        runBlocking { close(CloseReason(CloseReason.Codes.NORMAL, "shutting down server")) }
                     }
                 }
-                override fun shutdown() {
-                    logger.info("Сlosing $PATH websocket")
-                    running = false
-                    runBlocking { close(CloseReason(CloseReason.Codes.NORMAL, "shutting down server")) }
-                }
-            }
 
-            val job = launch {
-                while (running) {
-                    val stats = ServerStats.getServerStats()
-                    val statsJson = json.encodeToString(stats)
-                    send(Frame.Text(statsJson))
-                    delay(Config.readConfig().statisticsPeriod.toLong())
+            val job =
+                launch {
+                    while (running) {
+                        val stats = ServerStats.getServerStats()
+                        val statsJson = json.encodeToString(stats)
+                        send(Frame.Text(statsJson))
+                        delay(Config.readConfig().statisticsPeriod.toLong())
+                    }
                 }
-            }
 
             runCatching {
                 incoming.consumeEach { frame ->
@@ -83,5 +88,5 @@ object ServerStatsWS: WebSocket() {
         }
     }
 
-    override fun asWs(): WebSocketBaseInterface? = WSinterface
+    override fun asWs(): WebSocketBaseInterface? = wsInterface
 }

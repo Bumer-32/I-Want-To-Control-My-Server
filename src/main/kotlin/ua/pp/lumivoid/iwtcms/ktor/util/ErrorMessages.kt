@@ -104,12 +104,15 @@ enum class ErrorMessages {
             logger.error("|                                                                                         |")
             logger.error("+-----------------------------------------------------------------------------------------+")
         }
-    };
+    }, ;
 
     abstract fun launch(logger: Logger)
 
     companion object {
-        fun printStackTrace(logger: Logger, e: Exception) {
+        fun printStackTrace(
+            logger: Logger,
+            e: Exception,
+        ) {
             logger.error("###########################################################################################")
             logger.error("PRINTING STACK TRACE:")
             e.stackTrace.forEach { logger.error(it.toString()) }

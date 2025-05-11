@@ -11,9 +11,8 @@ import net.minecraft.server.MinecraftServer
  * Ez way to get Minecraft Server instance
  */
 object MinecraftServerHandler {
-
     var server: MinecraftServer? = null
-    private  var requestStop = false // Using for stop server BEFORE it launch, when we didn't have a server instance
+    private var requestStop = false // Using for stop server BEFORE it launch, when we didn't have a server instance
 
     fun register() {
         ServerLifecycleEvents.SERVER_STARTING.register { server ->

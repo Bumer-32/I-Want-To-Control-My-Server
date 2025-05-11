@@ -50,7 +50,7 @@ object ServerStats {
             maxPlayerCount = maxPlayerCount,
             tps = tps,
             ip = ip,
-            serverTime = serverTime
+            serverTime = serverTime,
         )
     }
 }
@@ -67,5 +67,5 @@ data class ServerStatsData(
     val maxPlayerCount: Int?,
     val tps: Double?,
     val ip: String?,
-    val serverTime: String
+    val serverTime: String,
 )

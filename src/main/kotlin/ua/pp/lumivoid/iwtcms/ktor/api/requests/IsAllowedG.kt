@@ -8,11 +8,11 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.Serializable
 import ua.pp.lumivoid.iwtcms.ktor.api.UserAuthentication.doAuth
 
-object IsAllowedG: Request() {
-    override val PATH = "/api/isAllowed"
+object IsAllowedG : Request() {
+    override val path = "/api/isAllowed"
 
     override val request: Routing.() -> Unit = {
-        get(PATH) {
+        get(path) {
             val payload = call.receive<IsAllowedPayload>()
 
             doAuth(
@@ -20,11 +20,13 @@ object IsAllowedG: Request() {
                 permission = payload.permission,
                 success = {
                     runBlocking { call.respond("allowed") }
-                }
+                },
             )
         }
     }
 }
 
 @Serializable
-data class IsAllowedPayload(val permission: String)
+data class IsAllowedPayload(
+    val permission: String,
+)

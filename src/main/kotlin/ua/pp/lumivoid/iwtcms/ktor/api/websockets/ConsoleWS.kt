@@ -1,51 +1,58 @@
 package ua.pp.lumivoid.iwtcms.ktor.api.websockets
 
-import io.ktor.http.*
-import io.ktor.server.routing.*
-import io.ktor.server.websocket.*
-import io.ktor.websocket.*
+import io.ktor.http.HttpStatusCode
+import io.ktor.server.routing.Routing
+import io.ktor.server.websocket.webSocket
+import io.ktor.websocket.CloseReason
+import io.ktor.websocket.Frame
+import io.ktor.websocket.close
+import io.ktor.websocket.readText
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import ua.pp.lumivoid.iwtcms.ktor.api.UserAuthentication.doAuth
 import ua.pp.lumivoid.iwtcms.util.MinecraftServerHandler
 
-object ConsoleWS: WebSocket() {
-    override var WSinterface: WebSocketBaseInterface? = null
-    override val PATH = "/ws/console" // why console? because we use this socket same as console, receive logs and send commands
+object ConsoleWS : WebSocket() {
+    override var wsInterface: WebSocketBaseInterface? = null
+    override val path = "/ws/console" // why console? because we use this socket same as console, receive logs and send commands
 
     override val ws: Routing.() -> Unit = {
-        webSocket(PATH) {
-            val status = doAuth(
-                call = call,
-                permission = "read real time logs",
-                success = {},
-                unauthorized = {
-                    logger.debug("Unauthorized user tried to connect to $PATH websocket")
-                    runBlocking{ close(CloseReason(CloseReason.Codes.VIOLATED_POLICY, "Unauthorized")) } },
-                forbidden = {
-                    logger.debug("Forbidden user tried to connect to $PATH websocket")
-                    runBlocking{ close(CloseReason(CloseReason.Codes.VIOLATED_POLICY, "Forbidden")) }
-                }
-            )
+        webSocket(path) {
+            val status =
+                doAuth(
+                    call = call,
+                    permission = "read real time logs",
+                    success = {},
+                    unauthorized = {
+                        logger.debug("Unauthorized user tried to connect to $path websocket")
+                        runBlocking { close(CloseReason(CloseReason.Codes.VIOLATED_POLICY, "Unauthorized")) }
+                    },
+                    forbidden = {
+                        logger.debug("Forbidden user tried to connect to $path websocket")
+                        runBlocking { close(CloseReason(CloseReason.Codes.VIOLATED_POLICY, "Forbidden")) }
+                    },
+                )
 
             if (status != HttpStatusCode.OK) return@webSocket
 
             // and ws
 
-            send(Frame.Text("Connected to $PATH"))
+            send(Frame.Text("Connected to $path"))
 
-            WSinterface = object : WebSocketBaseInterface {
-                override fun sendMessage(message: String) {
-                    launch {
-                        send(Frame.Text(message))
+            wsInterface =
+                object : WebSocketBaseInterface {
+                    override fun sendMessage(message: String) {
+                        launch {
+                            send(Frame.Text(message))
+                        }
+                    }
+
+                    override fun shutdown() {
+                        logger.info("Сlosing $path websocket")
+                        runBlocking { close(CloseReason(CloseReason.Codes.NORMAL, "shutting down server")) }
                     }
                 }
-                override fun shutdown() {
-                    logger.info("Сlosing $PATH websocket")
-                    runBlocking { close(CloseReason(CloseReason.Codes.NORMAL, "shutting down server")) }
-                }
-            }
 
             var allowExecution = false
 
@@ -54,7 +61,7 @@ object ConsoleWS: WebSocket() {
                 permission = "execute commands",
                 success = { allowExecution = true },
                 unauthorized = { allowExecution = false },
-                forbidden = { allowExecution = false }
+                forbidden = { allowExecution = false },
             )
 
             runCatching {
@@ -67,7 +74,7 @@ object ConsoleWS: WebSocket() {
                             if (MinecraftServerHandler.server != null) {
                                 MinecraftServerHandler.server!!.commandManager.executeWithPrefix(
                                     MinecraftServerHandler.server!!.commandSource,
-                                    receivedText
+                                    receivedText,
                                 )
                             }
                         } catch (e: Exception) {
@@ -81,5 +88,5 @@ object ConsoleWS: WebSocket() {
         }
     }
 
-    override fun asWs(): WebSocketBaseInterface? = WSinterface
+    override fun asWs(): WebSocketBaseInterface? = wsInterface
 }

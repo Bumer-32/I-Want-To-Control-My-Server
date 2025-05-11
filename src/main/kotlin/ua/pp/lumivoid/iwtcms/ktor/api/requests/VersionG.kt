@@ -6,11 +6,11 @@ import io.ktor.server.routing.Routing
 import io.ktor.server.routing.get
 import ua.pp.lumivoid.iwtcms.Constants
 
-object VersionG: Request() {
-    override val PATH = "/api/version"
+object VersionG : Request() {
+    override val path = "/api/version"
 
     override val request: Routing.() -> Unit = {
-        get(PATH) {
+        get(path) {
             call.respondText(Constants.MOD_VERSION, ContentType.Text.Plain)
         }
     }

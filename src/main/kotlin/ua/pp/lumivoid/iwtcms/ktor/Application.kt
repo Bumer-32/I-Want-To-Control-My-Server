@@ -43,11 +43,12 @@ fun ApplicationEngine.Configuration.envConfig() {
                 exitProcess(1)
             }
         } else {
-            keyStore = buildKeyStore {
-                certificate(modConfig.sslAlias) {
-                    password = modConfig.sslPass
+            keyStore =
+                buildKeyStore {
+                    certificate(modConfig.sslAlias) {
+                        password = modConfig.sslPass
+                    }
                 }
-            }
             keyStore.saveToFile(keyStoreFile, modConfig.sslPass)
         }
 

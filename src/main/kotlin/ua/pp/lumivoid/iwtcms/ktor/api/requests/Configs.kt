@@ -1,10 +1,6 @@
 package ua.pp.lumivoid.iwtcms.ktor.api.requests
 
 import com.charleskorn.kaml.Yaml
-import io.ktor.http.*
-import io.ktor.server.request.*
-import io.ktor.server.response.*
-import io.ktor.server.routing.*
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
@@ -13,19 +9,22 @@ import ua.pp.lumivoid.iwtcms.ktor.api.UserAuthentication.doAuth
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.ApiListG.registerAPI
 import java.io.File
 
-object Configs: Request() {
-    override val PATH = "/api/config"
+object Configs : Request() {
+    override val path = "/api/config"
     private val availableConfigsSettingsFile = this.javaClass.getResource(Constants.AVAILABLE_CONFIGS_SETTINGS_FILE)!!
 
     override val request: Routing.() -> Unit = {
-        val availableConfigsSettings: Map<String, AvailableConfigSetting> = Yaml.default.decodeFromString(availableConfigsSettingsFile.readText())
+        val availableConfigsSettings: Map<String, AvailableConfigSetting> =
+            Yaml.default.decodeFromString(
+                availableConfigsSettingsFile.readText(),
+            )
 
-        get(PATH) {
+        get(path) {
             call.respondText(availableConfigsSettingsFile.readText(), contentType = ContentType.Text.Plain)
         }
 
         availableConfigsSettings.forEach {
-            val configPath = "$PATH/${it.value.selector_name}"
+            val configPath = "$path/${it.value.selector_name}"
             logger.info("       - config ${it.key} url: $configPath")
             registerAPI("${it.value.selector_name}GPUT", configPath)
             registerAPI("${it.value.selector_name}StrategyG", configPath)
@@ -39,7 +38,7 @@ object Configs: Request() {
                         val file = File(filePath)
                         val fileContent = file.readText()
                         runBlocking { call.respondText(fileContent, contentType = ContentType.Text.Plain) }
-                    }
+                    },
                 )
             }
 
@@ -63,11 +62,11 @@ object Configs: Request() {
                         file.writeText(fileContent)
 
                         runBlocking { call.respondText("Created", status = HttpStatusCode.Created) }
-                    }
+                    },
                 )
             }
 
-            get("$PATH/${it.value.selector_name}/strategy") {
+            get("$path/${it.value.selector_name}/strategy") {
 
                 doAuth(
                     call = call,
@@ -77,11 +76,10 @@ object Configs: Request() {
                         val file = this.javaClass.getResource(filePath)!!
                         val fileContent = file.readText()
                         runBlocking { call.respondText(fileContent, contentType = ContentType.Text.Plain) }
-                    }
+                    },
                 )
             }
         }
-
     }
 }
 
@@ -94,5 +92,5 @@ data class AvailableConfigSetting(
     val config_path: String,
     val make_backup: Boolean,
     val read_permission_name: String,
-    val edit_permission_name: String
+    val edit_permission_name: String,
 )

@@ -2,14 +2,18 @@ package ua.pp.lumivoid.iwtcms.ktor.plugins
 
 import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.kotlinx.json.json
-import io.ktor.server.application.*
+import io.ktor.server.application.Application
+import io.ktor.server.application.install
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.server.plugins.cors.routing.*
+import io.ktor.server.plugins.cors.routing.CORS
 import io.ktor.server.plugins.statuspages.StatusPages
 import io.ktor.server.plugins.statuspages.statusFile
-import io.ktor.server.routing.*
-import io.ktor.server.sessions.*
-import io.ktor.server.websocket.*
+import io.ktor.server.routing.routing
+import io.ktor.server.sessions.Sessions
+import io.ktor.server.sessions.cookie
+import io.ktor.server.websocket.WebSockets
+import io.ktor.server.websocket.pingPeriod
+import io.ktor.server.websocket.timeout
 import ua.pp.lumivoid.iwtcms.Constants
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.ApiListG
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.CheckLoginG
@@ -42,7 +46,7 @@ fun Application.configureRouting() {
         cookie<UserSession>("USER_SESSION") {
             cookie.httpOnly = true
             cookie.secure = Config.readConfig().useSSL
-            //cookie.sameSite = "None"
+            // cookie.sameSite = "None"
         }
     }
 
@@ -54,7 +58,7 @@ fun Application.configureRouting() {
         statusFile(HttpStatusCode.NotFound, filePattern = "/web/404.html")
     }
 
-    if (Config.readConfig().devMode){
+    if (Config.readConfig().devMode) {
         install(CORS) {
             anyHost()
         }
