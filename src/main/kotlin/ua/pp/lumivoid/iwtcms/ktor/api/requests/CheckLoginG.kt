@@ -1,13 +1,14 @@
 package ua.pp.lumivoid.iwtcms.ktor.api.requests
 
-import io.ktor.http.HttpStatusCode
-import io.ktor.server.response.respondText
-import io.ktor.server.routing.Routing
-import io.ktor.server.routing.get
-import io.ktor.server.sessions.get
-import io.ktor.server.sessions.sessions
+import io.ktor.http.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
+import io.ktor.server.sessions.*
+import org.jetbrains.exposed.sql.andWhere
+import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import ua.pp.lumivoid.iwtcms.ktor.cookie.UserSession
-import ua.pp.lumivoid.iwtcms.ktor.util.Config
+import ua.pp.lumivoid.iwtcms.ktor.tables.Users
 
 object CheckLoginG: Request() {
     override val PATH = "/api/checkLogin"
@@ -15,14 +16,24 @@ object CheckLoginG: Request() {
     override val request: Routing.() -> Unit = {
         get(PATH) {
             val session = call.sessions.get<UserSession>()
-            if (session == null) {
+
+            @Suppress("SENSELESS_COMPARISON") // idk why
+            if (session == null || session.name == null || session.id == null) {
                 call.respondText("Not logged in", status = HttpStatusCode.Unauthorized)
+                return@get
             }
 
-            if (Config.readConfig().users.find { it.username == session?.name && it.id == session.id } != null) {
-                call.respondText(session!!.name)
-            } else {
-                call.respondText("Not logged in", status = HttpStatusCode.Unauthorized)
+            newSuspendedTransaction  {
+                try {
+                    Users.selectAll()
+                        .where { Users.username eq session.name }
+                        .andWhere { Users.uniqueId eq session.id }.first()
+                } catch(_: NoSuchElementException) {
+                    call.respondText("Not logged in", status = HttpStatusCode.Unauthorized)
+                    return@newSuspendedTransaction
+                }
+
+                call.respondText(session.name)
             }
         }
     }

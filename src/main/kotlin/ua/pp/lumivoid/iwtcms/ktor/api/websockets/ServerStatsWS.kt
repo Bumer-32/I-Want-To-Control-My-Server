@@ -10,9 +10,8 @@ import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import ua.pp.lumivoid.iwtcms.ktor.api.UserAuthentication
+import ua.pp.lumivoid.iwtcms.ktor.api.UserAuthentication.doAuth
 import ua.pp.lumivoid.iwtcms.ktor.util.Config
 import ua.pp.lumivoid.iwtcms.util.ServerStats
 
@@ -24,9 +23,9 @@ object ServerStatsWS: WebSocket() {
 
     override val ws: Routing.() -> Unit = {
         webSocket(PATH) {
-            val status = UserAuthentication.doAuth(
+            val status = doAuth(
                 call = call,
-                permit = "access to server stats",
+                permission = "access to server stats",
                 success = {},
                 unauthorized = {
                     logger.debug("Unauthorized user tried to connect to $PATH websocket")

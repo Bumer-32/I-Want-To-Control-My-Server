@@ -1,7 +1,5 @@
 package ua.pp.lumivoid.iwtcms.ktor.plugins
 
-import io.ktor.http.HttpHeaders
-import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.*
@@ -17,13 +15,12 @@ import ua.pp.lumivoid.iwtcms.ktor.api.requests.ApiListG
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.CheckLoginG
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.Configs
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.FilesG
-import ua.pp.lumivoid.iwtcms.ktor.api.requests.IsAuthEnabledG
+import ua.pp.lumivoid.iwtcms.ktor.api.requests.IsAllowedG
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.IsDevEnabledG
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.LoginP
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.LogoutP
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.LogsHistoryG
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.MainG
-import ua.pp.lumivoid.iwtcms.ktor.api.requests.PermitsG
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.VersionG
 import ua.pp.lumivoid.iwtcms.ktor.api.websockets.ConsoleWS
 import ua.pp.lumivoid.iwtcms.ktor.api.websockets.ServerStatsWS
@@ -71,8 +68,7 @@ fun Application.configureRouting() {
     LogsHistoryG.register(r)
     LoginP.register(r)
     ApiListG.register(r)
-    PermitsG.register(r)
-    IsAuthEnabledG.register(r)
+    IsAllowedG.register(r)
     FilesG.register(r)
     VersionG.register(r)
     CheckLoginG.register(r)

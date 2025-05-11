@@ -6,74 +6,71 @@ import io.ktor.server.response.respondText
 import io.ktor.server.sessions.get
 import io.ktor.server.sessions.sessions
 import kotlinx.coroutines.runBlocking
+import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.andWhere
+import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import ua.pp.lumivoid.iwtcms.ktor.cookie.UserSession
-import ua.pp.lumivoid.iwtcms.ktor.util.Config
+import ua.pp.lumivoid.iwtcms.ktor.tables.UserPermissions
+import ua.pp.lumivoid.iwtcms.ktor.tables.Users
 
 object UserAuthentication {
-
     /*
     * checks if auth enabled and user are logged in (user has cookies)
     * launch success unit, unauthorized unit or forbidden unit
-    * if auth disabled launch success unit
-    * also works for anonymous
-    * to set up permits look at config
     *
-    * returns HTTP status:
+    * returns HTTP status
     * */
-    @Suppress("t")
-    fun doAuth(
-        call: ApplicationCall, permit: String,
-        success: () -> Unit, unauthorized: () -> Unit = {
+    suspend fun doAuth(
+        call: ApplicationCall,
+        permission: String,
+        success: () -> Unit,
+        unauthorized: () -> Unit = {
             runBlocking { call.respondText("Unauthorized", status = HttpStatusCode.Unauthorized) }
         },
         forbidden: () -> Unit = {
             runBlocking{ call.respondText("Forbidden", status = HttpStatusCode.Forbidden) }
         }
     ) : HttpStatusCode {
-        if (!Config.readConfig().useAuthentication) {
-            success()
-            return HttpStatusCode.OK
-        }
 
         val session = call.sessions.get<UserSession>()
-        val anonymousUser: User? = Config.readConfig().users.find { it.username == "anonymous" }
 
-        if (session == null && anonymousUser != null) {
-            if (anonymousUser.permits[permit] == true) {
-                success()
-                return HttpStatusCode.OK
-            } else {
-                forbidden()
-                return HttpStatusCode.Forbidden
-            }
+        if (session == null) {
+            unauthorized()
+            return HttpStatusCode.Unauthorized
         }
 
-        val user: User? = Config.readConfig().users.find { it.username == session?.name && it.id == session.id }
+        return newSuspendedTransaction  {
+            val user: ResultRow = try {
+                Users.selectAll()
+                    .where { Users.username eq session.name }
+                    .andWhere { Users.uniqueId eq session.id }.first()
+            } catch (_: NoSuchElementException) {
+                unauthorized()
+                return@newSuspendedTransaction  HttpStatusCode.Unauthorized
+            }
 
-        if (user != null) {
-            if (user.permits[permit] == true) {
+            if (user[Users.admin]) {
                 success()
-                return HttpStatusCode.OK
-            } else if (user.permits[permit] == false) {
+                return@newSuspendedTransaction  HttpStatusCode.OK
+            }
+
+            val permission: ResultRow = try {
+                UserPermissions.selectAll()
+                    .where { UserPermissions.userId eq user[Users.id] }
+                    .andWhere { UserPermissions.permissionName eq permission }.first()
+            } catch (_: NoSuchElementException) {
                 forbidden()
-                return HttpStatusCode.Forbidden
-            } else {
-                // if permit == null try anonymous
-                if (anonymousUser?.permits[permit] == true) {
+                return@newSuspendedTransaction  HttpStatusCode.Forbidden
+            }
+
+            if (permission[UserPermissions.permissionState]) {
                     success()
-                    return HttpStatusCode.OK
-                } else if (user.permits[permit] == false) {
-                    forbidden()
-                    return HttpStatusCode.Forbidden
-                } else {
-                    // if even anonymous not found - forbidden
-                    forbidden()
-                    return HttpStatusCode.Forbidden
-                }
+                    return@newSuspendedTransaction HttpStatusCode.OK
+            } else {
+                forbidden()
+                return@newSuspendedTransaction HttpStatusCode.Forbidden
             }
         }
-
-        unauthorized()
-        return HttpStatusCode.Unauthorized
     }
 }

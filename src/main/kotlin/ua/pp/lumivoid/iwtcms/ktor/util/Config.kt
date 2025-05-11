@@ -3,11 +3,8 @@ package ua.pp.lumivoid.iwtcms.ktor.util
 import com.typesafe.config.Config
 import com.typesafe.config.ConfigException
 import com.typesafe.config.ConfigFactory
-import com.typesafe.config.ConfigObject
 import kotlinx.serialization.Serializable
-import org.apache.commons.codec.digest.DigestUtils
 import ua.pp.lumivoid.iwtcms.Constants
-import ua.pp.lumivoid.iwtcms.ktor.api.User
 import java.io.File
 import kotlin.system.exitProcess
 
@@ -15,18 +12,13 @@ object Config {
     private val logger = Constants.LOGGER
     private var cachedConfig: ConfigData? = null
     private val defaultConfig = this.javaClass.getResource(Constants.CONFIG_FILE.replace(Constants.CONFIG_FOLDER, ""))!!
-    private val defaultAuthConfig = this.javaClass.getResource(Constants.CONFIG_AUTH_FILE.replace(Constants.CONFIG_FOLDER, ""))!!
     private val configFile = File(Constants.CONFIG_FILE)
-    private val authConfigFile = File(Constants.CONFIG_AUTH_FILE)
 
     init {
         if (!File(Constants.CONFIG_FOLDER).exists()) File(Constants.CONFIG_FOLDER).mkdirs()
 
         if (!configFile.exists()) {
             configFile.writeText(defaultConfig.readText(), Charsets.UTF_8)
-        }
-        if (!authConfigFile.exists()) {
-            authConfigFile.writeText(defaultAuthConfig.readText(), Charsets.UTF_8)
         }
     }
 
@@ -35,40 +27,18 @@ object Config {
 
         try {
             val config = ConfigFactory.parseFile(configFile)
-            val authConfig = ConfigFactory.parseFile(authConfigFile)
-            val data = createConfigData(config, authConfig)!!
+            val data = createConfigData(config)!!
 
             cachedConfig = data
             return data
         } catch (e: ConfigException) {
             badConfig(e)
-            return createConfigData(ConfigFactory.empty(), ConfigFactory.empty())!! // never be launched
+            return createConfigData(ConfigFactory.empty())!! // never be launched
         }
     }
 
-    private fun createConfigData(config: Config, authConfig: Config): ConfigData? {
+    private fun createConfigData(config: Config): ConfigData? {
         try {
-            val users: MutableList<User> = mutableListOf()
-
-            authConfig.getList("auth.users").forEach { configUser ->
-                val user = (configUser as ConfigObject).toConfig()
-
-                val username = user.getString("name")
-                val password = if (user.hasPath("password") && user.getString("password").isNotEmpty()) {
-                    user.getString("password")
-                } else {
-                    null
-                }
-
-                val permits: MutableMap<String, Boolean> = user.getConfig("permits").entrySet().associate {
-                    it.key.replace("\"", "") to it.value.unwrapped() as Boolean
-                } as MutableMap<String, Boolean>
-
-                val id: String = DigestUtils.sha256Hex((username + password.toString()))
-
-                val newUser = User(id, username, password, permits)
-                users.add(newUser)
-            }
 
             return ConfigData(
                 ip = config.getString("server.ip"),
@@ -81,8 +51,6 @@ object Config {
                 statisticsPeriod = config.getInt("stuff.statistics period"),
                 enableIWTCMSControlPanel = config.getBoolean("web.enable IWTCMS control panel"),
                 autoOpenIWTCMSPageOnStartup = config.getBoolean("web.auto open IWTCMS page on startup"),
-                useAuthentication = authConfig.getBoolean("auth.use Authentication"),
-                users = users,
                 devMode = config.getBoolean("dev.dev mode"),
                 autoOpenVite = config.getBoolean("dev.auto open vite")
             )
@@ -125,8 +93,6 @@ data class ConfigData(
     val statisticsPeriod: Int,
     val enableIWTCMSControlPanel: Boolean,
     val autoOpenIWTCMSPageOnStartup: Boolean,
-    val useAuthentication: Boolean,
-    val users: List<User>,
     val devMode: Boolean,
     val autoOpenVite: Boolean,
 )
