@@ -1,20 +1,22 @@
 package ua.pp.lumivoid.iwtcms.ktor.api.requests
 
-import io.ktor.http.*
-import io.ktor.server.response.*
-import io.ktor.server.routing.*
-import io.ktor.server.sessions.*
+import io.ktor.http.HttpStatusCode
+import io.ktor.server.response.respondText
+import io.ktor.server.routing.Routing
+import io.ktor.server.routing.get
+import io.ktor.server.sessions.get
+import io.ktor.server.sessions.sessions
 import org.jetbrains.exposed.sql.andWhere
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import ua.pp.lumivoid.iwtcms.ktor.cookie.UserSession
 import ua.pp.lumivoid.iwtcms.ktor.tables.Users
 
-object CheckLoginG: Request() {
-    override val PATH = "/api/checkLogin"
+object CheckLoginG : Request() {
+    override val path = "/api/checkLogin"
 
     override val request: Routing.() -> Unit = {
-        get(PATH) {
+        get(path) {
             val session = call.sessions.get<UserSession>()
 
             @Suppress("SENSELESS_COMPARISON") // idk why
@@ -23,12 +25,14 @@ object CheckLoginG: Request() {
                 return@get
             }
 
-            newSuspendedTransaction  {
+            newSuspendedTransaction {
                 try {
-                    Users.selectAll()
+                    Users
+                        .selectAll()
                         .where { Users.username eq session.name }
-                        .andWhere { Users.uniqueId eq session.id }.first()
-                } catch(_: NoSuchElementException) {
+                        .andWhere { Users.uniqueId eq session.id }
+                        .first()
+                } catch (_: NoSuchElementException) {
                     call.respondText("Not logged in", status = HttpStatusCode.Unauthorized)
                     return@newSuspendedTransaction
                 }

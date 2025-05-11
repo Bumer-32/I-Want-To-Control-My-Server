@@ -2,7 +2,6 @@ package ua.pp.lumivoid.iwtcms
 
 import net.fabricmc.loader.api.entrypoint.PreLaunchEntrypoint
 import org.apache.commons.codec.digest.DigestUtils
-import org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils.create
 import org.jetbrains.exposed.sql.StdOutSqlLogger
@@ -20,7 +19,7 @@ import ua.pp.lumivoid.iwtcms.util.CustomLogger
 import java.io.File
 import kotlin.system.exitProcess
 
-object PREIWTCMS: PreLaunchEntrypoint {
+object PREIWTCMS : PreLaunchEntrypoint {
     private val logger = LoggerFactory.getLogger("iwtcms pre launch")
 
     override fun onPreLaunch() {
@@ -41,13 +40,13 @@ object PREIWTCMS: PreLaunchEntrypoint {
             url = "jdbc:h2:${Constants.DB_FILE}",
             driver = "org.h2.Driver",
             user = "iwtcms",
-            password = "iwtcms"
+            password = "iwtcms",
         )
         transaction {
             if (Config.readConfig().devMode) addLogger(StdOutSqlLogger)
             create(
                 Users,
-                UserPermissions
+                UserPermissions,
             )
 
             if (Users.selectAll().empty()) {
@@ -63,4 +62,3 @@ object PREIWTCMS: PreLaunchEntrypoint {
         KtorServer.setup()
     }
 }
-

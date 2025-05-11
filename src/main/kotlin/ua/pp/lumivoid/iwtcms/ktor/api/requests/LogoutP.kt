@@ -8,11 +8,11 @@ import io.ktor.server.sessions.get
 import io.ktor.server.sessions.sessions
 import ua.pp.lumivoid.iwtcms.ktor.cookie.UserSession
 
-object LogoutP: Request() {
-    override val PATH = "/api/logout"
+object LogoutP : Request() {
+    override val path = "/api/logout"
 
     override val request: Routing.() -> Unit = {
-        post(PATH) {
+        post(path) {
             val session = call.sessions.get<UserSession>()
             if (session == null) {
                 call.respondText("Not logged in")

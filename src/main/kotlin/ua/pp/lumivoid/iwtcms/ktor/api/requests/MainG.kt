@@ -4,14 +4,14 @@ import io.ktor.server.http.content.staticResources
 import io.ktor.server.routing.Routing
 import ua.pp.lumivoid.iwtcms.ktor.util.Config
 
-object MainG: Request() {
-    override val PATH =  "/"
+object MainG : Request() {
+    override val path = "/"
 
     override val request: Routing.() -> Unit = {
         if (Config.readConfig().enableIWTCMSControlPanel) {
-            staticResources(PATH, "web", index = "index.html")
+            staticResources(path, "web", index = "index.html")
         } else {
-            staticResources(PATH, "disabledWeb", index = "index.html")
+            staticResources(path, "disabledWeb", index = "index.html")
         }
     }
 }

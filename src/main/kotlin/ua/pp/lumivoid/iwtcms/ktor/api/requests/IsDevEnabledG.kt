@@ -6,11 +6,11 @@ import io.ktor.server.routing.Routing
 import io.ktor.server.routing.get
 import ua.pp.lumivoid.iwtcms.ktor.util.Config
 
-object IsDevEnabledG: Request() {
-    override val PATH = "/api/isDevEnabled"
+object IsDevEnabledG : Request() {
+    override val path = "/api/isDevEnabled"
 
     override val request: Routing.() -> Unit = {
-        get(PATH) {
+        get(path) {
             call.respondText(Config.readConfig().devMode.toString(), ContentType.Text.Plain)
         }
     }

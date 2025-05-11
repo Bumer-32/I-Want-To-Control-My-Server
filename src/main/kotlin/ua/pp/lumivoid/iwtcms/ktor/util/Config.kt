@@ -39,7 +39,6 @@ object Config {
 
     private fun createConfigData(config: Config): ConfigData? {
         try {
-
             return ConfigData(
                 ip = config.getString("server.ip"),
                 port = config.getInt("server.port"),
@@ -52,7 +51,7 @@ object Config {
                 enableIWTCMSControlPanel = config.getBoolean("web.enable IWTCMS control panel"),
                 autoOpenIWTCMSPageOnStartup = config.getBoolean("web.auto open IWTCMS page on startup"),
                 devMode = config.getBoolean("dev.dev mode"),
-                autoOpenVite = config.getBoolean("dev.auto open vite")
+                autoOpenVite = config.getBoolean("dev.auto open vite"),
             )
         } catch (e: ConfigException) {
             badConfig(e)

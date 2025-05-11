@@ -1,27 +1,28 @@
 package ua.pp.lumivoid.iwtcms.ktor.api.requests
 
-import io.ktor.http.*
-import io.ktor.server.response.*
-import io.ktor.server.routing.*
+import io.ktor.http.ContentType
+import io.ktor.server.response.respondText
+import io.ktor.server.routing.Routing
+import io.ktor.server.routing.get
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import ua.pp.lumivoid.iwtcms.ktor.api.UserAuthentication.doAuth
 
-object LogsHistoryG: Request() {
-    override val PATH = "/api/logsHistory"
+object LogsHistoryG : Request() {
+    override val path = "/api/logsHistory"
 
     private val json = Json { prettyPrint = true }
     private val logs = mutableListOf<String>()
 
     override val request: Routing.() -> Unit = {
-        get(PATH) {
+        get(path) {
             doAuth(
                 call = call,
                 permission = "read logs history",
                 success = {
                     val response = json.encodeToString(logs)
                     runBlocking { call.respondText(response, contentType = ContentType.Text.Plain) }
-                }
+                },
             )
         }
     }
