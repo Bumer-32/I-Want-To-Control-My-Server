@@ -78,6 +78,11 @@ dependencies {
 	include "io.netty:netty-codec-http:${project.netty_version}"
 	// already launched ktor
 
+	implementation include("org.jetbrains.exposed:exposed-core:${project.exposed_version}")
+	implementation include("org.jetbrains.exposed:exposed-jdbc:${project.exposed_version}")
+	implementation include("org.jetbrains.exposed:exposed-dao:${project.exposed_version}")
+	implementation include("com.h2database:h2:${project.h2database_version}")
+
 	implementation include("com.typesafe:config:${project.hocon_config_version}")
 
 	implementation include("commons-codec:commons-codec:${project.commons_codec}")

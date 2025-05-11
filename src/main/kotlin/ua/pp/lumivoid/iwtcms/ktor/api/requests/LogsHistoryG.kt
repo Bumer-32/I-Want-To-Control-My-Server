@@ -4,9 +4,8 @@ import io.ktor.http.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.coroutines.runBlocking
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import ua.pp.lumivoid.iwtcms.ktor.api.UserAuthentication
+import ua.pp.lumivoid.iwtcms.ktor.api.UserAuthentication.doAuth
 
 object LogsHistoryG: Request() {
     override val PATH = "/api/logsHistory"
@@ -16,9 +15,9 @@ object LogsHistoryG: Request() {
 
     override val request: Routing.() -> Unit = {
         get(PATH) {
-            UserAuthentication.doAuth(
+            doAuth(
                 call = call,
-                permit = "read logs history",
+                permission = "read logs history",
                 success = {
                     val response = json.encodeToString(logs)
                     runBlocking { call.respondText(response, contentType = ContentType.Text.Plain) }

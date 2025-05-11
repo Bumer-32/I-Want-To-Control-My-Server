@@ -8,9 +8,13 @@ import io.ktor.server.routing.post
 import io.ktor.server.sessions.sessions
 import io.ktor.server.sessions.set
 import kotlinx.serialization.Serializable
-import ua.pp.lumivoid.iwtcms.ktor.api.User
+import org.apache.commons.codec.digest.DigestUtils
+import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.andWhere
+import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import ua.pp.lumivoid.iwtcms.ktor.cookie.UserSession
-import ua.pp.lumivoid.iwtcms.ktor.util.Config
+import ua.pp.lumivoid.iwtcms.ktor.tables.Users
 
 object LoginP: Request() {
     override val PATH = "/api/login"
@@ -19,14 +23,18 @@ object LoginP: Request() {
         post(PATH) {
             val payload = call.receive<LoginPayload>()
 
-            var user: User? = Config.readConfig().users.find { it.username == payload.username && it.password == payload.password }
+            newSuspendedTransaction  {
+                val user: ResultRow = try {
+                    Users.selectAll()
+                        .where { Users.username eq payload.username }
+                        .andWhere { Users.passwordHash eq DigestUtils.sha256Hex(payload.password) }.first()
+                } catch(_: NoSuchElementException) {
+                    call.respondText("Login failed", status = HttpStatusCode.Unauthorized)
+                    return@newSuspendedTransaction
+                }
 
-            if (user != null) {
-                call.sessions.set(UserSession(user.username, user.id))
-
+                call.sessions.set(UserSession(name = user[Users.username], id = user[Users.uniqueId]))
                 call.respondText("Login successful")
-            } else {
-                call.respondText("Login failed", status = HttpStatusCode.Unauthorized)
             }
         }
     }

@@ -7,9 +7,7 @@ import io.ktor.websocket.*
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import ua.pp.lumivoid.iwtcms.Constants
-import ua.pp.lumivoid.iwtcms.ktor.api.UserAuthentication
-import ua.pp.lumivoid.iwtcms.ktor.api.requests.ApiListG.registerAPI
+import ua.pp.lumivoid.iwtcms.ktor.api.UserAuthentication.doAuth
 import ua.pp.lumivoid.iwtcms.util.MinecraftServerHandler
 
 object ConsoleWS: WebSocket() {
@@ -18,9 +16,9 @@ object ConsoleWS: WebSocket() {
 
     override val ws: Routing.() -> Unit = {
         webSocket(PATH) {
-            val status = UserAuthentication.doAuth(
+            val status = doAuth(
                 call = call,
-                permit = "read real time logs",
+                permission = "read real time logs",
                 success = {},
                 unauthorized = {
                     logger.debug("Unauthorized user tried to connect to $PATH websocket")
@@ -51,9 +49,9 @@ object ConsoleWS: WebSocket() {
 
             var allowExecution = false
 
-            UserAuthentication.doAuth(
+            doAuth(
                 call = call,
-                permit = "execute commands",
+                permission = "execute commands",
                 success = { allowExecution = true },
                 unauthorized = { allowExecution = false },
                 forbidden = { allowExecution = false }

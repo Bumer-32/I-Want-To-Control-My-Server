@@ -9,7 +9,7 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import ua.pp.lumivoid.iwtcms.Constants
-import ua.pp.lumivoid.iwtcms.ktor.api.UserAuthentication
+import ua.pp.lumivoid.iwtcms.ktor.api.UserAuthentication.doAuth
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.ApiListG.registerAPI
 import java.io.File
 
@@ -31,9 +31,9 @@ object Configs: Request() {
             registerAPI("${it.value.selector_name}StrategyG", configPath)
 
             get(configPath) {
-                UserAuthentication.doAuth(
+                doAuth(
                     call = call,
-                    permit = it.value.read_permission_name,
+                    permission = it.value.read_permission_name,
                     success = {
                         val filePath = "${System.getProperty("user.dir")}${it.value.config_path}"
                         val file = File(filePath)
@@ -44,9 +44,9 @@ object Configs: Request() {
             }
 
             put(configPath) {
-                UserAuthentication.doAuth(
+                doAuth(
                     call = call,
-                    permit = it.value.edit_permission_name,
+                    permission = it.value.edit_permission_name,
                     success = {
                         val filePath = "${System.getProperty("user.dir")}${it.value.config_path}"
                         val file = File(filePath)
@@ -69,9 +69,9 @@ object Configs: Request() {
 
             get("$PATH/${it.value.selector_name}/strategy") {
 
-                UserAuthentication.doAuth(
+                doAuth(
                     call = call,
-                    permit = it.value.read_permission_name,
+                    permission = it.value.read_permission_name,
                     success = {
                         val filePath = "/${it.value.config_path.split("/").last()}.strategy.yaml"
                         val file = this.javaClass.getResource(filePath)!!
