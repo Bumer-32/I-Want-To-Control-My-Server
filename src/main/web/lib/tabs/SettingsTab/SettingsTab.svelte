@@ -239,19 +239,19 @@
                 settingText.innerHTML = key;
                 settingDiv.style.backgroundColor = "var(--eazy-view-setting-background-color)";
 
-                switch(configs[key].type) {
+                switch (configs[key].type) {
                     case "string":
-                        settingInput.placeholder = (strategy[key].default !== null ? strategy[key].default.toString() : "");
-                        settingInput.value = (configs[key].default !== null ? configs[key].default.toString() : "");
+                        settingInput.placeholder = strategy[key].default !== null ? strategy[key].default.toString() : "";
+                        settingInput.value = configs[key].default !== null ? configs[key].default.toString() : "";
                         break;
                     case "bool":
                         settingInput.type = "checkbox";
-                        settingInput.checked = configs[key]!.default as boolean
+                        settingInput.checked = configs[key]!.default as boolean;
                         break;
                     case "int":
                         settingInput.type = "number";
-                        settingInput.placeholder = (strategy[key].default !== null ? strategy[key].default.toString() : "");
-                        settingInput.value = (configs[key].default !== null ? configs[key].default.toString() : "");
+                        settingInput.placeholder = strategy[key].default !== null ? strategy[key].default.toString() : "";
+                        settingInput.value = configs[key].default !== null ? configs[key].default.toString() : "";
                         if (configs[key].max != null) settingInput.max = configs[key].max.toString();
                         if (configs[key].min != null) settingInput.min = configs[key].min.toString();
                         if (configs[key].step != null && configs[key].max != null && configs[key].min != null) {
@@ -265,9 +265,9 @@
                 settingDiv.appendChild(settingInput);
 
                 eazyView.appendChild(settingDiv);
-                
+
                 slideOnOverflow(settingText);
-            })
+            });
         } catch (error) {
             ToastSystem.addToQueue(`Error: ${error}`, ToastSystem.ToastType.ERROR);
         }

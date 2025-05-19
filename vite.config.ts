@@ -39,7 +39,7 @@ export default defineConfig({
         svelte({
             preprocess: sveltePreprocess(),
         }),
-        tailwindcss()
+        tailwindcss(),
     ],
     root: "src/main/web",
     build: {

@@ -128,13 +128,13 @@ class ConfigReaders {
                         };
                     }
                 });
-                
+
                 return result;
             } catch (e) {
                 console.error(e);
                 return null;
             }
-        })
+        });
 
         // TODO: add more config readers (json, yaml, etc.)
     }

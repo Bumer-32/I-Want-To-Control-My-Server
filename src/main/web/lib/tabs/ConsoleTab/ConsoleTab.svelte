@@ -226,8 +226,7 @@
     <!-- ! DEFAULT TAB -->
     <div class="container">
         <h1>Console</h1>
-        <div class="windows">
-        </div>
+        <div class="windows"></div>
     </div>
 </div>
 
