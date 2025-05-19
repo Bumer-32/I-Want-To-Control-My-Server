@@ -8,7 +8,7 @@ plugins {
 	id "org.jetbrains.kotlin.jvm" version "2.1.21"
 	id "com.github.node-gradle.node" version "7.1.0"
 	id "com.modrinth.minotaur" version "2.+"
-	id "org.jlleitschuh.gradle.ktlint" version "12.2.0"
+//	id "org.jlleitschuh.gradle.ktlint" version "12.2.0"
 	id "maven-publish"
 }
 
@@ -25,12 +25,12 @@ repositories {
 	maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
 }
 
-ktlint {
-	version = "1.5.0"
-	additionalEditorconfig = [
-		"max_line_length": "200",
-	]
-}
+//ktlint {
+//	version = "1.5.0"
+//	additionalEditorconfig = [
+//		"max_line_length": "200",
+//	]
+//}
 
 modrinth {
 	token = project.hasProperty("modrinthToken") ? project.modrinthToken : System.getenv("MODRINTH_TOKEN")
