@@ -10,20 +10,18 @@ jobs:
     build:
         strategy:
             matrix:
-                # Use these Java versions
-                java: [
-                        21, # Current Java LTS
-                    ]
+                java: [21]
                 python: [3.13]
-                os: [ubuntu-22.04, windows-2022]
+                os: [ubuntu-latest, windows-latest]
         runs-on: ${{ matrix.os }}
         steps:
             - name: checkout repository
               uses: actions/checkout@v4
 
-            - uses: actions/setup-python@v5
+            - name: setup python
+              uses: actions/setup-python@v5
               with:
-                  python-version: "3.13"
+                  python-version: ${{ matrix.python }}
 
             - name: validate gradle wrapper
               uses: gradle/actions/wrapper-validation@v4
