@@ -10,7 +10,7 @@ import io.ktor.websocket.readText
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import ua.pp.lumivoid.iwtcms.ktor.api.UserAuthentication.doAuth
+import ua.pp.lumivoid.iwtcms.ktor.api.doAuth
 import ua.pp.lumivoid.iwtcms.util.MinecraftServerHandler
 
 object ConsoleWS : WebSocket() {

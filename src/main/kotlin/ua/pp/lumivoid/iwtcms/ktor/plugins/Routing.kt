@@ -18,6 +18,9 @@ import ua.pp.lumivoid.iwtcms.Constants
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.ApiListG
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.CheckLoginG
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.Configs
+import ua.pp.lumivoid.iwtcms.ktor.api.requests.CreateUserP
+import ua.pp.lumivoid.iwtcms.ktor.api.requests.DeleteUserP
+import ua.pp.lumivoid.iwtcms.ktor.api.requests.EditPermissionP
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.FilesG
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.IsAllowedG
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.IsDevEnabledG
@@ -56,6 +59,10 @@ fun Application.configureRouting() {
 
     install(StatusPages) {
         statusFile(HttpStatusCode.NotFound, filePattern = "/web/404.html")
+
+        exception<Throwable> { call, cause ->
+            cause.stackTrace.forEach { logger.error(it.toString()) }
+        }
     }
 
     if (Config.readConfig().devMode) {
@@ -79,6 +86,9 @@ fun Application.configureRouting() {
     IsDevEnabledG.register(r)
     LogoutP.register(r)
     Configs.register(r)
+    CreateUserP.register(r)
+    DeleteUserP.register(r)
+    EditPermissionP.register(r)
 
     ConsoleWS.register(r)
     ServerStatsWS.register(r)
