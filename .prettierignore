@@ -1,0 +1,11 @@
+.bevel
+.git
+.github
+.gradle
+.idea
+.vscode
+.kotlin
+bin
+build
+node_modules
+run
