@@ -12,9 +12,12 @@ on:
 jobs:
     publish:
         if: "!contains(github.ref, 'refs/tags/skip-ci')"
-
         name: build and publish to modrinth
         runs-on: ubuntu-latest
+        strategy:
+          matrix:
+            java: [ 21 ]
+            python: [ 3.13 ]
 
         steps:
             - name: checkout repository
@@ -22,7 +25,7 @@ jobs:
 
             - uses: actions/setup-python@v5
               with:
-                  python-version: "3.13"
+                  python-version: ${{ matrix.python }}
 
             - name: validate gradle wrapper
               uses: gradle/actions/wrapper-validation@v3
@@ -30,7 +33,7 @@ jobs:
             - name: setup jdk
               uses: actions/setup-java@v4
               with:
-                  java-version: 21
+                  java-version: ${{ matrix.java }}
                   distribution: "microsoft"
 
             - name: make gradle wrapper executable
