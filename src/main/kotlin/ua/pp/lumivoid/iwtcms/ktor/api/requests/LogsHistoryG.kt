@@ -6,7 +6,7 @@ import io.ktor.server.routing.Routing
 import io.ktor.server.routing.get
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
-import ua.pp.lumivoid.iwtcms.ktor.api.UserAuthentication.doAuth
+import ua.pp.lumivoid.iwtcms.ktor.api.doAuth
 
 object LogsHistoryG : Request() {
     override val path = "/api/logsHistory"

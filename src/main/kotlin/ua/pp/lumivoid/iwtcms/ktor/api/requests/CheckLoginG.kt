@@ -6,7 +6,7 @@ import io.ktor.server.routing.Routing
 import io.ktor.server.routing.get
 import io.ktor.server.sessions.get
 import io.ktor.server.sessions.sessions
-import org.jetbrains.exposed.sql.andWhere
+import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import ua.pp.lumivoid.iwtcms.ktor.cookie.UserSession
@@ -29,8 +29,7 @@ object CheckLoginG : Request() {
                 try {
                     Users
                         .selectAll()
-                        .where { Users.username eq session.name }
-                        .andWhere { Users.uniqueId eq session.id }
+                        .where { (Users.username eq session.name) and (Users.uniqueId eq session.id) }
                         .first()
                 } catch (_: NoSuchElementException) {
                     call.respondText("Not logged in", status = HttpStatusCode.Unauthorized)

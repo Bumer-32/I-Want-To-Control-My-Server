@@ -10,7 +10,7 @@ import io.ktor.server.sessions.set
 import kotlinx.serialization.Serializable
 import org.apache.commons.codec.digest.DigestUtils
 import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.andWhere
+import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import ua.pp.lumivoid.iwtcms.ktor.cookie.UserSession
@@ -28,8 +28,7 @@ object LoginP : Request() {
                     try {
                         Users
                             .selectAll()
-                            .where { Users.username eq payload.username }
-                            .andWhere { Users.passwordHash eq DigestUtils.sha256Hex(payload.password) }
+                            .where { (Users.username eq payload.username) and (Users.passwordHash eq DigestUtils.sha256Hex(payload.password)) }
                             .first()
                     } catch (_: NoSuchElementException) {
                         call.respondText("Login failed", status = HttpStatusCode.Unauthorized)
