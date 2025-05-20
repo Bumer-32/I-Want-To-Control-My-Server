@@ -20,7 +20,7 @@ import ua.pp.lumivoid.iwtcms.ktor.api.requests.CheckLoginG
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.Configs
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.CreateUserP
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.DeleteUserP
-import ua.pp.lumivoid.iwtcms.ktor.api.requests.EditPermissionP
+import ua.pp.lumivoid.iwtcms.ktor.api.requests.EditPermissionsP
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.FilesG
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.IsAllowedG
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.IsDevEnabledG
@@ -88,7 +88,7 @@ fun Application.configureRouting() {
     Configs.register(r)
     CreateUserP.register(r)
     DeleteUserP.register(r)
-    EditPermissionP.register(r)
+    EditPermissionsP.register(r)
 
     ConsoleWS.register(r)
     ServerStatsWS.register(r)
