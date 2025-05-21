@@ -291,7 +291,7 @@
     });
 </script>
 
-<div id="settings-tab" class="tab disabled">
+<div id="settings-tab" class="disabled">
     <div class="container">
         <div class="tab-selector">
             <!-- ? Add underline -->

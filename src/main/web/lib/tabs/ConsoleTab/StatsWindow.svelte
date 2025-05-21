@@ -1,4 +1,14 @@
-<script lang="ts"></script>
+<script lang="ts">
+    let statsDiv: HTMLDivElement;
+    let cpuLoadValue: HTMLSpanElement;
+    let ramUsageValue: HTMLSpanElement;
+    let uptimeValue: HTMLSpanElement;
+    let playersValue: HTMLSpanElement;
+    let playersMaxValue: HTMLSpanElement;
+    let ipAddrValue: HTMLSpanElement;
+    let tpsValue: HTMLSpanElement;
+    let serverTimeValue: HTMLSpanElement;
+</script>
 
 <div class="statistics" bind:this={statsDiv}>
     <h3>Statistics</h3>
@@ -34,4 +44,26 @@
     </div>
 </div>
 
-<style lang="scss"></style>
+<style lang="scss">
+    .statistics {
+        background-color: var(--console-background-color);
+        padding: 10px;
+        border-radius: 10px;
+        height: fit-content;
+        margin-left: 60px;
+        width: 250px;
+        transition: background-color ease 0.3s;
+
+        h3 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: center;
+        }
+
+        :global(a) {
+            text-decoration: none;
+            color: #597cef;
+        }
+    }
+</style>

@@ -8,6 +8,8 @@
     import ToastSystem from "./scripts/toastSystem";
     import icon from "./assets/icon_clearbg.png";
     import "./styles/tailwind.css";
+    import "./styles/style.scss";
+    import UsersTab from "./lib/tabs/UsersTab/UsersTab.svelte";
 
     window.addEventListener("load", async () => {
         // ? remove loading screen
@@ -18,42 +20,26 @@
 <Footer />
 
 {#if window.location.pathname == "/BadConnection"}
-    <main>
-        <a href="/"><img src={icon} alt="icon" /></a>
-        <div class="text">
-            <p1>Oh no!</p1>
-            <p1>It seems like you have a bad connection to the server.</p1>
-            <p1>Try to refresh the page or check your internet connection.</p1>
-            <p1>Good luck!</p1>
+    <main class="h-screen content-center">
+        <div class="flex justify-center">
+            <a href="/"><img src={icon} alt="icon" /></a>
+            <div class="ml-[20px] flex flex-col content-center justify-center font-['Nunito'] text-[20px]">
+                <p1>Oh no!</p1>
+                <p1>It seems like you have a bad connection to the server.</p1>
+                <p1>Try to refresh the page or check your internet connection.</p1>
+                <p1>Good luck!</p1>
+            </div>
         </div>
     </main>
-
-    <style lang="scss">
-        main {
-            justify-content: center;
-            align-items: center;
-            display: flex;
-            height: 100vh;
-
-            .text {
-                margin-left: 20px;
-                font-size: 20px;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                font-family: "Nunito", sans-serif;
-            }
-        }
-    </style>
 {:else}
     <Header />
 
-    <main>
-        <div class="tabs">
+    <main class="align-center absolute flex w-screen justify-center">
+        <div class="tabs h-full w-full">
             <ConsoleTab />
-            <SettingsTab />
+            <!-- <SettingsTab /> -->
             <PlayersTab />
+            <UsersTab />
         </div>
     </main>
 
@@ -63,34 +49,29 @@
 
     <style lang="scss">
         @use "./styles/variables";
+        @use "./styles/disabled";
 
         main {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100vw;
             height: variables.$container-height;
-            position: absolute;
             top: variables.$header-height;
 
-            .tabs {
+            .tabs > div {
                 width: 100%;
                 height: 100%;
 
-                .tab {
-                    width: 100%;
-                    height: 100%;
-
-                    .container {
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        color: var(--main-text-color);
-                        transition: color 0.3s ease;
-                        top: 0;
-                    }
+                .container {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: var(--main-text-color);
+                    transition: color 0.3s ease;
+                    top: 0;
+                    height: variables.$container-height;
                 }
             }
         }
     </style>
 {/if}
+
+<style lang="scss">
+</style>

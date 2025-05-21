@@ -1,3 +1,3 @@
-<div id="players-tab" class="tab disabled">
+<div id="players-tab" class="disabled">
     <div class="container">Players</div>
 </div>

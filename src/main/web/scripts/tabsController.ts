@@ -18,5 +18,5 @@ export function switchTab(id: string) {
         button.classList.remove("hover-holo-effect");
     });
 
-    document.querySelector<HTMLSpanElement>(`#header-${id.replace("-tab", "")}`)!.classList.add("hover-holo-effect");
+    document.querySelector<HTMLSpanElement>(`#header-${id.replace("-tab", "")}`)?.classList.add("hover-holo-effect");
 }
