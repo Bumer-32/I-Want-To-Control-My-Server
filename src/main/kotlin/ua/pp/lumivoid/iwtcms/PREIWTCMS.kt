@@ -36,11 +36,19 @@ object PREIWTCMS : PreLaunchEntrypoint {
 
         CustomLogger.setup()
 
+        val dbUrl: String = if (Config.readConfig().devMode && Config.readConfig().useExternalH2Db) {
+            "tcp://${Config.readConfig().externalH2DbIp}:${Config.readConfig().externalH2DbPort}/iwtcms"
+        } else {
+            Constants.DB_FILE
+        }
+
+        logger.info("Connecting to DB ${dbUrl}")
+
         Database.connect(
-            url = "jdbc:h2:${Constants.DB_FILE}",
+            url = "jdbc:h2:$dbUrl",
             driver = "org.h2.Driver",
-            user = "iwtcms",
-            password = "iwtcms",
+            user = Config.readConfig().databaseUser,
+            password = Config.readConfig().databasePassword,
         )
         transaction {
             if (Config.readConfig().devMode) addLogger(StdOutSqlLogger)

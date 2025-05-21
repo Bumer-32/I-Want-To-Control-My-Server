@@ -43,6 +43,8 @@ object Config {
                 ip = config.getString("server.ip"),
                 port = config.getInt("server.port"),
                 logLevel = config.getString("server.log Level"),
+                databaseUser = config.getString("server.database user"),
+                databasePassword = config.getString("server.database password"),
                 useSSL = config.getBoolean("ssl.use SSL"),
                 customSertificate = config.getBoolean("ssl.custom Certificate"),
                 sslAlias = config.getString("ssl.ssl Alias"),
@@ -52,6 +54,10 @@ object Config {
                 autoOpenIWTCMSPageOnStartup = config.getBoolean("web.auto open IWTCMS page on startup"),
                 devMode = config.getBoolean("dev.dev mode"),
                 autoOpenVite = config.getBoolean("dev.auto open vite"),
+                enableH2WebServer = config.getBoolean("dev.enable h2 web server"),
+                useExternalH2Db = config.getBoolean("dev.use external h2 db"),
+                externalH2DbIp = config.getString("dev.external h2 db ip"),
+                externalH2DbPort = config.getInt("dev.external h2 db port"),
             )
         } catch (e: ConfigException) {
             badConfig(e)
@@ -85,6 +91,8 @@ data class ConfigData(
     val ip: String,
     val port: Int,
     val logLevel: String,
+    val databaseUser: String,
+    val databasePassword: String,
     val useSSL: Boolean,
     val customSertificate: Boolean,
     val sslAlias: String,
@@ -94,4 +102,8 @@ data class ConfigData(
     val autoOpenIWTCMSPageOnStartup: Boolean,
     val devMode: Boolean,
     val autoOpenVite: Boolean,
+    val enableH2WebServer: Boolean,
+    val useExternalH2Db: Boolean,
+    val externalH2DbIp: String,
+    val externalH2DbPort: Int,
 )

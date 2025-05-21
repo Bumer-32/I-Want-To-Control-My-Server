@@ -29,8 +29,10 @@ object IWTCMS : ModInitializer {
         // ? run "npm run dev" if dev mode enabled
         if (Config.readConfig().devMode) {
             // run h2 db webserver
-            h2Server = Server.createWebServer("-web", "-webAllowOthers", "-webPort", "8082").start()
-            logger.info("H2 Console accessible by address: http://localhost:8082")
+            if (Config.readConfig().enableH2WebServer) {
+                h2Server = Server.createWebServer("-web", "-webAllowOthers", "-webPort", "8082").start()
+                logger.info("H2 Console accessible by address: http://localhost:8082")
+            }
 
             if (Config.readConfig().autoOpenVite) {
                 val runnerFile =
