@@ -39,10 +39,12 @@ object EditPermissionsP : Request() {
 
                         try {
                             payload.permissions.forEach { (key, value) ->
-                                UserPermissions.update({ (Users.id eq userId) and (UserPermissions.permissionName eq key) }) {
+                                UserPermissions.update({ (UserPermissions.userId eq userId) and (UserPermissions.permissionName eq key) }) {
                                     it[UserPermissions.permissionState] = value
                                 }
                             }
+
+                            runBlocking { call.respondText("User permissions updated", status = HttpStatusCode.OK) }
                         } catch (_: NoSuchElementException) {
                             runBlocking { call.respondText("Permission not found", status = HttpStatusCode.NotFound) }
                         }
