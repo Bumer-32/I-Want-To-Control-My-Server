@@ -98,16 +98,22 @@
                     </a>
                 </li>
                 <li>
+                    <a href="https://github.com/Bumer-32/I-Want-To-Control-My-Server/issues">
+                        <span class="material-symbols-rounded">bug_report</span>
+                        Bug tracker
+                    </a>
+                </li>
+                <li>
                     <a href="files/iwtcms_client.zip">
                         <span class="material-symbols-rounded">download</span>
                         Python CLI
                     </a>
                 </li>
                 <li>
-                    <a href="https://github.com/Bumer-32/I-Want-To-Control-My-Server/issues">
-                        <span class="material-symbols-rounded">bug_report</span>
-                        Bug tracker
-                    </a>
+                    <button type="button" on:click={() => switchTab("users-tab")}>
+                        <span class="material-symbols-rounded">account_circle</span>
+                        Users
+                    </button>
                 </li>
                 <li id="logout-button">
                     <button type="button" on:click={logout}>

@@ -1,44 +1,13 @@
 <script lang="ts">
     import icon from "../assets/icon_clearbg.png";
     import { checkAuth, login } from "../scripts/auth";
-    import Constants from "../scripts/constants";
-    import { isDev } from "../scripts/devMode";
     import ToastSystem from "../scripts/toastSystem";
     import { onMount } from "svelte";
 
     let loginForm: HTMLFormElement;
     let loginDiv: HTMLDivElement;
 
-    async function checkIsLoginNeeded(): Promise<boolean> {
-        try {
-            const response = await fetch(Constants.IS_AUTH_ENABLED_URL);
-
-            if (!response.ok) {
-                console.error("Error fetching data:", response.status, response.statusText);
-                ToastSystem.addToQueue(`Error fetching data: ${response.status}`, ToastSystem.ToastType.ERROR);
-                if (!(await isDev())) {
-                    window.location.href = Constants.PAGE_BAD_CONNECTION_URL;
-                }
-                return false;
-            }
-
-            if ((await response.text()) == "false") {
-                loginDiv.classList.add("disabled");
-            }
-        } catch (error) {
-            console.error(error);
-            ToastSystem.addToQueue(`Error: ${error}`, ToastSystem.ToastType.ERROR);
-            if (!(await isDev())) {
-                window.location.assign(Constants.PAGE_BAD_CONNECTION_URL);
-            }
-        }
-        return true;
-    }
-
     onMount(async () => {
-        const isLoginNeeded = await checkIsLoginNeeded();
-        if (!isLoginNeeded) return;
-
         const auth = await checkAuth();
         if (auth != null) {
             ToastSystem.addToQueue(`Hello ${auth}`, ToastSystem.ToastType.INFO);
