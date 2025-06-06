@@ -24,19 +24,36 @@
     });
 </script>
 
-<div class="absolute flex items-center justify-center w-screen h-screen z-10" bind:this={loginDiv}>
-    <div class="absolute w-screen h-screen z-[99] bg-[var(--login-background-color)] backdrop-blur-[20px]"></div>
-    <div class="flex z-[100] items-center absolute h-[250px] bg-[var(--login-panel-background-color)] rounded-[10px] pr-[10px] pl-px">
+<div class="absolute z-10 flex h-screen w-screen items-center justify-center" bind:this={loginDiv}>
+    <div class="absolute z-[99] h-screen w-screen bg-[var(--login-background-color)] backdrop-blur-[20px]"></div>
+    <div class="absolute z-[100] flex h-[250px] items-center rounded-[10px] bg-[var(--login-panel-background-color)] pr-[10px] pl-px">
         <h1 class="absolute top-0 left-[50%] transform-[translateX(-50%)]">Login</h1>
-        <a class="h-[110px] w-[110px] block" href="https://modrinth.com/mod/i-want-to-control-my-server"><img class="block h-[110px] w-[110px] transition-[filer 0.3s ease, box-shadow 0.3s ease]" src={icon} alt="IWTCMS logo" /></a>
+        <a class="block h-[110px] w-[110px]" href="https://modrinth.com/mod/i-want-to-control-my-server"
+            ><img class="transition-[filer 0.3s ease, box-shadow 0.3s ease] block h-[110px] w-[110px]" src={icon} alt="IWTCMS logo" /></a
+        >
         <form class="w-[250px]" bind:this={loginForm}>
             <label for="username">Username:</label>
-            <input class="bg-[var(--login-input-background-color)] border-none rounded-[5px] focus:outline-none w-full text-[var(--login-text-color)] px-[5px] transition-[filer 0.3s ease, box-shadow 0.3s ease] mb-[10px]" type="text" id="username" name="username" required />
+            <input
+                class="transition-[filer 0.3s ease, box-shadow 0.3s ease] mb-[10px] w-full rounded-[5px] border-none bg-[var(--login-input-background-color)] px-[5px] text-[var(--login-text-color)] focus:outline-none"
+                type="text"
+                id="username"
+                name="username"
+                required
+            />
 
             <label for="password">Password:</label>
-            <input class="bg-[var(--login-input-background-color)] border-none rounded-[5px] focus:outline-none w-full text-[var(--login-text-color)] px-[5px] transition-[filer 0.3s ease, box-shadow 0.3s ease] mb-[10px]" type="password" name="password" required />
+            <input
+                class="transition-[filer 0.3s ease, box-shadow 0.3s ease] mb-[10px] w-full rounded-[5px] border-none bg-[var(--login-input-background-color)] px-[5px] text-[var(--login-text-color)] focus:outline-none"
+                type="password"
+                name="password"
+                required
+            />
 
-            <button class="w-full h-[25px] bg-[var(--login-input-background-color)] border-none rounded-[5px] text-[var(--login-text-color)] transition-[filer 0.3s ease, box-shadow 0.3s ease]" type="submit" id="password">Login</button>
+            <button
+                class="transition-[filer 0.3s ease, box-shadow 0.3s ease] h-[25px] w-full rounded-[5px] border-none bg-[var(--login-input-background-color)] text-[var(--login-text-color)]"
+                type="submit"
+                id="password">Login</button
+            >
         </form>
     </div>
 </div>
@@ -47,7 +64,9 @@
     form > input,
     button,
     img {
-        transition: filter 0.3s ease, box-shadow 0.3s ease;
+        transition:
+            filter 0.3s ease,
+            box-shadow 0.3s ease;
         &:hover {
             @include hover-holo-effect.hover-holo-effect;
         }

@@ -14,7 +14,7 @@ export async function getVersion(): Promise<string> {
 export function catchError(error: any) {
     console.error(error);
     ToastSystem.addToQueue(`Error: ${error}`, ToastSystem.ToastType.ERROR);
-    if (!(isDev())) {
+    if (!isDev()) {
         window.location.assign(Constants.PAGE_BAD_CONNECTION_URL);
     }
 }

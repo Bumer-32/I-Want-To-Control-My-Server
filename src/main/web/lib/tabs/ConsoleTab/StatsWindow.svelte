@@ -24,9 +24,9 @@
         tpsValue.innerHTML = "none";
         serverTimeValue.innerHTML = "none";
 
-        if (!await isAllowed("access to server stats")) {
-            statsDiv.classList.add("forbidden")
-            return
+        if (!(await isAllowed("access to server stats"))) {
+            statsDiv.classList.add("forbidden");
+            return;
         }
 
         const ws = new WebSocket(Constants.STATS_URL);
@@ -56,7 +56,7 @@
 
         ws.onerror = (error) => {
             console.error(error);
-            ToastSystem.addToQueue(`Error: ${error}`, ToastSystem.ToastType.ERROR)
+            ToastSystem.addToQueue(`Error: ${error}`, ToastSystem.ToastType.ERROR);
         };
 
         const visibilitychangeListener = () => {
