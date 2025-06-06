@@ -1,6 +1,5 @@
 <!--TODO: Rewrite to tailwind-->
 
-
 <script lang="ts">
     import iwtcmsIcon from "../assets/icon_clearbg.png";
     import githubIcon from "../assets/github.svg";
@@ -260,8 +259,7 @@
                 left: -225px;
                 background-color: var(--header-menu-background-color);
                 border-radius: 10px;
-                transition:
-                    left 0.3s ease;
+                transition: left 0.3s ease;
                 padding-top: 10px;
                 padding-bottom: 10px;
                 z-index: 50;
