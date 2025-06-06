@@ -16,8 +16,8 @@
     --color-mode-switch-handle-icon-color: white;
 
     --main-text-color: white;
-    --header-icons-color: white;
 
+    --header-icons-color: white;
     --header-menu-background-color: #171c1c;
     --header-menu-item-hover-background-color: #2d2d2d;
     --header-menu-item-fg-color: white;
@@ -26,6 +26,7 @@
     --login-background-color: #ffffff4d;
     --login-text-color: black;
     --login-panel-background-color: #121717;
+    --login-input-background-color: white;
 
     --footer-iwtcms-label-color-1: #9f9f9f;
     --footer-iwtcms-label-color-2: #fff;
@@ -65,6 +66,9 @@
     --file-view-background-color: #121717;
     --file-view-text-color: white;
     --eazy-view-setting-background-color: #7f7f7f;
+
+    --forbidden-background-color: rgba(141, 141, 141, 0.65);
+    --forbidden-text-color: #e50000;
 }
 .light-mode-impl {
     // light mode

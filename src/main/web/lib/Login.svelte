@@ -24,105 +24,32 @@
     });
 </script>
 
-<div class="login" bind:this={loginDiv}>
-    <div class="background"></div>
-    <div class="container">
-        <h1>Login</h1>
-        <a href="https://modrinth.com/mod/i-want-to-control-my-server"><img src={icon} alt="IWTCMS logo" /></a>
-        <form id="loginForm" method="post" bind:this={loginForm}>
-            <label for="username" id="username">Username:</label>
-            <input type="text" name="username" required />
-            <br />
-            <label for="password" id="password">Password:</label>
-            <input type="password" name="password" required />
-            <br />
-            <button type="submit">Login</button>
+<div class="absolute flex items-center justify-center w-screen h-screen z-10" bind:this={loginDiv}>
+    <div class="absolute w-screen h-screen z-[99] bg-[var(--login-background-color)] backdrop-blur-[20px]"></div>
+    <div class="flex z-[100] items-center absolute h-[250px] bg-[var(--login-panel-background-color)] rounded-[10px] pr-[10px] pl-px">
+        <h1 class="absolute top-0 left-[50%] transform-[translateX(-50%)]">Login</h1>
+        <a class="h-[110px] w-[110px] block" href="https://modrinth.com/mod/i-want-to-control-my-server"><img class="block h-[110px] w-[110px] transition-[filer 0.3s ease, box-shadow 0.3s ease]" src={icon} alt="IWTCMS logo" /></a>
+        <form class="w-[250px]" bind:this={loginForm}>
+            <label for="username">Username:</label>
+            <input class="bg-[var(--login-input-background-color)] border-none rounded-[5px] focus:outline-none w-full text-[var(--login-text-color)] px-[5px] transition-[filer 0.3s ease, box-shadow 0.3s ease] mb-[10px]" type="text" id="username" name="username" required />
+
+            <label for="password">Password:</label>
+            <input class="bg-[var(--login-input-background-color)] border-none rounded-[5px] focus:outline-none w-full text-[var(--login-text-color)] px-[5px] transition-[filer 0.3s ease, box-shadow 0.3s ease] mb-[10px]" type="password" name="password" required />
+
+            <button class="w-full h-[25px] bg-[var(--login-input-background-color)] border-none rounded-[5px] text-[var(--login-text-color)] transition-[filer 0.3s ease, box-shadow 0.3s ease]" type="submit" id="password">Login</button>
         </form>
     </div>
 </div>
 
 <style lang="scss">
-    .login {
-        position: absolute;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 100vw;
-        height: 100vh;
+    @use "../styles/hover-holo-effect";
 
-        z-index: 10;
-
-        .background {
-            position: absolute;
-            width: 100vw;
-            height: 100vh;
-            z-index: 99;
-            background: var(--login-background-color);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 100;
-            width: 400px;
-            height: 250px;
-            background-color: var(--login-panel-background-color);
-            border-radius: 10px;
-            padding-right: 10px;
-
-            h1 {
-                position: absolute;
-                top: 0;
-                left: 50%;
-                transform: translateX(-50%);
-            }
-
-            input {
-                border: none;
-                border-radius: 5px;
-
-                &:focus {
-                    outline: none;
-                }
-            }
-
-            label {
-                display: inline-block;
-                width: 90px;
-            }
-
-            br {
-                margin-bottom: 10px;
-            }
-
-            button {
-                width: 100%;
-                height: 20px;
-                border: none;
-                border-radius: 5px;
-            }
-
-            input,
-            button,
-            img {
-                // hover holo effect
-                transition:
-                    filter 0.3s ease,
-                    box-shadow 0.3s ease;
-                &:hover {
-                    filter: drop-shadow(0 0 10px var(--holo-effect-color));
-                }
-            }
+    form > input,
+    button,
+    img {
+        transition: filter 0.3s ease, box-shadow 0.3s ease;
+        &:hover {
+            @include hover-holo-effect.hover-holo-effect;
         }
     }
 </style>

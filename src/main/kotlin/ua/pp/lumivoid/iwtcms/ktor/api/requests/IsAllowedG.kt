@@ -1,23 +1,25 @@
 package ua.pp.lumivoid.iwtcms.ktor.api.requests
 
-import io.ktor.server.request.receive
+import io.ktor.http.HttpStatusCode
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Routing
 import io.ktor.server.routing.get
 import kotlinx.coroutines.runBlocking
-import kotlinx.serialization.Serializable
 import ua.pp.lumivoid.iwtcms.ktor.api.doAuth
 
 object IsAllowedG : Request() {
-    override val path = "/api/isAllowed"
+    override val path = "/api/isAllowed/{permission}"
 
     override val request: Routing.() -> Unit = {
         get(path) {
-            val payload = call.receive<IsAllowedPayload>()
+            if (call.parameters["permission"] == null) {
+                call.respond(HttpStatusCode.Unauthorized)
+                return@get
+            }
 
             doAuth(
                 call = call,
-                permission = payload.permission,
+                permission = call.parameters["permission"]!!,
                 success = {
                     runBlocking { call.respond("allowed") }
                 },
@@ -25,8 +27,3 @@ object IsAllowedG : Request() {
         }
     }
 }
-
-@Serializable
-data class IsAllowedPayload(
-    val permission: String,
-)

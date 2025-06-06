@@ -1,3 +1,6 @@
+<!--TODO: Rewrite to tailwind-->
+
+
 <script lang="ts">
     import iwtcmsIcon from "../assets/icon_clearbg.png";
     import githubIcon from "../assets/github.svg";
@@ -66,6 +69,7 @@
             document.body.classList.toggle("light-mode-impl");
             localStorage.setItem("color-mode", colorModeSwitchInput.checked ? "light" : "dark");
         };
+
         if (localStorage.getItem("color-mode") == "light") {
             colorModeSwitchInput.checked = true;
             document.body.classList.add("light-mode-impl");
@@ -163,7 +167,6 @@
         align-items: center;
         justify-content: center;
         background-color: var(--header-color);
-        transition: background-color 0.3s ease;
         border-bottom: solid var(--header-bottom-border-color);
 
         .material-symbols-rounded,
@@ -258,8 +261,7 @@
                 background-color: var(--header-menu-background-color);
                 border-radius: 10px;
                 transition:
-                    left 0.3s ease,
-                    background-color 0.3s ease;
+                    left 0.3s ease;
                 padding-top: 10px;
                 padding-bottom: 10px;
                 z-index: 50;
@@ -280,7 +282,6 @@
                         border: none;
                         background-color: transparent;
                         color: var(--header-menu-item-fg-color);
-                        transition: color 0.3s ease;
                         font-family: "Nunito", sans-serif;
                         font-weight: 700;
                         text-decoration: none;
@@ -294,7 +295,6 @@
                             font-size: 20px;
                             margin-right: 10px;
                             color: var(--header-menu-item-fg-color);
-                            transition: color 0.3s ease;
                             filter: none;
                         }
 
@@ -302,9 +302,7 @@
                             width: 20px;
                             height: 20px;
                             margin-right: 10px;
-                            transition:
-                                filter 0.3s ease,
-                                color 0.3s ease;
+                            transition: filter 0.3s ease;
                         }
                     }
                 }
@@ -350,8 +348,6 @@
 
                 .slider {
                     background-color: var(--color-mode-switch-background-color);
-                    transition: background-color 0.3s ease;
-
                     &:before {
                         background-color: var(--color-mode-switch-handle-color);
                         content: "brightness_4";
@@ -362,10 +358,7 @@
                         display: flex;
                         justify-content: center;
                         align-items: center;
-                        transition:
-                            background-color 0.3s ease,
-                            color 0.3s ease,
-                            transform 0.4s;
+                        transition: transform 0.4s;
                     }
                 }
 

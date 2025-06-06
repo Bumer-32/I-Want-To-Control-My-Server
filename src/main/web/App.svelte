@@ -2,7 +2,7 @@
     import Header from "./lib/Header.svelte";
     import Footer from "./lib/Footer.svelte";
     import ConsoleTab from "./lib/tabs/ConsoleTab/ConsoleTab.svelte";
-    import SettingsTab from "./lib/tabs/SettingsTab/SettingsTab.svelte";
+    // import SettingsTab from "./lib/tabs/SettingsTab/SettingsTab.svelte";
     import PlayersTab from "./lib/tabs/PlayersTab/PlayersTab.svelte";
     import Login from "./lib/Login.svelte";
     import ToastSystem from "./scripts/toastSystem";
@@ -19,15 +19,15 @@
 
 <Footer />
 
-{#if window.location.pathname == "/BadConnection"}
+{#if window.location.pathname === "/BadConnection"}
     <main class="h-screen content-center">
         <div class="flex justify-center">
             <a href="/"><img src={icon} alt="icon" /></a>
             <div class="ml-[20px] flex flex-col content-center justify-center font-['Nunito'] text-[20px]">
-                <p1>Oh no!</p1>
-                <p1>It seems like you have a bad connection to the server.</p1>
-                <p1>Try to refresh the page or check your internet connection.</p1>
-                <p1>Good luck!</p1>
+                <h1>Oh no!</h1>
+                <h1>It seems like you have a bad connection to the server.</h1>
+                <h1>Try to refresh the page or check your internet connection.</h1>
+                <h1>Good luck!</h1>
             </div>
         </div>
     </main>
@@ -59,7 +59,7 @@
                 width: 100%;
                 height: 100%;
 
-                .container {
+                .tab-container {
                     display: flex;
                     align-items: center;
                     justify-content: center;
@@ -72,6 +72,3 @@
         }
     </style>
 {/if}
-
-<style lang="scss">
-</style>

@@ -72,7 +72,6 @@
         bottom: 0;
         display: flex;
         align-items: center;
-        transition: background-color 0.3s ease;
 
         .left {
             display: flex;
@@ -93,12 +92,10 @@
                 flex-direction: column;
                 transform: translateX(-50%);
                 color: var(--footer-authors-color);
-                transition: color 0.3s ease;
 
                 a {
                     color: var(--footer-authors-url-color);
                     text-decoration: none;
-                    transition: color 0.3s ease;
                 }
             }
         }
@@ -115,15 +112,13 @@
             gap: 5px;
             transition:
                 filter 0.3s ease,
-                box-shadow 0.3s ease,
-                color 0.3s ease;
+                box-shadow 0.3s ease;
 
             &:hover {
                 @include hover-holo-effect.hover-holo-effect;
 
                 .material-symbols-rounded {
                     color: var(--footer-github-star-hover-color);
-                    transition: color ease 0.3s;
                 }
             }
 
@@ -135,7 +130,6 @@
             .material-symbols-rounded {
                 font-size: 12px;
                 color: var(--footer-github-star-color);
-                transition: color ease 0.3s;
             }
         }
     }
