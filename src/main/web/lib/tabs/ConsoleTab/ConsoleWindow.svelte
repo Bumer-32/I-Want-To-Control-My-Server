@@ -110,6 +110,7 @@
 
         if (!(await isAllowed("read real time logs"))) {
             consoleDiv.classList.add("forbidden");
+            return
         }
 
         const ws = new WebSocket(Constants.CONSOLE_URL);
