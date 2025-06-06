@@ -13,10 +13,11 @@ body {
     align-items: center;
     height: 100vh;
     overflow: hidden;
+}
 
-    transition:
-        background-color 0.3s ease,
-        color 0.3s ease;
+* {
+    // smooth theme changing
+    transition: color 0.3s ease, background-color 0.3s , filter 0.3s ease;
 }
 
 #app {

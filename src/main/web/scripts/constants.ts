@@ -10,8 +10,8 @@ export default class Constants {
     static LOGS_HISTORY_URL = this.BASE_URL + "api/logsHistory";
     static CONSOLE_URL = this.BASE_URL + "ws/console";
     static STATS_URL = this.BASE_URL + "ws/serverStats";
-    static PERMITS_BASE_URL = this.BASE_URL + "api/permits/";
     static CONFIG_URL = this.BASE_URL + "api/config";
+    static IS_ALLOWED_URL = this.BASE_URL + "api/isAllowed";
 
     // OTHER
     static IWTCMS_VERSION: string;

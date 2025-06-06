@@ -292,7 +292,7 @@
 </script>
 
 <div id="settings-tab" class="disabled">
-    <div class="container">
+    <div class="tab-container">
         <div class="tab-selector">
             <!-- ? Add underline -->
             <span class="underline" bind:this={selectorUnderline}></span>

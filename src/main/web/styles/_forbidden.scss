@@ -1,39 +1,34 @@
-@mixin forbidden($width) {
+@mixin forbidden() {
     :global(.forbidden) {
-        $height: calc($width / 4);
         position: relative;
 
         &:before {
-            content: "";
-            background-color: red;
-            width: calc($width + 35px);
-            height: calc($height + 35px);
+            content: "FORBIDDEN";
+            background-color: var(--forbidden-background-color);
+            backdrop-filter: blur(5px);
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) rotate(-45deg);
-            border-radius: 15px;
-            z-index: 10;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: inherit;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--forbidden-text-color);
+            white-space: pre-line;
+            font-size: 20px;
         }
 
         &:after {
-            content: "FORBIDDEN";
+            content: "You have no access to this feature, please ask admin if you need it.";
             position: absolute;
-            top: 50%;
+            top: 55%;
             left: 50%;
-            transform: translate(-50%, -50%) rotate(-45deg);
-            font-size: calc($width / 6);
-            color: white;
-            background: red;
-            border: solid 10px white;
-            border-radius: 10px;
-            font-weight: 900;
-            width: calc($width + 3px);
-            height: calc($height + 3px);
+            width: 100%;
+            transform: translate(-50%, 0);
+            font-size: 12px;
             text-align: center;
-            display: flex;
-            align-items: center;
-            z-index: 10;
         }
     }
 }

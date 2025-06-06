@@ -1,4 +1,9 @@
 <script lang="ts">
+    import { onMount } from "svelte";
+    import { isAllowed } from "../../../scripts/auth";
+    import Constants from "../../../scripts/constants";
+    import ToastSystem from "../../../scripts/toastSystem";
+
     let statsDiv: HTMLDivElement;
     let cpuLoadValue: HTMLSpanElement;
     let ramUsageValue: HTMLSpanElement;
@@ -8,6 +13,66 @@
     let ipAddrValue: HTMLSpanElement;
     let tpsValue: HTMLSpanElement;
     let serverTimeValue: HTMLSpanElement;
+
+    async function connect() {
+        cpuLoadValue.innerHTML = "none";
+        ramUsageValue.innerHTML = "none";
+        uptimeValue.innerHTML = "none";
+        playersValue.innerHTML = "none";
+        playersMaxValue.innerHTML = "none";
+        ipAddrValue.innerHTML = "none";
+        tpsValue.innerHTML = "none";
+        serverTimeValue.innerHTML = "none";
+
+        if (!await isAllowed("access to server stats")) {
+            statsDiv.classList.add("forbidden")
+            return
+        }
+
+        const ws = new WebSocket(Constants.STATS_URL);
+        ws.onmessage = (event) => {
+            if (!event.data.includes("Connected to /")) {
+                //console.log(event.data);
+                const jsonData = JSON.parse(event.data);
+
+                cpuLoadValue.innerHTML = jsonData.cpuUsage != null ? (jsonData.cpuUsage * 100).toString().split(".")[0] + "%" : "<a href='https://modrinth.com/mod/spark'>Needs Spark</a>";
+                ramUsageValue.innerHTML = jsonData.memoryUsage.toString().split(".")[0] + "%";
+                uptimeValue.innerHTML = new Date(jsonData.uptime).toISOString().slice(11, -1).split(".")[0];
+                playersValue.innerHTML = jsonData.playerCount;
+                playersMaxValue.innerHTML = jsonData.maxPlayerCount;
+                ipAddrValue.innerHTML = jsonData.ip;
+                tpsValue.innerHTML = jsonData.tps != null ? Math.floor(jsonData.tps).toString() : "<a href='https://modrinth.com/mod/spark'>Needs Spark</a>";
+                serverTimeValue.innerHTML = jsonData.serverTime.split(".")[0].split("T")[1];
+            }
+        };
+
+        ws.onclose = () => {
+            if (!document.hidden) {
+                setTimeout(() => {
+                    connect();
+                }, 30000);
+            }
+        };
+
+        ws.onerror = (error) => {
+            console.error(error);
+            ToastSystem.addToQueue(`Error: ${error}`, ToastSystem.ToastType.ERROR)
+        };
+
+        const visibilitychangeListener = () => {
+            if (document.hidden) {
+                ws.close();
+            } else {
+                connect();
+                document.removeEventListener("visibilitychange", visibilitychangeListener);
+            }
+        };
+        document.addEventListener("visibilitychange", visibilitychangeListener);
+    }
+
+    onMount(() => {
+        connect();
+    });
 </script>
 
 <div class="statistics" bind:this={statsDiv}>
@@ -45,6 +110,8 @@
 </div>
 
 <style lang="scss">
+    @use "../../../styles/forbidden";
+
     .statistics {
         background-color: var(--console-background-color);
         padding: 10px;
@@ -52,7 +119,7 @@
         height: fit-content;
         margin-left: 60px;
         width: 250px;
-        transition: background-color ease 0.3s;
+        min-width: 175px;
 
         h3 {
             margin-top: 0;
@@ -66,4 +133,6 @@
             color: #597cef;
         }
     }
+
+    @include forbidden.forbidden();
 </style>

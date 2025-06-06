@@ -39,16 +39,15 @@ suspend fun doAuth(
     }
 
     return newSuspendedTransaction {
-        val user: ResultRow =
-            try {
-                Users
-                    .selectAll()
-                    .where { (Users.username eq session.name) and (Users.uniqueId eq session.id) }
-                    .first()
-            } catch (_: NoSuchElementException) {
-                unauthorized()
-                return@newSuspendedTransaction HttpStatusCode.Unauthorized
-            }
+        val user: ResultRow = try {
+            Users
+                .selectAll()
+                .where { (Users.username eq session.name) and (Users.uniqueId eq session.id) }
+                .first()
+        } catch (_: NoSuchElementException) {
+            unauthorized()
+            return@newSuspendedTransaction HttpStatusCode.Unauthorized
+        }
 
         if (user[Users.admin]) {
             success()
