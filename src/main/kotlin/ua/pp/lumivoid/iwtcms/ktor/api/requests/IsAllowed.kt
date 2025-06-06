@@ -7,7 +7,7 @@ import io.ktor.server.routing.get
 import kotlinx.coroutines.runBlocking
 import ua.pp.lumivoid.iwtcms.ktor.api.doAuth
 
-object IsAllowedG : Request() {
+object IsAllowed : Request() {
     override val path = "/api/isAllowed/{permission}"
 
     override val request: Routing.() -> Unit = {

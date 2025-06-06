@@ -13,7 +13,6 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import ua.pp.lumivoid.iwtcms.Constants
 import ua.pp.lumivoid.iwtcms.ktor.api.doAuth
-import ua.pp.lumivoid.iwtcms.ktor.api.requests.ApiListG.registerAPI
 import java.io.File
 
 object Configs : Request() {
@@ -33,8 +32,6 @@ object Configs : Request() {
         availableConfigsSettings.forEach {
             val configPath = "$path/${it.value.selector_name}"
             logger.info("       - config ${it.key} url: $configPath")
-            registerAPI("${it.value.selector_name}GPUT", configPath)
-            registerAPI("${it.value.selector_name}StrategyG", configPath)
 
             get(configPath) {
                 doAuth(

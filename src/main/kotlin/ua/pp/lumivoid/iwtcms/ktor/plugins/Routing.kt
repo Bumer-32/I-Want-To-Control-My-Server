@@ -15,20 +15,19 @@ import io.ktor.server.websocket.WebSockets
 import io.ktor.server.websocket.pingPeriod
 import io.ktor.server.websocket.timeout
 import ua.pp.lumivoid.iwtcms.Constants
-import ua.pp.lumivoid.iwtcms.ktor.api.requests.ApiListG
-import ua.pp.lumivoid.iwtcms.ktor.api.requests.CheckLoginG
+import ua.pp.lumivoid.iwtcms.ktor.api.requests.CheckLogin
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.Configs
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.CreateUserP
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.DeleteUserP
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.EditPermissionsP
-import ua.pp.lumivoid.iwtcms.ktor.api.requests.FilesG
-import ua.pp.lumivoid.iwtcms.ktor.api.requests.IsAllowedG
-import ua.pp.lumivoid.iwtcms.ktor.api.requests.IsDevEnabledG
+import ua.pp.lumivoid.iwtcms.ktor.api.requests.Files
+import ua.pp.lumivoid.iwtcms.ktor.api.requests.IsAllowed
+import ua.pp.lumivoid.iwtcms.ktor.api.requests.IsDevEnabled
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.LoginP
-import ua.pp.lumivoid.iwtcms.ktor.api.requests.LogoutP
-import ua.pp.lumivoid.iwtcms.ktor.api.requests.LogsHistoryG
-import ua.pp.lumivoid.iwtcms.ktor.api.requests.MainG
-import ua.pp.lumivoid.iwtcms.ktor.api.requests.VersionG
+import ua.pp.lumivoid.iwtcms.ktor.api.requests.Logout
+import ua.pp.lumivoid.iwtcms.ktor.api.requests.LogsHistory
+import ua.pp.lumivoid.iwtcms.ktor.api.requests.Main
+import ua.pp.lumivoid.iwtcms.ktor.api.requests.Version
 import ua.pp.lumivoid.iwtcms.ktor.api.websockets.ConsoleWS
 import ua.pp.lumivoid.iwtcms.ktor.api.websockets.ServerStatsWS
 import ua.pp.lumivoid.iwtcms.ktor.cookie.UserSession
@@ -75,16 +74,15 @@ fun Application.configureRouting() {
 
     logger.info("-=-=-=-=-=-=-=-=-=- Registering routes -=-=-=-=-=-=-=-=-=-")
 
-    MainG.register(r)
-    LogsHistoryG.register(r)
+    Main.register(r)
+    LogsHistory.register(r)
     LoginP.register(r)
-    ApiListG.register(r)
-    IsAllowedG.register(r)
-    FilesG.register(r)
-    VersionG.register(r)
-    CheckLoginG.register(r)
-    IsDevEnabledG.register(r)
-    LogoutP.register(r)
+    IsAllowed.register(r)
+    Files.register(r)
+    Version.register(r)
+    CheckLogin.register(r)
+    IsDevEnabled.register(r)
+    Logout.register(r)
     Configs.register(r)
     CreateUserP.register(r)
     DeleteUserP.register(r)

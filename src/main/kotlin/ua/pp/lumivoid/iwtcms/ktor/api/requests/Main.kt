@@ -4,7 +4,7 @@ import io.ktor.server.http.content.staticResources
 import io.ktor.server.routing.Routing
 import ua.pp.lumivoid.iwtcms.ktor.util.Config
 
-object MainG : Request() {
+object Main : Request() {
     override val path = "/"
 
     override val request: Routing.() -> Unit = {
