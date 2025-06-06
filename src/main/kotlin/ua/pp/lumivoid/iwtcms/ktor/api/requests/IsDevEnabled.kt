@@ -4,14 +4,14 @@ import io.ktor.http.ContentType
 import io.ktor.server.response.respondText
 import io.ktor.server.routing.Routing
 import io.ktor.server.routing.get
-import ua.pp.lumivoid.iwtcms.Constants
+import ua.pp.lumivoid.iwtcms.ktor.util.Config
 
-object VersionG : Request() {
-    override val path = "/api/version"
+object IsDevEnabled : Request() {
+    override val path = "/api/isDevEnabled"
 
     override val request: Routing.() -> Unit = {
         get(path) {
-            call.respondText(Constants.MOD_VERSION, ContentType.Text.Plain)
+            call.respondText(Config.readConfig().devMode.toString(), ContentType.Text.Plain)
         }
     }
 }

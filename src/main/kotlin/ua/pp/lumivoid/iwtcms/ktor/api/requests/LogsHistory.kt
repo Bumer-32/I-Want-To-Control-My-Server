@@ -8,7 +8,7 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import ua.pp.lumivoid.iwtcms.ktor.api.doAuth
 
-object LogsHistoryG : Request() {
+object LogsHistory : Request() {
     override val path = "/api/logsHistory"
 
     private val json = Json { prettyPrint = true }

@@ -12,7 +12,7 @@ import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransacti
 import ua.pp.lumivoid.iwtcms.ktor.cookie.UserSession
 import ua.pp.lumivoid.iwtcms.ktor.tables.Users
 
-object CheckLoginG : Request() {
+object CheckLogin : Request() {
     override val path = "/api/checkLogin"
 
     override val request: Routing.() -> Unit = {

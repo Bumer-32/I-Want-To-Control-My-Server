@@ -8,7 +8,7 @@ import io.ktor.server.sessions.get
 import io.ktor.server.sessions.sessions
 import ua.pp.lumivoid.iwtcms.ktor.cookie.UserSession
 
-object LogoutP : Request() {
+object Logout : Request() {
     override val path = "/api/logout"
 
     override val request: Routing.() -> Unit = {
