@@ -28,7 +28,6 @@
         loadGithubStars();
 
         // ? happy birthday Bumer_32
-        // TODO: fix position
         if (new Date().getMonth() == 1 && new Date().getDate() == 21) {
             console.log("Happy birthday Bumer_32! 🎉🎉🎉");
             creatorElement.innerHTML = creatorElement.innerHTML + " | Happy birthday Bumer_32! 🎉🎉🎉";
@@ -76,21 +75,21 @@
         .left {
             display: flex;
             align-items: center;
-            justify-content: center;
 
             .iwtcms-label {
                 position: static;
-                transform: translate(-15%, 0);
+                transform: translate(0, 0);
                 background: linear-gradient(to right, var(--footer-iwtcms-label-color-1) 0, var(--footer-iwtcms-label-color-2) 10%, var(--footer-iwtcms-label-color-3) 20%) 0;
                 -webkit-background-clip: text;
                 background-clip: text;
+                margin-left: -30px;
+                margin-right: -30px;
             }
 
             .authors {
                 font-size: 8px;
                 display: flex;
                 flex-direction: column;
-                transform: translateX(-50%);
                 color: var(--footer-authors-color);
 
                 a {
