@@ -60,7 +60,8 @@ object PREIWTCMS : PreLaunchEntrypoint {
             if (Users.selectAll().empty()) {
                 Users.insert {
                     it[username] = "admin"
-                    it[passwordHash] = DigestUtils.sha256Hex("iwtcms").toString()
+                    it[passwordHash] = DigestUtils.sha256Hex("iwtcms" + "ySXBvMifqXULEm1uRKP91ctmL6tCwCMi").toString()
+                    it[salt] = "ySXBvMifqXULEm1uRKP91ctmL6tCwCMi"
                     it[uniqueId] = DigestUtils.sha256Hex("admin+iwtcms").toString()
                     it[admin] = true
                 }

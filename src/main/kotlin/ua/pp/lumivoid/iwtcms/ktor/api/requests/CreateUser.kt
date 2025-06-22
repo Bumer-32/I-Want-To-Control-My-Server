@@ -9,6 +9,7 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.Serializable
 import org.apache.commons.codec.digest.DigestUtils
 import org.jetbrains.exposed.exceptions.ExposedSQLException
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -17,7 +18,7 @@ import ua.pp.lumivoid.iwtcms.ktor.api.getPermissionsList
 import ua.pp.lumivoid.iwtcms.ktor.tables.UserPermissions
 import ua.pp.lumivoid.iwtcms.ktor.tables.Users
 
-object CreateUserP : Request() {
+object CreateUser : Request() {
     override val path = "/api/createUser"
 
     override val request: Routing.() -> Unit = {
@@ -29,14 +30,20 @@ object CreateUserP : Request() {
                 permission = "create users",
                 success = {
                     transaction {
-                        try {
+                        var salt = generateSequence { genSalt() }
+                            .first { saltCandidate -> 
+                                Users.selectAll().where(Users.salt eq saltCandidate).empty()
+                            }
+
+                        runCatching {
                             Users.insert {
                                 it[Users.username] = payload.username
-                                it[Users.passwordHash] = DigestUtils.sha256Hex(payload.password)
-                                it[Users.uniqueId] = DigestUtils.sha256Hex("${payload.username}+${payload.password}")
+                                it[Users.passwordHash] = DigestUtils.sha256Hex(payload.password + salt)
+                                it[Users.salt] = salt
+                                it[Users.uniqueId] = DigestUtils.sha256Hex("${payload.username}+${payload.password}+${salt}")
                                 it[Users.admin] = payload.isAdmin
                             }
-                        } catch (_: ExposedSQLException) {
+                        }.onFailure {
                             runBlocking { call.respondText("User already exists", status = HttpStatusCode.Conflict) }
                             return@transaction
                         }
@@ -59,6 +66,13 @@ object CreateUserP : Request() {
                 },
             )
         }
+    }
+
+    fun genSalt(): String {
+        val allowedChars = ('A'..'Z') + ('a'..'z') + ('0'..'9')
+        return (1..32)
+            .map { allowedChars.random() }
+            .joinToString("")
     }
 }
 
