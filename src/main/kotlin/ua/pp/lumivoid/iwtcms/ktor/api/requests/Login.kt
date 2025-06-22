@@ -10,13 +10,12 @@ import io.ktor.server.sessions.set
 import kotlinx.serialization.Serializable
 import org.apache.commons.codec.digest.DigestUtils
 import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import ua.pp.lumivoid.iwtcms.ktor.cookie.UserSession
 import ua.pp.lumivoid.iwtcms.ktor.tables.Users
 
-object LoginP : Request() {
+object Login : Request() {
     override val path = "/api/login"
 
     override val request: Routing.() -> Unit = {
@@ -24,19 +23,22 @@ object LoginP : Request() {
             val payload = call.receive<LoginPayload>()
 
             newSuspendedTransaction {
-                val user: ResultRow =
-                    try {
-                        Users
-                            .selectAll()
-                            .where { (Users.username eq payload.username) and (Users.passwordHash eq DigestUtils.sha256Hex(payload.password)) }
-                            .first()
-                    } catch (_: NoSuchElementException) {
-                        call.respondText("Login failed", status = HttpStatusCode.Unauthorized)
-                        return@newSuspendedTransaction
-                    }
+                try {
+                    val user: ResultRow = Users
+                                            .selectAll()
+                                            .where { (Users.username eq payload.username) }
+                                            .first()
+                    val salt = user[Users.salt]
 
-                call.sessions.set(UserSession(name = user[Users.username], id = user[Users.uniqueId]))
-                call.respondText("Login successful")
+                    if (DigestUtils.sha256Hex(payload.password + salt) == user[Users.passwordHash]) {
+                        call.sessions.set(UserSession(user[Users.username], user[Users.uniqueId]))
+                        call.respondText("Login successful")
+                    } else {
+                        call.respondText("Login failed", status = HttpStatusCode.Unauthorized)
+                    }
+                } catch (_: NoSuchElementException) {
+                    call.respondText("Login failed", status = HttpStatusCode.Unauthorized)
+                }
             }
         }
     }

@@ -15,7 +15,7 @@ import ua.pp.lumivoid.iwtcms.ktor.api.doAuth
 import ua.pp.lumivoid.iwtcms.ktor.tables.UserPermissions
 import ua.pp.lumivoid.iwtcms.ktor.tables.Users
 
-object EditPermissionsP : Request() {
+object EditPermissions : Request() {
     override val path = "/api/editPermissions"
 
     override val request: Routing.() -> Unit = {
