@@ -200,5 +200,4 @@
             height: variables.$console-input-height;
         }
     }
-
 </style>

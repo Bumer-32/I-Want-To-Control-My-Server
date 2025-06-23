@@ -52,7 +52,7 @@
             ToastSystem.addToQueue("Set default tab to " + tabName, ToastSystem.ToastType.INFO);
             console.log("Set default tab to " + tabName);
         }}
-    >Set default tab
+        >Set default tab
     </button>
 
     <hr />

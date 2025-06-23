@@ -22,7 +22,7 @@ try {
     const wsPrefix = json.ssl["use SSL"] ? "wss" : "ws";
     apiURL = `${prefix}://${json.server.ip}:${json.server.port}`;
     apiWsURL = `${wsPrefix}://${json.server.ip}:${json.server.port}`;
-    hostIp = json.server.ip
+    hostIp = json.server.ip;
 
     autoOpen = json.web["auto open IWTCMS page on startup"] ? "/" : "";
 
