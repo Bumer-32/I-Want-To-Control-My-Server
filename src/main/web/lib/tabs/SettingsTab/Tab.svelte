@@ -9,7 +9,7 @@
     let tabContainer: HTMLDivElement;
     let textArea: HTMLTextAreaElement;
 
-    export async function updateFileView(force: boolean = false) {
+    export async function update(force: boolean = false) {
         if (!tabContainer.classList.contains("disabled") || force) {
             let sure = false;
             if (!force) sure = confirm(`Are you sure want to update ${selfConfigSetting.selector_name}?\nThis overwrite any changes you made!`);
@@ -47,7 +47,7 @@
     }
 
     onMount(() => {
-        updateFileView(true);
+        update(true);
     });
 </script>
 

@@ -107,7 +107,7 @@
         // controls buttons
         updateButton.addEventListener("click", () => {
             tabs.forEach((tab) => {
-                tab.updateFileView();
+                tab.update();
             });
         });
 
