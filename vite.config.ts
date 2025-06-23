@@ -8,6 +8,7 @@ import tailwindcss from "@tailwindcss/vite";
 let apiURL = "http://localhost:25566";
 let apiWsURL = "ws://localhost:25566";
 let autoOpen = "";
+let hostIp = "localhost";
 
 try {
     const hoconInstance = await hocon();
@@ -21,6 +22,7 @@ try {
     const wsPrefix = json.ssl["use SSL"] ? "wss" : "ws";
     apiURL = `${prefix}://${json.server.ip}:${json.server.port}`;
     apiWsURL = `${wsPrefix}://${json.server.ip}:${json.server.port}`;
+    hostIp = json.server.ip
 
     autoOpen = json.web["auto open IWTCMS page on startup"] ? "/" : "";
 
@@ -47,6 +49,7 @@ export default defineConfig({
         sourcemap: true,
     },
     server: {
+        host: hostIp,
         open: autoOpen,
         proxy: {
             "/apiList": {

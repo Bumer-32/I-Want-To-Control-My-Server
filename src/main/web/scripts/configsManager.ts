@@ -8,9 +8,9 @@ export default async function readConfig(configSelectorName: string, availableCo
         return null;
     }
 
-    const comratator = ConfigReaders.readers[config?.config_type];
-    if (comratator == undefined) return null;
-    return await comratator(strategy, configFile);
+    const comparator = ConfigReaders.readers[config?.config_type];
+    if (comparator == undefined) return null;
+    return await comparator(strategy, configFile);
 }
 
 interface StrategyConfig {
@@ -39,11 +39,11 @@ export type AvailableConfigs = Record<string, AvailableConfigSetting>;
 class ConfigReaders {
     static readers: Record<string, (strategy: Strategy, configFile: string) => Promise<Record<string, StrategyConfig> | null>> = {};
 
-    static register(name: string, comratator: (strategy: Strategy, configFile: string) => Promise<Record<string, StrategyConfig> | null>) {
+    static register(name: string, compatator: (strategy: Strategy, configFile: string) => Promise<Record<string, StrategyConfig> | null>) {
         if (this.readers[name]) {
             throw new Error(`Config reader ${name} already registered`);
         }
-        this.readers[name] = comratator;
+        this.readers[name] = compatator;
     }
 
     static {

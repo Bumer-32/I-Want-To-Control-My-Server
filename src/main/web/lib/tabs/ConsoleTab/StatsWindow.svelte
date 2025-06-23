@@ -110,8 +110,6 @@
 </div>
 
 <style lang="scss">
-    @use "../../../styles/forbidden";
-
     .statistics {
         background-color: var(--console-background-color);
         padding: 10px;
@@ -133,6 +131,4 @@
             color: #597cef;
         }
     }
-
-    @include forbidden.forbidden();
 </style>

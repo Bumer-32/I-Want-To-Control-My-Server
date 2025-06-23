@@ -109,9 +109,6 @@
             align-items: center;
             color: var(--footer-github-title-color);
             gap: 5px;
-            transition:
-                filter 0.3s ease,
-                box-shadow 0.3s ease;
 
             &:hover {
                 @include hover-holo-effect.hover-holo-effect;

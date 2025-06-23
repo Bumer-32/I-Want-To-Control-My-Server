@@ -24,8 +24,8 @@ body {
 }
 
 #app {
-    height: 100%;
-    width: 100%;
+    height: 100vh;
+    width: 100vw;
 }
 
 .material-symbols-rounded {
@@ -68,4 +68,41 @@ noscript {
         background-color 1s ease,
         box-shadow 1s ease;
     box-shadow: 5px 5px transparent;
+}
+
+.forbidden {
+    position: relative;
+
+    &:before {
+        content: "FORBIDDEN";
+        background-color: var(--forbidden-background-color);
+        backdrop-filter: blur(5px);
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: inherit;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--forbidden-text-color);
+        white-space: pre-line;
+        font-size: 20px;
+    }
+
+    &:after {
+        content: "You have no access to this feature, please ask admin if you need it.";
+        position: absolute;
+        top: 55%;
+        left: 50%;
+        width: 100%;
+        transform: translate(-50%, 0);
+        font-size: 12px;
+        text-align: center;
+    }
+}
+
+.hover-holo {
+    filter: drop-shadow(0 0 10px var(--holo-effect-color));
 }

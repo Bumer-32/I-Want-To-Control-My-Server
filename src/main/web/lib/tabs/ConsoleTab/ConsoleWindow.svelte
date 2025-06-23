@@ -182,16 +182,14 @@
 <style lang="scss">
     @use "../../../styles/variables";
     @use "../../../styles/scrollbar";
-    @use "../../../styles/forbidden";
 
     .console {
         width: variables.$console-width;
 
-        @include scrollbar.scrollbar;
-
         .console-text {
             width: calc(100% - 32px);
             height: calc(100% - #{variables.$console-input-height} - 24px);
+            @include scrollbar.scrollbar;
         }
 
         .total-messages {
@@ -202,5 +200,5 @@
             height: variables.$console-input-height;
         }
     }
-    @include forbidden.forbidden;
+
 </style>
