@@ -37,7 +37,7 @@
     <main class="align-center absolute flex w-screen justify-center">
         <div class="tabs h-full w-full">
             <ConsoleTab />
-             <SettingsTab />
+            <SettingsTab />
             <PlayersTab />
             <UsersTab />
         </div>
