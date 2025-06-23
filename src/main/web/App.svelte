@@ -2,7 +2,7 @@
     import Header from "./lib/Header.svelte";
     import Footer from "./lib/Footer.svelte";
     import ConsoleTab from "./lib/tabs/ConsoleTab/ConsoleTab.svelte";
-    // import SettingsTab from "./lib/tabs/SettingsTab/SettingsTab.svelte";
+    import SettingsTab from "./lib/tabs/SettingsTab/SettingsTab.svelte";
     import PlayersTab from "./lib/tabs/PlayersTab/PlayersTab.svelte";
     import Login from "./lib/Login.svelte";
     import ToastSystem from "./scripts/toastSystem";
@@ -37,7 +37,7 @@
     <main class="align-center absolute flex w-screen justify-center">
         <div class="tabs h-full w-full">
             <ConsoleTab />
-            <!-- <SettingsTab /> -->
+             <SettingsTab />
             <PlayersTab />
             <UsersTab />
         </div>

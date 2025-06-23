@@ -61,7 +61,7 @@
 <style lang="scss">
     @use "../styles/hover-holo-effect";
 
-    :is(form > input, button, img):hover {
+    :is(form > input, button, img) {
         @include hover-holo-effect.hover-holo-effect;
     }
 </style>

@@ -1,5 +1,5 @@
 @mixin scrollbar {
-    :global(::-webkit-scrollbar) {
+    &::-webkit-scrollbar {
         width: 5px;
 
         &:horizontal {
@@ -7,7 +7,7 @@
         }
     }
 
-    :global(::-webkit-scrollbar-track) {
+    &::-webkit-scrollbar-track {
         background: var(--console-scrollbar-track-color);
         border-radius: 10px;
         transition: background ease 0.3s;
@@ -23,7 +23,7 @@
         }
     }
 
-    :global(::-webkit-scrollbar-thumb) {
+    &::-webkit-scrollbar-thumb {
         background: var(--console-scrollbar-thumb-color);
         border-radius: 10px;
 

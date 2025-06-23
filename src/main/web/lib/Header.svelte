@@ -171,14 +171,7 @@
         .material-symbols-rounded,
         .color-mode,
         .menu .menu-button {
-            // hover holo effect
-            transition:
-                filter 0.3s ease,
-                box-shadow 0.3s ease;
-
-            &:hover {
-                @include hover-holo-effect.hover-holo-effect;
-            }
+            @include hover-holo-effect.hover-holo-effect;
         }
 
         .material-symbols-rounded {
@@ -300,7 +293,6 @@
                             width: 20px;
                             height: 20px;
                             margin-right: 10px;
-                            transition: filter 0.3s ease;
                         }
                     }
                 }
@@ -329,7 +321,7 @@
             }
 
             .hover-holo-effect {
-                @include hover-holo-effect.hover-holo-effect;
+                @include hover-holo-effect.holo-effect;
             }
         }
 
