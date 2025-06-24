@@ -1,13 +1,19 @@
 <script lang="ts">
     import { onMount } from "svelte";
-    import type { AvailableConfigSetting } from "../../../scripts/configsManager";
+    import readConfig, { type AvailableConfigSetting, type Strategy } from "../../../scripts/configsManager";
     import Constants from "../../../scripts/constants";
     import ToastSystem from "../../../scripts/toastSystem";
+    import slideOnOverflow from "../../../scripts/slideOnOverflow";
+    import YAML from "yaml";
 
     export let selfConfigSetting: AvailableConfigSetting;
 
     let tabContainer: HTMLDivElement;
     let textArea: HTMLTextAreaElement;
+    let easyViewDiv: HTMLDivElement;
+
+    let defaultStrategy: Strategy
+    let easyViewPlatesList: Strategy = {}
 
     export async function update(force: boolean = false) {
         if (!tabContainer.classList.contains("disabled") || force) {
@@ -19,6 +25,7 @@
 
                     if (response.ok) {
                         textArea.value = await response.text();
+                        await easyViewPlates()
                     }
                 } catch (error) {
                     ToastSystem.addToQueue(`Error: ${error}`, ToastSystem.ToastType.ERROR);
@@ -46,19 +53,66 @@
         }
     }
 
+    async function easyViewPlates() {
+        try {
+            const currentConfig = textArea.value
+            const strategyText = await (await fetch(`${Constants.CONFIG_URL}/${selfConfigSetting.selector_name}/strategy`)).text();
+            const strategy: Strategy = YAML.parse(strategyText);
+            defaultStrategy = strategy;
+
+            (easyViewDiv.querySelectorAll("div") as NodeListOf<HTMLDivElement>).forEach((element: HTMLDivElement) => { // remove all except easy-view-text
+                if (!element.classList.contains("easy-view-text")) element.remove();
+            });
+
+            const config = await readConfig(selfConfigSetting, strategy, currentConfig)
+            if (config == null) return;
+            easyViewPlatesList = config
+
+        } catch (error) {
+            ToastSystem.addToQueue(`Error: ${error}`, ToastSystem.ToastType.ERROR);
+        }
+
+    }
+
     onMount(() => {
         update(true);
     });
 </script>
 
 <div class="tab disabled h-full" id={"settings_file|" + selfConfigSetting.selector_name} bind:this={tabContainer}>
-    <div class="easy-view">
+    <div class="easy-view" bind:this={easyViewDiv}>
         <div class="easy-view-text absolute top-[50%] left-[50%] flex flex-col items-center justify-center gap-[10px] text-center">
-            <span>Eazy view enabled, but seems like there's no strategy for this file.</span>
+            <span>Easy view enabled, but seems like there's no strategy for this file.</span>
             <span>Please switch to file view.</span>
             <hr />
             <span>If you need more info please check console.</span>
         </div>
+        
+        {#each Object.entries(easyViewPlatesList) as [name, data], i}
+            <div class="bg-[var(--easy-view-setting-background-color)] rounded-[5px] h-[50px] relative before:content-[''] before:absolute before:h-[15px] before:w-full before:bg-[var(--easy-view-setting-secondary-background-color)] before:bottom-0 before:left-0 before:rounded-b-[5px]">
+                <div class="flex items-center w-full h-full justify-between px-[5px]" style="transform:translateY(-7.5px)">
+                    <span class="w-[220px] rounded-full text-nowrap overflow-clip" use:slideOnOverflow>{name}</span>
+                    {#if data.type === "int"}
+                        <input type="number"  min={data.min} max={data.max} step={data.step} value={data.default} class="bg-[var(--easy-view-setting-secondary-background-color)] outline-none rounded-[5px] w-[160px] pl-[5px] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
+                    {:else if data.type === "bool"}
+                        <select class="bg-[var(--easy-view-setting-secondary-background-color)] outline-none rounded-[5px]">
+                            {#if data.default === false}<option selected>false</option>{:else}<option>false</option>{/if}
+                            {#if data.default === true}<option selected>true</option>{:else}<option>true</option>{/if}
+                        </select>
+                    {:else if data.type === "choose"}
+                        <select class="bg-[var(--easy-view-setting-secondary-background-color)] outline-none rounded-[5px]">
+                            {#each data.options as option}
+                                {#if data.default === option}<option selected>{option}</option>{:else}<option>{option}</option>{/if}
+                            {/each}
+                        </select>
+                    {:else}
+                        <!--string and other unregistered will also work as string-->
+                        <input value={data.default} class="bg-[var(--easy-view-setting-secondary-background-color)] outline-none rounded-[5px] w-[160px] pl-[5px]">
+                    {/if}
+                </div>
+                <span class="absolute bottom-0 text-[10px] left-[5px]">default: {defaultStrategy[name].default}</span>
+            </div>
+        {/each}
     </div>
     <div class="disabled flex h-full items-center justify-center">
         <!--suppress HtmlWrongAttributeValue -->
@@ -77,18 +131,18 @@
     .tab {
         .easy-view {
             display: grid;
-            grid-template-columns: repeat(3, 300px);
+            grid-template-columns: repeat(3, 400px);
             gap: 10px;
             grid-auto-rows: minmax(100px, auto);
             justify-content: center;
             align-items: center;
 
-            @media (max-width: 1000px) {
-                grid-template-columns: repeat(2, 300px);
+            @media (min-width: 1050px) and (max-width: 1220px) {
+                grid-template-columns: repeat(2, 500px);
             }
 
-            @media (max-width: 700px) {
-                grid-template-columns: 300px;
+            @media (max-width: 1049px) {
+                grid-template-columns: 500px;
             }
 
             .easy-view-text {
@@ -97,16 +151,6 @@
                 &:not(:only-child) {
                     display: none;
                 }
-            }
-
-            :global(.setting) {
-                display: flex;
-                flex-direction: column;
-            }
-            :global(.setting span) {
-                font-size: 18px;
-                text-wrap: nowrap;
-                overflow: hidden;
             }
         }
 
