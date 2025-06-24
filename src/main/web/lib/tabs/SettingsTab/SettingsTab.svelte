@@ -50,7 +50,7 @@
         .tab-container {
             height: variables.$container-height;
             .settings-tab-tabs {
-                @include scrollbar.scrollbar()
+                @include scrollbar.scrollbar();
             }
         }
     }
