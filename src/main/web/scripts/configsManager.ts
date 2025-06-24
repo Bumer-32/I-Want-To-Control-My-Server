@@ -1,14 +1,7 @@
 import { hocon } from "hocon-web";
 
-export default async function readConfig(configSelectorName: string, availableConfigs: AvailableConfigs, strategy: Strategy, configFile: string): Promise<Record<string, StrategyConfig> | null> {
-    const config = Object.values(availableConfigs).find((config) => config.selector_name == configSelectorName);
-
-    if (!config) {
-        console.error(`Config ${configSelectorName} not found`);
-        return null;
-    }
-
-    const comparator = ConfigReaders.readers[config?.config_type];
+export default async function readConfig(selfConfigSetting: AvailableConfigSetting, strategy: Strategy, configFile: string): Promise<Strategy | null> {
+    const comparator = ConfigReaders.readers[selfConfigSetting.config_type];
     if (comparator == undefined) return null;
     return await comparator(strategy, configFile);
 }
@@ -37,9 +30,9 @@ export interface AvailableConfigSetting {
 export type AvailableConfigs = Record<string, AvailableConfigSetting>;
 
 class ConfigReaders {
-    static readers: Record<string, (strategy: Strategy, configFile: string) => Promise<Record<string, StrategyConfig> | null>> = {};
+    static readers: Record<string, (strategy: Strategy, configFile: string) => Promise<Strategy | null>> = {};
 
-    static register(name: string, compatator: (strategy: Strategy, configFile: string) => Promise<Record<string, StrategyConfig> | null>) {
+    static register(name: string, compatator: (strategy: Strategy, configFile: string) => Promise<Strategy | null>) {
         if (this.readers[name]) {
             throw new Error(`Config reader ${name} already registered`);
         }
@@ -54,7 +47,7 @@ class ConfigReaders {
                 const json = JSON.parse(cfg.toJSON());
                 cfg.delete();
 
-                const result: Record<string, StrategyConfig> = {};
+                const result: Strategy = {};
 
                 Object.entries(strategy).forEach(([key, value]) => {
                     // ? first try to get the value from the config file
@@ -100,7 +93,7 @@ class ConfigReaders {
                     cfg[key] = value;
                 });
 
-                const result: Record<string, StrategyConfig> = {};
+                const result: Strategy = {};
 
                 Object.entries(strategy).forEach(([key, value]) => {
                     // ? first try to get the value from the config file

@@ -62,7 +62,7 @@
         selectorUnderline.style.width = `${width}px`;
     }
 
-    function changeTab() {
+    export function changeTab() {
         const checkedInput = selectorContainer.querySelector('input[type="radio"]:checked') as HTMLInputElement;
         const checkedLabel = selectorContainer.querySelector(`label[for="${checkedInput.id}"]`) as HTMLLabelElement;
         const tabDiv = document.getElementById(`settings_file|${checkedLabel.innerHTML}`) as HTMLDivElement;
