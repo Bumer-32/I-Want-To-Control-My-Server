@@ -95,6 +95,9 @@ dependencies {
 	implementation include("commons-codec:commons-codec:${project.commons_codec}")
 
 	implementation include("com.charleskorn.kaml:kaml:${project.kaml_version}")
+	include "com.squareup.okio:okio:${project.okio_version}"
+	include "it.krzeminski:snakeyaml-engine-kmp:${project.snakeyaml_engine_kmp_version}"
+	include "net.thauvin.erik.urlencoder:urlencoder-lib-jvm:${project.urlencoder_lib_jvm_version}"
 
 	modImplementation "me.lucko:spark-api:${project.spark_api_version}"
 }
