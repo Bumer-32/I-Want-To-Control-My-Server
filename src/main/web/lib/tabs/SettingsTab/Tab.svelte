@@ -12,8 +12,8 @@
     let textArea: HTMLTextAreaElement;
     let easyViewDiv: HTMLDivElement;
 
-    let defaultStrategy: Strategy
-    let easyViewPlatesList: Strategy = {}
+    let defaultStrategy: Strategy;
+    let easyViewPlatesList: Strategy = {};
 
     export async function update(force: boolean = false) {
         if (!tabContainer.classList.contains("disabled") || force) {
@@ -25,7 +25,7 @@
 
                     if (response.ok) {
                         textArea.value = await response.text();
-                        await easyViewPlates()
+                        await easyViewPlates();
                     }
                 } catch (error) {
                     ToastSystem.addToQueue(`Error: ${error}`, ToastSystem.ToastType.ERROR);
@@ -55,23 +55,22 @@
 
     async function easyViewPlates() {
         try {
-            const currentConfig = textArea.value
+            const currentConfig = textArea.value;
             const strategyText = await (await fetch(`${Constants.CONFIG_URL}/${selfConfigSetting.selector_name}/strategy`)).text();
             const strategy: Strategy = YAML.parse(strategyText);
             defaultStrategy = strategy;
 
-            (easyViewDiv.querySelectorAll("div") as NodeListOf<HTMLDivElement>).forEach((element: HTMLDivElement) => { // remove all except easy-view-text
+            (easyViewDiv.querySelectorAll("div") as NodeListOf<HTMLDivElement>).forEach((element: HTMLDivElement) => {
+                // remove all except easy-view-text
                 if (!element.classList.contains("easy-view-text")) element.remove();
             });
 
-            const config = await readConfig(selfConfigSetting, strategy, currentConfig)
+            const config = await readConfig(selfConfigSetting, strategy, currentConfig);
             if (config == null) return;
-            easyViewPlatesList = config
-
+            easyViewPlatesList = config;
         } catch (error) {
             ToastSystem.addToQueue(`Error: ${error}`, ToastSystem.ToastType.ERROR);
         }
-
     }
 
     onMount(() => {
@@ -87,30 +86,39 @@
             <hr />
             <span>If you need more info please check console.</span>
         </div>
-        
+
         {#each Object.entries(easyViewPlatesList) as [name, data], i}
-            <div class="bg-[var(--easy-view-setting-background-color)] rounded-[5px] h-[50px] relative before:content-[''] before:absolute before:h-[15px] before:w-full before:bg-[var(--easy-view-setting-secondary-background-color)] before:bottom-0 before:left-0 before:rounded-b-[5px]">
-                <div class="flex items-center w-full h-full justify-between px-[5px]" style="transform:translateY(-7.5px)">
-                    <span class="w-[220px] rounded-full text-nowrap overflow-clip" use:slideOnOverflow>{name}</span>
+            <div
+                class="relative h-[50px] rounded-[5px] bg-[var(--easy-view-setting-background-color)] before:absolute before:bottom-0 before:left-0 before:h-[15px] before:w-full before:rounded-b-[5px] before:bg-[var(--easy-view-setting-secondary-background-color)] before:content-['']"
+            >
+                <div class="flex h-full w-full items-center justify-between px-[5px]" style="transform:translateY(-7.5px)">
+                    <span class="w-[220px] overflow-clip rounded-full text-nowrap" use:slideOnOverflow>{name}</span>
                     {#if data.type === "int"}
-                        <input type="number"  min={data.min} max={data.max} step={data.step} value={data.default} class="bg-[var(--easy-view-setting-secondary-background-color)] outline-none rounded-[5px] w-[160px] pl-[5px] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
+                        <input
+                            type="number"
+                            min={data.min}
+                            max={data.max}
+                            step={data.step}
+                            value={data.default}
+                            class="w-[160px] [appearance:textfield] rounded-[5px] bg-[var(--easy-view-setting-secondary-background-color)] pl-[5px] outline-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                        />
                     {:else if data.type === "bool"}
-                        <select class="bg-[var(--easy-view-setting-secondary-background-color)] outline-none rounded-[5px]">
+                        <select class="rounded-[5px] bg-[var(--easy-view-setting-secondary-background-color)] outline-none">
                             {#if data.default === false}<option selected>false</option>{:else}<option>false</option>{/if}
                             {#if data.default === true}<option selected>true</option>{:else}<option>true</option>{/if}
                         </select>
                     {:else if data.type === "choose"}
-                        <select class="bg-[var(--easy-view-setting-secondary-background-color)] outline-none rounded-[5px]">
+                        <select class="rounded-[5px] bg-[var(--easy-view-setting-secondary-background-color)] outline-none">
                             {#each data.options as option}
                                 {#if data.default === option}<option selected>{option}</option>{:else}<option>{option}</option>{/if}
                             {/each}
                         </select>
                     {:else}
                         <!--string and other unregistered will also work as string-->
-                        <input value={data.default} class="bg-[var(--easy-view-setting-secondary-background-color)] outline-none rounded-[5px] w-[160px] pl-[5px]">
+                        <input value={data.default} class="w-[160px] rounded-[5px] bg-[var(--easy-view-setting-secondary-background-color)] pl-[5px] outline-none" />
                     {/if}
                 </div>
-                <span class="absolute bottom-0 text-[10px] left-[5px]">default: {defaultStrategy[name].default}</span>
+                <span class="absolute bottom-0 left-[5px] text-[10px]">default: {defaultStrategy[name].default}</span>
             </div>
         {/each}
     </div>
