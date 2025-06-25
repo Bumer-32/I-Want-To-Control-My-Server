@@ -88,17 +88,18 @@ body {
 
             .iwtcms-label {
                 position: static;
-                transform: translate(-15%, 0);
+                transform: translate(0, 0);
                 background: linear-gradient(to right, var(--footer-iwtcms-label-color-1) 0, var(--footer-iwtcms-label-color-2) 10%, var(--footer-iwtcms-label-color-3) 20%) 0;
                 -webkit-background-clip: text;
                 background-clip: text;
+                margin-left: -30px;
+                margin-right: -30px;
             }
 
             .authors {
                 font-size: 8px;
                 display: flex;
                 flex-direction: column;
-                transform: translateX(-50%);
                 color: var(--footer-authors-color);
                 transition: color 0.3s ease;
                 text-align: left;
