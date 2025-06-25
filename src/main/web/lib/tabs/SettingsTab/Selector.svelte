@@ -114,7 +114,7 @@
         fileViewButton.addEventListener("click", () => {
             tabs.forEach((tab) => {
                 tab.fileView();
-            })
+            });
         });
 
         saveButton.addEventListener("click", () => {
