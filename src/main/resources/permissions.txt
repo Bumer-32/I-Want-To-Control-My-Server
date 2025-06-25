@@ -1,13 +1,5 @@
-read real time logs
-read logs history
-execute commands
-access to server stats
-read iwtcms config
-edit iwtcms config
-read minecraft server config
-edit minecraft server config
-kick players
-ban players
-create users
-delete users
-edit users
+logs.read
+commands.execute
+server.stats.read
+players.manage
+users.manage

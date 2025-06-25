@@ -24,7 +24,7 @@
         tpsValue.innerHTML = "none";
         serverTimeValue.innerHTML = "none";
 
-        if (!(await isAllowed("access to server stats"))) {
+        if (!(await isAllowed("server.stats.read"))) {
             statsDiv.classList.add("forbidden");
             return;
         }

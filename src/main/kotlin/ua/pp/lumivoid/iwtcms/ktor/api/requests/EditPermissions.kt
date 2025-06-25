@@ -24,7 +24,7 @@ object EditPermissions : Request() {
 
             doAuth(
                 call = call,
-                permission = "edit users",
+                permission = "users.manage",
                 success = {
                     transaction {
                         val userId: Int = try {

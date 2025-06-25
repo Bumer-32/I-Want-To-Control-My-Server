@@ -23,8 +23,6 @@ export interface AvailableConfigSetting {
     config_type: string;
     config_path: string;
     make_backup: boolean;
-    read_permission_name: string;
-    edit_permission_name: string;
 }
 
 export type AvailableConfigs = Record<string, AvailableConfigSetting>;
