@@ -19,7 +19,7 @@ loadGithubStars();
 
 // ? happy birthday Bumer_32
 // TODO: fix position
-if (new Date().getMonth() == 1 && new Date().getDate() == 21) {
+if (new Date().getMonth() === 1 && new Date().getDate() === 21) {
     console.log("Happy birthday Bumer_32! 🎉🎉🎉");
     const creatorElement = document.querySelector(".footer .authors .creator");
     creatorElement.innerHTML = creatorElement.innerHTML + " | Happy birthday Bumer_32! 🎉🎉🎉";
@@ -38,6 +38,6 @@ try {
         });
     });
 } catch (e) {
-    console.error("Failed to load IWTCSM version");
+    console.error("Failed to load IWTCMS version");
     console.error(e);
 }

@@ -21,6 +21,7 @@
             ToastSystem.addToQueue(`Error: ${error}`, ToastSystem.ToastType.ERROR);
         }
     });
+    // TODO: forbidden message
 </script>
 
 <div id="settings-tab" class="disabled">
