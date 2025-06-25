@@ -112,10 +112,9 @@
         });
 
         fileViewButton.addEventListener("click", () => {
-            const allTabs = tabsContainer.querySelectorAll<HTMLDivElement>(".tab div");
-            allTabs.forEach((element) => {
-                element.classList.toggle("disabled");
-            });
+            tabs.forEach((tab) => {
+                tab.fileView();
+            })
         });
 
         saveButton.addEventListener("click", () => {
