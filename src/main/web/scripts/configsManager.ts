@@ -156,13 +156,7 @@ export class ConfigWriters {
 
             function deepMerge(target: any, source: any): any {
                 for (const key in source) {
-                    if (
-                        key in target &&
-                        typeof target[key] === "object" &&
-                        typeof source[key] === "object" &&
-                        target[key] !== null &&
-                        source[key] !== null
-                    ) {
+                    if (key in target && typeof target[key] === "object" && typeof source[key] === "object" && target[key] !== null && source[key] !== null) {
                         deepMerge(target[key], source[key]);
                     } else {
                         target[key] = source[key];
@@ -172,15 +166,17 @@ export class ConfigWriters {
             }
 
             function toHocon(obj: any, indent = ""): string {
-                return Object.entries(obj).map(([key, val]) => {
-                    if (typeof val === "object" && val !== null) {
-                        return `${indent}${key} {\n${toHocon(val, indent + "  ")}\n${indent}}\n`;
-                    } else if (typeof val === "string") {
-                        return `${indent}${key} = "${val}"`;
-                    } else {
-                        return `${indent}${key} = ${val}`;
-                    }
-                }).join("\n");
+                return Object.entries(obj)
+                    .map(([key, val]) => {
+                        if (typeof val === "object" && val !== null) {
+                            return `${indent}${key} {\n${toHocon(val, indent + "  ")}\n${indent}}\n`;
+                        } else if (typeof val === "string") {
+                            return `${indent}${key} = "${val}"`;
+                        } else {
+                            return `${indent}${key} = ${val}`;
+                        }
+                    })
+                    .join("\n");
             }
 
             let merged: any = {};
@@ -192,14 +188,14 @@ export class ConfigWriters {
             return toHocon(merged);
         });
 
-        this.register("minecraft", (input: Record<string, any>) =>  {
-            let str = ""
+        this.register("minecraft", (input: Record<string, any>) => {
+            let str = "";
 
             for (const [name, value] of Object.entries(input)) {
                 str += `${name}=${value}\n`;
             }
 
-            return str
+            return str;
         });
 
         // TODO: add more config readers (json, yaml, etc.)

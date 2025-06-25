@@ -1,10 +1,6 @@
 <script lang="ts">
     import { onMount } from "svelte";
-    import readConfig, {
-        type AvailableConfigSetting,
-        ConfigWriters,
-        type Strategy
-    } from "../../../scripts/configsManager";
+    import readConfig, { type AvailableConfigSetting, ConfigWriters, type Strategy } from "../../../scripts/configsManager";
     import Constants from "../../../scripts/constants";
     import ToastSystem from "../../../scripts/toastSystem";
     import slideOnOverflow from "../../../scripts/slideOnOverflow";
@@ -20,7 +16,7 @@
     let defaultStrategy: Strategy;
     let easyViewPlatesList: Strategy = {};
 
-    let platesList: HTMLDivElement[] = []
+    let platesList: HTMLDivElement[] = [];
 
     export async function update(force: boolean = false) {
         if (!tabContainer.classList.contains("disabled") || force) {
@@ -86,9 +82,9 @@
     }
 
     function generateEasyConfig() {
-        let configData: Record<string, any> = {}
+        let configData: Record<string, any> = {};
 
-        platesList.forEach(plate => {
+        platesList.forEach((plate) => {
             const name = plate.querySelector<HTMLSpanElement>(".name")!.innerHTML;
             const input = plate.querySelector<HTMLInputElement | HTMLSelectElement>(".input")!;
             const type = defaultStrategy[name].type;
@@ -102,12 +98,12 @@
             }
         });
 
-        const result = ConfigWriters.writeConfig(selfConfigSetting.config_type, configData)
+        const result = ConfigWriters.writeConfig(selfConfigSetting.config_type, configData);
         if (result == null) {
             ToastSystem.addToQueue("Can't generate config: no such writer/unknown config type", ToastSystem.ToastType.ERROR);
             return;
         }
-        textArea.value = result
+        textArea.value = result;
 
         fileView();
     }
@@ -119,7 +115,10 @@
 
 <div class="tab disabled h-full" id={"settings_file|" + selfConfigSetting.selector_name} bind:this={tabContainer}>
     <div class="easy-view relative pt-[45px]" bind:this={easyViewDiv}>
-        <button class="submit bg-[var(--easy-view-setting-background-color)] rounded-[5px] absolute left-[50%] top-0 transform-[translateX(-50%)] flex flex-col items-center justify-center w-[125px] h-[60px] active:w-[120px] active:h-[55px]" onclick={generateEasyConfig}>
+        <button
+            class="submit absolute top-0 left-[50%] flex h-[60px] w-[125px] transform-[translateX(-50%)] flex-col items-center justify-center rounded-[5px] bg-[var(--easy-view-setting-background-color)] active:h-[55px] active:w-[120px]"
+            onclick={generateEasyConfig}
+        >
             <span class="material-symbols-rounded">check_circle</span>
             <span>generate config</span>
         </button>
