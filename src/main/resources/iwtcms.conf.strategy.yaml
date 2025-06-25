@@ -18,6 +18,12 @@ server.log Level:
         - "DEBUG"
         - "TRACE"
         - "ALL"
+server.database user:
+    type: "string"
+    default: "iwtcms"
+server.database password:
+    type: "string"
+    default: "iwtcms"
 ssl.use SSL:
     type: "bool"
     default: false
@@ -42,3 +48,20 @@ web.auto open IWTCMS page on startup:
 dev.dev mode:
     type: "bool"
     default: false
+dev.auto open vite:
+    type: "bool"
+    default: false
+dev.enable h2 web server:
+    type: "bool"
+    default: false
+dev.use external h2 db:
+    type: "bool"
+    default: false
+dev.external h2 db ip:
+    type: "string"
+    default: localhost
+dev.external h2 db port:
+    type: "int"
+    default: 9092
+    min: 1024
+    max: 65535

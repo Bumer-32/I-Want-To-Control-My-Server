@@ -25,6 +25,10 @@
 
 <div id="settings-tab" class="disabled">
     <div class="tab-container relative flex items-center justify-center">
+        <span class="absolute left-[-80px] top-[25px] transform-[rotate(-30deg)] bg-[red] w-[400px] px-[80px] text-[12px] z-[2]">
+            Note! "Easy mode" still in beta!<br>Please, be careful, make backups and report if something gone wrong!
+        </span>
+
         {#if configs}
             {#if tabsContainer}
                 <Selector tabsContainer={tabsContainer} configs={configs} tabs={tabs} />
