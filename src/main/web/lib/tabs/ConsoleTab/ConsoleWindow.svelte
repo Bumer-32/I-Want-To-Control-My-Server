@@ -155,7 +155,7 @@
 
     onMount(() => {
         consoleScroll.addEventListener("scroll", () => {
-            allowAutoScroll = consoleScroll.scrollTop + consoleScroll.clientHeight >= consoleScroll.scrollHeight - 5;
+            allowAutoScroll = consoleScroll.scrollTop >= consoleScroll.scrollHeight - consoleScroll.clientHeight;
         });
 
         connect();
