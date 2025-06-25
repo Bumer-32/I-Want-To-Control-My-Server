@@ -18,7 +18,7 @@ object LogsHistory : Request() {
         get(path) {
             doAuth(
                 call = call,
-                permission = "read logs history",
+                permission = "logs.read",
                 success = {
                     val response = json.encodeToString(logs)
                     runBlocking { call.respondText(response, contentType = ContentType.Text.Plain) }

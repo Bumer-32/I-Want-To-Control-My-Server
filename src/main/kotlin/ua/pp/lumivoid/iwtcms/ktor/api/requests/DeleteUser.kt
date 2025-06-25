@@ -24,7 +24,7 @@ object DeleteUser : Request() {
 
             doAuth(
                 call = call,
-                permission = "delete users",
+                permission = "users.manage",
                 success = {
                     transaction {
                         val userId: Int = try {

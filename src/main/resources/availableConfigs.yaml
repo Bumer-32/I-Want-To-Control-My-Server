@@ -8,8 +8,6 @@
 #   config_type: hocon # hocon, yaml, json, other (if other will be used you need custom reader (read documentation))
 #   config_path: /path/to/config/any.conf # path to config starts from server root
 #   make_backup: true # make backup of config before changes
-#   read_permission_name: read any.conf config # name of permission which will be used to check if user has access to this config
-#   edit_permission_name: edit any.conf config # name of permission which will be used to check if user has access to this config
 
 minecraft_properties:
     selector_name: "server.properties"
@@ -17,8 +15,6 @@ minecraft_properties:
     config_type: "minecraft" # custom reader
     config_path: "/server.properties"
     make_backup: "true"
-    read_permission_name: "read minecraft server config"
-    edit_permission_name: "edit minecraft server config"
 
 iwtcms_config:
     selector_name: "iwtcms.conf"
@@ -26,5 +22,3 @@ iwtcms_config:
     config_type: "hocon"
     config_path: "/iwtcms/iwtcms.conf"
     make_backup: "true"
-    read_permission_name: "read iwtcms config"
-    edit_permission_name: "edit iwtcms config"

@@ -13,8 +13,8 @@ import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
+import ua.pp.lumivoid.iwtcms.ktor.api.PermissionsList
 import ua.pp.lumivoid.iwtcms.ktor.api.doAuth
-import ua.pp.lumivoid.iwtcms.ktor.api.getPermissionsList
 import ua.pp.lumivoid.iwtcms.ktor.tables.UserPermissions
 import ua.pp.lumivoid.iwtcms.ktor.tables.Users
 
@@ -27,7 +27,7 @@ object CreateUser : Request() {
 
             doAuth(
                 call = call,
-                permission = "create users",
+                permission = "users.manage",
                 success = {
                     transaction {
                         var salt = generateSequence { genSalt() }
@@ -49,7 +49,7 @@ object CreateUser : Request() {
                         }
 
                         payload.permissions.forEach { (key, value) ->
-                            if (key in getPermissionsList()) {
+                            if (key in PermissionsList.getPermissionsList()) {
                                 try {
                                     UserPermissions.insert {
                                         it[UserPermissions.permissionName] = key

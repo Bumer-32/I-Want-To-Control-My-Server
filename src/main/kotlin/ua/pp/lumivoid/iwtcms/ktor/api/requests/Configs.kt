@@ -12,6 +12,7 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import ua.pp.lumivoid.iwtcms.Constants
+import ua.pp.lumivoid.iwtcms.ktor.api.PermissionsList
 import ua.pp.lumivoid.iwtcms.ktor.api.doAuth
 import java.io.File
 
@@ -33,10 +34,14 @@ object Configs : Request() {
             val configPath = "$path/${it.value.selector_name}"
             logger.info("       - config ${it.key} url: $configPath")
 
+            //also create permissions
+            PermissionsList.createPermission("config.read.${it.value.selector_name}")
+            PermissionsList.createPermission("config.write.${it.value.selector_name}")
+
             get(configPath) {
                 doAuth(
                     call = call,
-                    permission = it.value.read_permission_name,
+                    permission = "config.read.${it.value.selector_name}",
                     success = {
                         val filePath = "${System.getProperty("user.dir")}${it.value.config_path}"
                         val file = File(filePath)
@@ -49,7 +54,7 @@ object Configs : Request() {
             put(configPath) {
                 doAuth(
                     call = call,
-                    permission = it.value.edit_permission_name,
+                    permission = "config.write.${it.value.selector_name}",
                     success = {
                         val filePath = "${System.getProperty("user.dir")}${it.value.config_path}"
                         val file = File(filePath)
@@ -74,7 +79,7 @@ object Configs : Request() {
 
                 doAuth(
                     call = call,
-                    permission = it.value.read_permission_name,
+                    permission = "config.read.${it.value.selector_name}",
                     success = {
                         val filePath = "/${it.value.config_path.split("/").last()}.strategy.yaml"
                         val file = this.javaClass.getResource(filePath)!!
@@ -94,7 +99,5 @@ data class AvailableConfigSetting(
     val config_name: String,
     val config_type: String,
     val config_path: String,
-    val make_backup: Boolean,
-    val read_permission_name: String,
-    val edit_permission_name: String,
+    val make_backup: Boolean
 )

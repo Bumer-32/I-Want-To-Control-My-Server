@@ -85,11 +85,11 @@
     async function connect() {
         consoleScroll.innerHTML = "";
 
-        if (!(await isAllowed("execute commands"))) messageFieldDiv.classList.add("disabled");
+        if (!(await isAllowed("commands.execute"))) messageFieldDiv.classList.add("disabled");
 
         messageFieldInput.addEventListener("keypress", (event) => onEnter(event));
 
-        if (await isAllowed("read logs history")) {
+        if (await isAllowed("logs.read")) {
             try {
                 const response = await fetch(Constants.LOGS_HISTORY_URL);
                 if (!response.ok) {
@@ -106,9 +106,7 @@
                 console.error(error);
                 ToastSystem.addToQueue(`Error: ${error}`, ToastSystem.ToastType.ERROR);
             }
-        }
-
-        if (!(await isAllowed("read real time logs"))) {
+        } else {
             consoleDiv.classList.add("forbidden");
             return;
         }

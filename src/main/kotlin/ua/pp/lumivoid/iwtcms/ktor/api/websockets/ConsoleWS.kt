@@ -22,7 +22,7 @@ object ConsoleWS : WebSocket() {
             val status =
                 doAuth(
                     call = call,
-                    permission = "read real time logs",
+                    permission = "logs.read",
                     success = {},
                     unauthorized = {
                         logger.debug("Unauthorized user tried to connect to $path websocket")
@@ -58,7 +58,7 @@ object ConsoleWS : WebSocket() {
 
             doAuth(
                 call = call,
-                permission = "execute commands",
+                permission = "commands.execute",
                 success = { allowExecution = true },
                 unauthorized = { allowExecution = false },
                 forbidden = { allowExecution = false },

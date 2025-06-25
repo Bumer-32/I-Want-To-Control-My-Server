@@ -26,7 +26,7 @@ object ServerStatsWS : WebSocket() {
             val status =
                 doAuth(
                     call = call,
-                    permission = "access to server stats",
+                    permission = "server.stats.read",
                     success = {},
                     unauthorized = {
                         logger.debug("Unauthorized user tried to connect to $path websocket")

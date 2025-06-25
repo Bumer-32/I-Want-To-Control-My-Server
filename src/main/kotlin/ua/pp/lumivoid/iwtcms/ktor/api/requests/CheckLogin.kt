@@ -19,8 +19,7 @@ object CheckLogin : Request() {
         get(path) {
             val session = call.sessions.get<UserSession>()
 
-            @Suppress("SENSELESS_COMPARISON") // idk why
-            if (session == null || session.name == null || session.id == null) {
+            if (session == null) {
                 call.respondText("Not logged in", status = HttpStatusCode.Unauthorized)
                 return@get
             }
