@@ -27,6 +27,7 @@ import ua.pp.lumivoid.iwtcms.ktor.api.requests.Login
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.Logout
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.LogsHistory
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.Main
+import ua.pp.lumivoid.iwtcms.ktor.api.requests.UsersList
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.Version
 import ua.pp.lumivoid.iwtcms.ktor.api.websockets.ConsoleWS
 import ua.pp.lumivoid.iwtcms.ktor.api.websockets.ServerStatsWS
@@ -75,15 +76,16 @@ fun Application.configureRouting() {
     logger.info("-=-=-=-=-=-=-=-=-=- Registering routes -=-=-=-=-=-=-=-=-=-")
 
     Main.register(r)
-    LogsHistory.register(r)
-    Login.register(r)
-    IsAllowed.register(r)
     Files.register(r)
     Version.register(r)
+    Login.register(r)
     CheckLogin.register(r)
-    IsDevEnabled.register(r)
     Logout.register(r)
+    IsAllowed.register(r)
+    LogsHistory.register(r)
+    IsDevEnabled.register(r)
     Configs.register(r)
+    UsersList.register(r)
     CreateUser.register(r)
     DeleteUser.register(r)
     EditPermissions.register(r)

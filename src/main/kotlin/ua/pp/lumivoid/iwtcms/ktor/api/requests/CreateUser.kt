@@ -15,8 +15,8 @@ import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import ua.pp.lumivoid.iwtcms.ktor.api.PermissionsList
 import ua.pp.lumivoid.iwtcms.ktor.api.doAuth
-import ua.pp.lumivoid.iwtcms.ktor.tables.UserPermissions
-import ua.pp.lumivoid.iwtcms.ktor.tables.Users
+import ua.pp.lumivoid.iwtcms.ktor.tables.UserPermissionsTable
+import ua.pp.lumivoid.iwtcms.ktor.tables.UsersTable
 
 object CreateUser : Request() {
     override val path = "/api/createUser"
@@ -32,16 +32,16 @@ object CreateUser : Request() {
                     transaction {
                         var salt = generateSequence { genSalt() }
                             .first { saltCandidate -> 
-                                Users.selectAll().where(Users.salt eq saltCandidate).empty()
+                                UsersTable.selectAll().where(UsersTable.salt eq saltCandidate).empty()
                             }
 
                         runCatching {
-                            Users.insert {
-                                it[Users.username] = payload.username
-                                it[Users.passwordHash] = DigestUtils.sha256Hex(payload.password + salt)
-                                it[Users.salt] = salt
-                                it[Users.uniqueId] = DigestUtils.sha256Hex("${payload.username}+${payload.password}+${salt}")
-                                it[Users.admin] = payload.isAdmin
+                            UsersTable.insert {
+                                it[UsersTable.username] = payload.username
+                                it[UsersTable.passwordHash] = DigestUtils.sha256Hex(payload.password + salt)
+                                it[UsersTable.salt] = salt
+                                it[UsersTable.uniqueId] = DigestUtils.sha256Hex("${payload.username}+${payload.password}+${salt}")
+                                it[UsersTable.admin] = payload.admin
                             }
                         }.onFailure {
                             runBlocking { call.respondText("User already exists", status = HttpStatusCode.Conflict) }
@@ -51,10 +51,10 @@ object CreateUser : Request() {
                         payload.permissions.forEach { (key, value) ->
                             if (key in PermissionsList.getPermissionsList()) {
                                 try {
-                                    UserPermissions.insert {
-                                        it[UserPermissions.permissionName] = key
-                                        it[UserPermissions.permissionState] = value
-                                        it[UserPermissions.userId] = Users.selectAll().where { Users.username eq payload.username }.first()[Users.id]
+                                    UserPermissionsTable.insert {
+                                        it[UserPermissionsTable.permissionName] = key
+                                        it[UserPermissionsTable.permissionState] = value
+                                        it[UserPermissionsTable.userId] = UsersTable.selectAll().where { UsersTable.username eq payload.username }.first()[UsersTable.id]
                                     }
                                 } catch (_: ExposedSQLException) {
                                 }
@@ -74,12 +74,12 @@ object CreateUser : Request() {
             .map { allowedChars.random() }
             .joinToString("")
     }
-}
 
-@Serializable
-data class CreateUserPayload(
-    val username: String,
-    val password: String,
-    val isAdmin: Boolean,
-    val permissions: Map<String, Boolean>,
-)
+    @Serializable
+    data class CreateUserPayload(
+        val username: String,
+        val password: String,
+        val admin: Boolean,
+        val permissions: Map<String, Boolean>,
+    )
+}

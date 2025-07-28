@@ -12,8 +12,8 @@ import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 import ua.pp.lumivoid.iwtcms.ktor.api.doAuth
-import ua.pp.lumivoid.iwtcms.ktor.tables.UserPermissions
-import ua.pp.lumivoid.iwtcms.ktor.tables.Users
+import ua.pp.lumivoid.iwtcms.ktor.tables.UserPermissionsTable
+import ua.pp.lumivoid.iwtcms.ktor.tables.UsersTable
 
 object EditPermissions : Request() {
     override val path = "/api/editPermissions"
@@ -28,10 +28,10 @@ object EditPermissions : Request() {
                 success = {
                     transaction {
                         val userId: Int = try {
-                            Users
+                            UsersTable
                                 .selectAll()
-                                .where { Users.username eq payload.username }
-                                .first()[Users.id]
+                                .where { UsersTable.username eq payload.username }
+                                .first()[UsersTable.id]
                         } catch (_: NoSuchElementException) {
                             runBlocking { call.respondText("User not found", status = HttpStatusCode.NotFound) }
                             return@transaction
@@ -39,8 +39,8 @@ object EditPermissions : Request() {
 
                         try {
                             payload.permissions.forEach { (key, value) ->
-                                UserPermissions.update({ (UserPermissions.userId eq userId) and (UserPermissions.permissionName eq key) }) {
-                                    it[UserPermissions.permissionState] = value
+                                UserPermissionsTable.update({ (UserPermissionsTable.userId eq userId) and (UserPermissionsTable.permissionName eq key) }) {
+                                    it[UserPermissionsTable.permissionState] = value
                                 }
                             }
 
@@ -53,10 +53,11 @@ object EditPermissions : Request() {
             )
         }
     }
-}
 
-@Serializable
-data class EditPermissionPayload(
-    val username: String,
-    val permissions: Map<String, Boolean>,
-)
+    @Serializable
+    data class EditPermissionPayload(
+        val username: String,
+        val permissions: Map<String, Boolean>,
+    )
+
+}

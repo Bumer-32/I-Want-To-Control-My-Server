@@ -90,14 +90,14 @@ object Configs : Request() {
             }
         }
     }
-}
 
-@Suppress("PropertyName")
-@Serializable
-data class AvailableConfigSetting(
-    val selector_name: String,
-    val config_name: String,
-    val config_type: String,
-    val config_path: String,
-    val make_backup: Boolean
-)
+    @Suppress("PropertyName")
+    @Serializable
+    data class AvailableConfigSetting(
+        val selector_name: String,
+        val config_name: String,
+        val config_type: String,
+        val config_path: String,
+        val make_backup: Boolean
+    )
+}

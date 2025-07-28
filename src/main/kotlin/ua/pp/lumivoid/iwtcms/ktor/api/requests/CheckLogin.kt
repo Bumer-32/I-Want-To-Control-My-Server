@@ -10,7 +10,7 @@ import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import ua.pp.lumivoid.iwtcms.ktor.cookie.UserSession
-import ua.pp.lumivoid.iwtcms.ktor.tables.Users
+import ua.pp.lumivoid.iwtcms.ktor.tables.UsersTable
 
 object CheckLogin : Request() {
     override val path = "/api/checkLogin"
@@ -26,9 +26,9 @@ object CheckLogin : Request() {
 
             newSuspendedTransaction {
                 try {
-                    Users
+                    UsersTable
                         .selectAll()
-                        .where { (Users.username eq session.name) and (Users.uniqueId eq session.id) }
+                        .where { (UsersTable.username eq session.name) and (UsersTable.uniqueId eq session.id) }
                         .first()
                 } catch (_: NoSuchElementException) {
                     call.respondText("Not logged in", status = HttpStatusCode.Unauthorized)
