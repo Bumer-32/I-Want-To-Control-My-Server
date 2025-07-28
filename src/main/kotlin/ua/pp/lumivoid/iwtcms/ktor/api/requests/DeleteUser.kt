@@ -12,8 +12,8 @@ import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import ua.pp.lumivoid.iwtcms.ktor.api.doAuth
-import ua.pp.lumivoid.iwtcms.ktor.tables.UserPermissions
-import ua.pp.lumivoid.iwtcms.ktor.tables.Users
+import ua.pp.lumivoid.iwtcms.ktor.tables.UserPermissionsTable
+import ua.pp.lumivoid.iwtcms.ktor.tables.UsersTable
 
 object DeleteUser : Request() {
     override val path = "/api/deleteUser"
@@ -28,26 +28,26 @@ object DeleteUser : Request() {
                 success = {
                     transaction {
                         val userId: Int = try {
-                            Users
+                            UsersTable
                                 .selectAll()
-                                .where { Users.username eq payload.username }
-                                .first()[Users.id]
+                                .where { UsersTable.username eq payload.username }
+                                .first()[UsersTable.id]
                         } catch (_: NoSuchElementException) {
                             runBlocking { call.respondText("User not found", status = HttpStatusCode.NotFound) }
                             return@transaction
                         }
 
-                        Users.deleteWhere { Users.username eq payload.username }
-                        UserPermissions.deleteWhere { UserPermissions.userId eq userId }
+                        UsersTable.deleteWhere { UsersTable.username eq payload.username }
+                        UserPermissionsTable.deleteWhere { UserPermissionsTable.userId eq userId }
                         runBlocking { call.respondText("User deleted") }
                     }
                 },
             )
         }
     }
-}
 
-@Serializable
-data class DeleteUserPayload(
-    val username: String,
-)
+    @Serializable
+    data class DeleteUserPayload(
+        val username: String,
+    )
+}

@@ -13,7 +13,7 @@ import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import ua.pp.lumivoid.iwtcms.ktor.cookie.UserSession
-import ua.pp.lumivoid.iwtcms.ktor.tables.Users
+import ua.pp.lumivoid.iwtcms.ktor.tables.UsersTable
 
 object Login : Request() {
     override val path = "/api/login"
@@ -24,14 +24,14 @@ object Login : Request() {
 
             newSuspendedTransaction {
                 try {
-                    val user: ResultRow = Users
+                    val user: ResultRow = UsersTable
                                             .selectAll()
-                                            .where { (Users.username eq payload.username) }
+                                            .where { (UsersTable.username eq payload.username) }
                                             .first()
-                    val salt = user[Users.salt]
+                    val salt = user[UsersTable.salt]
 
-                    if (DigestUtils.sha256Hex(payload.password + salt) == user[Users.passwordHash]) {
-                        call.sessions.set(UserSession(user[Users.username], user[Users.uniqueId]))
+                    if (DigestUtils.sha256Hex(payload.password + salt) == user[UsersTable.passwordHash]) {
+                        call.sessions.set(UserSession(user[UsersTable.username], user[UsersTable.uniqueId]))
                         call.respondText("Login successful")
                     } else {
                         call.respondText("Login failed", status = HttpStatusCode.Unauthorized)
@@ -42,10 +42,10 @@ object Login : Request() {
             }
         }
     }
-}
 
-@Serializable
-data class LoginPayload(
-    val username: String,
-    val password: String,
-)
+    @Serializable
+    data class LoginPayload(
+        val username: String,
+        val password: String,
+    )
+}

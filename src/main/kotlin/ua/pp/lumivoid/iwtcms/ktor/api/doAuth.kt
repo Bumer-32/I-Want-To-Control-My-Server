@@ -11,8 +11,8 @@ import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import ua.pp.lumivoid.iwtcms.ktor.cookie.UserSession
-import ua.pp.lumivoid.iwtcms.ktor.tables.UserPermissions
-import ua.pp.lumivoid.iwtcms.ktor.tables.Users
+import ua.pp.lumivoid.iwtcms.ktor.tables.UserPermissionsTable
+import ua.pp.lumivoid.iwtcms.ktor.tables.UsersTable
 
 /*
  * checks if auth enabled and user are logged in (user has cookies)
@@ -40,32 +40,32 @@ suspend fun doAuth(
 
     return newSuspendedTransaction {
         val user: ResultRow = try {
-            Users
+            UsersTable
                 .selectAll()
-                .where { (Users.username eq session.name) and (Users.uniqueId eq session.id) }
+                .where { (UsersTable.username eq session.name) and (UsersTable.uniqueId eq session.id) }
                 .first()
         } catch (_: NoSuchElementException) {
             unauthorized()
             return@newSuspendedTransaction HttpStatusCode.Unauthorized
         }
 
-        if (user[Users.admin]) {
+        if (user[UsersTable.admin]) {
             success()
             return@newSuspendedTransaction HttpStatusCode.OK
         }
 
         val permission: ResultRow =
             try {
-                UserPermissions
+                UserPermissionsTable
                     .selectAll()
-                    .where { (UserPermissions.userId eq user[Users.id]) and (UserPermissions.permissionName eq permission) }
+                    .where { (UserPermissionsTable.userId eq user[UsersTable.id]) and (UserPermissionsTable.permissionName eq permission) }
                     .first()
             } catch (_: NoSuchElementException) {
                 forbidden()
                 return@newSuspendedTransaction HttpStatusCode.Forbidden
             }
 
-        if (permission[UserPermissions.permissionState]) {
+        if (permission[UserPermissionsTable.permissionState]) {
             success()
             return@newSuspendedTransaction HttpStatusCode.OK
         } else {

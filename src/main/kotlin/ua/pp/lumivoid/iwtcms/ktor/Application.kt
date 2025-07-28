@@ -28,7 +28,7 @@ fun ApplicationEngine.Configuration.envConfig() {
         val keyStoreFile = File(Constants.SSL_CERTIFICATE_FILE)
         val keyStore: KeyStore
 
-        if (Config.readConfig().customSertificate) {
+        if (Config.readConfig().customCertificate) {
             logger.info("Check is SSL keys available")
             if (keyStoreFile.exists()) {
                 logger.info("SSL keys found!")

@@ -11,8 +11,8 @@ import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.slf4j.LoggerFactory
 import ua.pp.lumivoid.iwtcms.ktor.KtorServer
-import ua.pp.lumivoid.iwtcms.ktor.tables.UserPermissions
-import ua.pp.lumivoid.iwtcms.ktor.tables.Users
+import ua.pp.lumivoid.iwtcms.ktor.tables.UserPermissionsTable
+import ua.pp.lumivoid.iwtcms.ktor.tables.UsersTable
 import ua.pp.lumivoid.iwtcms.ktor.util.Config
 import ua.pp.lumivoid.iwtcms.ktor.util.ErrorMessages
 import ua.pp.lumivoid.iwtcms.util.CustomLogger
@@ -53,12 +53,12 @@ object PREIWTCMS : PreLaunchEntrypoint {
         transaction {
             if (Config.readConfig().devMode) addLogger(StdOutSqlLogger)
             create(
-                Users,
-                UserPermissions,
+                UsersTable,
+                UserPermissionsTable,
             )
 
-            if (Users.selectAll().empty()) {
-                Users.insert {
+            if (UsersTable.selectAll().empty()) {
+                UsersTable.insert {
                     it[username] = "admin"
                     it[passwordHash] = DigestUtils.sha256Hex("iwtcms" + "ySXBvMifqXULEm1uRKP91ctmL6tCwCMi").toString()
                     it[salt] = "ySXBvMifqXULEm1uRKP91ctmL6tCwCMi"
