@@ -46,7 +46,7 @@
                     serverTimeValue.innerHTML = jsonData.serverTime.split(".")[0].split("T")[1];
                 }
             } catch (e) {}
-        }
+        };
 
         ws.onclose = () => {
             if (!document.hidden) {
