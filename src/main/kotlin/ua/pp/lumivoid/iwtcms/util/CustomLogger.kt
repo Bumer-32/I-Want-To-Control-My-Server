@@ -27,35 +27,32 @@ object CustomLogger {
     fun setup() {
         val rootLogger = LogManager.getRootLogger() as Logger
 
-        val layout =
-            PatternLayout
-                .newBuilder()
-                .withPattern("[%d{HH:mm:ss}] [%t/%level] (%logger{1}) %msg%n")
-                .build()
+        val layout = PatternLayout
+                        .newBuilder()
+                        .withPattern("[%d{HH:mm:ss}] [%t/%level] (%logger{1}) %msg%n")
+                        .build()
 
-        val fileCustomAppender =
-            FileAppender
-                .newBuilder()
-                .withFileName("logs/iwtcms.log")
-                .setName("CustomFileAppender")
-                .setLayout(layout)
-                .withAppend(false)
-                .build()
+        val fileCustomAppender = FileAppender
+                                    .newBuilder()
+                                    .withFileName("logs/iwtcms.log")
+                                    .setName("CustomFileAppender")
+                                    .setLayout(layout)
+                                    .withAppend(false)
+                                    .build()
         fileCustomAppender.start()
         rootLogger.addAppender(fileCustomAppender)
 
-        val customAppender =
-            WriterAppender
-                .newBuilder()
-                .setLayout(layout)
-                .setName("CustomWriterAppender")
-                .setIgnoreExceptions(false)
-                .setTarget(OutputStreamWriter(output))
-                .build()
+        val customAppender = WriterAppender
+                                .newBuilder()
+                                .setLayout(layout)
+                                .setName("CustomWriterAppender")
+                                .setIgnoreExceptions(false)
+                                .setTarget(OutputStreamWriter(output))
+                                .build()
         customAppender.start()
         rootLogger.addAppender(customAppender)
 
-        CoroutineScope(Dispatchers.Default).launch {
+        CoroutineScope(Dispatchers.IO).launch {
             try {
                 running = true
                 while (running) {

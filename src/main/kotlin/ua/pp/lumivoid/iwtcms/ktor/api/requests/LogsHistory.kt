@@ -4,8 +4,8 @@ import io.ktor.http.ContentType
 import io.ktor.server.response.respondText
 import io.ktor.server.routing.Routing
 import io.ktor.server.routing.get
-import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
+import ua.pp.lumivoid.iwtcms.ktor.api.PermissionsList
 import ua.pp.lumivoid.iwtcms.ktor.api.doAuth
 
 object LogsHistory : Request() {
@@ -18,10 +18,10 @@ object LogsHistory : Request() {
         get(path) {
             doAuth(
                 call = call,
-                permission = "logs.read",
+                permission = PermissionsList.Permission.LOGS_READ.value,
                 success = {
                     val response = json.encodeToString(logs)
-                    runBlocking { call.respondText(response, contentType = ContentType.Text.Plain) }
+                    call.respondText(response, contentType = ContentType.Text.Plain)
                 },
             )
         }

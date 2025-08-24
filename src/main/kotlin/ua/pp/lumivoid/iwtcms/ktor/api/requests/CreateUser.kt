@@ -5,14 +5,12 @@ import io.ktor.server.request.receive
 import io.ktor.server.response.respondText
 import io.ktor.server.routing.Routing
 import io.ktor.server.routing.post
-import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.Serializable
 import org.apache.commons.codec.digest.DigestUtils
-import org.jetbrains.exposed.exceptions.ExposedSQLException
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
-import org.jetbrains.exposed.sql.transactions.transaction
+import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import ua.pp.lumivoid.iwtcms.ktor.api.PermissionsList
 import ua.pp.lumivoid.iwtcms.ktor.api.doAuth
 import ua.pp.lumivoid.iwtcms.ktor.tables.UserPermissionsTable
@@ -27,9 +25,9 @@ object CreateUser : Request() {
 
             doAuth(
                 call = call,
-                permission = "users.manage",
+                permission = PermissionsList.Permission.USERS_MANAGE.value,
                 success = {
-                    transaction {
+                    val success = newSuspendedTransaction {
                         var salt = generateSequence { genSalt() }
                             .first { saltCandidate -> 
                                 UsersTable.selectAll().where(UsersTable.salt eq saltCandidate).empty()
@@ -44,25 +42,26 @@ object CreateUser : Request() {
                                 it[UsersTable.admin] = payload.admin
                             }
                         }.onFailure {
-                            runBlocking { call.respondText("User already exists", status = HttpStatusCode.Conflict) }
-                            return@transaction
+                            return@newSuspendedTransaction false
                         }
 
                         payload.permissions.forEach { (key, value) ->
                             if (key in PermissionsList.getPermissionsList()) {
-                                try {
+                                runCatching {
                                     UserPermissionsTable.insert {
                                         it[UserPermissionsTable.permissionName] = key
                                         it[UserPermissionsTable.permissionState] = value
                                         it[UserPermissionsTable.userId] = UsersTable.selectAll().where { UsersTable.username eq payload.username }.first()[UsersTable.id]
                                     }
-                                } catch (_: ExposedSQLException) {
                                 }
                             }
                         }
 
-                        runBlocking { call.respondText("User created") }
+                        true
                     }
+
+                    if (success) call.respondText("User created")
+                    else call.respondText("User already exists", status = HttpStatusCode.Conflict)
                 },
             )
         }

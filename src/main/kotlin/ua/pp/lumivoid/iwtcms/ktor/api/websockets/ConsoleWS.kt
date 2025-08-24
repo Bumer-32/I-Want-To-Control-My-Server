@@ -8,8 +8,7 @@ import io.ktor.websocket.Frame
 import io.ktor.websocket.close
 import io.ktor.websocket.readText
 import kotlinx.coroutines.channels.consumeEach
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import ua.pp.lumivoid.iwtcms.ktor.api.PermissionsList
 import ua.pp.lumivoid.iwtcms.ktor.api.doAuth
 import ua.pp.lumivoid.iwtcms.util.MinecraftServerHandler
 
@@ -22,15 +21,15 @@ object ConsoleWS : WebSocket() {
             val status =
                 doAuth(
                     call = call,
-                    permission = "logs.read",
+                    permission = PermissionsList.Permission.LOGS_READ.value,
                     success = {},
                     unauthorized = {
                         logger.debug("Unauthorized user tried to connect to $path websocket")
-                        runBlocking { close(CloseReason(CloseReason.Codes.VIOLATED_POLICY, "Unauthorized")) }
+                        close(CloseReason(CloseReason.Codes.VIOLATED_POLICY, "Unauthorized"))
                     },
                     forbidden = {
                         logger.debug("Forbidden user tried to connect to $path websocket")
-                        runBlocking { close(CloseReason(CloseReason.Codes.VIOLATED_POLICY, "Forbidden")) }
+                        close(CloseReason(CloseReason.Codes.VIOLATED_POLICY, "Forbidden"))
                     },
                 )
 
@@ -42,15 +41,13 @@ object ConsoleWS : WebSocket() {
 
             wsInterface =
                 object : WebSocketBaseInterface {
-                    override fun sendMessage(message: String) {
-                        launch {
-                            send(Frame.Text(message))
-                        }
+                    override suspend fun sendMessage(message: String) {
+                        send(Frame.Text(message))
                     }
 
-                    override fun shutdown() {
+                    override suspend fun shutdown() {
                         logger.info("Сlosing $path websocket")
-                        runBlocking { close(CloseReason(CloseReason.Codes.NORMAL, "shutting down server")) }
+                        close(CloseReason(CloseReason.Codes.NORMAL, "shutting down server"))
                     }
                 }
 
@@ -58,7 +55,7 @@ object ConsoleWS : WebSocket() {
 
             doAuth(
                 call = call,
-                permission = "commands.execute",
+                permission = PermissionsList.Permission.COMMANDS_EXECUTE.value,
                 success = { allowExecution = true },
                 unauthorized = { allowExecution = false },
                 forbidden = { allowExecution = false },

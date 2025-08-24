@@ -5,12 +5,12 @@ import io.ktor.server.request.receive
 import io.ktor.server.response.respondText
 import io.ktor.server.routing.Routing
 import io.ktor.server.routing.post
-import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.selectAll
-import org.jetbrains.exposed.sql.transactions.transaction
+import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
+import ua.pp.lumivoid.iwtcms.ktor.api.PermissionsList
 import ua.pp.lumivoid.iwtcms.ktor.api.doAuth
 import ua.pp.lumivoid.iwtcms.ktor.tables.UserPermissionsTable
 import ua.pp.lumivoid.iwtcms.ktor.tables.UsersTable
@@ -24,23 +24,23 @@ object DeleteUser : Request() {
 
             doAuth(
                 call = call,
-                permission = "users.manage",
+                permission = PermissionsList.Permission.USERS_MANAGE.value,
                 success = {
-                    transaction {
-                        val userId: Int = try {
-                            UsersTable
-                                .selectAll()
-                                .where { UsersTable.username eq payload.username }
-                                .first()[UsersTable.id]
-                        } catch (_: NoSuchElementException) {
-                            runBlocking { call.respondText("User not found", status = HttpStatusCode.NotFound) }
-                            return@transaction
-                        }
+                    val success = newSuspendedTransaction {
+                        val user = UsersTable
+                                            .selectAll()
+                                            .where { UsersTable.username eq payload.username }
+                                            .firstOrNull()
+
+                        if (user == null) return@newSuspendedTransaction false
 
                         UsersTable.deleteWhere { UsersTable.username eq payload.username }
                         UserPermissionsTable.deleteWhere { UserPermissionsTable.userId eq userId }
-                        runBlocking { call.respondText("User deleted") }
+                        true
                     }
+
+                    if (success) call.respondText("User deleted")
+                    else call.respondText("User not found", status = HttpStatusCode.NotFound)
                 },
             )
         }

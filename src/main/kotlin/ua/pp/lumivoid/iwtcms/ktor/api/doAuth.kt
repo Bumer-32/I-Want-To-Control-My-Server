@@ -1,11 +1,9 @@
 package ua.pp.lumivoid.iwtcms.ktor.api
 
-import io.ktor.http.HttpStatusCode
-import io.ktor.server.application.ApplicationCall
-import io.ktor.server.response.respondText
-import io.ktor.server.sessions.get
-import io.ktor.server.sessions.sessions
-import kotlinx.coroutines.runBlocking
+import io.ktor.http.*
+import io.ktor.server.application.*
+import io.ktor.server.response.*
+import io.ktor.server.sessions.*
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.selectAll
@@ -23,12 +21,12 @@ import ua.pp.lumivoid.iwtcms.ktor.tables.UsersTable
 suspend fun doAuth(
     call: ApplicationCall,
     permission: String,
-    success: () -> Unit,
-    unauthorized: () -> Unit = {
-        runBlocking { call.respondText("Unauthorized", status = HttpStatusCode.Unauthorized) }
+    success: suspend () -> Unit,
+    unauthorized: suspend () -> Unit = {
+        call.respondText("Unauthorized", status = HttpStatusCode.Unauthorized)
     },
-    forbidden: () -> Unit = {
-        runBlocking { call.respondText("Forbidden", status = HttpStatusCode.Forbidden) }
+    forbidden: suspend () -> Unit = {
+        call.respondText("Forbidden", status = HttpStatusCode.Forbidden)
     },
 ): HttpStatusCode {
     val session = call.sessions.get<UserSession>()
@@ -38,39 +36,39 @@ suspend fun doAuth(
         return HttpStatusCode.Unauthorized
     }
 
-    return newSuspendedTransaction {
-        val user: ResultRow = try {
-            UsersTable
+    val user = newSuspendedTransaction {
+        UsersTable
+            .selectAll()
+            .where { (UsersTable.username eq session.name) and (UsersTable.uniqueId eq session.id) }
+            .firstOrNull()
+    }
+
+    if (user == null) {
+        unauthorized()
+        return HttpStatusCode.Unauthorized
+    }
+
+    if (user[UsersTable.admin]) {
+        success()
+        return HttpStatusCode.OK
+    }
+
+    val permission: ResultRow =
+        try {
+            UserPermissionsTable
                 .selectAll()
-                .where { (UsersTable.username eq session.name) and (UsersTable.uniqueId eq session.id) }
+                .where { (UserPermissionsTable.userId eq user[UsersTable.id]) and (UserPermissionsTable.permissionName eq permission) }
                 .first()
         } catch (_: NoSuchElementException) {
-            unauthorized()
-            return@newSuspendedTransaction HttpStatusCode.Unauthorized
-        }
-
-        if (user[UsersTable.admin]) {
-            success()
-            return@newSuspendedTransaction HttpStatusCode.OK
-        }
-
-        val permission: ResultRow =
-            try {
-                UserPermissionsTable
-                    .selectAll()
-                    .where { (UserPermissionsTable.userId eq user[UsersTable.id]) and (UserPermissionsTable.permissionName eq permission) }
-                    .first()
-            } catch (_: NoSuchElementException) {
-                forbidden()
-                return@newSuspendedTransaction HttpStatusCode.Forbidden
-            }
-
-        if (permission[UserPermissionsTable.permissionState]) {
-            success()
-            return@newSuspendedTransaction HttpStatusCode.OK
-        } else {
             forbidden()
-            return@newSuspendedTransaction HttpStatusCode.Forbidden
+            return HttpStatusCode.Forbidden
         }
+
+    if (permission[UserPermissionsTable.permissionState]) {
+        success()
+        return HttpStatusCode.OK
+    } else {
+        forbidden()
+        return HttpStatusCode.Forbidden
     }
 }
