@@ -8,7 +8,6 @@ import io.ktor.server.response.respondText
 import io.ktor.server.routing.Routing
 import io.ktor.server.routing.get
 import io.ktor.server.routing.put
-import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import ua.pp.lumivoid.iwtcms.Constants
@@ -46,7 +45,7 @@ object Configs : Request() {
                         val filePath = "${System.getProperty("user.dir")}${it.value.config_path}"
                         val file = File(filePath)
                         val fileContent = file.readText()
-                        runBlocking { call.respondText(fileContent, contentType = ContentType.Text.Plain) }
+                        call.respondText(fileContent, contentType = ContentType.Text.Plain)
                     },
                 )
             }
@@ -67,10 +66,10 @@ object Configs : Request() {
                             logger.info("Backup created")
                         }
 
-                        val fileContent = runBlocking { call.receiveText() }
+                        val fileContent = call.receiveText()
                         file.writeText(fileContent)
 
-                        runBlocking { call.respondText("Created", status = HttpStatusCode.Created) }
+                        call.respondText("Created", status = HttpStatusCode.Created)
                     },
                 )
             }
@@ -84,7 +83,7 @@ object Configs : Request() {
                         val filePath = "/${it.value.config_path.split("/").last()}.strategy.yaml"
                         val file = this.javaClass.getResource(filePath)!!
                         val fileContent = file.readText()
-                        runBlocking { call.respondText(fileContent, contentType = ContentType.Text.Plain) }
+                        call.respondText(fileContent, contentType = ContentType.Text.Plain)
                     },
                 )
             }

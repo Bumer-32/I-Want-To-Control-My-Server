@@ -4,7 +4,6 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Routing
 import io.ktor.server.routing.get
-import kotlinx.coroutines.runBlocking
 import ua.pp.lumivoid.iwtcms.ktor.api.doAuth
 
 object IsAllowed : Request() {
@@ -21,7 +20,7 @@ object IsAllowed : Request() {
                 call = call,
                 permission = call.parameters["permission"]!!,
                 success = {
-                    runBlocking { call.respond("allowed") }
+                    call.respond("allowed")
                 },
             )
         }

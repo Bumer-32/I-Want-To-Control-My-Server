@@ -5,12 +5,12 @@ import io.ktor.server.request.receive
 import io.ktor.server.response.respondText
 import io.ktor.server.routing.Routing
 import io.ktor.server.routing.post
-import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.selectAll
-import org.jetbrains.exposed.sql.transactions.transaction
+import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import org.jetbrains.exposed.sql.update
+import ua.pp.lumivoid.iwtcms.ktor.api.PermissionsList
 import ua.pp.lumivoid.iwtcms.ktor.api.doAuth
 import ua.pp.lumivoid.iwtcms.ktor.tables.UserPermissionsTable
 import ua.pp.lumivoid.iwtcms.ktor.tables.UsersTable
@@ -24,17 +24,16 @@ object EditPermissions : Request() {
 
             doAuth(
                 call = call,
-                permission = "users.manage",
+                permission = PermissionsList.Permission.USERS_MANAGE.value,
                 success = {
-                    transaction {
+                    val result: TransactionState = newSuspendedTransaction {
                         val userId: Int = try {
                             UsersTable
                                 .selectAll()
                                 .where { UsersTable.username eq payload.username }
                                 .first()[UsersTable.id]
                         } catch (_: NoSuchElementException) {
-                            runBlocking { call.respondText("User not found", status = HttpStatusCode.NotFound) }
-                            return@transaction
+                            return@newSuspendedTransaction TransactionState.USER_NOT_FOUND
                         }
 
                         try {
@@ -43,11 +42,16 @@ object EditPermissions : Request() {
                                     it[UserPermissionsTable.permissionState] = value
                                 }
                             }
-
-                            runBlocking { call.respondText("User permissions updated", status = HttpStatusCode.OK) }
+                            return@newSuspendedTransaction TransactionState.SUCCESS
                         } catch (_: NoSuchElementException) {
-                            runBlocking { call.respondText("Permission not found", status = HttpStatusCode.NotFound) }
+                            return@newSuspendedTransaction TransactionState.PERMISSION_NOT_FOUND
                         }
+                    }
+
+                    when (result) {
+                        TransactionState.USER_NOT_FOUND -> call.respondText("User not found", status = HttpStatusCode.NotFound)
+                        TransactionState.PERMISSION_NOT_FOUND -> call.respondText("Permission not found", status = HttpStatusCode.NotFound)
+                        TransactionState.SUCCESS -> call.respondText("User permissions updated", status = HttpStatusCode.OK)
                     }
                 }
             )
@@ -59,5 +63,9 @@ object EditPermissions : Request() {
         val username: String,
         val permissions: Map<String, Boolean>,
     )
+
+    private enum class TransactionState {
+        USER_NOT_FOUND, PERMISSION_NOT_FOUND, SUCCESS
+    }
 
 }

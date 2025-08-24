@@ -1,5 +1,0 @@
-logs.read
-commands.execute
-server.stats.read
-players.manage
-users.manage
