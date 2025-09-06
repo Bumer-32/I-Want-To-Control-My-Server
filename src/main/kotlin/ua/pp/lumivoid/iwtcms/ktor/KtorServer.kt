@@ -6,6 +6,7 @@ import io.ktor.server.engine.applicationEnvironment
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import io.ktor.server.netty.NettyApplicationEngine
+import kotlinx.coroutines.runBlocking
 import ua.pp.lumivoid.iwtcms.Constants
 import ua.pp.lumivoid.iwtcms.ktor.api.websockets.ConsoleWS
 import ua.pp.lumivoid.iwtcms.ktor.api.websockets.ServerStatsWS
@@ -33,8 +34,10 @@ object KtorServer {
     fun shutdown() {
         logger.info("Shutting down embedded server")
 
-        ConsoleWS.asWs()?.shutdown()
-        ServerStatsWS.asWs()?.shutdown()
+        runBlocking {
+            ConsoleWS.asWs()?.shutdown()
+            ServerStatsWS.asWs()?.shutdown()
+        }
 
         server?.stop()
     }
