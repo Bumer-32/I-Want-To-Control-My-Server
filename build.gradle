@@ -22,7 +22,13 @@ base {
 }
 
 repositories {
-	maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+    maven {
+        name "luck-repo"
+        url "https://repo.lucko.me/"
+        content {
+            includeModule "me.lucko", "spark-api"
+        }
+    }
 }
 
 //ktlint {
