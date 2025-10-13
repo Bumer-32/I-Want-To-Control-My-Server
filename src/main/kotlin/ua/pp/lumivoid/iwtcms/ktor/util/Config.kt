@@ -32,8 +32,9 @@ object Config {
             cachedConfig = data
             return data
         } catch (e: ConfigException) {
-            badConfig(e)
-            return createConfigData(ConfigFactory.empty())!! // never be launched
+            ErrorMessages.printStackTrace(logger, e)
+            ErrorMessages.BAD_CONFIG.launch(logger)
+            exitProcess(1)
         }
     }
 
@@ -52,37 +53,31 @@ object Config {
                 statisticsPeriod = config.getInt("stuff.statistics period"),
                 enableIWTCMSControlPanel = config.getBoolean("web.enable IWTCMS control panel"),
                 autoOpenIWTCMSPageOnStartup = config.getBoolean("web.auto open IWTCMS page on startup"),
-                devMode = config.getBoolean("dev.dev mode"),
-                autoOpenVite = config.getBoolean("dev.auto open vite"),
-                enableH2WebServer = config.getBoolean("dev.enable h2 web server"),
-                useExternalH2Db = config.getBoolean("dev.use external h2 db"),
-                externalH2DbIp = config.getString("dev.external h2 db ip"),
-                externalH2DbPort = config.getInt("dev.external h2 db port"),
+
+                // dev
+                devMode = config.getBooleanOrDefault("dev.dev mode", false),
+                autoOpenVite = config.getBooleanOrDefault("dev.auto open vite", false),
+                enableH2WebServer = config.getBooleanOrDefault("dev.enable h2 web server", false),
+                useExternalH2Db = config.getBooleanOrDefault("dev.use external h2 db", false),
+                externalH2DbIp = config.getStringOrDefault("dev.external h2 db ip", "localhost"),
+                externalH2DbPort = config.getIntOrDefault("dev.external h2 db port", 9092),
             )
         } catch (e: ConfigException) {
-            badConfig(e)
-            return null
+
+            ErrorMessages.printStackTrace(logger, e)
+            ErrorMessages.BAD_CONFIG.launch(logger)
+            exitProcess(1)
         }
     }
 
-    private fun badConfig(e: ConfigException? = null) {
-        logger.error("Error while reading config file: ${e?.message}")
-
-        logger.error("###########################################################################################")
-
-        logger.info("Renaming config file to ${Constants.CONFIG_FILE}-BAD")
-        if (File("${Constants.CONFIG_FILE}-BAD").exists()) File(Constants.CONFIG_FILE).delete()
-        File(Constants.CONFIG_FILE).renameTo(File("${Constants.CONFIG_FILE}-BAD"))
-
-        logger.info("Generating new config file")
-        if (File(Constants.CONFIG_FILE).exists()) File(Constants.CONFIG_FILE).delete()
-        File(Constants.CONFIG_FILE).writeText(defaultConfig.readText(), Charsets.UTF_8)
-
-        if (e != null) ErrorMessages.printStackTrace(logger, e)
-
-        ErrorMessages.BAD_CONFIG.launch(logger)
-
-        exitProcess(1)
+    private fun Config.getBooleanOrDefault(key: String, default: Boolean): Boolean {
+        return if (this.hasPath(key)) this.getBoolean(key) else default
+    }
+    private fun Config.getStringOrDefault(key: String, default: String): String {
+        return if (this.hasPath(key)) this.getString(key) else default
+    }
+    private fun Config.getIntOrDefault(key: String, default: Int): Int {
+        return if (this.hasPath(key)) this.getInt(key) else default
     }
 }
 
@@ -100,6 +95,7 @@ data class ConfigData(
     val statisticsPeriod: Int,
     val enableIWTCMSControlPanel: Boolean,
     val autoOpenIWTCMSPageOnStartup: Boolean,
+
     val devMode: Boolean,
     val autoOpenVite: Boolean,
     val enableH2WebServer: Boolean,
