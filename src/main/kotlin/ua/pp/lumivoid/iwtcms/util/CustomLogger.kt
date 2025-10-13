@@ -15,7 +15,6 @@ import ua.pp.lumivoid.iwtcms.Constants
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.LogsHistory
 import ua.pp.lumivoid.iwtcms.ktor.api.websockets.ConsoleWS
 import ua.pp.lumivoid.iwtcms.ktor.util.Config
-import java.io.IOException
 import java.io.OutputStreamWriter
 
 object CustomLogger {
@@ -53,7 +52,7 @@ object CustomLogger {
         rootLogger.addAppender(customAppender)
 
         CoroutineScope(Dispatchers.IO).launch {
-            try {
+            runCatching {
                 running = true
                 while (running) {
                     @Suppress("Deprecation")
@@ -64,7 +63,6 @@ object CustomLogger {
                         output.reset()
                     }
                 }
-            } catch (_: IOException) {
             }
         }
 

@@ -1,14 +1,14 @@
 package ua.pp.lumivoid.iwtcms
 
+import kotlinx.coroutines.runBlocking
 import net.fabricmc.loader.api.entrypoint.PreLaunchEntrypoint
 import org.apache.commons.codec.digest.DigestUtils
-import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.SchemaUtils.create
-import org.jetbrains.exposed.sql.StdOutSqlLogger
-import org.jetbrains.exposed.sql.addLogger
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.selectAll
-import org.jetbrains.exposed.sql.transactions.transaction
+import org.jetbrains.exposed.v1.core.StdOutSqlLogger
+import org.jetbrains.exposed.v1.r2dbc.insert
+import org.jetbrains.exposed.v1.r2dbc.selectAll
+import org.jetbrains.exposed.v1.r2dbc.R2dbcDatabase
+import org.jetbrains.exposed.v1.r2dbc.SchemaUtils
+import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 import org.slf4j.LoggerFactory
 import ua.pp.lumivoid.iwtcms.ktor.KtorServer
 import ua.pp.lumivoid.iwtcms.ktor.tables.UserPermissionsTable
@@ -24,8 +24,10 @@ object PREIWTCMS : PreLaunchEntrypoint {
 
     override fun onPreLaunch() {
         logger.info("Initialize pre launch iwtcms")
+        
+        val config = Config.readConfig()
 
-        if (Config.readConfig().devMode) {
+        if (config.devMode) {
             if (File("${Constants.CONFIG_FOLDER}/../../gradlew.bat").exists()) { // Check is mod launched in "developer environment"
                 ErrorMessages.DEV_MODE.launch(logger)
             } else {
@@ -36,23 +38,26 @@ object PREIWTCMS : PreLaunchEntrypoint {
 
         CustomLogger.setup()
 
-        val dbUrl: String = if (Config.readConfig().devMode && Config.readConfig().useExternalH2Db) {
-            "tcp://${Config.readConfig().externalH2DbIp}:${Config.readConfig().externalH2DbPort}/iwtcms"
+        val dbUrl: String = if (config.useExternalDb) {
+            "${config.externalDbDriver.url}://${config.externalDbIp}:${config.externalDbPort}/${config.externalDbIWTCMSName}"
         } else {
-            Constants.DB_FILE
+            "h2:file:///${Constants.DB_FILE.replace("\\", "/")}"
         }
+        val dbDriver = if (config.useExternalDb) config.externalDbDriver.driver else "h2"
 
-        logger.info("Connecting to DB ${dbUrl}")
+        logger.info("Connecting to DB r2dbc:$dbUrl with driver: $dbDriver")
 
-        Database.connect(
-            url = "jdbc:h2:$dbUrl",
-            driver = "org.h2.Driver",
-            user = Config.readConfig().databaseUser,
-            password = Config.readConfig().databasePassword,
+        R2dbcDatabase.connect(
+            url = "r2dbc:$dbUrl",
+            driver = dbDriver,
+            user = config.databaseUser,
+            password = config.databasePassword,
         )
-        transaction {
-            if (Config.readConfig().devMode) addLogger(StdOutSqlLogger)
-            create(
+
+        runBlocking { suspendTransaction {
+            if (config.devMode) addLogger(StdOutSqlLogger)
+
+            SchemaUtils.create(
                 UsersTable,
                 UserPermissionsTable,
             )
@@ -66,7 +71,7 @@ object PREIWTCMS : PreLaunchEntrypoint {
                     it[admin] = true
                 }
             }
-        }
+        }}
 
         KtorServer.setup()
     }

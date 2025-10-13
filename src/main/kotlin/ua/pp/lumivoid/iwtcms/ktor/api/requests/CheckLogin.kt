@@ -1,14 +1,16 @@
 package ua.pp.lumivoid.iwtcms.ktor.api.requests
 
 import io.ktor.http.HttpStatusCode
-import io.ktor.server.response.respondText
+import io.ktor.server.response.respond
 import io.ktor.server.routing.Routing
 import io.ktor.server.routing.get
 import io.ktor.server.sessions.get
 import io.ktor.server.sessions.sessions
-import org.jetbrains.exposed.sql.and
-import org.jetbrains.exposed.sql.selectAll
-import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
+import kotlinx.coroutines.flow.first
+import org.jetbrains.exposed.v1.core.and
+import org.jetbrains.exposed.v1.core.eq
+import org.jetbrains.exposed.v1.r2dbc.selectAll
+import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 import ua.pp.lumivoid.iwtcms.ktor.cookie.UserSession
 import ua.pp.lumivoid.iwtcms.ktor.tables.UsersTable
 
@@ -20,22 +22,22 @@ object CheckLogin : Request() {
             val session = call.sessions.get<UserSession>()
 
             if (session == null) {
-                call.respondText("Not logged in", status = HttpStatusCode.Unauthorized)
+                call.respond(HttpStatusCode.Unauthorized, "Not logged in")
                 return@get
             }
 
-            newSuspendedTransaction {
+            suspendTransaction  {
                 try {
                     UsersTable
                         .selectAll()
                         .where { (UsersTable.username eq session.name) and (UsersTable.uniqueId eq session.id) }
                         .first()
                 } catch (_: NoSuchElementException) {
-                    call.respondText("Not logged in", status = HttpStatusCode.Unauthorized)
-                    return@newSuspendedTransaction
+                    call.respond(HttpStatusCode.Unauthorized, "Not logged in")
+                    return@suspendTransaction
                 }
 
-                call.respondText(session.name)
+                call.respond(session.name)
             }
         }
     }

@@ -1,10 +1,9 @@
 package ua.pp.lumivoid.iwtcms.ktor.api.requests
 
 import com.charleskorn.kaml.Yaml
-import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.request.receiveText
-import io.ktor.server.response.respondText
+import io.ktor.server.response.respond
 import io.ktor.server.routing.Routing
 import io.ktor.server.routing.get
 import io.ktor.server.routing.put
@@ -20,13 +19,10 @@ object Configs : Request() {
     private val availableConfigsSettingsFile = this.javaClass.getResource(Constants.AVAILABLE_CONFIGS_SETTINGS_FILE)!!
 
     override val request: Routing.() -> Unit = {
-        val availableConfigsSettings: Map<String, AvailableConfigSetting> =
-            Yaml.default.decodeFromString(
-                availableConfigsSettingsFile.readText(),
-            )
+        val availableConfigsSettings: Map<String, AvailableConfigSetting> = Yaml.default.decodeFromString(availableConfigsSettingsFile.readText())
 
         get(path) {
-            call.respondText(availableConfigsSettingsFile.readText(), contentType = ContentType.Text.Plain)
+            call.respond(availableConfigsSettingsFile.readText())
         }
 
         availableConfigsSettings.forEach {
@@ -45,7 +41,7 @@ object Configs : Request() {
                         val filePath = "${System.getProperty("user.dir")}${it.value.config_path}"
                         val file = File(filePath)
                         val fileContent = file.readText()
-                        call.respondText(fileContent, contentType = ContentType.Text.Plain)
+                        call.respond(fileContent)
                     },
                 )
             }
@@ -69,7 +65,7 @@ object Configs : Request() {
                         val fileContent = call.receiveText()
                         file.writeText(fileContent)
 
-                        call.respondText("Created", status = HttpStatusCode.Created)
+                        call.respond(HttpStatusCode.Created, "Created")
                     },
                 )
             }
@@ -83,7 +79,7 @@ object Configs : Request() {
                         val filePath = "/${it.value.config_path.split("/").last()}.strategy.yaml"
                         val file = this.javaClass.getResource(filePath)!!
                         val fileContent = file.readText()
-                        call.respondText(fileContent, contentType = ContentType.Text.Plain)
+                        call.respond(fileContent)
                     },
                 )
             }

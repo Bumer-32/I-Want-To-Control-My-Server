@@ -2,14 +2,16 @@ package ua.pp.lumivoid.iwtcms.ktor.api.requests
 
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.request.receive
-import io.ktor.server.response.respondText
+import io.ktor.server.response.respond
 import io.ktor.server.routing.Routing
 import io.ktor.server.routing.post
+import kotlinx.coroutines.flow.first
 import kotlinx.serialization.Serializable
-import org.jetbrains.exposed.sql.and
-import org.jetbrains.exposed.sql.selectAll
-import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
-import org.jetbrains.exposed.sql.update
+import org.jetbrains.exposed.v1.core.and
+import org.jetbrains.exposed.v1.core.eq
+import org.jetbrains.exposed.v1.r2dbc.selectAll
+import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
+import org.jetbrains.exposed.v1.r2dbc.update
 import ua.pp.lumivoid.iwtcms.ktor.api.PermissionsList
 import ua.pp.lumivoid.iwtcms.ktor.api.doAuth
 import ua.pp.lumivoid.iwtcms.ktor.tables.UserPermissionsTable
@@ -26,14 +28,14 @@ object EditPermissions : Request() {
                 call = call,
                 permission = PermissionsList.Permission.USERS_MANAGE.value,
                 success = {
-                    val result: TransactionState = newSuspendedTransaction {
+                    val result: TransactionState = suspendTransaction {
                         val userId: Int = try {
                             UsersTable
                                 .selectAll()
                                 .where { UsersTable.username eq payload.username }
                                 .first()[UsersTable.id]
                         } catch (_: NoSuchElementException) {
-                            return@newSuspendedTransaction TransactionState.USER_NOT_FOUND
+                            return@suspendTransaction TransactionState.USER_NOT_FOUND
                         }
 
                         try {
@@ -42,16 +44,17 @@ object EditPermissions : Request() {
                                     it[UserPermissionsTable.permissionState] = value
                                 }
                             }
-                            return@newSuspendedTransaction TransactionState.SUCCESS
+                            return@suspendTransaction TransactionState.SUCCESS
                         } catch (_: NoSuchElementException) {
-                            return@newSuspendedTransaction TransactionState.PERMISSION_NOT_FOUND
+                            return@suspendTransaction TransactionState.PERMISSION_NOT_FOUND
                         }
                     }
 
+
                     when (result) {
-                        TransactionState.USER_NOT_FOUND -> call.respondText("User not found", status = HttpStatusCode.NotFound)
-                        TransactionState.PERMISSION_NOT_FOUND -> call.respondText("Permission not found", status = HttpStatusCode.NotFound)
-                        TransactionState.SUCCESS -> call.respondText("User permissions updated", status = HttpStatusCode.OK)
+                        TransactionState.PERMISSION_NOT_FOUND -> call.respond(HttpStatusCode.NotFound, "Permission not found")
+                        TransactionState.USER_NOT_FOUND -> call.respond(HttpStatusCode.NotFound, "User not found")
+                        TransactionState.SUCCESS -> call.respond(HttpStatusCode.OK, "User permissions updated")
                     }
                 }
             )

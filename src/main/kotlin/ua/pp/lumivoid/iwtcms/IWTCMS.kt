@@ -19,6 +19,8 @@ object IWTCMS : ModInitializer {
     override fun onInitialize() {
         logger.info("Hello from Bumer_32!")
 
+        val config = Config.readConfig()
+
         MinecraftServerHandler.register()
         StoppedServerTrigger.register()
 
@@ -27,14 +29,14 @@ object IWTCMS : ModInitializer {
         }
 
         // ? run "npm run dev" if dev mode enabled
-        if (Config.readConfig().devMode) {
+        if (config.devMode) {
             // run h2 db webserver
-            if (Config.readConfig().enableH2WebServer) {
+            if (config.enableH2WebServer && !config.useExternalDb) {
                 h2Server = Server.createWebServer("-web", "-webAllowOthers", "-webPort", "8082").start()
                 logger.info("H2 Console accessible by address: http://localhost:8082")
             }
 
-            if (Config.readConfig().autoOpenVite) {
+            if (config.autoOpenVite) {
                 val runnerFile =
                     if (System.getProperty("os.name").startsWith("Win")) {
                         "devRunner.bat"
@@ -51,11 +53,11 @@ object IWTCMS : ModInitializer {
         }
 
         // If dev mode enabled, it will be opened by vite
-        if (Config.readConfig().autoOpenIWTCMSPageOnStartup && !Config.readConfig().devMode) {
+        if (config.autoOpenIWTCMSPageOnStartup && !config.devMode) {
             logger.info("Open IWTCMS page")
             @Suppress("HttpUrlsUsage")
-            val prefix = if (Config.readConfig().useSSL) "https://" else "http://"
-            Desktop.getDesktop().browse(URI("$prefix${Config.readConfig().ip}:${Config.readConfig().port}"))
+            val prefix = if (config.useSSL) "https://" else "http://"
+            Desktop.getDesktop().browse(URI("$prefix${config.ip}:${config.port}"))
         }
     }
 }

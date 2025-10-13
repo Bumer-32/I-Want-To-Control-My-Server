@@ -2,6 +2,7 @@ package ua.pp.lumivoid.iwtcms.ktor.api.websockets
 
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.routing.Routing
+import io.ktor.server.routing.RoutingCall
 import io.ktor.server.websocket.webSocket
 import io.ktor.websocket.CloseReason
 import io.ktor.websocket.Frame
@@ -18,20 +19,19 @@ object ConsoleWS : WebSocket() {
 
     override val ws: Routing.() -> Unit = {
         webSocket(path) {
-            val status =
-                doAuth(
-                    call = call,
-                    permission = PermissionsList.Permission.LOGS_READ.value,
-                    success = {},
-                    unauthorized = {
-                        logger.debug("Unauthorized user tried to connect to $path websocket")
-                        close(CloseReason(CloseReason.Codes.VIOLATED_POLICY, "Unauthorized"))
-                    },
-                    forbidden = {
-                        logger.debug("Forbidden user tried to connect to $path websocket")
-                        close(CloseReason(CloseReason.Codes.VIOLATED_POLICY, "Forbidden"))
-                    },
-                )
+            val status = doAuth(
+                call = call as RoutingCall,
+                permission = PermissionsList.Permission.LOGS_READ.value,
+                success = {},
+                unauthorized = {
+                    logger.debug("Unauthorized user tried to connect to $path websocket")
+                    close(CloseReason(CloseReason.Codes.VIOLATED_POLICY, "Unauthorized"))
+                },
+                forbidden = {
+                    logger.debug("Forbidden user tried to connect to $path websocket")
+                    close(CloseReason(CloseReason.Codes.VIOLATED_POLICY, "Forbidden"))
+                },
+            )
 
             if (status != HttpStatusCode.OK) return@webSocket
 
@@ -46,7 +46,7 @@ object ConsoleWS : WebSocket() {
                     }
 
                     override suspend fun shutdown() {
-                        logger.info("Сlosing $path websocket")
+                        logger.info("Closing $path websocket")
                         close(CloseReason(CloseReason.Codes.NORMAL, "shutting down server"))
                     }
                 }
@@ -54,7 +54,7 @@ object ConsoleWS : WebSocket() {
             var allowExecution = false
 
             doAuth(
-                call = call,
+                call = call as RoutingCall,
                 permission = PermissionsList.Permission.COMMANDS_EXECUTE.value,
                 success = { allowExecution = true },
                 unauthorized = { allowExecution = false },

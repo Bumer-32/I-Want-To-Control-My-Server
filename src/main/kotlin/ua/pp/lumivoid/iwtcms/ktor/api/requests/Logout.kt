@@ -1,6 +1,6 @@
 package ua.pp.lumivoid.iwtcms.ktor.api.requests
 
-import io.ktor.server.response.respondText
+import io.ktor.server.response.respond
 import io.ktor.server.routing.Routing
 import io.ktor.server.routing.post
 import io.ktor.server.sessions.clear
@@ -15,12 +15,12 @@ object Logout : Request() {
         post(path) {
             val session = call.sessions.get<UserSession>()
             if (session == null) {
-                call.respondText("Not logged in")
+                call.respond("Not logged in")
                 return@post
             }
 
             call.sessions.clear(UserSession::class)
-            call.respondText("Logged out")
+            call.respond("Logged out")
         }
     }
 }

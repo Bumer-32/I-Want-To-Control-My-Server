@@ -2,6 +2,7 @@ package ua.pp.lumivoid.iwtcms.ktor.api.websockets
 
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.routing.Routing
+import io.ktor.server.routing.RoutingCall
 import io.ktor.server.websocket.webSocket
 import io.ktor.websocket.CloseReason
 import io.ktor.websocket.Frame
@@ -25,7 +26,7 @@ object ServerStatsWS : WebSocket() {
         webSocket(path) {
             val status =
                 doAuth(
-                    call = call,
+                    call = call as RoutingCall,
                     permission = PermissionsList.Permission.SERVER_STATS_READ.value,
                     success = {},
                     unauthorized = {

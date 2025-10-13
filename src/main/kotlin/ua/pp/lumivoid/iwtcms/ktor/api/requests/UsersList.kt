@@ -1,13 +1,14 @@
 package ua.pp.lumivoid.iwtcms.ktor.api.requests
 
-import io.ktor.http.*
-import io.ktor.server.response.*
-import io.ktor.server.routing.*
+import io.ktor.server.response.respond
+import io.ktor.server.routing.Routing
+import io.ktor.server.routing.get
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.selectAll
-import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
+import org.jetbrains.exposed.v1.core.ResultRow
+import org.jetbrains.exposed.v1.core.eq
+import org.jetbrains.exposed.v1.r2dbc.selectAll
+import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 import ua.pp.lumivoid.iwtcms.ktor.api.PermissionsList
 import ua.pp.lumivoid.iwtcms.ktor.api.doAuth
 import ua.pp.lumivoid.iwtcms.ktor.tables.UserPermissionsTable
@@ -30,22 +31,22 @@ object UsersList: Request() {
                 call = call,
                 permission = PermissionsList.Permission.USERS_MANAGE.value,
                 success = {
-                    val usersList = newSuspendedTransaction {
+                    val usersList = suspendTransaction {
                         val usersList = mutableListOf<UsersListData>()
-                        UsersTable.selectAll().forEach { user: ResultRow ->
+                        UsersTable.selectAll().collect { user: ResultRow ->
                             val permissions = UserPermissionsTable.selectAll().where { UserPermissionsTable.userId eq user[UsersTable.id] }
                             val permissionsMap = falsePermissionsMap
 
-                            permissions.forEach { permission: ResultRow ->
+                            permissions.collect { permission: ResultRow ->
                                 permissionsMap[permission[UserPermissionsTable.permissionName]] = permission[UserPermissionsTable.permissionState]
                             }
 
                             usersList.add(UsersListData(id = user[UsersTable.id], username = user[UsersTable.username], admin = user[UsersTable.admin], permissions = permissionsMap))
                         }
 
-                        return@newSuspendedTransaction usersList
+                        return@suspendTransaction usersList
                     }
-                    call.respondText(json.encodeToString(usersList), contentType = ContentType.Text.Plain)
+                    call.respond(json.encodeToString(usersList))
                 },
             )
         }

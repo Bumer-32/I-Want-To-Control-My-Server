@@ -27,7 +27,7 @@ object Config {
 
         try {
             val config = ConfigFactory.parseFile(configFile)
-            val data = createConfigData(config)!!
+            val data = createConfigData(config)
 
             cachedConfig = data
             return data
@@ -38,7 +38,7 @@ object Config {
         }
     }
 
-    private fun createConfigData(config: Config): ConfigData? {
+    private fun createConfigData(config: Config): ConfigData {
         try {
             return ConfigData(
                 ip = config.getString("server.ip"),
@@ -58,9 +58,11 @@ object Config {
                 devMode = config.getBooleanOrDefault("dev.dev mode", false),
                 autoOpenVite = config.getBooleanOrDefault("dev.auto open vite", false),
                 enableH2WebServer = config.getBooleanOrDefault("dev.enable h2 web server", false),
-                useExternalH2Db = config.getBooleanOrDefault("dev.use external h2 db", false),
-                externalH2DbIp = config.getStringOrDefault("dev.external h2 db ip", "localhost"),
-                externalH2DbPort = config.getIntOrDefault("dev.external h2 db port", 9092),
+                useExternalDb = config.getBooleanOrDefault("dev.use external db", false),
+                externalDbDriver = DbDriver.entries.find { config.getStringOrDefault("dev.external db driver", "MariaDB") == it.named } ?: DbDriver.MariaDB,
+                externalDbIWTCMSName = config.getStringOrDefault("external db iwtcms name", "iwtcms"),
+                externalDbIp = config.getStringOrDefault("dev.external db ip", "localhost"),
+                externalDbPort = config.getIntOrDefault("dev.external db port", 9092),
             )
         } catch (e: ConfigException) {
 
@@ -79,27 +81,38 @@ object Config {
     private fun Config.getIntOrDefault(key: String, default: Int): Int {
         return if (this.hasPath(key)) this.getInt(key) else default
     }
+
+    @Serializable
+    data class ConfigData(
+        val ip: String,
+        val port: Int,
+        val logLevel: String,
+        val databaseUser: String,
+        val databasePassword: String,
+        val useSSL: Boolean,
+        val customCertificate: Boolean,
+        val sslAlias: String,
+        val sslPass: String,
+        val statisticsPeriod: Int,
+        val enableIWTCMSControlPanel: Boolean,
+        val autoOpenIWTCMSPageOnStartup: Boolean,
+
+        val devMode: Boolean,
+        val autoOpenVite: Boolean,
+        val enableH2WebServer: Boolean,
+        val useExternalDb: Boolean,
+        val externalDbDriver: DbDriver,
+        val externalDbIWTCMSName: String,
+        val externalDbIp: String,
+        val externalDbPort: Int,
+    )
+
+    enum class DbDriver(val named: String, val driver: String, val url: String) {
+        Oracle("Oracle", "oracle", "oracle"),
+        //    H2("H2", "h2"), // in some reason can't connect by tcp and gives error
+        MariaDB("MariaDB", "mariadb", "mariadb"),
+        MSSQL("MSSQL", "sqlserver", "mssql"),
+        MYSQL("MySQL", "mysql", "mysql"),
+        POSTGRESQL("PostgreSQL", "postgresql", "postgresql"),
+    }
 }
-
-@Serializable
-data class ConfigData(
-    val ip: String,
-    val port: Int,
-    val logLevel: String,
-    val databaseUser: String,
-    val databasePassword: String,
-    val useSSL: Boolean,
-    val customCertificate: Boolean,
-    val sslAlias: String,
-    val sslPass: String,
-    val statisticsPeriod: Int,
-    val enableIWTCMSControlPanel: Boolean,
-    val autoOpenIWTCMSPageOnStartup: Boolean,
-
-    val devMode: Boolean,
-    val autoOpenVite: Boolean,
-    val enableH2WebServer: Boolean,
-    val useExternalH2Db: Boolean,
-    val externalH2DbIp: String,
-    val externalH2DbPort: Int,
-)

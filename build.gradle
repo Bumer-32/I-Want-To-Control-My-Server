@@ -59,13 +59,16 @@ modrinth {
 
 dependencies {
 	// To change the versions see the gradle.properties file
+
+    // * Fabric
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 	modImplementation "net.fabricmc:fabric-language-kotlin:${project.fabric_kotlin_version}"
+    // * Fabric
 
-	// Ktor cool thing, but launching with fabricmc looks terrible
+	// * Ktor
     implementation shaded("io.ktor:ktor-server-core:${project.ktor_version}")
     implementation shaded("io.ktor:ktor-server-netty:${project.ktor_version}")
 	implementation shaded("io.ktor:ktor-network-tls-certificates:${project.ktor_version}")
@@ -75,14 +78,24 @@ dependencies {
 	implementation shaded("io.ktor:ktor-server-content-negotiation:${project.ktor_version}")
 	implementation shaded("io.ktor:ktor-server-status-pages:${project.ktor_version}")
 	implementation shaded("io.ktor:ktor-server-cors:${project.ktor_version}")
-	// already launched ktor
+	// * Ktor
 
+    // * Exposed
 	implementation shaded("org.jetbrains.exposed:exposed-core:${project.exposed_version}")
-	implementation shaded("org.jetbrains.exposed:exposed-jdbc:${project.exposed_version}")
+	implementation shaded("org.jetbrains.exposed:exposed-r2dbc:${project.exposed_version}")
 	implementation shaded("org.jetbrains.exposed:exposed-dao:${project.exposed_version}")
-	implementation shaded("com.h2database:h2:${project.h2database_version}")
+    // * Exposed
 
-	implementation shaded("com.typesafe:config:${project.hocon_config_version}")
+    // * R2DBC drivers
+	implementation shaded("io.r2dbc:r2dbc-h2:${project.h2_database_version}") // implements only because it's internal db, which we should launch
+    shaded "com.oracle.database.r2dbc:oracle-r2dbc:${project.oracle_database_version}"
+    shaded "org.mariadb:r2dbc-mariadb:${project.mariadb_database_version}"
+    shaded "io.r2dbc:r2dbc-mssql:${project.mssql_database_version}"
+    shaded "io.asyncer:r2dbc-mysql:${project.mysql_database_version}"
+    shaded "org.postgresql:r2dbc-postgresql:${project.postgresql_database_version}"
+    // * R2DBC drivers
+
+    implementation shaded("com.typesafe:config:${project.hocon_config_version}")
 
 	implementation shaded("commons-codec:commons-codec:${project.commons_codec}")
 

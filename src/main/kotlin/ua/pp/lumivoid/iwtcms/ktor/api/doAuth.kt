@@ -1,13 +1,17 @@
 package ua.pp.lumivoid.iwtcms.ktor.api
 
-import io.ktor.http.*
-import io.ktor.server.application.*
-import io.ktor.server.response.*
-import io.ktor.server.sessions.*
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.and
-import org.jetbrains.exposed.sql.selectAll
-import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
+import io.ktor.http.HttpStatusCode
+import io.ktor.server.response.respond
+import io.ktor.server.routing.RoutingCall
+import io.ktor.server.sessions.get
+import io.ktor.server.sessions.sessions
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
+import org.jetbrains.exposed.v1.core.ResultRow
+import org.jetbrains.exposed.v1.core.and
+import org.jetbrains.exposed.v1.core.eq
+import org.jetbrains.exposed.v1.r2dbc.selectAll
+import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 import ua.pp.lumivoid.iwtcms.ktor.cookie.UserSession
 import ua.pp.lumivoid.iwtcms.ktor.tables.UserPermissionsTable
 import ua.pp.lumivoid.iwtcms.ktor.tables.UsersTable
@@ -19,14 +23,14 @@ import ua.pp.lumivoid.iwtcms.ktor.tables.UsersTable
  * returns HTTP status
  * */
 suspend fun doAuth(
-    call: ApplicationCall,
+    call: RoutingCall,
     permission: String,
     success: suspend () -> Unit,
     unauthorized: suspend () -> Unit = {
-        call.respondText("Unauthorized", status = HttpStatusCode.Unauthorized)
+        call.respond(HttpStatusCode.Unauthorized, "Unauthorized")
     },
     forbidden: suspend () -> Unit = {
-        call.respondText("Forbidden", status = HttpStatusCode.Forbidden)
+        call.respond(HttpStatusCode.Forbidden, "Forbidden")
     },
 ): HttpStatusCode {
     val session = call.sessions.get<UserSession>()
@@ -36,7 +40,7 @@ suspend fun doAuth(
         return HttpStatusCode.Unauthorized
     }
 
-    val user = newSuspendedTransaction {
+    val user = suspendTransaction  {
         UsersTable
             .selectAll()
             .where { (UsersTable.username eq session.name) and (UsersTable.uniqueId eq session.id) }

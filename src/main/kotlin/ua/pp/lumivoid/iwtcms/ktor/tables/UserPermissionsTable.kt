@@ -1,6 +1,6 @@
 package ua.pp.lumivoid.iwtcms.ktor.tables
 
-import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.v1.core.Table
 
 object UserPermissionsTable : Table("user_permissions") {
     val userId = integer("user_id")

@@ -2,16 +2,18 @@ package ua.pp.lumivoid.iwtcms.ktor.api.requests
 
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.request.receive
-import io.ktor.server.response.respondText
+import io.ktor.server.response.respond
 import io.ktor.server.routing.Routing
 import io.ktor.server.routing.post
 import io.ktor.server.sessions.sessions
 import io.ktor.server.sessions.set
+import kotlinx.coroutines.flow.first
 import kotlinx.serialization.Serializable
 import org.apache.commons.codec.digest.DigestUtils
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.selectAll
-import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
+import org.jetbrains.exposed.v1.core.ResultRow
+import org.jetbrains.exposed.v1.core.eq
+import org.jetbrains.exposed.v1.r2dbc.selectAll
+import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 import ua.pp.lumivoid.iwtcms.ktor.cookie.UserSession
 import ua.pp.lumivoid.iwtcms.ktor.tables.UsersTable
 
@@ -22,7 +24,7 @@ object Login : Request() {
         post(path) {
             val payload = call.receive<LoginPayload>()
 
-            newSuspendedTransaction {
+            suspendTransaction {
                 try {
                     val user: ResultRow = UsersTable
                                             .selectAll()
@@ -32,12 +34,12 @@ object Login : Request() {
 
                     if (DigestUtils.sha256Hex(payload.password + salt) == user[UsersTable.passwordHash]) {
                         call.sessions.set(UserSession(user[UsersTable.username], user[UsersTable.uniqueId]))
-                        call.respondText("Login successful")
+                        call.respond("Login successful")
                     } else {
-                        call.respondText("Login failed", status = HttpStatusCode.Unauthorized)
+                        call.respond(HttpStatusCode.Unauthorized, "Login failed")
                     }
                 } catch (_: NoSuchElementException) {
-                    call.respondText("Login failed", status = HttpStatusCode.Unauthorized)
+                    call.respond(HttpStatusCode.Unauthorized, "Login failed")
                 }
             }
         }

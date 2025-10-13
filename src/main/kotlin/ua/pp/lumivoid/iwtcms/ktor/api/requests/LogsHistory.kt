@@ -1,7 +1,6 @@
 package ua.pp.lumivoid.iwtcms.ktor.api.requests
 
-import io.ktor.http.ContentType
-import io.ktor.server.response.respondText
+import io.ktor.server.response.respond
 import io.ktor.server.routing.Routing
 import io.ktor.server.routing.get
 import kotlinx.serialization.json.Json
@@ -21,7 +20,7 @@ object LogsHistory : Request() {
                 permission = PermissionsList.Permission.LOGS_READ.value,
                 success = {
                     val response = json.encodeToString(logs)
-                    call.respondText(response, contentType = ContentType.Text.Plain)
+                    call.respond(response)
                 },
             )
         }

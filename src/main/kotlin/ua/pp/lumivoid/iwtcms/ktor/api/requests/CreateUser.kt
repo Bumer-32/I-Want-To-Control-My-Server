@@ -2,15 +2,16 @@ package ua.pp.lumivoid.iwtcms.ktor.api.requests
 
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.request.receive
-import io.ktor.server.response.respondText
+import io.ktor.server.response.respond
 import io.ktor.server.routing.Routing
 import io.ktor.server.routing.post
+import kotlinx.coroutines.flow.first
 import kotlinx.serialization.Serializable
 import org.apache.commons.codec.digest.DigestUtils
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.selectAll
-import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
+import org.jetbrains.exposed.v1.core.eq
+import org.jetbrains.exposed.v1.r2dbc.insert
+import org.jetbrains.exposed.v1.r2dbc.selectAll
+import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 import ua.pp.lumivoid.iwtcms.ktor.api.PermissionsList
 import ua.pp.lumivoid.iwtcms.ktor.api.doAuth
 import ua.pp.lumivoid.iwtcms.ktor.tables.UserPermissionsTable
@@ -27,9 +28,9 @@ object CreateUser : Request() {
                 call = call,
                 permission = PermissionsList.Permission.USERS_MANAGE.value,
                 success = {
-                    val success = newSuspendedTransaction {
+                    val success = suspendTransaction  {
                         var salt = generateSequence { genSalt() }
-                            .first { saltCandidate -> 
+                            .first { saltCandidate ->
                                 UsersTable.selectAll().where(UsersTable.salt eq saltCandidate).empty()
                             }
 
@@ -42,16 +43,17 @@ object CreateUser : Request() {
                                 it[UsersTable.admin] = payload.admin
                             }
                         }.onFailure {
-                            return@newSuspendedTransaction false
+                            return@suspendTransaction false
                         }
 
                         payload.permissions.forEach { (key, value) ->
                             if (key in PermissionsList.getPermissionsList()) {
                                 runCatching {
+                                    val userId = UsersTable.selectAll().where{ UsersTable.username eq payload.username }.first()[UsersTable.id]
                                     UserPermissionsTable.insert {
                                         it[UserPermissionsTable.permissionName] = key
                                         it[UserPermissionsTable.permissionState] = value
-                                        it[UserPermissionsTable.userId] = UsersTable.selectAll().where { UsersTable.username eq payload.username }.first()[UsersTable.id]
+                                        it[UserPermissionsTable.userId] = userId
                                     }
                                 }
                             }
@@ -60,8 +62,8 @@ object CreateUser : Request() {
                         true
                     }
 
-                    if (success) call.respondText("User created")
-                    else call.respondText("User already exists", status = HttpStatusCode.Conflict)
+                    if (success) call.respond("User created")
+                    else call.respond(HttpStatusCode.Conflict, "User already exists")
                 },
             )
         }
