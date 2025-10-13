@@ -3,12 +3,12 @@
     "id": "iwtcms",
     "version": "${version}",
     "name": "I Want To Control My Server",
-    "description": "Allows you to send commands and get logs through tcp/ip",
+    "description": "Implements rest api and fancy admin panel for minecraft server!",
     "authors": ["Bumer_32"],
     "contact": {
         "homepage": "https://lumivoid.pp.ua",
-        "sources": "https://github.com/Bumer-32/Redstone-Helper",
-        "issues": "https://github.com/Bumer-32/Redstone-Helper/issues"
+        "sources": "https://github.com/Bumer-32/https://github.com/Bumer-32/I-Want-To-Control-My-Server",
+        "issues": "https://github.com/Bumer-32/https://github.com/Bumer-32/I-Want-To-Control-My-Server/issues"
     },
     "license": "Apache-2.0",
     "icon": "assets/iwtcms/icon.png",
