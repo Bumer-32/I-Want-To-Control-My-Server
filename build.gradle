@@ -8,8 +8,13 @@ plugins {
 	id "org.jetbrains.kotlin.jvm" version "2.2.10"
 	id "com.github.node-gradle.node" version "7.1.0"
 	id "com.modrinth.minotaur" version "2.+"
-//	id "org.jlleitschuh.gradle.ktlint" version "12.2.0"
+    id "com.github.johnrengelman.shadow" version "8.1.1"
 	id "maven-publish"
+}
+
+configurations {
+    shaded
+    implementation.extendsFrom shaded
 }
 
 version = project.mod_version
@@ -30,13 +35,6 @@ repositories {
         }
     }
 }
-
-//ktlint {
-//	version = "1.5.0"
-//	additionalEditorconfig = [
-//		"max_line_length": "200",
-//	]
-//}
 
 modrinth {
 	token = project.hasProperty("modrinthToken") ? project.modrinthToken : System.getenv("MODRINTH_TOKEN")
@@ -68,42 +66,27 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-language-kotlin:${project.fabric_kotlin_version}"
 
 	// Ktor cool thing, but launching with fabricmc looks terrible
-    implementation include("io.ktor:ktor-server-core:${project.ktor_version}")
-    implementation include("io.ktor:ktor-server-netty:${project.ktor_version}")
-	implementation include("io.ktor:ktor-network-tls-certificates:${project.ktor_version}")
-	implementation include("io.ktor:ktor-server-websockets:${project.ktor_version}")
-	implementation include("io.ktor:ktor-server-sessions:${project.ktor_version}")
-	implementation include("io.ktor:ktor-serialization-kotlinx-json:${project.ktor_version}")
-	implementation include("io.ktor:ktor-server-content-negotiation:${project.ktor_version}")
-	implementation include("io.ktor:ktor-server-status-pages:${project.ktor_version}")
-	implementation include("io.ktor:ktor-server-cors:${project.ktor_version}")
-	include "io.ktor:ktor-events:${project.ktor_version}"
-	include "io.ktor:ktor-utils:${project.ktor_version}"
-	include "io.ktor:ktor-network-tls:${project.ktor_version}"
-	include "io.ktor:ktor-io:${project.ktor_version}"
-	include "io.ktor:ktor-http:${project.ktor_version}" // fuck this
-	include "io.ktor:ktor-websockets:${project.ktor_version}"
-	include "io.ktor:ktor-serialization:${project.ktor_version}"
-	include "io.ktor:ktor-serialization-kotlinx:${project.ktor_version}"
-
-	include "io.netty:netty-transport-classes-kqueue:${project.netty_version}"
-	include "io.netty:netty-codec-http2:${project.netty_version}"
-	include "io.netty:netty-codec-http:${project.netty_version}"
+    implementation shaded("io.ktor:ktor-server-core:${project.ktor_version}")
+    implementation shaded("io.ktor:ktor-server-netty:${project.ktor_version}")
+	implementation shaded("io.ktor:ktor-network-tls-certificates:${project.ktor_version}")
+	implementation shaded("io.ktor:ktor-server-websockets:${project.ktor_version}")
+	implementation shaded("io.ktor:ktor-server-sessions:${project.ktor_version}")
+	implementation shaded("io.ktor:ktor-serialization-kotlinx-json:${project.ktor_version}")
+	implementation shaded("io.ktor:ktor-server-content-negotiation:${project.ktor_version}")
+	implementation shaded("io.ktor:ktor-server-status-pages:${project.ktor_version}")
+	implementation shaded("io.ktor:ktor-server-cors:${project.ktor_version}")
 	// already launched ktor
 
-	implementation include("org.jetbrains.exposed:exposed-core:${project.exposed_version}")
-	implementation include("org.jetbrains.exposed:exposed-jdbc:${project.exposed_version}")
-	implementation include("org.jetbrains.exposed:exposed-dao:${project.exposed_version}")
-	implementation include("com.h2database:h2:${project.h2database_version}")
+	implementation shaded("org.jetbrains.exposed:exposed-core:${project.exposed_version}")
+	implementation shaded("org.jetbrains.exposed:exposed-jdbc:${project.exposed_version}")
+	implementation shaded("org.jetbrains.exposed:exposed-dao:${project.exposed_version}")
+	implementation shaded("com.h2database:h2:${project.h2database_version}")
 
-	implementation include("com.typesafe:config:${project.hocon_config_version}")
+	implementation shaded("com.typesafe:config:${project.hocon_config_version}")
 
-	implementation include("commons-codec:commons-codec:${project.commons_codec}")
+	implementation shaded("commons-codec:commons-codec:${project.commons_codec}")
 
-	implementation include("com.charleskorn.kaml:kaml:${project.kaml_version}")
-	include "com.squareup.okio:okio:${project.okio_version}"
-	include "it.krzeminski:snakeyaml-engine-kmp:${project.snakeyaml_engine_kmp_version}"
-	include "net.thauvin.erik.urlencoder:urlencoder-lib-jvm:${project.urlencoder_lib_jvm_version}"
+	implementation shaded("com.charleskorn.kaml:kaml:${project.kaml_version}")
 
 	modImplementation "me.lucko:spark-api:${project.spark_api_version}"
 }
@@ -200,6 +183,10 @@ tasks.register("compileVite"){
 
 jar {
 	from("LICENSE")
+}
+
+shadowJar {
+    configurations = [project.configurations.shaded]
 }
 
 processResources {
