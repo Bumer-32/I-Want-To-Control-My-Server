@@ -17,6 +17,7 @@ import ua.pp.lumivoid.iwtcms.ktor.util.Config
 import ua.pp.lumivoid.iwtcms.ktor.util.ErrorMessages
 import ua.pp.lumivoid.iwtcms.util.CustomLogger
 import java.io.File
+import java.util.TimeZone
 import kotlin.system.exitProcess
 
 object PREIWTCMS : PreLaunchEntrypoint {
@@ -24,7 +25,9 @@ object PREIWTCMS : PreLaunchEntrypoint {
 
     override fun onPreLaunch() {
         logger.info("Initialize pre launch iwtcms")
-        
+
+        if (TimeZone.getDefault().id == "Europe/Kiev") TimeZone.setDefault(TimeZone.getTimeZone("Europe/Kyiv")) // shit coded thing only because kyiv not kiev for postgres
+
         val config = Config.readConfig()
 
         if (config.devMode) {
