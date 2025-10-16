@@ -40,39 +40,41 @@ suspend fun doAuth(
         return HttpStatusCode.Unauthorized
     }
 
-    val user = suspendTransaction  {
-        UsersTable
+    val status = suspendTransaction {
+        val user = UsersTable
             .selectAll()
             .where { (UsersTable.username eq session.name) and (UsersTable.uniqueId eq session.id) }
             .firstOrNull()
-    }
 
-    if (user == null) {
-        unauthorized()
-        return HttpStatusCode.Unauthorized
-    }
+        if (user == null) {
+            return@suspendTransaction HttpStatusCode.Unauthorized
+        }
 
-    if (user[UsersTable.admin]) {
-        success()
-        return HttpStatusCode.OK
-    }
+        if (user[UsersTable.admin]) {
+            return@suspendTransaction HttpStatusCode.OK
+        }
 
-    val permission: ResultRow =
-        try {
+        val permission: ResultRow = try {
             UserPermissionsTable
                 .selectAll()
                 .where { (UserPermissionsTable.userId eq user[UsersTable.id]) and (UserPermissionsTable.permissionName eq permission) }
                 .first()
         } catch (_: NoSuchElementException) {
-            forbidden()
-            return HttpStatusCode.Forbidden
+            return@suspendTransaction HttpStatusCode.Forbidden
         }
 
-    if (permission[UserPermissionsTable.permissionState]) {
-        success()
-        return HttpStatusCode.OK
-    } else {
-        forbidden()
-        return HttpStatusCode.Forbidden
+        if (permission[UserPermissionsTable.permissionState]) {
+            return@suspendTransaction HttpStatusCode.OK
+        } else {
+            return@suspendTransaction HttpStatusCode.Forbidden
+        }
     }
+
+    when (status) {
+        HttpStatusCode.Unauthorized -> unauthorized()
+        HttpStatusCode.Forbidden -> forbidden()
+        HttpStatusCode.OK -> success()
+    }
+
+    return status
 }
