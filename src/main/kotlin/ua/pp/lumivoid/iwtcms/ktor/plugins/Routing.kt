@@ -27,6 +27,7 @@ import ua.pp.lumivoid.iwtcms.ktor.api.requests.Login
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.Logout
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.LogsHistory
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.Main
+import ua.pp.lumivoid.iwtcms.ktor.api.requests.PermissionsList
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.UsersList
 import ua.pp.lumivoid.iwtcms.ktor.api.requests.Version
 import ua.pp.lumivoid.iwtcms.ktor.api.websockets.ConsoleWS
@@ -60,7 +61,7 @@ fun Application.configureRouting() {
     install(StatusPages) {
         statusFile(HttpStatusCode.NotFound, filePattern = "/web/404.html")
 
-        exception<Throwable> { call, cause ->
+        exception<Throwable> { _, cause ->
             cause.stackTrace.forEach { logger.error(it.toString()) }
         }
     }
@@ -89,6 +90,7 @@ fun Application.configureRouting() {
     CreateUser.register(r)
     DeleteUser.register(r)
     EditPermissions.register(r)
+    PermissionsList.register(r)
 
     ConsoleWS.register(r)
     ServerStatsWS.register(r)

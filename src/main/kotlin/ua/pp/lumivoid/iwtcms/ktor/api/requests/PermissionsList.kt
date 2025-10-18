@@ -7,7 +7,7 @@ import kotlinx.serialization.json.Json
 import ua.pp.lumivoid.iwtcms.ktor.api.doAuth
 
 object PermissionsList: Request() {
-    override val path = "/api/permissions"
+    override val path = "/api/permissionsList"
     private val json = Json { prettyPrint = true }
 
     private var permissions: MutableList<String> = mutableListOf()
