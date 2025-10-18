@@ -35,11 +35,11 @@ object CreateUser : Request() {
 
     suspend fun create(username: String, password: String, admin: Boolean, permissions: List<String>): Boolean {
         return suspendTransaction  {
-            val salt = generateSequence { genSalt() }.first { saltCandidate ->
-                UsersTable.selectAll().where(UsersTable.salt eq saltCandidate).empty()
-            }
+            if (UsersTable.selectAll().where { UsersTable.username eq username }.empty()) {
+                val salt = generateSequence { genSalt() }.first { saltCandidate ->
+                    UsersTable.selectAll().where(UsersTable.salt eq saltCandidate).empty()
+                }
 
-            runCatching {
                 val user = UsersTable.insert {
                     it[UsersTable.username] = username
                     it[UsersTable.passwordHash] = DigestUtils.sha256Hex(password + salt)
@@ -56,11 +56,10 @@ object CreateUser : Request() {
                         }
                     }
                 }
-            }.onFailure {
-                return@suspendTransaction false
+                true
+            } else {
+                false
             }
-
-            true
         }
     }
 
