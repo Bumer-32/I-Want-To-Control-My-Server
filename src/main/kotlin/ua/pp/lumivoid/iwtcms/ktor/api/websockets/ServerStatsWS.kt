@@ -11,7 +11,7 @@ import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
-import ua.pp.lumivoid.iwtcms.ktor.api.PermissionsList
+import ua.pp.lumivoid.iwtcms.ktor.api.requests.PermissionsList
 import ua.pp.lumivoid.iwtcms.ktor.api.doAuth
 import ua.pp.lumivoid.iwtcms.ktor.util.Config
 import ua.pp.lumivoid.iwtcms.util.ServerStats
@@ -54,7 +54,7 @@ object ServerStatsWS : WebSocket() {
                     }
 
                     override suspend fun shutdown() {
-                        logger.info("Сlosing $path websocket")
+                        logger.info("Closing $path websocket")
                         running = false
                         close(CloseReason(CloseReason.Codes.NORMAL, "shutting down server"))
                     }

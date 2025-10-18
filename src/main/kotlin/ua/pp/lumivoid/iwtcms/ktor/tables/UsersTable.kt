@@ -9,5 +9,6 @@ object UsersTable : Table("users") {
     val salt = char("salt", 32).uniqueIndex()
     val uniqueId = char("unique_id", 64).uniqueIndex()
     val admin = bool("admin").default(false)
+
     override val primaryKey = PrimaryKey(id)
 }

@@ -3,13 +3,14 @@ package ua.pp.lumivoid.iwtcms.ktor.api.requests
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Routing
 import io.ktor.server.routing.get
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.toList
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.v1.core.ResultRow
 import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.r2dbc.selectAll
 import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
-import ua.pp.lumivoid.iwtcms.ktor.api.PermissionsList
 import ua.pp.lumivoid.iwtcms.ktor.api.doAuth
 import ua.pp.lumivoid.iwtcms.ktor.tables.UserPermissionsTable
 import ua.pp.lumivoid.iwtcms.ktor.tables.UsersTable
@@ -17,13 +18,6 @@ import ua.pp.lumivoid.iwtcms.ktor.tables.UsersTable
 object UsersList: Request() {
     override val path = "/api/usersList"
     private val json = Json { prettyPrint = true }
-    private val falsePermissionsMap = mutableMapOf<String, Boolean>()
-
-    init {
-        PermissionsList.getPermissionsList().forEach { permission ->
-            falsePermissionsMap[permission] = false
-        }
-    }
 
     override val request: Routing.() -> Unit = {
         get(path) {
@@ -33,15 +27,14 @@ object UsersList: Request() {
                 success = {
                     val usersList = suspendTransaction {
                         val usersList = mutableListOf<UsersListData>()
+
                         UsersTable.selectAll().collect { user: ResultRow ->
-                            val permissions = UserPermissionsTable.selectAll().where { UserPermissionsTable.userId eq user[UsersTable.id] }
-                            val permissionsMap = falsePermissionsMap
+                            val permissions = UserPermissionsTable.selectAll()
+                                .where { UserPermissionsTable.userId eq user[UsersTable.id] }
+                                .map { it[UserPermissionsTable.permissionName] }
+                                .toList()
 
-                            permissions.collect { permission: ResultRow ->
-                                permissionsMap[permission[UserPermissionsTable.permissionName]] = permission[UserPermissionsTable.permissionState]
-                            }
-
-                            usersList.add(UsersListData(id = user[UsersTable.id], username = user[UsersTable.username], admin = user[UsersTable.admin], permissions = permissionsMap))
+                            usersList.add(UsersListData(id = user[UsersTable.id], username = user[UsersTable.username], admin = user[UsersTable.admin], permissions = permissions))
                         }
 
                         return@suspendTransaction usersList
@@ -57,6 +50,6 @@ object UsersList: Request() {
         val id: Int,
         val username: String,
         val admin: Boolean,
-        val permissions: MutableMap<String, Boolean>
+        val permissions: List<String>
     )
 }

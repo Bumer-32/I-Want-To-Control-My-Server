@@ -1,13 +1,16 @@
 package ua.pp.lumivoid.iwtcms.ktor.tables
 
+import org.jetbrains.exposed.v1.core.ReferenceOption
 import org.jetbrains.exposed.v1.core.Table
 
 object UserPermissionsTable : Table("user_permissions") {
-    val userId = integer("user_id")
-    val permissionName = varchar("permission_name", 128)
-    val permissionState = bool("permission_state")
+    val id = integer("id").autoIncrement()
+    val userId = reference("user_id", UsersTable.id, onDelete = ReferenceOption.CASCADE)
+    val permissionName = varchar("permission_name", 312)
+
+    override val primaryKey = PrimaryKey(id)
 
     init {
-        uniqueIndex(userId, permissionName)
+        uniqueIndex(userId, permissionName) // user can't have 2 similar permissions
     }
 }

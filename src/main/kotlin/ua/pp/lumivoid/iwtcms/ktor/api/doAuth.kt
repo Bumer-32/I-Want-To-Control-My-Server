@@ -1,13 +1,10 @@
 package ua.pp.lumivoid.iwtcms.ktor.api
 
-import io.ktor.http.HttpStatusCode
-import io.ktor.server.response.respond
-import io.ktor.server.routing.RoutingCall
-import io.ktor.server.sessions.get
-import io.ktor.server.sessions.sessions
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.firstOrNull
-import org.jetbrains.exposed.v1.core.ResultRow
+import io.ktor.http.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
+import io.ktor.server.sessions.*
+import kotlinx.coroutines.flow.singleOrNull
 import org.jetbrains.exposed.v1.core.and
 import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.r2dbc.selectAll
@@ -41,10 +38,9 @@ suspend fun doAuth(
     }
 
     val status = suspendTransaction {
-        val user = UsersTable
-            .selectAll()
+        val user = UsersTable.selectAll()
             .where { (UsersTable.username eq session.name) and (UsersTable.uniqueId eq session.id) }
-            .firstOrNull()
+            .singleOrNull()
 
         if (user == null) {
             return@suspendTransaction HttpStatusCode.Unauthorized
@@ -54,16 +50,11 @@ suspend fun doAuth(
             return@suspendTransaction HttpStatusCode.OK
         }
 
-        val permission: ResultRow = try {
-            UserPermissionsTable
-                .selectAll()
-                .where { (UserPermissionsTable.userId eq user[UsersTable.id]) and (UserPermissionsTable.permissionName eq permission) }
-                .first()
-        } catch (_: NoSuchElementException) {
-            return@suspendTransaction HttpStatusCode.Forbidden
-        }
+        val found = UserPermissionsTable.selectAll()
+            .where { (UserPermissionsTable.userId eq user[UsersTable.id]) and (UserPermissionsTable.permissionName eq permission) }
+            .singleOrNull()
 
-        if (permission[UserPermissionsTable.permissionState]) {
+        if (found != null) {
             return@suspendTransaction HttpStatusCode.OK
         } else {
             return@suspendTransaction HttpStatusCode.Forbidden

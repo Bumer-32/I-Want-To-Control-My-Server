@@ -9,7 +9,7 @@ import io.ktor.websocket.Frame
 import io.ktor.websocket.close
 import io.ktor.websocket.readText
 import kotlinx.coroutines.channels.consumeEach
-import ua.pp.lumivoid.iwtcms.ktor.api.PermissionsList
+import ua.pp.lumivoid.iwtcms.ktor.api.requests.PermissionsList
 import ua.pp.lumivoid.iwtcms.ktor.api.doAuth
 import ua.pp.lumivoid.iwtcms.util.MinecraftServerHandler
 

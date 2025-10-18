@@ -2,22 +2,21 @@ package ua.pp.lumivoid.iwtcms
 
 import kotlinx.coroutines.runBlocking
 import net.fabricmc.loader.api.entrypoint.PreLaunchEntrypoint
-import org.apache.commons.codec.digest.DigestUtils
 import org.jetbrains.exposed.v1.core.StdOutSqlLogger
-import org.jetbrains.exposed.v1.r2dbc.insert
-import org.jetbrains.exposed.v1.r2dbc.selectAll
 import org.jetbrains.exposed.v1.r2dbc.R2dbcDatabase
 import org.jetbrains.exposed.v1.r2dbc.SchemaUtils
+import org.jetbrains.exposed.v1.r2dbc.selectAll
 import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 import org.slf4j.LoggerFactory
 import ua.pp.lumivoid.iwtcms.ktor.KtorServer
+import ua.pp.lumivoid.iwtcms.ktor.api.requests.CreateUser
 import ua.pp.lumivoid.iwtcms.ktor.tables.UserPermissionsTable
 import ua.pp.lumivoid.iwtcms.ktor.tables.UsersTable
 import ua.pp.lumivoid.iwtcms.ktor.util.Config
 import ua.pp.lumivoid.iwtcms.ktor.util.ErrorMessages
 import ua.pp.lumivoid.iwtcms.util.CustomLogger
 import java.io.File
-import java.util.TimeZone
+import java.util.*
 import kotlin.system.exitProcess
 
 object PREIWTCMS : PreLaunchEntrypoint {
@@ -57,24 +56,18 @@ object PREIWTCMS : PreLaunchEntrypoint {
             password = config.databasePassword,
         )
 
-        runBlocking { suspendTransaction {
-            if (config.devMode) addLogger(StdOutSqlLogger)
+        runBlocking {
+            suspendTransaction {
+                if (config.devMode) addLogger(StdOutSqlLogger)
 
-            SchemaUtils.create(
-                UsersTable,
-                UserPermissionsTable,
-            )
+                SchemaUtils.create(
+                    UsersTable,
+                    UserPermissionsTable,
+                )
 
-            if (UsersTable.selectAll().empty()) {
-                UsersTable.insert {
-                    it[username] = "admin"
-                    it[passwordHash] = DigestUtils.sha256Hex("iwtcms" + "ySXBvMifqXULEm1uRKP91ctmL6tCwCMi").toString()
-                    it[salt] = "ySXBvMifqXULEm1uRKP91ctmL6tCwCMi"
-                    it[uniqueId] = DigestUtils.sha256Hex("admin+iwtcms").toString()
-                    it[admin] = true
-                }
+                if (UsersTable.selectAll().empty()) CreateUser.create("admin", "iwtcms", true, emptyList())
             }
-        }}
+        }
 
         KtorServer.setup()
     }
