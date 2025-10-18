@@ -1,9 +1,6 @@
 <script lang="ts">
     import ConsoleWindow from "./ConsoleWindow.svelte";
     import StatsWindow from "./StatsWindow.svelte";
-    import registerHot from "../../../scripts/devMode";
-
-    registerHot(import.meta.hot);
 </script>
 
 <div id="console-tab" style="display: block; /* DEFAULT TAB */">

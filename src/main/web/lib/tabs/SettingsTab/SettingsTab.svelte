@@ -7,9 +7,6 @@
     import YAML from "yaml";
     import Selector from "./Selector.svelte";
     import Tab from "./Tab.svelte";
-    import registerHot from "../../../scripts/devMode";
-
-    registerHot(import.meta.hot);
 
     let tabsContainer: HTMLDivElement;
     let configs: AvailableConfigs;

@@ -4,22 +4,24 @@
     import ConsoleTab from "./lib/tabs/ConsoleTab/ConsoleTab.svelte";
     import SettingsTab from "./lib/tabs/SettingsTab/SettingsTab.svelte";
     import PlayersTab from "./lib/tabs/PlayersTab/PlayersTab.svelte";
+    import UsersTab from "./lib/tabs/UsersTab/UsersTab.svelte";
     import Login from "./lib/Login.svelte";
+    import Constants from "./scripts/constants";
     import ToastSystem from "./scripts/toastSystem";
     import icon from "./assets/icon_clearbg.png";
     import "./styles/tailwind.css";
     import "./styles/style.scss";
-    import UsersTab from "./lib/tabs/UsersTab/UsersTab.svelte";
 
     window.addEventListener("load", async () => {
         // ? remove loading screen
         document.querySelector<HTMLDivElement>(".loading")!.style.display = "none";
     });
+
 </script>
 
 <Footer />
 
-{#if window.location.pathname === "/BadConnection"}
+{#if window.location.href === Constants.PAGE_BAD_CONNECTION_URL}
     <main class="h-screen content-center">
         <div class="flex justify-center">
             <a href="/"><img src={icon} alt="icon" /></a>

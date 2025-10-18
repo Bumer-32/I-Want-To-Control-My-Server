@@ -136,15 +136,15 @@
             ToastSystem.addToQueue("Connection error", ToastSystem.ToastType.ERROR);
         };
 
-        const visibilitychangeListener = (_: Event) => {
+        const visibilityChangeListener = (_: Event) => {
             if (document.hidden) {
                 ws.close();
             } else {
                 connect();
-                document.removeEventListener("visibilitychange", visibilitychangeListener);
+                document.removeEventListener("visibilitychange", visibilityChangeListener); // remove because on reconnect new listener will be created
             }
         };
-        document.addEventListener("visibilitychange", visibilitychangeListener);
+        document.addEventListener("visibilitychange", visibilityChangeListener);
 
         sendCommand = function (command: string) {
             ws.send(command);
@@ -153,7 +153,7 @@
 
     onMount(() => {
         consoleScroll.addEventListener("scroll", () => {
-            allowAutoScroll = consoleScroll.scrollTop >= consoleScroll.scrollHeight - consoleScroll.clientHeight;
+            allowAutoScroll = consoleScroll.scrollTop >= consoleScroll.scrollHeight - consoleScroll.clientHeight - 200;
         });
 
         connect();

@@ -1,6 +1,5 @@
 import Constants from "./constants";
 import ToastSystem from "./toastSystem";
-import { switchTab } from "./tabsController";
 
 let isDEV: boolean; // cache
 
@@ -32,17 +31,5 @@ export async function isDev(): Promise<boolean> {
         ToastSystem.addToQueue(`Error: ${error}`, ToastSystem.ToastType.ERROR);
         isDEV = false;
         return false;
-    }
-}
-
-export default function registerHot(hot: any) {
-    // Vite HMR tab selection
-    if (hot) {
-        hot.accept(() => {
-            const defaultTab = localStorage.getItem("default-tab");
-            if (defaultTab != null) {
-                switchTab(defaultTab);
-            }
-        });
     }
 }
