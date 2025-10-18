@@ -16,7 +16,6 @@
         // ? remove loading screen
         document.querySelector<HTMLDivElement>(".loading")!.style.display = "none";
     });
-
 </script>
 
 <Footer />
