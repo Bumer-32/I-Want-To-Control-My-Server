@@ -33,45 +33,51 @@
                     username: username,
                     password: password,
                     admin: false,
-                    permissions: []
-                })
+                    permissions: [],
+                }),
             }).then(async (res) => {
                 if (res.status === 200) {
                     form.reset();
                     form.classList.add("hidden");
                     updateUsers();
 
-                    ToastSystem.addToQueue(`User ${username} has been successfully created`, ToastSystem.ToastType.INFO)
+                    ToastSystem.addToQueue(`User ${username} has been successfully created`, ToastSystem.ToastType.INFO);
                 } else {
-                    ToastSystem.addToQueue(`Error while creating user (${res.status}): ${await res.text()}`, ToastSystem.ToastType.ERROR)
+                    ToastSystem.addToQueue(`Error while creating user (${res.status}): ${await res.text()}`, ToastSystem.ToastType.ERROR);
                 }
-            })
+            });
         });
-    })
+    });
 </script>
 
-<form class="mt-[10px] w-[320px] rounded-[10px] bg-[var(--users-background-color)] py-[2px] flex flex-col items-center hidden" bind:this={form}>
+<form class="mt-[10px] flex hidden w-[320px] flex-col items-center rounded-[10px] bg-[var(--users-background-color)] py-[2px]" bind:this={form}>
     <h1>User creation</h1>
     <label for="username" class="mt-[5px]">Username</label>
-    <input class="bg-[var(--users-buttons-bg-color)] rounded-[5px] text-[var(--users-background-color)]" type="text" name="username" required>
+    <input class="rounded-[5px] bg-[var(--users-buttons-bg-color)] text-[var(--users-background-color)]" type="text" name="username" required />
 
     <label for="password" class="mt-[15px]">Password</label>
-    <input class="bg-[var(--users-buttons-bg-color)] rounded-[5px] text-[var(--users-background-color)]" type="password" name="password" required>
+    <input class="rounded-[5px] bg-[var(--users-buttons-bg-color)] text-[var(--users-background-color)]" type="password" name="password" required />
 
     <label for="password_confirm" class="mt-[3px]">Confirm Password</label>
-    <input class="bg-[var(--users-buttons-bg-color)] rounded-[5px] text-[var(--users-background-color)]" type="password" name="password_confirm" required>
+    <input class="rounded-[5px] bg-[var(--users-buttons-bg-color)] text-[var(--users-background-color)]" type="password" name="password_confirm" required />
 
     <div class="mt-[15px] mb-[10px]">
-        <button class="rounded-[5px] bg-[var(--users-buttons-bg-color)] px-[4px] text-[var(--users-background-color)]" type="reset" on:click={() => {form.classList.add("hidden")}}>Cancel</button>
+        <button
+            class="rounded-[5px] bg-[var(--users-buttons-bg-color)] px-[4px] text-[var(--users-background-color)]"
+            type="reset"
+            on:click={() => {
+                form.classList.add("hidden");
+            }}>Cancel</button
+        >
         <button class="rounded-[5px] bg-[var(--users-buttons-bg-color)] px-[4px] text-[var(--users-background-color)]" type="submit">Submit</button>
     </div>
 </form>
 
-
 <style lang="scss">
     @use "../../../styles/hover-holo-effect";
 
-    button, input {
-        @include hover-holo-effect.hover-holo-effect
+    button,
+    input {
+        @include hover-holo-effect.hover-holo-effect;
     }
 </style>

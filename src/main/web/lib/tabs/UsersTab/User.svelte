@@ -27,12 +27,12 @@
         if (permissionsExpandable.classList.contains("active")) {
             permissionsExpandable.style.maxHeight = `${permissionsExpandable.scrollHeight}px`;
         } else {
-            permissionsExpandable.style.transition = "max-height 0.3s ease"
+            permissionsExpandable.style.transition = "max-height 0.3s ease";
             permissionsExpandable.style.maxHeight = "0px";
             setTimeout(() => {
                 permissionsExpandable.style.transition = "";
                 if (expandable.classList.contains("active")) expandable.style.maxHeight = `${expandable.scrollHeight}px`;
-            }, 300) // 300ms == 0.3s -> same as transition
+            }, 300); // 300ms == 0.3s -> same as transition
         }
 
         if (expandable.classList.contains("active")) {
@@ -58,16 +58,16 @@
         >
         {user.username}
         {#if user.username === currentUser}
-            <span class="text-[var(--users-current-text-color)] absolute right-[5px]"> (current)</span>
+            <span class="absolute right-[5px] text-[var(--users-current-text-color)]"> (current)</span>
         {/if}
     </div>
-    <div class="overflow-hidden max-h-0" style="transition: max-height 0.3s ease" bind:this={expandable}>
+    <div class="max-h-0 overflow-hidden" style="transition: max-height 0.3s ease" bind:this={expandable}>
         <div>
             <h3 class="mt-[5px] pl-[10px]">General</h3>
-            <hr class="mx-[10px]">
+            <hr class="mx-[10px]" />
 
             <span class="pl-[15px]">id: {user.id}</span>
-            <br>
+            <br />
 
             <span class="pl-[15px]">admin: </span>
             <select
@@ -91,9 +91,9 @@
             </select>
         </div>
 
-        <div class="overflow-hidden max-h-0" bind:this={permissionsExpandable}>
+        <div class="max-h-0 overflow-hidden" bind:this={permissionsExpandable}>
             <h3 class="mt-[15px] pl-[10px]">Permissions</h3>
-            <hr class="mx-[10px]">
+            <hr class="mx-[10px]" />
 
             <div class="pt-[10px] pl-[15px]">
                 {#each permissionsList as permission}
@@ -112,7 +112,7 @@
                         {#if user.permissions.includes(permission)}<option selected>true</option>{:else}<option>true</option>{/if}
                     </select>
 
-                    <br>
+                    <br />
                 {/each}
             </div>
         </div>
@@ -201,6 +201,6 @@
     @use "../../../styles/hover-holo-effect";
 
     button {
-        @include hover-holo-effect.hover-holo-effect
+        @include hover-holo-effect.hover-holo-effect;
     }
 </style>
