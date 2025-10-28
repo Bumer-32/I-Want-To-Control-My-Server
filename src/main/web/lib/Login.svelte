@@ -51,8 +51,7 @@
 
             <button
                 class="transition-[filer 0.3s ease, box-shadow 0.3s ease] h-[25px] w-full rounded-[5px] border-none bg-[var(--login-input-background-color)] text-[var(--login-text-color)]"
-                type="submit"
-                id="password">Login</button
+                type="submit">Login</button
             >
         </form>
     </div>

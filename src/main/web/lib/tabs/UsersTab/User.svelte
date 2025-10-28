@@ -57,14 +57,17 @@
             }}>expand_circle_right</button
         >
         {user.username}
+        {#if user.username === currentUser}
+            <span class="text-[var(--users-current-text-color)] absolute right-[5px]"> (current)</span>
+        {/if}
     </div>
     <div class="overflow-hidden max-h-0" style="transition: max-height 0.3s ease" bind:this={expandable}>
         <div>
             <h3 class="mt-[5px] pl-[10px]">General</h3>
-            <hr class="mx-[10px]" />
+            <hr class="mx-[10px]">
 
             <span class="pl-[15px]">id: {user.id}</span>
-            <br />
+            <br>
 
             <span class="pl-[15px]">admin: </span>
             <select
@@ -90,7 +93,7 @@
 
         <div class="overflow-hidden max-h-0" bind:this={permissionsExpandable}>
             <h3 class="mt-[15px] pl-[10px]">Permissions</h3>
-            <hr class="mx-[10px]" />
+            <hr class="mx-[10px]">
 
             <div class="pt-[10px] pl-[15px]">
                 {#each permissionsList as permission}
@@ -109,7 +112,7 @@
                         {#if user.permissions.includes(permission)}<option selected>true</option>{:else}<option>true</option>{/if}
                     </select>
 
-                    <br />
+                    <br>
                 {/each}
             </div>
         </div>
@@ -193,3 +196,11 @@
         </div>
     </div>
 </li>
+
+<style lang="scss">
+    @use "../../../styles/hover-holo-effect";
+
+    button {
+        @include hover-holo-effect.hover-holo-effect
+    }
+</style>
