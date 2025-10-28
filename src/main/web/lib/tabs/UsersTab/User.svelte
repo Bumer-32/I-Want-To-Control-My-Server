@@ -9,8 +9,6 @@
     export let permissionsList: string[];
 
     let newUser = structuredClone(user);
-    let expandableHeight = 0;
-    let permissionsExpandableHeight = 0;
 
     let permissions: Record<string, HTMLSelectElement> = {};
 
@@ -21,32 +19,26 @@
     let permissionsExpandable: HTMLDivElement;
 
     onMount(() => {
-        setTimeout(() => {
-            expandable.style.maxHeight = "none";
-            expandableHeight = expandable.offsetHeight;
-            permissionsExpandableHeight = permissionsExpandable.offsetHeight;
-            // console.log(expandableHeight)
-
-            if (!user.admin) permissionsExpandable.classList.add("active");
-
-            updateExpandableHeight();
-            updatePermissionsExpandableHeight();
-        }, 100);
+        if (!user.admin) permissionsExpandable.classList.add("active");
     });
 
     function updateExpandableHeight() {
+        // ! Important to expand permissions before expandable
+        if (permissionsExpandable.classList.contains("active")) {
+            permissionsExpandable.style.maxHeight = `${permissionsExpandable.scrollHeight}px`;
+        } else {
+            permissionsExpandable.style.transition = "max-height 0.3s ease"
+            permissionsExpandable.style.maxHeight = "0px";
+            setTimeout(() => {
+                permissionsExpandable.style.transition = "";
+                if (expandable.classList.contains("active")) expandable.style.maxHeight = `${expandable.scrollHeight}px`;
+            }, 300) // 300ms == 0.3s -> same as transition
+        }
+
         if (expandable.classList.contains("active")) {
-            expandable.style.maxHeight = `${expandableHeight}px`;
+            expandable.style.maxHeight = `${expandable.scrollHeight}px`;
         } else {
             expandable.style.maxHeight = "0px";
-        }
-    }
-
-    function updatePermissionsExpandableHeight() {
-        if (permissionsExpandable.classList.contains("active")) {
-            permissionsExpandable.style.maxHeight = `${permissionsExpandableHeight}px`;
-        } else {
-            permissionsExpandable.style.maxHeight = "0px";
         }
     }
 </script>
@@ -66,7 +58,7 @@
         >
         {user.username}
     </div>
-    <div class="overflow-hidden" style="transition: max-height 0.3s ease" bind:this={expandable}>
+    <div class="overflow-hidden max-h-0" style="transition: max-height 0.3s ease" bind:this={expandable}>
         <div>
             <h3 class="mt-[5px] pl-[10px]">General</h3>
             <hr class="mx-[10px]" />
@@ -83,7 +75,8 @@
 
                     if (!newUser.admin) permissionsExpandable.classList.add("active");
                     else permissionsExpandable.classList.remove("active");
-                    updatePermissionsExpandableHeight();
+
+                    updateExpandableHeight();
                 }}
             >
                 {#if user.username === currentUser && user.admin}
@@ -95,7 +88,7 @@
             </select>
         </div>
 
-        <div class="overflow-hidden" style="transition: max-height 0.3s ease" bind:this={permissionsExpandable}>
+        <div class="overflow-hidden max-h-0" bind:this={permissionsExpandable}>
             <h3 class="mt-[15px] pl-[10px]">Permissions</h3>
             <hr class="mx-[10px]" />
 
