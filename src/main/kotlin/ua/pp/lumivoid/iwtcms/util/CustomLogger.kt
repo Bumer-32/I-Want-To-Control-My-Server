@@ -12,9 +12,9 @@ import org.apache.logging.log4j.core.appender.WriterAppender
 import org.apache.logging.log4j.core.config.Configurator
 import org.apache.logging.log4j.core.layout.PatternLayout
 import ua.pp.lumivoid.iwtcms.Constants
-import ua.pp.lumivoid.iwtcms.ktor.api.requests.LogsHistory
-import ua.pp.lumivoid.iwtcms.ktor.api.websockets.ConsoleWS
-import ua.pp.lumivoid.iwtcms.ktor.util.Config
+import ua.pp.lumivoid.iwtcms.server.api.requests.api.LogsHistory
+import ua.pp.lumivoid.iwtcms.server.api.requests.api.ws.ConsoleWS
+import ua.pp.lumivoid.iwtcms.server.util.Config
 import java.io.OutputStreamWriter
 
 object CustomLogger {

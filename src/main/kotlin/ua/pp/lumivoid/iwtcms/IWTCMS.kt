@@ -3,7 +3,7 @@ package ua.pp.lumivoid.iwtcms
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.loader.api.FabricLoader
 import org.h2.tools.Server
-import ua.pp.lumivoid.iwtcms.ktor.util.Config
+import ua.pp.lumivoid.iwtcms.server.util.Config
 import ua.pp.lumivoid.iwtcms.util.MinecraftServerHandler
 import ua.pp.lumivoid.iwtcms.util.StoppedServerTrigger
 import java.awt.Desktop
