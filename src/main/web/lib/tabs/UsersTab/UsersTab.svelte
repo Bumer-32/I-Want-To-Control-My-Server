@@ -6,7 +6,7 @@
     import type { UserData } from "../../../scripts/userData";
     import CreateUser from "./CreateUser.svelte";
 
-    let createUser: CreateUser
+    let createUser: CreateUser;
 
     let users: UserData[];
     let permissionsList: string[];
@@ -26,9 +26,14 @@
 
 <div id="users-tab" class="tab disabled">
     <div class="tab-container flex flex-col">
-        <button class="create-user-button mt-[15px] rounded-[10px] bg-[var(--users-background-color)] px-[20px] py-[2px] active:px-[17px] active:py-[0px]" on:click={() => {createUser.show()}}>create user</button>
+        <button
+            class="create-user-button mt-[15px] rounded-[10px] bg-[var(--users-background-color)] px-[20px] py-[2px] active:px-[17px] active:py-[0px]"
+            on:click={() => {
+                createUser.show();
+            }}>create user</button
+        >
 
-        <div class="users-container flex h-full w-full flex-col items-center justify-start overflow-y-scroll mt-[25px]">
+        <div class="users-container mt-[25px] flex h-full w-full flex-col items-center justify-start overflow-y-scroll">
             <CreateUser updateUsers={updateUsers} bind:this={createUser} />
             <ul>
                 {#await checkAuth()}
@@ -54,6 +59,6 @@
     }
 
     .create-user-button {
-        @include hover-holo-effect.hover-holo-effect
+        @include hover-holo-effect.hover-holo-effect;
     }
 </style>
