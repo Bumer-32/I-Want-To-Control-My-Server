@@ -51,6 +51,7 @@ object Config {
                 sslAlias = config.getString("ssl.ssl Alias"),
                 sslPass = config.getString("ssl.ssl Pass"),
                 statisticsPeriod = config.getInt("stuff.statistics period"),
+                playerInfoPeriod = config.getInt("stuff.player info period"),
                 enableIWTCMSControlPanel = config.getBoolean("web.enable IWTCMS control panel"),
                 autoOpenIWTCMSPageOnStartup = config.getBoolean("web.auto open IWTCMS page on startup"),
 
@@ -94,6 +95,7 @@ object Config {
         val sslAlias: String,
         val sslPass: String,
         val statisticsPeriod: Int,
+        val playerInfoPeriod: Int,
         val enableIWTCMSControlPanel: Boolean,
         val autoOpenIWTCMSPageOnStartup: Boolean,
 

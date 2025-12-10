@@ -55,11 +55,10 @@ object CustomLogger {
             runCatching {
                 running = true
                 while (running) {
-                    @Suppress("Deprecation")
-                    val log = output.toString()
+                    val log = output.toString("UTF-8")
                     if (log.isNotEmpty()) {
                         LogsHistory.addLog(log)
-                        ConsoleWS.asWs()?.sendMessage(log)
+                        ConsoleWS.send(log)
                         output.reset()
                     }
                 }

@@ -78,6 +78,7 @@ dependencies {
 	implementation shaded("io.ktor:ktor-server-content-negotiation:${project.ktor_version}")
 	implementation shaded("io.ktor:ktor-server-status-pages:${project.ktor_version}")
 	implementation shaded("io.ktor:ktor-server-cors:${project.ktor_version}")
+	implementation shaded("io.ktor:ktor-server-http-redirect:${project.ktor_version}")
 	// * Ktor
 
     // * Exposed
@@ -94,6 +95,8 @@ dependencies {
     shaded "io.asyncer:r2dbc-mysql:${project.mysql_database_version}"
     shaded "org.postgresql:r2dbc-postgresql:${project.postgresql_database_version}"
     // * R2DBC drivers
+
+	implementation shaded("org.jetbrains.kotlinx:kotlinx-datetime:${project.kotlinx_datetime_version}")
 
     implementation shaded("com.typesafe:config:${project.hocon_config_version}")
 

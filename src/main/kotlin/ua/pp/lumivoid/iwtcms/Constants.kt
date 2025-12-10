@@ -11,7 +11,6 @@ object Constants {
     val CONFIG_FILE = "$CONFIG_FOLDER/iwtcms.conf"
     val DB_FILE = "$CONFIG_FOLDER/db"
     val SSL_CERTIFICATE_FILE = "$CONFIG_FOLDER/keystore.jks"
-    const val PERMISSIONS_FILE = "/permissions.txt"
     const val SPARK_FABRIC_ID = "spark"
     val MOD_VERSION = FabricLoader.getInstance().getModContainer(MOD_ID).get().metadata.version.toString()
     const val AVAILABLE_CONFIGS_SETTINGS_FILE = "/availableConfigs.yaml" // AVAILABLE_CONFIGS_SETTINGS_FILE

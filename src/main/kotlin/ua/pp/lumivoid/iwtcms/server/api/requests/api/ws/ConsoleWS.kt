@@ -1,23 +1,23 @@
 package ua.pp.lumivoid.iwtcms.server.api.requests.api.ws
 
-import io.ktor.http.HttpStatusCode
-import io.ktor.server.routing.Routing
-import io.ktor.server.routing.RoutingCall
-import io.ktor.server.websocket.webSocket
-import io.ktor.websocket.CloseReason
-import io.ktor.websocket.Frame
-import io.ktor.websocket.close
-import io.ktor.websocket.readText
+import io.ktor.http.*
+import io.ktor.server.routing.*
+import io.ktor.server.websocket.*
+import io.ktor.websocket.*
 import kotlinx.coroutines.channels.consumeEach
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.launch
 import ua.pp.lumivoid.iwtcms.server.api.WebSocket
-import ua.pp.lumivoid.iwtcms.server.api.WebSocketBaseInterface
-import ua.pp.lumivoid.iwtcms.server.api.requests.api.user.PermissionsList
 import ua.pp.lumivoid.iwtcms.server.api.doAuth
+import ua.pp.lumivoid.iwtcms.server.api.requests.api.user.PermissionsList
 import ua.pp.lumivoid.iwtcms.util.MinecraftServerHandler
 
 object ConsoleWS : WebSocket() {
-    override var wsInterface: WebSocketBaseInterface? = null
     override val path = "/ws/console" // why console? because we use this socket same as console, receive logs and send commands
+
+    private val messageResponseFlow = MutableSharedFlow<String>()
+    private val sharedFlow = messageResponseFlow.asSharedFlow()
 
     override val ws: Routing.() -> Unit = {
         webSocket(path) {
@@ -35,24 +35,23 @@ object ConsoleWS : WebSocket() {
                 },
             )
 
-            if (status != HttpStatusCode.OK) return@webSocket
+            if (status != HttpStatusCode.OK) {
+                close(CloseReason(CloseReason.Codes.VIOLATED_POLICY, "Auth Error"))
+                return@webSocket
+            }
 
             // and ws
 
             send(Frame.Text("Connected to $path"))
 
-            wsInterface =
-                object : WebSocketBaseInterface {
-                    override suspend fun sendMessage(message: String) {
-                        send(Frame.Text(message))
-                    }
-
-                    override suspend fun shutdown() {
-                        logger.info("Closing $path websocket")
-                        close(CloseReason(CloseReason.Codes.NORMAL, "shutting down server"))
-                    }
+            // Send
+            val job = launch {
+                sharedFlow.collect { message ->
+                    send(Frame.Text(message))
                 }
+            }
 
+            // Receive
             var allowExecution = false
 
             doAuth(
@@ -83,9 +82,13 @@ object ConsoleWS : WebSocket() {
                 }
             }.onFailure { exception ->
                 logger.error("WebSocket exception: $exception")
+            }.also {
+                job.cancel()
             }
         }
     }
 
-    override fun asWs(): WebSocketBaseInterface? = wsInterface
+    suspend fun send(message: String) {
+        messageResponseFlow.emit(message)
+    }
 }

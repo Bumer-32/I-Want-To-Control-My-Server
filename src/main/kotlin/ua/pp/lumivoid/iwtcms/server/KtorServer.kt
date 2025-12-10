@@ -6,10 +6,7 @@ import io.ktor.server.engine.applicationEnvironment
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import io.ktor.server.netty.NettyApplicationEngine
-import kotlinx.coroutines.runBlocking
 import ua.pp.lumivoid.iwtcms.Constants
-import ua.pp.lumivoid.iwtcms.server.api.requests.api.ws.ConsoleWS
-import ua.pp.lumivoid.iwtcms.server.api.requests.api.ws.ServerStatsWS
 
 object KtorServer {
     private val logger = Constants.EMBEDDED_SERVER_LOGGER
@@ -33,11 +30,6 @@ object KtorServer {
 
     fun shutdown() {
         logger.info("Shutting down embedded server")
-
-        runBlocking {
-            ConsoleWS.asWs()?.shutdown()
-            ServerStatsWS.asWs()?.shutdown()
-        }
 
         server?.stop()
     }
