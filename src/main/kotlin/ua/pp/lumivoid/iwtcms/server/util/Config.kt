@@ -61,7 +61,7 @@ object Config {
                 enableH2WebServer = config.getBooleanOrDefault("dev.enable h2 web server", false),
                 useExternalDb = config.getBooleanOrDefault("dev.use external db", false),
                 externalDbDriver = DbDriver.entries.find { config.getStringOrDefault("dev.external db driver", "MariaDB") == it.named } ?: DbDriver.MariaDB,
-                externalDbIWTCMSName = config.getStringOrDefault("external db iwtcms name", "iwtcms"),
+                externalDbIWTCMSName = config.getStringOrDefault("dev.external db iwtcms name", "iwtcms"),
                 externalDbIp = config.getStringOrDefault("dev.external db ip", "localhost"),
                 externalDbPort = config.getIntOrDefault("dev.external db port", 9092),
             )
