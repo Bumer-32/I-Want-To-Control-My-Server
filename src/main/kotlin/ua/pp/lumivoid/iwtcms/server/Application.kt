@@ -1,24 +1,19 @@
 package ua.pp.lumivoid.iwtcms.server
 
-import io.ktor.http.HttpStatusCode
-import io.ktor.network.tls.certificates.buildKeyStore
-import io.ktor.network.tls.certificates.saveToFile
-import io.ktor.serialization.kotlinx.json.json
-import io.ktor.server.application.Application
-import io.ktor.server.application.install
-import io.ktor.server.engine.ApplicationEngine
-import io.ktor.server.engine.connector
-import io.ktor.server.engine.sslConnector
-import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.server.plugins.cors.routing.CORS
-import io.ktor.server.plugins.httpsredirect.HttpsRedirect
-import io.ktor.server.plugins.statuspages.StatusPages
-import io.ktor.server.plugins.statuspages.statusFile
-import io.ktor.server.sessions.Sessions
-import io.ktor.server.sessions.cookie
-import io.ktor.server.websocket.WebSockets
-import io.ktor.server.websocket.pingPeriod
-import io.ktor.server.websocket.timeout
+import io.ktor.http.*
+import io.ktor.network.tls.certificates.*
+import io.ktor.serialization.kotlinx.json.*
+import io.ktor.server.application.*
+import io.ktor.server.engine.*
+import io.ktor.server.plugins.*
+import io.ktor.server.plugins.contentnegotiation.*
+import io.ktor.server.plugins.cors.routing.*
+import io.ktor.server.plugins.httpsredirect.*
+import io.ktor.server.plugins.statuspages.*
+import io.ktor.server.request.path
+import io.ktor.server.response.*
+import io.ktor.server.sessions.*
+import io.ktor.server.websocket.*
 import ua.pp.lumivoid.iwtcms.Constants
 import ua.pp.lumivoid.iwtcms.server.cookie.UserSession
 import ua.pp.lumivoid.iwtcms.server.util.Config
@@ -52,10 +47,18 @@ fun Application.module() {
     }
 
     install(StatusPages) {
-        statusFile(HttpStatusCode.NotFound, filePattern = "/web/404.html")
+        status(HttpStatusCode.NotFound) { call, _ ->
+            if(!call.request.path().startsWith("/api")) call.respondText(javaClass.getResource(Constants.NOT_FOUND_HTML)!!.readText(), ContentType.Text.Html, HttpStatusCode.NotFound)
+        }
 
-        exception<Throwable> { _, cause ->
-            cause.stackTrace.forEach { logger.error(it.toString()) }
+        exception<Throwable> { call, cause ->
+            when (cause) {
+                is BadRequestException -> call.respondText("Bad request: ${cause.localizedMessage}", status = HttpStatusCode.BadRequest)
+                else -> {
+                    cause.stackTrace.forEach { logger.error(it.toString()) }
+                    call . respondText ("Server fucked up, $cause", status = HttpStatusCode.InternalServerError)
+                }
+            }
         }
     }
 

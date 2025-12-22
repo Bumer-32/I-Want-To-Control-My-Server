@@ -14,4 +14,5 @@ object Constants {
     const val SPARK_FABRIC_ID = "spark"
     val MOD_VERSION = FabricLoader.getInstance().getModContainer(MOD_ID).get().metadata.version.toString()
     const val AVAILABLE_CONFIGS_SETTINGS_FILE = "/availableConfigs.yaml" // AVAILABLE_CONFIGS_SETTINGS_FILE
+    const val NOT_FOUND_HTML = "/disabledWeb/404.html"
 }

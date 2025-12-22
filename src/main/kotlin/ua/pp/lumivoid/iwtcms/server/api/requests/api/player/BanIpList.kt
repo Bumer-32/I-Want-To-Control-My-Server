@@ -12,8 +12,8 @@ import ua.pp.lumivoid.iwtcms.util.MinecraftServerHandler
 import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
 
-object BanList : Request() {
-    override val path = "/api/player/banList"
+object BanIpList : Request() {
+    override val path = "/api/player/banIpList"
 
     @OptIn(ExperimentalTime::class)
     override val request: Routing.() -> Unit = {
@@ -22,10 +22,10 @@ object BanList : Request() {
                 call = call,
                 permission = PermissionsList.Permission.PLAYERS_MANAGE.value,
                 success = {
-                    val banned = mutableListOf<Ban>()
-                    MinecraftServerHandler.server!!.playerManager.userBanList.values().forEach {
+                    val banned = mutableListOf<BanIp>()
+                    MinecraftServerHandler.server!!.playerManager.ipBanList.values().forEach {
                         banned.add(
-                            Ban(
+                            BanIp(
                                 target = it.toText().string,
                                 reason = it.reason,
                                 expireDate = if (it.expiryDate?.time != null) Instant.fromEpochMilliseconds(it.expiryDate!!.time) else null,
@@ -40,7 +40,7 @@ object BanList : Request() {
     }
 
     @Serializable
-    private data class Ban @OptIn(ExperimentalTime::class) constructor(
+    private data class BanIp @OptIn(ExperimentalTime::class) constructor(
         val target: String,
         val reason: String,
         val expireDate: Instant?,

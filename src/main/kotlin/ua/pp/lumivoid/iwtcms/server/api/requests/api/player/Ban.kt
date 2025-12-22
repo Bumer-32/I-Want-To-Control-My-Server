@@ -25,6 +25,7 @@ import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
 import kotlin.time.toJavaInstant
 
+@Suppress("DuplicatedCode")
 object Ban : Request() {
     override val path = "/api/player/ban"
 

@@ -20,6 +20,7 @@ import ua.pp.lumivoid.iwtcms.server.api.requests.api.user.UsersList
 import ua.pp.lumivoid.iwtcms.server.api.requests.api.Version
 import ua.pp.lumivoid.iwtcms.server.api.requests.api.player.Ban
 import ua.pp.lumivoid.iwtcms.server.api.requests.api.player.BanIp
+import ua.pp.lumivoid.iwtcms.server.api.requests.api.player.BanIpList
 import ua.pp.lumivoid.iwtcms.server.api.requests.api.player.BanList
 import ua.pp.lumivoid.iwtcms.server.api.requests.api.player.DeOp
 import ua.pp.lumivoid.iwtcms.server.api.requests.api.player.Kick
@@ -46,6 +47,7 @@ fun Application.configureRouting() {
     // * /api/player
     Ban.register(r)
     BanIp.register(r)
+    BanIpList.register(r)
     BanList.register(r)
     DeOp.register(r)
     Kick.register(r)

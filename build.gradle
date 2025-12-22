@@ -3,7 +3,7 @@ import com.modrinth.minotaur.dependencies.ModDependency
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-	id "fabric-loom" version "1.11-SNAPSHOT"
+	id "fabric-loom" version "1.14.6"
 	id "org.jetbrains.kotlin.plugin.serialization" version "2.2.20"
 	id "org.jetbrains.kotlin.jvm" version "2.2.20"
 	id "com.github.node-gradle.node" version "7.1.0"
@@ -127,23 +127,19 @@ java {
 	targetCompatibility = JavaVersion.VERSION_21
 }
 
-tasks.register("generatePythonRequirements") {
+tasks.register("generatePythonRequirements", Exec) {
 	group = "build"
 
 	doFirst {
 		file("$buildDir/python").delete()
+	}
 
-		if (System.getProperty("os.name").toLowerCase().contains("win")) {
-			exec {
-				workingDir  projectDir
-				commandLine "cmd", "/c", "${projectDir}/devRunner.bat genPyReqs"
-			}
-		} else {
-			exec {
-				workingDir  projectDir
-				commandLine "bash", "-c", "chmod +x ${projectDir}/devRunner.sh && ${projectDir}/devRunner.sh genPyReqs"
-			}
-		}
+	workingDir  projectDir
+
+	if (System.getProperty("os.name").toLowerCase().contains("win")) {
+		commandLine "cmd", "/c", "${projectDir}/devRunner.bat genPyReqs"
+	} else {
+		commandLine "bash", "-c", "chmod +x ${projectDir}/devRunner.sh && ${projectDir}/devRunner.sh genPyReqs"
 	}
 
 	doLast {
@@ -178,22 +174,16 @@ tasks.register("preparePythonClient") {
 	}
 }
 
-tasks.register("compileVite"){
+tasks.register("compileVite", Exec){
 	group = "build"
 	dependsOn tasks.npmInstall
-	
-	doLast {
-		if (System.getProperty("os.name").toLowerCase().contains("win")) {
-			exec {
-				workingDir  projectDir
-				commandLine "cmd", "/c", "${projectDir}/devRunner.bat buildWeb"
-			}
-		} else {
-			exec {
-				workingDir  projectDir
-				commandLine "bash", "-c", "chmod +x ${projectDir}/devRunner.sh && ${projectDir}/devRunner.sh buildWeb"
-			}
-		}
+
+	workingDir  projectDir
+
+	if (System.getProperty("os.name").toLowerCase().contains("win")) {
+		commandLine "cmd", "/c", "${projectDir}/devRunner.bat buildWeb"
+	} else {
+		commandLine "bash", "-c", "chmod +x ${projectDir}/devRunner.sh && ${projectDir}/devRunner.sh buildWeb"
 	}
 }
 
