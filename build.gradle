@@ -1,231 +1,33 @@
-//file:noinspection GrDeprecatedAPIUsage
-import com.modrinth.minotaur.dependencies.ModDependency
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
-	id "fabric-loom" version "1.14.6"
-	id "org.jetbrains.kotlin.plugin.serialization" version "2.2.20"
-	id "org.jetbrains.kotlin.jvm" version "2.2.20"
-	id "com.github.node-gradle.node" version "7.1.0"
-	id "com.modrinth.minotaur" version "2.+"
-    id "com.github.johnrengelman.shadow" version "8.1.1"
-	id "maven-publish"
+	id "org.jetbrains.kotlin.jvm" version "2.3.0" apply false
+	id "org.jetbrains.kotlin.plugin.serialization" version "2.3.0" apply false
+    id "com.gradleup.shadow" version "9.3.0" apply false
 }
 
-configurations {
-    shaded
-    implementation.extendsFrom shaded
+allprojects {
+	version = rootProject.version
+	group = maven_group
 }
 
-version = project.mod_version
-group = project.maven_group
-
-archives_base_name = "${project.archives_base_name}-${project.minecraft_version}"
-
-base {
-	archivesName = project.archives_base_name
-}
-
-repositories {
-    maven {
-        name "luck-repo"
-        url "https://repo.lucko.me/"
-        content {
-            includeModule "me.lucko", "spark-api"
-        }
-    }
-}
-
-modrinth {
-	token = project.hasProperty("modrinthToken") ? project.modrinthToken : System.getenv("MODRINTH_TOKEN")
-	projectId = project.id_main
-	versionNumber = project.mod_version
-	versionName = "IWTCMS ${project.mod_version}"
-	uploadFile = remapJar
-	//additionalFiles = [remapSourcesJar]
-	gameVersions = Eval.me(project.release_minecraft_versions)
-	versionType = project.release_type
-	loaders = ["fabric"]
-	syncBodyFrom = rootProject.file("README.md").text
-	changelog = rootProject.file("CHANGELOG.md").text
-	dependencies = [
-			new ModDependency(project.id_fabric_api, "required"),
-			new ModDependency(project.id_fabric_kotlin, "required"),
-			new ModDependency(project.id_spark, "optional")
-	]
-
-	tasks.modrinth.dependsOn(tasks.modrinthSyncBody)
-}
-
-dependencies {
-	// To change the versions see the gradle.properties file
-
-    // * Fabric
-	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-	modImplementation "net.fabricmc:fabric-language-kotlin:${project.fabric_kotlin_version}"
-    // * Fabric
-
-	// * Ktor
-    implementation shaded("io.ktor:ktor-server-core:${project.ktor_version}")
-    implementation shaded("io.ktor:ktor-server-netty:${project.ktor_version}")
-	implementation shaded("io.ktor:ktor-network-tls-certificates:${project.ktor_version}")
-	implementation shaded("io.ktor:ktor-server-websockets:${project.ktor_version}")
-	implementation shaded("io.ktor:ktor-server-sessions:${project.ktor_version}")
-	implementation shaded("io.ktor:ktor-serialization-kotlinx-json:${project.ktor_version}")
-	implementation shaded("io.ktor:ktor-server-content-negotiation:${project.ktor_version}")
-	implementation shaded("io.ktor:ktor-server-status-pages:${project.ktor_version}")
-	implementation shaded("io.ktor:ktor-server-cors:${project.ktor_version}")
-	implementation shaded("io.ktor:ktor-server-http-redirect:${project.ktor_version}")
-	// * Ktor
-
-    // * Exposed
-	implementation shaded("org.jetbrains.exposed:exposed-core:${project.exposed_version}")
-	implementation shaded("org.jetbrains.exposed:exposed-r2dbc:${project.exposed_version}")
-	implementation shaded("org.jetbrains.exposed:exposed-dao:${project.exposed_version}")
-    // * Exposed
-
-    // * R2DBC drivers
-	implementation shaded("io.r2dbc:r2dbc-h2:${project.h2_database_version}") // implements only because it's internal db, which we should launch
-    shaded "com.oracle.database.r2dbc:oracle-r2dbc:${project.oracle_database_version}"
-    shaded "org.mariadb:r2dbc-mariadb:${project.mariadb_database_version}"
-    shaded "io.r2dbc:r2dbc-mssql:${project.mssql_database_version}"
-    shaded "io.asyncer:r2dbc-mysql:${project.mysql_database_version}"
-    shaded "org.postgresql:r2dbc-postgresql:${project.postgresql_database_version}"
-    // * R2DBC drivers
-
-	implementation shaded("org.jetbrains.kotlinx:kotlinx-datetime:${project.kotlinx_datetime_version}")
-
-    implementation shaded("com.typesafe:config:${project.hocon_config_version}")
-
-	implementation shaded("commons-codec:commons-codec:${project.commons_codec}")
-
-	implementation shaded("com.charleskorn.kaml:kaml:${project.kaml_version}")
-
-	modImplementation "me.lucko:spark-api:${project.spark_api_version}"
-}
-
-tasks.withType(JavaCompile).configureEach {
-	it.options.release = 21
-}
-
-tasks.withType(KotlinCompile).configureEach {
-	kotlinOptions {
-		jvmTarget = 21
-	}
-}
-
-java {
-	// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
-	// if it is present.
-	// If you remove this line, sources will not be generated.
-	withSourcesJar()
-
-	sourceCompatibility = JavaVersion.VERSION_21
-	targetCompatibility = JavaVersion.VERSION_21
-}
-
-tasks.register("generatePythonRequirements", Exec) {
-	group = "build"
-
-	doFirst {
-		file("$buildDir/python").delete()
-	}
-
-	workingDir  projectDir
-
-	if (System.getProperty("os.name").toLowerCase().contains("win")) {
-		commandLine "cmd", "/c", "${projectDir}/devRunner.bat genPyReqs"
-	} else {
-		commandLine "bash", "-c", "chmod +x ${projectDir}/devRunner.sh && ${projectDir}/devRunner.sh genPyReqs"
-	}
-
-	doLast {
-		logger.info("generated requirements.txt")
-	}
-}
-
-tasks.register("preparePythonClient") {
-	group = "build"
-
-	dependsOn tasks.generatePythonRequirements
-
-	def clientDir = file("src/main/python")
-	def pyBuildDir = file("$buildDir/python")
-	def outputZip = file("$buildDir/resources/main/files/iwtcms_client.zip")
-
-	doFirst {
-		outputZip.delete()
-	}
-
-	copy {
-		from(clientDir)
-		into(pyBuildDir)
-	}
-
-	inputs.dir(pyBuildDir)
-	outputs.file(outputZip)
-
-	doLast {
-		ant.zip(destfile: outputZip, basedir: pyBuildDir)
-		logger.info("Python client files have been archived as: $outputZip")
-	}
-}
-
-tasks.register("compileVite", Exec){
-	group = "build"
-	dependsOn tasks.npmInstall
-
-	workingDir  projectDir
-
-	if (System.getProperty("os.name").toLowerCase().contains("win")) {
-		commandLine "cmd", "/c", "${projectDir}/devRunner.bat buildWeb"
-	} else {
-		commandLine "bash", "-c", "chmod +x ${projectDir}/devRunner.sh && ${projectDir}/devRunner.sh buildWeb"
-	}
-}
-
-jar {
-	from("LICENSE")
-}
-
-shadowJar {
-    configurations = [project.configurations.shaded]
-}
-
-processResources {
-	dependsOn tasks.preparePythonClient
-	dependsOn tasks.compileVite
-
-	inputs.property "version", project.version
-
-	filesMatching("fabric.mod.json") {
-		expand "version": project.version
-	}
-}
-
-publishing {
-	publications {
-		create("mavenJava", MavenPublication) {
-			artifactId = project.archives_base_name
-			groupId = project.maven_group
-			version = version
-			//noinspection GroovyAssignabilityCheck
-			from components.java
-		}
-	}
-
+subprojects {
 	repositories {
-		maven {
-			name = "Lumivoid"
-			url = "https://maven.lumivoid.pp.ua/repository/lumivoid/"
+		mavenCentral()
+	}
 
-			credentials {
-				username = project.hasProperty("mavenUsername") ? project.mavenUsername : System.getenv("MAVEN_USERNAME")
-				password = project.hasProperty("mavenPassword") ? project.mavenPassword : System.getenv("MAVEN_PASSWORD")
-			}
+//	tasks.withType(org.gradle.jvm.tasks.Jar).configureEach {
+//		from("${rootProject.projectDir}/LICENSE")
+//	}
+
+	tasks.withType(JavaCompile).configureEach {
+		it.options.release = 21
+	}
+
+	plugins.withId("java") {
+		java {
+			withSourcesJar()
+
+			sourceCompatibility = JavaVersion.VERSION_21
+			targetCompatibility = JavaVersion.VERSION_21
 		}
 	}
 }

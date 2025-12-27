@@ -1,0 +1,6 @@
+tasks.register("build") {
+    copy {
+        from("${projectDir}/src")
+        into("${rootProject.projectDir}/server/build/resources/main/files")
+    }
+}

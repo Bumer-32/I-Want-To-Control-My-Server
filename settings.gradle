@@ -1,10 +1,24 @@
 pluginManagement {
-	repositories {
-		maven {
-			name = 'Fabric'
-			url = 'https://maven.fabricmc.net/'
-		}
-		mavenCentral()
-		gradlePluginPortal()
-	}
+    repositories {
+        maven {
+            name = "Fabric"
+            url = "https://maven.fabricmc.net/"
+        }
+        maven {
+            name = "Sponge"
+            url = 'https://repo.spongepowered.org/repository/maven-public/'
+        }
+        mavenCentral()
+        gradlePluginPortal()
+    }
 }
+
+rootProject.name = "I Want To Control My Server"
+
+include(
+        "cli",
+        "server",
+        "fabric",
+        "front",
+        "static"
+)

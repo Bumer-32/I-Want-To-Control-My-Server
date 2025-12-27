@@ -1,0 +1,72 @@
+@use "colors";
+@use "disabled";
+@use "slide-on-overflow";
+@use "forbidden";
+
+body {
+    margin: 0;
+    font-family: "Nunito", sans-serif;
+    font-weight: 700;
+    background-color: var(--background-color);
+    color: var(--main-text-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+* {
+    // smooth theme changing
+    transition:
+        color 0.3s ease,
+        background-color 0.3s,
+        filter 0.3s ease;
+}
+
+#app {
+    height: 100vh;
+    width: 100vw;
+}
+
+.material-symbols-rounded {
+    user-select: none;
+}
+
+noscript {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    font-size: 20px;
+    color: var(--main-text-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    background-color: var(--background-color);
+}
+
+.toast-notifications {
+    z-index: 1000;
+    background-color: transparent;
+    color: transparent;
+    border-radius: 10px;
+    width: 250px;
+    height: 75px;
+    overflow: hidden;
+    white-space: normal;
+    word-wrap: break-word;
+    word-break: break-word;
+    padding: 10px;
+    position: absolute;
+    top: 100px;
+    right: 15px;
+    display: none;
+    transition:
+        color 1s ease,
+        background-color 1s ease,
+        box-shadow 1s ease;
+    box-shadow: 5px 5px transparent;
+}

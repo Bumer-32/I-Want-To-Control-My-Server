@@ -1,0 +1,78 @@
+package ua.pp.lumivoid.iwtcms.server.util
+
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.apache.logging.log4j.Level
+import org.apache.logging.log4j.LogManager
+import org.apache.logging.log4j.core.Logger
+import org.apache.logging.log4j.core.appender.FileAppender
+import org.apache.logging.log4j.core.appender.WriterAppender
+import org.apache.logging.log4j.core.config.Configurator
+import org.apache.logging.log4j.core.layout.PatternLayout
+import ua.pp.lumivoid.iwtcms.server.Constants
+import ua.pp.lumivoid.iwtcms.server.api.requests.api.LogsHistory
+import ua.pp.lumivoid.iwtcms.server.api.requests.api.ws.ConsoleWS
+import java.io.ByteArrayOutputStream
+import java.io.OutputStreamWriter
+
+internal object CustomLogger {
+    private val logger = Constants.LOGGER
+
+    private val output = ByteArrayOutputStream()
+    private var running = false
+
+    fun setup() {
+        val rootLogger = LogManager.getRootLogger() as Logger
+
+        val layout = PatternLayout
+                        .newBuilder()
+                        .withPattern("[%d{HH:mm:ss}] [%t/%level] (%logger{1}) %msg%n")
+                        .build()
+
+        val fileCustomAppender = FileAppender
+                                    .newBuilder()
+                                    .withFileName("logs/iwtcms.log")
+                                    .setName("CustomFileAppender")
+                                    .setLayout(layout)
+                                    .withAppend(false)
+                                    .build()
+        fileCustomAppender.start()
+        rootLogger.addAppender(fileCustomAppender)
+
+        val customAppender = WriterAppender
+                                .newBuilder()
+                                .setLayout(layout)
+                                .setName("CustomWriterAppender")
+                                .setIgnoreExceptions(false)
+                                .setTarget(OutputStreamWriter(output))
+                                .build()
+        customAppender.start()
+        rootLogger.addAppender(customAppender)
+
+        CoroutineScope(Dispatchers.IO).launch {
+            runCatching {
+                running = true
+                while (running) {
+                    val log = output.toString("UTF-8")
+                    if (log.isNotEmpty()) {
+                        LogsHistory.addLog(log)
+                        ConsoleWS.send(log)
+                        output.reset()
+                    }
+                }
+            }
+        }
+
+        Configurator.setLevel(rootLogger.name, Level.getLevel(Config.readConfig().logLevel))
+
+        logger.info("Initialized new logger") // After logger added, to log this
+        logger.info("Logging level - ${rootLogger.level}")
+        logger.info("Started logging")
+    }
+
+    fun shutdown() {
+        logger.info("Shutting down logger")
+        running = false
+    }
+}

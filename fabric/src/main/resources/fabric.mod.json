@@ -1,0 +1,41 @@
+{
+    "schemaVersion": 1,
+    "id": "iwtcms",
+    "version": "${version}",
+    "name": "I Want To Control My Server",
+    "description": "Implements rest api and fancy admin panel for minecraft server!",
+    "authors": ["Bumer_32"],
+    "contact": {
+        "homepage": "https://lumivoid.pp.ua",
+        "sources": "https://github.com/Bumer-32/I-Want-To-Control-My-Server",
+        "issues": "https://github.com/Bumer-32/I-Want-To-Control-My-Server/issues"
+    },
+    "license": "Apache-2.0",
+    "icon": "assets/iwtcms/icon.png",
+    "environment": "server",
+    "entrypoints": {
+        "main": [
+            {
+                "value": "ua.pp.lumivoid.iwtcms.IWTCMSFabric",
+                "adapter": "kotlin"
+            }
+        ],
+
+        "preLaunch": [
+            {
+                "value": "ua.pp.lumivoid.iwtcms.PREIWTCMSFabric",
+                "adapter": "kotlin"
+            }
+        ]
+    },
+    "depends": {
+        "fabricloader": ">=0.16.5",
+        "minecraft": "~1.21",
+        "java": ">=21",
+        "fabric-api": "*",
+        "fabric-language-kotlin": "*"
+    },
+    "suggests": {
+        "spark": "*"
+    }
+}
