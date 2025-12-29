@@ -2,7 +2,7 @@ plugins {
 	id "org.jetbrains.kotlin.jvm"
 	id "maven-publish"
 	id "org.jetbrains.kotlin.plugin.serialization"
-	id "org.spongepowered.gradle.vanilla" version "0.2.2"
+	id "org.spongepowered.gradle.vanilla" version "0.3.0"
 }
 
 base {
