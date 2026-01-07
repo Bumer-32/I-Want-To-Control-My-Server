@@ -28,6 +28,19 @@ tasks.register("npmInstall", Exec) {
     commandLine npm, "install"
 }
 
+tasks.register("run", Exec) {
+    workingDir projectDir
+    dependsOn tasks.syncVersions
+    dependsOn tasks.npmInstall
+
+    String npm = "npm"
+    if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+        npm = "npm.cmd"
+    }
+
+    commandLine npm, "run", "dev"
+}
+
 tasks.register("syncVersions") {
     def file = file("package.json")
     def json = new JsonSlurper().parseText(file.text)
@@ -35,3 +48,4 @@ tasks.register("syncVersions") {
     file.text = JsonOutput.prettyPrint(JsonOutput.toJson(json))
     println "package.json version -> ${json.version}"
 }
+

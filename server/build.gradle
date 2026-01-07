@@ -25,42 +25,42 @@ repositories {
 
 dependencies {
 	// * Ktor
-    implementation "io.ktor:ktor-server-core:${ktor_version}"
-    implementation "io.ktor:ktor-server-netty:${ktor_version}"
-	implementation "io.ktor:ktor-network-tls-certificates:${ktor_version}"
-	implementation "io.ktor:ktor-server-websockets:${ktor_version}"
-	implementation "io.ktor:ktor-server-sessions:${ktor_version}"
-	implementation "io.ktor:ktor-serialization-kotlinx-json:${ktor_version}"
-	implementation "io.ktor:ktor-server-content-negotiation:${ktor_version}"
-	implementation "io.ktor:ktor-server-status-pages:${ktor_version}"
-	implementation "io.ktor:ktor-server-cors:${ktor_version}"
-	implementation "io.ktor:ktor-server-http-redirect:${ktor_version}"
+    implementation "io.ktor:ktor-server-core:$ktor_version"
+    implementation "io.ktor:ktor-server-netty:$ktor_version"
+	implementation "io.ktor:ktor-network-tls-certificates:$ktor_version"
+	implementation "io.ktor:ktor-server-websockets:$ktor_version"
+	implementation "io.ktor:ktor-server-sessions:$ktor_version"
+	implementation "io.ktor:ktor-serialization-kotlinx-json:$ktor_version"
+	implementation "io.ktor:ktor-server-content-negotiation:$ktor_version"
+	implementation "io.ktor:ktor-server-status-pages:$ktor_version"
+	implementation "io.ktor:ktor-server-cors:$ktor_version"
+	implementation "io.ktor:ktor-server-http-redirect:$ktor_version"
 	// * Ktor
 
     // * Exposed
-	implementation "org.jetbrains.exposed:exposed-core:${exposed_version}"
-	implementation "org.jetbrains.exposed:exposed-r2dbc:${exposed_version}"
-	implementation "org.jetbrains.exposed:exposed-dao:${exposed_version}"
+	implementation "org.jetbrains.exposed:exposed-core:$exposed_version"
+	implementation "org.jetbrains.exposed:exposed-r2dbc:$exposed_version"
+	implementation "org.jetbrains.exposed:exposed-dao:$exposed_version"
     // * Exposed
 
     // * R2DBC drivers
-	implementation "io.r2dbc:r2dbc-h2:${h2_database_version}"
+	implementation "io.r2dbc:r2dbc-h2:$h2_database_version"
     implementation "com.oracle.database.r2dbc:oracle-r2dbc:${oracle_database_version}"
-    implementation "org.mariadb:r2dbc-mariadb:${mariadb_database_version}"
-    implementation "io.r2dbc:r2dbc-mssql:${mssql_database_version}"
-    implementation "io.asyncer:r2dbc-mysql:${mysql_database_version}"
-    implementation "org.postgresql:r2dbc-postgresql:${postgresql_database_version}"
+    implementation "org.mariadb:r2dbc-mariadb:$mariadb_database_version"
+    implementation "io.r2dbc:r2dbc-mssql:$mssql_database_version"
+    implementation "io.asyncer:r2dbc-mysql:$mysql_database_version"
+    implementation "org.postgresql:r2dbc-postgresql:$postgresql_database_version"
     // * R2DBC drivers
 
-	implementation "org.jetbrains.kotlinx:kotlinx-datetime:${kotlinx_datetime_version}"
-    implementation "com.typesafe:config:${hocon_config_version}"
-	implementation "commons-codec:commons-codec:${commons_codec}"
-	implementation "com.charleskorn.kaml:kaml:${kaml_version}"
+	implementation "org.jetbrains.kotlinx:kotlinx-datetime:$kotlinx_datetime_version"
+    implementation "com.typesafe:config:$hocon_config_version"
+	implementation "commons-codec:commons-codec:$commons_codec"
+	implementation "com.charleskorn.kaml:kaml:$kaml_version"
 
-	compileOnly "me.lucko:spark-api:${spark_api_version}"
-	compileOnly "org.apache.logging.log4j:log4j-api:${log4j_version}"
-	compileOnly "org.apache.logging.log4j:log4j-core:${log4j_version}"
-	compileOnly "com.google.guava:guava:${guava_version}"
+	compileOnly "me.lucko:spark-api:$spark_api_version"
+	compileOnly "org.apache.logging.log4j:log4j-api:$log4j_version"
+	compileOnly "org.apache.logging.log4j:log4j-core:$log4j_version"
+	compileOnly "com.google.guava:guava:$guava_version"
 }
 
 processResources {

@@ -27,14 +27,12 @@ dependencies {
 	implementation shadow(project(":server"))
 
     // * Fabric
-	minecraft "com.mojang:minecraft:${minecraft_version}"
+	minecraft "com.mojang:minecraft:$minecraft_version"
 	mappings loom.officialMojangMappings()
-	modImplementation "net.fabricmc:fabric-loader:${loader_version}"
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_api_version}"
-	modImplementation "net.fabricmc:fabric-language-kotlin:${fabric_kotlin_version}"
+	modImplementation "net.fabricmc:fabric-loader:$loader_version"
+	modImplementation "net.fabricmc.fabric-api:fabric-api:$fabric_api_version"
+	modImplementation "net.fabricmc:fabric-language-kotlin:$fabric_kotlin_version"
     // * Fabric
-
-	modImplementation "me.lucko:spark-api:${spark_api_version}"
 }
 
 processResources {
@@ -48,4 +46,10 @@ processResources {
 shadowJar {
 	minimize()
 	configurations = [project.configurations.shadow]
+}
+
+loom {
+	runs {
+		remove client
+	}
 }

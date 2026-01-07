@@ -16,9 +16,9 @@ pluginManagement {
 rootProject.name = "I Want To Control My Server"
 
 include(
-        "cli",
         "server",
         "fabric",
         "front",
-        "static"
+        "static",
+        "cli"
 )
