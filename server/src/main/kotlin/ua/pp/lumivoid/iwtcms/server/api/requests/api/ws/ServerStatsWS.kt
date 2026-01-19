@@ -1,19 +1,16 @@
 package ua.pp.lumivoid.iwtcms.server.api.requests.api.ws
 
-import io.ktor.http.HttpStatusCode
-import io.ktor.server.routing.Routing
-import io.ktor.server.routing.RoutingCall
-import io.ktor.server.websocket.webSocket
-import io.ktor.websocket.CloseReason
-import io.ktor.websocket.Frame
-import io.ktor.websocket.close
+import io.ktor.http.*
+import io.ktor.server.routing.*
+import io.ktor.server.websocket.*
+import io.ktor.websocket.*
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 import ua.pp.lumivoid.iwtcms.server.api.WebSocket
-import ua.pp.lumivoid.iwtcms.server.api.requests.api.user.PermissionsList
 import ua.pp.lumivoid.iwtcms.server.api.doAuth
+import ua.pp.lumivoid.iwtcms.server.api.requests.api.user.PermissionsList
 import ua.pp.lumivoid.iwtcms.server.util.Config
 import ua.pp.lumivoid.iwtcms.server.util.ServerStats
 
@@ -44,8 +41,6 @@ internal object ServerStatsWS : WebSocket() {
             }
 
             // and ws
-
-            send(Frame.Text("Connected to $path"))
 
             // Send
             val job = launch {

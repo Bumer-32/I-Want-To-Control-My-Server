@@ -14,7 +14,7 @@ import ua.pp.lumivoid.iwtcms.server.tables.UserPermissionsTable
 import ua.pp.lumivoid.iwtcms.server.tables.UsersTable
 
 /*
- * checks if auth enabled and user are logged in (user has cookies)
+ * checks if auth enabled and user is logged in (user has cookies)
  * launch success unit, unauthorized unit or forbidden unit
  *
  * returns HTTP status

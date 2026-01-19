@@ -42,8 +42,6 @@ internal object ConsoleWS : WebSocket() {
 
             // and ws
 
-            send(Frame.Text("Connected to $path"))
-
             // Send
             val job = launch {
                 sharedFlow.collect { message ->

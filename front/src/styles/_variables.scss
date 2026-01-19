@@ -7,4 +7,4 @@ $console-width: 100%;
 $console-height: calc($console-width * 0.8);
 $console-input-height: 24px;
 
-$container-height: calc(100vh - $header-height - $footer-height);
+$container-height: calc(100vh - $header-height - $footer-height - 54px);

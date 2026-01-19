@@ -1,31 +1,26 @@
 <script lang="ts">
-    import { onMount } from "svelte";
+    import {onMount} from "svelte";
     import githubIcon from "../assets/github.svg";
-    import { getVersion } from "../scripts/supply";
+    import Constants from "./constants";
 
     let creatorElement: HTMLSpanElement;
     let iwtcmsLabel: HTMLSpanElement;
     let starsElement: HTMLSpanElement;
 
     onMount(() => {
-        async function loadGithubStars() {
-            try {
-                const request = fetch("https://corsproxy.io/?url=https://github.com/Bumer-32/I-Want-To-Control-My-Server");
-                const html = (await request).text();
-
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(await html, "text/html");
-
-                const starsSpan = doc.querySelector<HTMLSpanElement>('a[href$="/stargazers"] span')!;
-
-                starsElement.innerHTML = starsSpan.innerHTML.trim();
-            } catch (error) {
-                console.error("Failed to load github stars");
-                console.error(error);
-            }
+        try {
+            fetch("https://corsproxy.io/?url=https://github.com/Bumer-32/I-Want-To-Control-My-Server")
+                .then(r => r.text())
+                .then(html => {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, "text/html");
+                    const starsSpan = doc.querySelector<HTMLSpanElement>('a[href$="/stargazers"] span')!;
+                    starsElement.innerHTML = starsSpan.innerHTML.trim();
+                })
+        } catch (error) {
+            console.error("Failed to load github stars");
+            console.error(error);
         }
-
-        loadGithubStars();
 
         // ? happy birthday Bumer_32
         if (new Date().getMonth() == 1 && new Date().getDate() == 21) {
@@ -34,9 +29,11 @@
         }
 
         // ? iwtcms version
-        getVersion().then((version) => {
-            iwtcmsLabel.innerHTML = iwtcmsLabel.innerHTML + " " + version;
-        });
+        fetch(Constants.VERSION_URL)
+            .then(r => r.text())
+            .then(version => {
+                iwtcmsLabel.innerHTML = iwtcmsLabel.innerHTML + " " + version;
+            })
     });
 </script>
 

@@ -76,7 +76,6 @@ internal object PlayersWS : WebSocket() {
                                 if (oldPlayer.inventory == changedPlayer.inventory) {
                                     changedPlayer.inventory = null
                                 }
-                                    logger.info(changedPlayer.inventory.toString())
                                 changedPlayers.add(changedPlayer)
                             }
 
@@ -139,7 +138,7 @@ internal object PlayersWS : WebSocket() {
             username = player.name.string,
             uuid = player.stringUUID,
             gameMode = player.gameMode.gameModeForPlayer,
-            isOp = player.server!!.playerList.isOp(player.gameProfile),
+            permissionLevel = player.permissionLevel,
             inventory = playerInventory,
         )
     }
@@ -170,7 +169,7 @@ internal object PlayersWS : WebSocket() {
             val username: String,
             val uuid: String,
             val gameMode: GameType,
-            val isOp: Boolean,
+            val permissionLevel: Int,
             var inventory: List<Slot>?
         ) {
             @Serializable

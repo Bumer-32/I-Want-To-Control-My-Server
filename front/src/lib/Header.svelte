@@ -4,9 +4,8 @@
     import iwtcmsIcon from "../assets/icon_clearbg.png";
     import githubIcon from "../assets/github.svg";
     import modrinthIcon from "../assets/modrinth.svg";
-    import { switchTab } from "../scripts/tabsController";
-    import { onMount } from "svelte";
-    import { logout } from "../scripts/auth";
+    import {onMount} from "svelte";
+    import {logout} from "./auth";
 
     let leftDiv: HTMLDivElement;
     let rightDiv: HTMLDivElement;
@@ -49,20 +48,9 @@
         });
     }
 
-    function handleTabSwitching() {
-        const buttons = document.querySelectorAll("header .buttons span") as NodeListOf<HTMLImageElement>;
-
-        buttons.forEach((button) => {
-            button.addEventListener("click", () => {
-                switchTab(`${button.id.replace("header-", "")}-tab`);
-            });
-        });
-    }
-
     onMount(() => {
         alignHeaderButtons();
         handleAlignHeaderButtons();
-        handleTabSwitching();
 
         colorModeSwitchInput.onchange = () => {
             document.body.classList.toggle("light-mode-impl");
@@ -113,10 +101,10 @@
                     </a>
                 </li>
                 <li>
-                    <button type="button" on:click={() => switchTab("users-tab")}>
+                    <a href="users">
                         <span class="material-symbols-rounded">account_circle</span>
                         Users
-                    </button>
+                    </a>
                 </li>
                 <li id="logout-button">
                     <button type="button" on:click={logout}>
@@ -130,14 +118,13 @@
 
     <div class="buttons" bind:this={buttonsDiv}>
         <div class="left" bind:this={leftDiv}>
-            <span class="material-symbols-rounded" id="header-settings">settings</span>
+            <a href="settings" class="material-symbols-rounded" id="header-settings">settings</a>
         </div>
         <div class="center">
-            <!-- ! DEFAULT TAB -->
-            <span class="material-symbols-rounded hover-holo-effect" id="header-console">terminal</span>
+            <a href="console" class="material-symbols-rounded" id="header-console">terminal</a>
         </div>
         <div class="right" bind:this={rightDiv}>
-            <span class="material-symbols-rounded" id="header-players">group</span>
+            <a href="players" class="material-symbols-rounded" id="header-players">group</a>
         </div>
     </div>
 

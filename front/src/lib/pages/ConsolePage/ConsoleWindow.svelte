@@ -1,0 +1,204 @@
+<script lang="ts">
+    import {onMount} from "svelte";
+    import ToastSystem from "../../toastSystem";
+    import Constants from "../../constants";
+    import {isAllowed} from "../../auth";
+
+    let consoleDiv: HTMLDivElement;
+    let consoleScroll: HTMLDivElement;
+    let totalMessages: HTMLSpanElement;
+    let messageFieldDiv: HTMLDivElement;
+    let messageFieldInput: HTMLInputElement;
+
+    let allowAutoScroll = true;
+
+    const logWorker = new Worker(new URL("/lib/pages/ConsolePage/consoleLogsWorker.ts", import.meta.url));
+
+    logWorker.onmessage = (e: MessageEvent<[RegExpMatchArray | null, string]>) => {
+
+        const log = document.createElement("span");
+
+        const [match, text] = e.data
+
+        if (!match) {
+            log.textContent = text; // If no match, just display the text
+        } else {
+            const timestamp = match[1];
+            const level = match[2].split("/")[1].toLowerCase();
+            const logger = match[3];
+            const message = match[4];
+
+            // timestamp
+            const timestampSpan = document.createElement("span");
+            timestampSpan.textContent = `[${timestamp}] `;
+            timestampSpan.style.color = "var(--console-timestamp-color)";
+            log.appendChild(timestampSpan);
+
+            // log level
+            const levelSpan = document.createElement("span");
+            levelSpan.textContent = `[${match[2]}] `;
+            if (level === "info") {
+                levelSpan.style.color = "var(--console-log-level-info-color)";
+            } else if (level === "warn") {
+                levelSpan.style.color = "var(--console-log-level-warn-color)";
+            } else if (level === "error") {
+                levelSpan.style.color = "var(--console-log-level-error-color)";
+            }
+            log.appendChild(levelSpan);
+
+            // logger
+            const loggerSpan = document.createElement("span");
+            loggerSpan.textContent = `(${logger}) `;
+            loggerSpan.style.color = "var(--console-logger-color)";
+            log.appendChild(loggerSpan);
+
+            // message
+            const messageSpan = document.createElement("span");
+            messageSpan.textContent = message;
+            log.appendChild(messageSpan);
+        }
+
+        consoleScroll.appendChild(log);
+
+        if (allowAutoScroll) {
+            consoleScroll.scrollTo({
+                top: consoleScroll.scrollHeight,
+                behavior: "smooth",
+            });
+        }
+    }
+
+    async function addLog(text: string) {
+        logWorker.postMessage(text);
+    }
+
+    function onEnter(event: KeyboardEvent) {
+        if (event.key === "Enter") {
+            if (messageFieldInput.value.toLowerCase().trim() == "stop") {
+                if (!window.confirm("Are you sure want to stop the server?")) {
+                    return;
+                }
+            }
+            sendCommand(messageFieldInput.value);
+            messageFieldInput.value = "";
+        }
+    }
+
+    // noinspection JSUnusedLocalSymbols
+    export let sendCommand = function (command: string) {};
+
+    async function connect() {
+        consoleScroll.innerHTML = "";
+
+        if (!(await isAllowed("commands.execute"))) messageFieldDiv.classList.add("disabled");
+
+        messageFieldInput.addEventListener("keypress", (event) => onEnter(event));
+
+        if (await isAllowed("logs.read")) {
+            try {
+                const response = await fetch(Constants.LOGS_HISTORY_URL);
+                if (!response.ok) {
+                    ToastSystem.addToQueue(`Error: ${response.statusText}`, ToastSystem.ToastType.ERROR);
+                    return;
+                }
+
+                const logs = await response.json();
+                logs.forEach((log: string) => {
+                    addLog(log);
+                    totalMessages.innerHTML = logs.length.toString();
+                });
+            } catch (error) {
+                console.error(error);
+                ToastSystem.addToQueue(`Error: ${error}`, ToastSystem.ToastType.ERROR);
+            }
+        } else {
+            consoleDiv.classList.add("forbidden");
+            return;
+        }
+
+        const ws = new WebSocket(Constants.CONSOLE_URL);
+        ws.onmessage = (event) => {
+            addLog(event.data);
+            totalMessages.innerHTML = consoleScroll.children.length.toString();
+        };
+
+        ws.onclose = () => {
+            messageFieldInput.removeEventListener("keypress", (event) => onEnter(event));
+
+            if (!document.hidden) {
+                ToastSystem.addToQueue("Connection closed", ToastSystem.ToastType.ERROR);
+                ToastSystem.addToQueue("Reconnecting... In 30 seconds", ToastSystem.ToastType.ERROR);
+                setTimeout(() => {
+                    connect();
+                    console.log("Reconnecting...");
+                }, 30000);
+            }
+        };
+
+        ws.onerror = () => {
+            ToastSystem.addToQueue("Connection error", ToastSystem.ToastType.ERROR);
+        };
+
+        const visibilityChangeListener = (_: Event) => {
+            if (document.hidden) {
+                ws.close();
+            } else {
+                connect();
+                document.removeEventListener("visibilitychange", visibilityChangeListener); // remove because on reconnect new listener will be created
+            }
+        };
+        document.addEventListener("visibilitychange", visibilityChangeListener);
+
+        sendCommand = function (command: string) {
+            ws.send(command);
+        };
+    }
+
+    onMount(() => {
+        consoleScroll.addEventListener("scroll", () => {
+            allowAutoScroll = consoleScroll.scrollTop >= consoleScroll.scrollHeight - consoleScroll.clientHeight - 200;
+        });
+
+        connect();
+    });
+</script>
+
+<div class="console relative mr-[60px] ml-[25px] flex h-[90%] max-w-[1200px] flex-col content-center items-center rounded-[10px] bg-[var(--console-background-color)]" bind:this={consoleDiv}>
+    <div class="console-text absolute top-[8px] flex flex-col overflow-x-hidden overflow-y-auto scroll-smooth" bind:this={consoleScroll}>
+        <!-- * Content will be auto generated by js -->
+    </div>
+    <div class="total-messages absolute right-[35px] text-[12px]">
+        <span>Total messages: </span>
+        <span class="count" bind:this={totalMessages}>
+            <!-- * Content will be auto generated by js -->
+            0
+        </span>
+    </div>
+    <div class="input absolute bottom-0 left-0 flex w-full items-center" bind:this={messageFieldDiv}>
+        <span class="material-symbols-rounded">keyboard_arrow_right</span>
+        <input class="w-full border-none bg-transparent pr-[10px] text-[var(--console-text-color)] focus:outline-none" type="text" placeholder="help" bind:this={messageFieldInput} />
+    </div>
+</div>
+
+<style lang="scss">
+    @use "../../../styles/variables";
+    @use "../../../styles/scrollbar";
+
+    .console {
+        width: variables.$console-width;
+
+        .console-text {
+            width: calc(100% - 32px);
+            height: calc(100% - #{variables.$console-input-height} - 24px);
+            @include scrollbar.scrollbar;
+        }
+
+        .total-messages {
+            bottom: variables.$console-input-height;
+        }
+
+        .input input {
+            height: variables.$console-input-height;
+        }
+    }
+</style>

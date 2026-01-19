@@ -3,6 +3,7 @@ package ua.pp.lumivoid.iwtcms.server.util
 import kotlinx.serialization.Serializable
 import me.lucko.spark.api.SparkProvider
 import me.lucko.spark.api.statistic.StatisticWindow
+import ua.pp.lumivoid.iwtcms.server.Constants
 import ua.pp.lumivoid.iwtcms.server.IWTCMS
 import java.lang.management.ManagementFactory
 import java.time.ZonedDateTime
@@ -32,6 +33,9 @@ internal object ServerStats {
         var tps: Double? = null
         val ip = "${server.localIp}:${server.port}"
         val serverTime = ZonedDateTime.now().format(DateTimeFormatter.ISO_ZONED_DATE_TIME)
+        val serverVersion = IWTCMS.instance.getMinecraftServer().serverVersion
+        val platform = IWTCMS.instance.implName
+        val iwtcmsVersion = Constants.MOD_VERSION
 
         if (IWTCMS.instance.isSparkLoaded()) {
             val spark = SparkProvider.get()
@@ -51,6 +55,9 @@ internal object ServerStats {
             tps = tps,
             ip = ip,
             serverTime = serverTime,
+            serverVersion = serverVersion,
+            platform = platform,
+            iwtcmsVersion = iwtcmsVersion
         )
     }
 }
@@ -68,4 +75,7 @@ internal data class ServerStatsData(
     val tps: Double?,
     val ip: String?,
     val serverTime: String,
+    val serverVersion: String,
+    val platform: String,
+    val iwtcmsVersion: String,
 )
