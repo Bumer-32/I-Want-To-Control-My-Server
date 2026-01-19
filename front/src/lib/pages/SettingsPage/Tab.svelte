@@ -1,6 +1,6 @@
 <script lang="ts">
-    import {onMount} from "svelte";
-    import readConfig, {type AvailableConfigSetting, ConfigWriters, type Strategy} from "./configsManager";
+    import { onMount } from "svelte";
+    import readConfig, { type AvailableConfigSetting, ConfigWriters, type Strategy } from "./configsManager";
     import Constants from "../../constants";
     import ToastSystem from "../../toastSystem";
     import slideOnOverflow from "./slideOnOverflow";
@@ -44,7 +44,9 @@
 
     export async function save() {
         if (!tabContainer.classList.contains("disabled")) {
-            const sure = confirm(`Are you sure want to save ${selfConfigSetting.selector_name}?\nThis will overwrite the file on the server!\n\nIf something went wrong you can find a backup file in IWTCMS folder.`);
+            const sure = confirm(
+                `Are you sure want to save ${selfConfigSetting.selector_name}?\nThis will overwrite the file on the server!\n\nIf something went wrong you can find a backup file in IWTCMS folder.`,
+            );
             if (sure) {
                 try {
                     const response = await fetch(`${Constants.CONFIG_URL}/${selfConfigSetting.selector_name}`, { method: "PUT", body: textArea.value });
@@ -132,18 +134,12 @@
                                 on:change={generateEasyConfig}
                             />
                         {:else if data.type === "bool"}
-                            <select
-                                    class="input rounded-[5px] bg-[var(--easy-view-setting-secondary-background-color)] outline-none"
-                                    on:change={generateEasyConfig}
-                            >
+                            <select class="input rounded-[5px] bg-[var(--easy-view-setting-secondary-background-color)] outline-none" on:change={generateEasyConfig}>
                                 {#if data.default === false}<option selected>false</option>{:else}<option>false</option>{/if}
                                 {#if data.default === true}<option selected>true</option>{:else}<option>true</option>{/if}
                             </select>
                         {:else if data.type === "choose"}
-                            <select
-                                    class="input rounded-[5px] bg-[var(--easy-view-setting-secondary-background-color)] outline-none"
-                                    on:change={generateEasyConfig}
-                            >
+                            <select class="input rounded-[5px] bg-[var(--easy-view-setting-secondary-background-color)] outline-none" on:change={generateEasyConfig}>
                                 {#each data.options as option}
                                     {#if data.default === option}<option selected>{option}</option>{:else}<option>{option}</option>{/if}
                                 {/each}
@@ -151,8 +147,9 @@
                         {:else}
                             <!--string and other unregistered will also work as string-->
                             <input
-                                    value={data.default} class="input w-[160px] rounded-[5px] bg-[var(--easy-view-setting-secondary-background-color)] pl-[5px] outline-none"
-                                    on:change={generateEasyConfig}
+                                value={data.default}
+                                class="input w-[160px] rounded-[5px] bg-[var(--easy-view-setting-secondary-background-color)] pl-[5px] outline-none"
+                                on:change={generateEasyConfig}
                             />
                         {/if}
                     </div>

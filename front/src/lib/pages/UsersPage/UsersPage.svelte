@@ -1,9 +1,9 @@
 <script lang="ts">
-    import {onMount} from "svelte";
-    import {checkAuth} from "../../auth";
+    import { onMount } from "svelte";
+    import { checkAuth } from "../../auth";
     import User from "./User.svelte";
     import Constants from "../../constants";
-    import type {UserData} from "./userData";
+    import type { UserData } from "./userData";
     import CreateUserPopup from "./CreateUserPopup.svelte";
 
     let createUser: CreateUserPopup;

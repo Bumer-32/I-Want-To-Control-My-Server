@@ -1,5 +1,5 @@
 <script lang="ts">
-    import {onMount} from "svelte";
+    import { onMount } from "svelte";
     import githubIcon from "../assets/github.svg";
     import Constants from "./constants";
 
@@ -10,13 +10,13 @@
     onMount(() => {
         try {
             fetch("https://corsproxy.io/?url=https://github.com/Bumer-32/I-Want-To-Control-My-Server")
-                .then(r => r.text())
-                .then(html => {
+                .then((r) => r.text())
+                .then((html) => {
                     const parser = new DOMParser();
                     const doc = parser.parseFromString(html, "text/html");
                     const starsSpan = doc.querySelector<HTMLSpanElement>('a[href$="/stargazers"] span')!;
                     starsElement.innerHTML = starsSpan.innerHTML.trim();
-                })
+                });
         } catch (error) {
             console.error("Failed to load github stars");
             console.error(error);
@@ -30,10 +30,10 @@
 
         // ? iwtcms version
         fetch(Constants.VERSION_URL)
-            .then(r => r.text())
-            .then(version => {
+            .then((r) => r.text())
+            .then((version) => {
                 iwtcmsLabel.innerHTML = iwtcmsLabel.innerHTML + " " + version;
-            })
+            });
     });
 </script>
 

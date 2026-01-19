@@ -1,4 +1,4 @@
-import {hocon} from "hocon-web";
+import { hocon } from "hocon-web";
 
 export default async function readConfig(selfConfigSetting: AvailableConfigSetting, strategy: Strategy, configFile: string): Promise<Strategy | null> {
     const comparator = ConfigReaders.readers[selfConfigSetting.config_type];
@@ -185,11 +185,11 @@ export class ConfigWriters {
                 merged = deepMerge(merged, obj);
             }
 
-            return `#Generated through iwtcms easy mode at ${(new Date()).toISOString()} \n` + toHocon(merged);
+            return `#Generated through iwtcms easy mode at ${new Date().toISOString()} \n` + toHocon(merged);
         });
 
         this.register("minecraft", (input: Record<string, any>) => {
-            let str = `#Generated through iwtcms easy mode at ${(new Date()).toISOString()} \n`;
+            let str = `#Generated through iwtcms easy mode at ${new Date().toISOString()} \n`;
 
             for (const [name, value] of Object.entries(input)) {
                 str += `${name}=${value}\n`;

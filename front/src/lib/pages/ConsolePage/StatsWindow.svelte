@@ -1,6 +1,6 @@
 <script lang="ts">
-    import {onMount} from "svelte";
-    import {isAllowed} from "../../auth";
+    import { onMount } from "svelte";
+    import { isAllowed } from "../../auth";
     import Constants from "../../constants";
     import ToastSystem from "../../toastSystem";
 

@@ -1,6 +1,6 @@
 <script lang="ts">
-    import {onMount} from "svelte";
-    import {type AvailableConfigs, type AvailableConfigSetting} from "./configsManager";
+    import { onMount } from "svelte";
+    import { type AvailableConfigs, type AvailableConfigSetting } from "./configsManager";
     import Tab from "./Tab.svelte";
 
     export let configs: AvailableConfigs;

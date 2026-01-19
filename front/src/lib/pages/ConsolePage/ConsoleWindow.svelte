@@ -1,8 +1,8 @@
 <script lang="ts">
-    import {onMount} from "svelte";
+    import { onMount } from "svelte";
     import ToastSystem from "../../toastSystem";
     import Constants from "../../constants";
-    import {isAllowed} from "../../auth";
+    import { isAllowed } from "../../auth";
 
     let consoleDiv: HTMLDivElement;
     let consoleScroll: HTMLDivElement;
@@ -15,10 +15,9 @@
     const logWorker = new Worker(new URL("/lib/pages/ConsolePage/consoleLogsWorker.ts", import.meta.url));
 
     logWorker.onmessage = (e: MessageEvent<[RegExpMatchArray | null, string]>) => {
-
         const log = document.createElement("span");
 
-        const [match, text] = e.data
+        const [match, text] = e.data;
 
         if (!match) {
             log.textContent = text; // If no match, just display the text
@@ -66,7 +65,7 @@
                 behavior: "smooth",
             });
         }
-    }
+    };
 
     async function addLog(text: string) {
         logWorker.postMessage(text);

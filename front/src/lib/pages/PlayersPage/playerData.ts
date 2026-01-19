@@ -26,6 +26,6 @@ export namespace PlayerData {
         Moderator = 1,
         GameMaster = 2,
         Admin = 3,
-        Owner = 4
+        Owner = 4,
     }
 }

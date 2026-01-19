@@ -11,8 +11,8 @@
     import icon from "./assets/icon_clearbg.png";
     import "./styles/tailwind.css";
     import "./styles/style.scss";
-    import type {Component} from "svelte";
-    import {checkAuth} from "./lib/auth";
+    import type { Component } from "svelte";
+    import { checkAuth } from "./lib/auth";
 
     const pages: Record<string, Component | null> = {
         "/": ConsolePage,
@@ -20,12 +20,12 @@
         "/settings": SettingsPage,
         "/players": PlayersPage,
         "/users": UsersPage,
-    }
+    };
 
     if (window.location.href !== Constants.PAGE_BAD_CONNECTION_URL) {
         checkAuth().then((a) => {
             if (a === null && window.location.pathname !== "/login") {
-                window.location.assign("/login")
+                window.location.assign("/login");
             }
         });
     }
@@ -33,8 +33,8 @@
     let currentPage: Component | null;
 
     if (pages[window.location.pathname] != null) {
-        currentPage = pages[window.location.pathname]
-    } else if(window.location.pathname !== "/login") {
+        currentPage = pages[window.location.pathname];
+    } else if (window.location.pathname !== "/login") {
         // window.location.assign("/");
     }
 
@@ -64,14 +64,13 @@
     <Header />
     <Login />
 
-    <main class="flex items-center justify-center h-full">
-        <img class="opacity-25" alt="MEOW" src="https://cataas.com/cat">
+    <main class="flex h-full items-center justify-center">
+        <img class="opacity-25" alt="MEOW" src="https://cataas.com/cat" />
     </main>
-
 {:else}
     <Header />
 
-    <main class="align-center absolute flex w-screen h-screen justify-center">
+    <main class="align-center absolute flex h-screen w-screen justify-center">
         <div class="h-full w-full">
             <svelte:component this={currentPage} />
         </div>

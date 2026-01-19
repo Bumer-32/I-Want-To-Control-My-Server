@@ -1,6 +1,6 @@
 <script lang="ts">
-    import {onMount} from "svelte";
-    import {isDev} from "./devMode";
+    import { onMount } from "svelte";
+    import { isDev } from "./devMode";
     import ToastSystem from "../../toastSystem";
 
     let devMenu: HTMLDivElement;

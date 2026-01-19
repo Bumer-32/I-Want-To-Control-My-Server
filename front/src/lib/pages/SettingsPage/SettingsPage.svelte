@@ -1,9 +1,9 @@
 <script lang="ts">
-    import {type AvailableConfigs} from "./configsManager";
+    import { type AvailableConfigs } from "./configsManager";
     import Constants from "../../constants";
     import ToastSystem from "../../toastSystem";
     import DevMenu from "./DevMenu.svelte";
-    import {onMount} from "svelte";
+    import { onMount } from "svelte";
     import YAML from "yaml";
     import Selector from "./Selector.svelte";
     import Tab from "./Tab.svelte";

@@ -1,11 +1,11 @@
 <script lang="ts">
-    import {onMount} from "svelte";
+    import { onMount } from "svelte";
     import Constants from "../../constants";
     import ToastSystem from "../../toastSystem";
 
     export let updateUsers: () => void;
 
-    let container: HTMLDivElement
+    let container: HTMLDivElement;
     let form: HTMLFormElement;
 
     export function show() {
@@ -51,10 +51,9 @@
     });
 </script>
 
-<div class="absolute top-0 flex h-full w-screen items-center justify-center hidden" bind:this={container}>
+<div class="absolute top-0 flex hidden h-full w-screen items-center justify-center" bind:this={container}>
     <div class="absolute z-[99] h-full w-screen backdrop-blur-[20px]"></div>
     <div class="absolute z-[100] items-center rounded-[10px] bg-[var(--users-background-color)] pl-px">
-
         <form class="flex w-[320px] flex-col items-center" bind:this={form}>
             <h1>User creation</h1>
             <label for="username" class="mt-[5px]">Username</label>
@@ -68,12 +67,12 @@
 
             <div class="mt-[15px] mb-[10px]">
                 <button
-                        class="rounded-[5px] bg-[var(--users-buttons-bg-color)] px-[4px] text-[var(--users-background-color)]"
-                        type="reset"
-                        on:click={() => {
-                            container.classList.add("hidden");
-                         }}
-                >Cancel</button>
+                    class="rounded-[5px] bg-[var(--users-buttons-bg-color)] px-[4px] text-[var(--users-background-color)]"
+                    type="reset"
+                    on:click={() => {
+                        container.classList.add("hidden");
+                    }}>Cancel</button
+                >
                 <button class="rounded-[5px] bg-[var(--users-buttons-bg-color)] px-[4px] text-[var(--users-background-color)]" type="submit">Submit</button>
             </div>
         </form>

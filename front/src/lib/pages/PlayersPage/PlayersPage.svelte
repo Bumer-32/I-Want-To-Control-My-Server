@@ -7,23 +7,23 @@
 
 <div class="flex flex-col">
     <h1 class="flex content-center justify-center text-[36px]">Players</h1>
-    <BannedPopup bind:this={banned}/>
-<!--    <InventoryPopup/>-->
-    <div class="page-container relative overflow-auto gap-[150px]">
+    <BannedPopup bind:this={banned} />
+    <!--    <InventoryPopup/>-->
+    <div class="page-container relative gap-[150px] overflow-auto">
         <button
-                class="absolute top-[25px] rounded-[5px] bg-[var(--players-buttons-bg-color)] px-[4px]"
-                on:click={() => {
-                    banned.show();
-                }}
-        >Banned</button>
+            class="absolute top-[25px] rounded-[5px] bg-[var(--players-buttons-bg-color)] px-[4px]"
+            on:click={() => {
+                banned.show();
+            }}>Banned</button
+        >
         <Online bannedPopup={banned} />
     </div>
 </div>
 
 <style lang="scss">
-  @use "../../../styles/scrollbar";
+    @use "../../../styles/scrollbar";
 
-  .page-container {
-    @include  scrollbar.scrollbar;
-  }
+    .page-container {
+        @include scrollbar.scrollbar;
+    }
 </style>
