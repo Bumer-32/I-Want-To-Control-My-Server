@@ -52,3 +52,5 @@ replay_*.log
 # nodejs
 
 node_modules/
+
+.devcontainer/

@@ -42,7 +42,7 @@ internal object Entry {
         val dbUrl: String = if (config.useExternalDb) {
             "${config.externalDbDriver.url}://${config.externalDbIp}:${config.externalDbPort}/${config.externalDbIWTCMSName}"
         } else {
-            "h2:file:///${Constants.DB_FILE.replace("\\", "/")}"
+            "h2:file:///${Constants.DB_FILE.replace("\\", "/")};MODE=MYSQL"
         }
         val dbDriver = if (config.useExternalDb) config.externalDbDriver.driver else "h2"
 

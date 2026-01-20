@@ -306,10 +306,6 @@
             .left {
                 margin-right: 10px;
             }
-
-            .hover-holo-effect {
-                @include hover-holo-effect.holo-effect;
-            }
         }
 
         .supply {
