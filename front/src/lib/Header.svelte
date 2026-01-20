@@ -4,8 +4,8 @@
     import iwtcmsIcon from "../assets/icon_clearbg.png";
     import githubIcon from "../assets/github.svg";
     import modrinthIcon from "../assets/modrinth.svg";
-    import { onMount } from "svelte";
-    import { logout } from "./auth";
+    import {onMount} from "svelte";
+    import {logout} from "./auth";
 
     let leftDiv: HTMLDivElement;
     let rightDiv: HTMLDivElement;
@@ -101,7 +101,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="users">
+                    <a href="#/users">
                         <span class="material-symbols-rounded">account_circle</span>
                         Users
                     </a>
@@ -118,13 +118,13 @@
 
     <div class="buttons" bind:this={buttonsDiv}>
         <div class="left" bind:this={leftDiv}>
-            <a href="settings" class="material-symbols-rounded" id="header-settings">settings</a>
+            <a href="#/settings" class="material-symbols-rounded" id="header-settings">settings</a>
         </div>
         <div class="center">
-            <a href="console" class="material-symbols-rounded" id="header-console">terminal</a>
+            <a href="#/console" class="material-symbols-rounded" id="header-console">terminal</a>
         </div>
         <div class="right" bind:this={rightDiv}>
-            <a href="players" class="material-symbols-rounded" id="header-players">group</a>
+            <a href="#/players" class="material-symbols-rounded" id="header-players">group</a>
         </div>
     </div>
 

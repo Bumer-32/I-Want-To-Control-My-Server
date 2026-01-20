@@ -6,49 +6,54 @@
     import PlayersPage from "./lib/pages/PlayersPage/PlayersPage.svelte";
     import UsersPage from "./lib/pages/UsersPage/UsersPage.svelte";
     import Login from "./lib/Login.svelte";
-    import Constants from "./lib/constants";
     import ToastSystem from "./lib/toastSystem";
     import icon from "./assets/icon_clearbg.png";
     import "./styles/tailwind.css";
     import "./styles/style.scss";
-    import type { Component } from "svelte";
-    import { checkAuth } from "./lib/auth";
+    import type {Component} from "svelte";
+    import {checkAuth} from "./lib/auth";
 
     const pages: Record<string, Component | null> = {
-        "/": ConsolePage,
-        "/console": ConsolePage,
-        "/settings": SettingsPage,
-        "/players": PlayersPage,
-        "/users": UsersPage,
+        "#/": ConsolePage,
+        "#/console": ConsolePage,
+        "#/settings": SettingsPage,
+        "#/players": PlayersPage,
+        "#/users": UsersPage,
     };
 
-    if (window.location.href !== Constants.PAGE_BAD_CONNECTION_URL) {
+    let currentPage: Component | null;
+
+    window.addEventListener("hashchange", () => { window.location.reload() })
+
+    if (window.location.hash === "") {
+        window.location.assign("/#/");
+    }
+
+    if (window.location.hash !== "#/badConnection") {
         checkAuth().then((a) => {
-            if (a === null && window.location.pathname !== "/login") {
-                window.location.assign("/login");
+            if (a === null && window.location.hash !== "#/login") {
+                window.location.assign("#/login");
             }
         });
     }
 
-    let currentPage: Component | null;
-
-    if (pages[window.location.pathname] != null) {
-        currentPage = pages[window.location.pathname];
-    } else if (window.location.pathname !== "/login") {
-        // window.location.assign("/");
+    if (pages[window.location.hash] != null) {
+        currentPage = pages[window.location.hash];
     }
 
+
     window.addEventListener("load", async () => {
+
         // ? remove loading screen
         document.querySelector<HTMLDivElement>(".loading")!.style.display = "none";
-        console.log(window.location.pathname);
+        console.log(window.location.href);
     });
 </script>
 
 <Footer />
 <div class="toast-notifications" bind:this={ToastSystem.notification}></div>
 
-{#if window.location.href === Constants.PAGE_BAD_CONNECTION_URL}
+{#if window.location.hash === "#/badConnection"}
     <main class="h-screen content-center">
         <div class="flex justify-center">
             <a href="/"><img src={icon} alt="icon" /></a>
@@ -60,7 +65,7 @@
             </div>
         </div>
     </main>
-{:else if window.location.pathname === "/login"}
+{:else if window.location.hash === "#/login"}
     <Header />
     <Login />
 

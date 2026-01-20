@@ -2,8 +2,6 @@ export default class Constants {
     // URLS
     static BASE_URL = document.location.origin + "/";
 
-    static PAGE_BAD_CONNECTION_URL = this.BASE_URL + "BadConnection";
-
     // api urls
     // * /api/authentication
     static CHECK_LOGIN_URL = this.BASE_URL + "api/authentication/checkLogin";

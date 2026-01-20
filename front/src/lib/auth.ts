@@ -1,5 +1,5 @@
 import Constants from "./constants";
-import { isDev } from "./pages/SettingsPage/devMode";
+import {isDev} from "./pages/SettingsPage/devMode";
 import ToastSystem from "./toastSystem";
 
 export async function checkAuth(): Promise<string | null> {
@@ -13,7 +13,7 @@ export async function checkAuth(): Promise<string | null> {
             console.error("Error:", request.statusText);
             ToastSystem.addToQueue(`Error: ${request.statusText}`, ToastSystem.ToastType.ERROR);
             if (!(await isDev())) {
-                window.location.assign(Constants.PAGE_BAD_CONNECTION_URL);
+                window.location.assign("#/badConnection");
             }
         }
     } catch (error) {
@@ -41,7 +41,7 @@ export async function login(username: string, password: string) {
         if (response.ok) {
             console.log("Success");
             ToastSystem.addToQueue("Success", ToastSystem.ToastType.INFO);
-            window.location.assign("/");
+            window.location.assign("#/");
         } else if (response.status == 401) {
             console.error("Unauthorized");
             ToastSystem.addToQueue("Incorrect username or password", ToastSystem.ToastType.ERROR);
@@ -62,7 +62,7 @@ export async function logout() {
         if (response.ok) {
             console.log("Success");
             ToastSystem.addToQueue("Success", ToastSystem.ToastType.INFO);
-            window.location.assign("/login");
+            window.location.assign("#/login");
         } else {
             console.error("Error:", response.statusText);
             ToastSystem.addToQueue(`Error: ${response.statusText}`, ToastSystem.ToastType.ERROR);
