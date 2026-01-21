@@ -26,7 +26,7 @@ internal object DeOp : Request() {
         post(path) {
             val session = call.sessions.get<UserSession>()
             val payload = call.receive<DeOpData>()
-            val playerList = IWTCMS.instance.getMinecraftServer().playerList
+            val iwtcms = IWTCMS.instance
 
             doAuth(
                 call = call,
@@ -37,14 +37,14 @@ internal object DeOp : Request() {
                         return@doAuth
                     }
 
-                    val player = playerList.players.find { it.name.string == payload.username || it.stringUUID == payload.uuid }
+                    val player = iwtcms.players().find { it.name == payload.username || it.uuid == payload.uuid }
 
                     if (player == null) {
                         call.respond(HttpStatusCode.NotFound, "Player not found")
                         return@doAuth
                     }
 
-                    if (!playerList.isOp(player.gameProfile)) {
+                    if (!iwtcms.isOp(player)) {
                         call.respond(HttpStatusCode.Conflict, "Player already is not an operator")
                         return@doAuth
                     }
@@ -56,10 +56,10 @@ internal object DeOp : Request() {
                             .first()[UsersTable.username]
                     }
 
-                    playerList.deop(player.gameProfile)
+                    iwtcms.deop(player)
 
-                    logger.info("Iwtcms user $source successfully removed operator privileges on player ${player.name.string}")
-                    call.respond("Player ${player.name.string} are no longer a server operator")
+                    logger.info("Iwtcms user $source successfully removed operator privileges on player ${player.name}")
+                    call.respond("Player ${player.name} are no longer a server operator")
                 },
             )
         }

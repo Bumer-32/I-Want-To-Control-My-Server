@@ -20,7 +20,7 @@ internal object ServerStats {
 
     fun getServerStats(): ServerStatsData {
         val runtime = Runtime.getRuntime()
-        val server = IWTCMS.instance.getMinecraftServer()
+        val iwtcms = IWTCMS.instance
 
         var cpuLoad: Double? = null
         val memoryUsage = getMemoryUsage()
@@ -28,12 +28,12 @@ internal object ServerStats {
         val totalMemory = runtime.totalMemory()
         val maxMemory = runtime.maxMemory()
         val uptime = ManagementFactory.getRuntimeMXBean().uptime
-        val playerCount = server.playerList.playerCount
-        val maxPlayerCount = server.playerList.maxPlayers
+        val playerCount = iwtcms.playersCount()
+        val maxPlayerCount = iwtcms.maxPlayersCount()
         var tps: Double? = null
-        val ip = "${server.localIp}:${server.port}"
+        val ip = "${iwtcms.mcIp()}:${iwtcms.mcPort()}"
         val serverTime = ZonedDateTime.now().format(DateTimeFormatter.ISO_ZONED_DATE_TIME)
-        val serverVersion = IWTCMS.instance.getMinecraftServer().serverVersion
+        val serverVersion = IWTCMS.instance.minecraftVersion()
         val platform = IWTCMS.instance.implName
         val iwtcmsVersion = Constants.MOD_VERSION
 

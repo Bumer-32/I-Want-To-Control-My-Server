@@ -1,12 +1,10 @@
 package ua.pp.lumivoid.iwtcms.server.api.requests.api.player
 
-import io.ktor.http.HttpStatusCode
-import io.ktor.server.request.receive
-import io.ktor.server.response.respond
-import io.ktor.server.routing.Routing
-import io.ktor.server.routing.post
-import io.ktor.server.sessions.get
-import io.ktor.server.sessions.sessions
+import io.ktor.http.*
+import io.ktor.server.request.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
+import io.ktor.server.sessions.*
 import kotlinx.coroutines.flow.first
 import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.v1.core.and
@@ -14,8 +12,8 @@ import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.r2dbc.selectAll
 import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 import ua.pp.lumivoid.iwtcms.server.IWTCMS
-import ua.pp.lumivoid.iwtcms.server.api.doAuth
 import ua.pp.lumivoid.iwtcms.server.api.Request
+import ua.pp.lumivoid.iwtcms.server.api.doAuth
 import ua.pp.lumivoid.iwtcms.server.api.requests.api.user.PermissionsList
 import ua.pp.lumivoid.iwtcms.server.cookie.UserSession
 import ua.pp.lumivoid.iwtcms.server.tables.UsersTable
@@ -28,7 +26,7 @@ internal object Kill : Request() {
         post(path) {
             val session = call.sessions.get<UserSession>()
             val payload = call.receive<KillData>()
-            val playerList = IWTCMS.instance.getMinecraftServer().playerList
+            val iwtcms = IWTCMS.instance
 
             doAuth(
                 call = call,
@@ -39,7 +37,7 @@ internal object Kill : Request() {
                         return@doAuth
                     }
 
-                    val player = playerList.players.find { it.name.string == payload.username || it.stringUUID == payload.uuid }
+                    val player = iwtcms.players().find { it.name == payload.username || it.uuid == payload.uuid }
 
                     if (player == null) {
                         call.respond(HttpStatusCode.NotFound, "Player not found")
@@ -53,10 +51,10 @@ internal object Kill : Request() {
                             .first()[UsersTable.username]
                     }
 
-                    player.kill(player.level())
+                    iwtcms.kill(player)
 
-                    logger.info("Iwtcms user $source successfully killed player ${player.name.string}")
-                    call.respond("Player ${player.name.string} killed")
+                    logger.info("Iwtcms user $source successfully killed player ${player.name}")
+                    call.respond("Player ${player.name} killed")
                 },
             )
         }

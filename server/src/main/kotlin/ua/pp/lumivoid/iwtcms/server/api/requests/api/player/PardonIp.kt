@@ -26,7 +26,7 @@ internal object PardonIp : Request() {
         post(path) {
             val session = call.sessions.get<UserSession>()
             val payload = call.receive<PardonIpData>()
-            val playerList = IWTCMS.instance.getMinecraftServer().playerList
+            val iwtcms = IWTCMS.instance
 
             doAuth(
                 call = call,
@@ -36,7 +36,7 @@ internal object PardonIp : Request() {
                         call.respond(HttpStatusCode.BadRequest, "Invalid IP address")
                     }
 
-                    if (!playerList.ipBans.isBanned(payload.ip)) {
+                    if (!iwtcms.isIpBanned(payload.ip)) {
                         call.respond(HttpStatusCode.Conflict, "Such ip are not banned")
                         return@doAuth
                     }
@@ -48,7 +48,7 @@ internal object PardonIp : Request() {
                             .first()[UsersTable.username]
                     }
 
-                    playerList.ipBans.remove(payload.ip)
+                    iwtcms.pardonIp(payload.ip)
 
                     logger.info("Iwtcms user $source successfully unbanned ip ${payload.ip}")
                     call.respond("Ip ${payload.ip} has been successfully unbanned")

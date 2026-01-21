@@ -9,13 +9,12 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
-import net.minecraft.server.level.ServerPlayer
-import net.minecraft.world.level.GameType
 import ua.pp.lumivoid.iwtcms.server.IWTCMS
 import ua.pp.lumivoid.iwtcms.server.api.WebSocket
 import ua.pp.lumivoid.iwtcms.server.api.doAuth
 import ua.pp.lumivoid.iwtcms.server.api.requests.api.user.PermissionsList
 import ua.pp.lumivoid.iwtcms.server.util.Config
+import ua.pp.lumivoid.iwtcms.server.util.McHandler
 
 internal object PlayersWS : WebSocket() {
     override val path = "/ws/players"
@@ -117,27 +116,27 @@ internal object PlayersWS : WebSocket() {
         }
     }
 
-    private fun parsePlayer(player: ServerPlayer): PlayersData.PlayerData {
+    private fun parsePlayer(player: McHandler.Player): PlayersData.PlayerData {
         val playerInventory = mutableListOf<PlayersData.PlayerData.Slot>()
 
         player.inventory.forEach { itemStack ->
             playerInventory.add(
                 PlayersData.PlayerData.Slot(
-                    itemId = if (itemStack.isEmpty) null else itemStack.itemName.string,
-                    count = if (itemStack.isEmpty) null else itemStack.count,
+                    itemId = if (itemStack.count == 0) null else itemStack.id,
+                    count = if (itemStack.count == 0) null else itemStack.count,
                 )
             )
         }
 
         return PlayersData.PlayerData(
             pos = PlayersData.PlayerData.Pos(
-                player.position().x,
-                player.position().y,
-                player.position().z
+                player.x,
+                player.y,
+                player.z
             ),
-            username = player.name.string,
-            uuid = player.stringUUID,
-            gameMode = player.gameMode.gameModeForPlayer,
+            username = player.name,
+            uuid = player.uuid,
+            gameMode = player.gameMode,
             permissionLevel = player.permissionLevel,
             inventory = playerInventory,
         )
@@ -152,7 +151,7 @@ internal object PlayersWS : WebSocket() {
             fun get(): PlayersData {
                 val players = mutableListOf<PlayerData>()
 
-                IWTCMS.instance.getMinecraftServer().playerList.players.forEach { player ->
+                IWTCMS.instance.players().forEach { player ->
                     players.add(parsePlayer(player))
                 }
 
@@ -168,7 +167,7 @@ internal object PlayersWS : WebSocket() {
             val pos: Pos,
             val username: String,
             val uuid: String,
-            val gameMode: GameType,
+            val gameMode: Int,
             val permissionLevel: Int,
             var inventory: List<Slot>?
         ) {

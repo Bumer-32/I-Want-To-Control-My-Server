@@ -67,11 +67,7 @@ internal object ConsoleWS : WebSocket() {
                         logger.info("Launching command: $receivedText")
 
                         try {
-                            val server = IWTCMS.instance.getMinecraftServer()
-                            server.commands.performPrefixedCommand(
-                                server.createCommandSourceStack(),
-                                receivedText,
-                            )
+                            IWTCMS.instance.executeMcCommand(receivedText)
                         } catch (e: Exception) {
                             e.stackTrace.forEach { logger.error(it.toString()) }
                         }

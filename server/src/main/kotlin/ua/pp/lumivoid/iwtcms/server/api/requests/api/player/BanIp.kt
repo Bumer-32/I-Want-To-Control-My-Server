@@ -1,28 +1,24 @@
 package ua.pp.lumivoid.iwtcms.server.api.requests.api.player
 
 import com.google.common.net.InetAddresses
-import io.ktor.http.HttpStatusCode
-import io.ktor.server.request.receive
-import io.ktor.server.response.respond
-import io.ktor.server.routing.Routing
-import io.ktor.server.routing.post
-import io.ktor.server.sessions.get
-import io.ktor.server.sessions.sessions
+import io.ktor.http.*
+import io.ktor.server.request.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
+import io.ktor.server.sessions.*
 import kotlinx.coroutines.flow.first
 import kotlinx.serialization.Serializable
-import net.minecraft.network.chat.Component
-import net.minecraft.server.players.IpBanListEntry
 import org.jetbrains.exposed.v1.core.and
 import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.r2dbc.selectAll
 import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 import ua.pp.lumivoid.iwtcms.server.IWTCMS
-import ua.pp.lumivoid.iwtcms.server.api.doAuth
 import ua.pp.lumivoid.iwtcms.server.api.Request
+import ua.pp.lumivoid.iwtcms.server.api.doAuth
 import ua.pp.lumivoid.iwtcms.server.api.requests.api.user.PermissionsList
 import ua.pp.lumivoid.iwtcms.server.cookie.UserSession
 import ua.pp.lumivoid.iwtcms.server.tables.UsersTable
-import java.util.Date
+import java.util.*
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
@@ -36,7 +32,7 @@ internal object BanIp : Request() {
         post(path) {
             val session = call.sessions.get<UserSession>()
             val payload = call.receive<BanIpData>()
-            val playerList = IWTCMS.instance.getMinecraftServer().playerList
+            val iwtcms = IWTCMS.instance
 
             doAuth(
                 call = call,
@@ -50,7 +46,7 @@ internal object BanIp : Request() {
                             return@doAuth
                         }
 
-                        val player = playerList.players.find { it.name.string == payload.username || it.stringUUID == payload.uuid }
+                        val player = iwtcms.players().find { it.name == payload.username || it.uuid == payload.uuid }
 
                         if (player == null) {
                             call.respond(HttpStatusCode.NotFound, "Player not found")
@@ -60,7 +56,7 @@ internal object BanIp : Request() {
                         player.ipAddress
                     }
 
-                    if (playerList.ipBans.isBanned(ip)) {
+                    if (iwtcms.isIpBanned(ip)) {
                         call.respond(HttpStatusCode.Conflict, "Such ip already banned")
                         return@doAuth
                     }
@@ -72,20 +68,18 @@ internal object BanIp : Request() {
                             .first()[UsersTable.username]
                     }
 
-                    playerList.ipBans.add(
-                        IpBanListEntry(
-                            ip,
-                            Date.from(Clock.System.now().toJavaInstant()),
-                            "$source (using iwtcms)",
-                            if (payload.expireDate != null) Date.from(payload.expireDate.toJavaInstant()) else null,
-                            payload.reason
-                        )
+                    iwtcms.banIp(
+                        ip,
+                        Date.from(Clock.System.now().toJavaInstant()),
+                        "$source (using iwtcms)",
+                        if (payload.expireDate != null) Date.from(payload.expireDate.toJavaInstant()) else null,
+                        payload.reason
                     )
 
                     // don't forget to kick
-                    // btw we if we ban by ip there's can be multiple players from 1 ip, so we need to kick them all, not only 1 player
-                    playerList.getPlayersWithAddress(ip).forEach { player ->
-                        player.connection.disconnect(Component.translatable("multiplayer.disconnect.ip_banned"))
+                    // btw we if we ban by ip there can be multiple players from 1 ip, so we need to kick them all, not only 1 player
+                    iwtcms.players().filter { it.ipAddress == ip }.forEach { player ->
+                        iwtcms.disconnect(player, "multiplayer.disconnect.ip_banned", translatable = true)
                     }
 
                     logger.info("Iwtcms user $source successfully banned ip $ip")

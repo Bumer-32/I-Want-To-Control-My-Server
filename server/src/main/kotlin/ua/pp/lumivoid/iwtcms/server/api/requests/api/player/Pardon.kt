@@ -26,7 +26,7 @@ internal object Pardon : Request() {
         post(path) {
             val session = call.sessions.get<UserSession>()
             val payload = call.receive<PardonData>()
-            val playerList = IWTCMS.instance.getMinecraftServer().playerList
+            val iwtcms = IWTCMS.instance
 
             doAuth(
                 call = call,
@@ -37,9 +37,9 @@ internal object Pardon : Request() {
                         return@doAuth
                     }
 
-                    val bannedEntry = playerList.bans.entries.find { it.displayName.string == payload.username }
+                    val bannedPlayer = iwtcms.bans().find { it.player.name == payload.username }?.player
 
-                    if (bannedEntry == null) {
+                    if (bannedPlayer == null) {
                         call.respond(HttpStatusCode.NotFound, "Player not found")
                         return@doAuth
                     }
@@ -51,7 +51,7 @@ internal object Pardon : Request() {
                             .first()[UsersTable.username]
                     }
 
-                    playerList.bans.remove(bannedEntry)
+                    iwtcms.pardon(bannedPlayer)
 
                     logger.info("Iwtcms user $source successfully unbanned player ${payload.username}")
                     call.respond("Player ${payload.username} has been successfully unbanned")

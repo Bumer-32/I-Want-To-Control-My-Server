@@ -22,13 +22,13 @@ internal object BanIpList : Request() {
                 permission = PermissionsList.Permission.PLAYERS_MANAGE.value,
                 success = {
                     val banned = mutableListOf<BanIp>()
-                    IWTCMS.instance.getMinecraftServer().playerList.ipBans.entries.forEach {
+                    IWTCMS.instance.ipBans().forEach {
                         banned.add(
                             BanIp(
-                                target = it.displayName.string,
+                                target = it.ip,
                                 reason = it.reason,
-                                expireDate = if (it.expires?.time != null) Instant.fromEpochMilliseconds(it.expires!!.time) else null,
-                                creationDate = if (it.created?.time != null) Instant.fromEpochMilliseconds(it.created!!.time) else null
+                                expireDate = if (it.expireDate?.time != null) Instant.fromEpochMilliseconds(it.expireDate.time) else null,
+                                creationDate = if (it.creationDate?.time != null) Instant.fromEpochMilliseconds(it.creationDate.time) else null
                             )
                         )
                     }
@@ -41,7 +41,7 @@ internal object BanIpList : Request() {
     @Serializable
     private data class BanIp @OptIn(ExperimentalTime::class) constructor(
         val target: String,
-        val reason: String,
+        val reason: String?,
         val expireDate: Instant?,
         val creationDate: Instant?,
     )

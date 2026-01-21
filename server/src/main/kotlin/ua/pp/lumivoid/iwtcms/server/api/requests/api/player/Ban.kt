@@ -7,8 +7,6 @@ import io.ktor.server.routing.*
 import io.ktor.server.sessions.*
 import kotlinx.coroutines.flow.first
 import kotlinx.serialization.Serializable
-import net.minecraft.network.chat.Component
-import net.minecraft.server.players.UserBanListEntry
 import org.jetbrains.exposed.v1.core.and
 import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.r2dbc.selectAll
@@ -34,7 +32,7 @@ internal object Ban : Request() {
         post(path) {
             val session = call.sessions.get<UserSession>()
             val payload = call.receive<BanData>()
-            val playerList = IWTCMS.instance.getMinecraftServer().playerList
+            val iwtcms = IWTCMS.instance
 
             doAuth(
                 call = call,
@@ -45,14 +43,14 @@ internal object Ban : Request() {
                         return@doAuth
                     }
 
-                    val player = playerList.players.find { it.name.string == payload.username || it.stringUUID == payload.uuid }
+                    val player = iwtcms.players().find { it.name == payload.username || it.uuid == payload.uuid }
 
                     if (player == null) {
                         call.respond(HttpStatusCode.NotFound, "Player not found")
                         return@doAuth
                     }
 
-                    if (playerList.bans.isBanned(player.gameProfile)) {
+                    if (iwtcms.isBanned(player)) {
                         call.respond(HttpStatusCode.Conflict, "Player already banned")
                         return@doAuth
                     }
@@ -64,21 +62,19 @@ internal object Ban : Request() {
                             .first()[UsersTable.username]
                     }
 
-                    playerList.bans.add(
-                        UserBanListEntry(
-                            player.gameProfile,
-                            Date.from(Clock.System.now().toJavaInstant()),
-                            "$source (using iwtcms)",
-                            if (payload.expireDate != null) Date.from(payload.expireDate.toJavaInstant()) else null,
+                    iwtcms.ban(
+                        player,
+                        Date.from(Clock.System.now().toJavaInstant()),
+                        "$source (using iwtcms)",
+                        if (payload.expireDate != null) Date.from(payload.expireDate.toJavaInstant()) else null,
                             payload.reason
-                        )
                    )
 
                     // don't forget to kick
-                    player.connection.disconnect(Component.translatable("multiplayer.disconnect.banned"))
+                    iwtcms.disconnect(player, "multiplayer.disconnect.banned", translatable = true)
 
-                    logger.info("Iwtcms user $source successfully banned player ${player.name.string}")
-                    call.respond("Player ${player.name.string} has been successfully banned")
+                    logger.info("Iwtcms user $source successfully banned player ${player.name}")
+                    call.respond("Player ${player.name} has been successfully banned")
                 },
             )
         }

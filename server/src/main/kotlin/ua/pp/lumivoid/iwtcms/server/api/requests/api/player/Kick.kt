@@ -7,7 +7,6 @@ import io.ktor.server.routing.*
 import io.ktor.server.sessions.*
 import kotlinx.coroutines.flow.first
 import kotlinx.serialization.Serializable
-import net.minecraft.network.chat.Component
 import org.jetbrains.exposed.v1.core.and
 import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.r2dbc.selectAll
@@ -27,7 +26,7 @@ internal object Kick : Request() {
         post(path) {
             val session = call.sessions.get<UserSession>()
             val payload = call.receive<KickData>()
-            val playerList = IWTCMS.instance.getMinecraftServer().playerList
+            val iwtcms = IWTCMS.instance
 
             doAuth(
                 call = call,
@@ -38,7 +37,7 @@ internal object Kick : Request() {
                         return@doAuth
                     }
 
-                    val player = playerList.players.find { it.name.string == payload.username || it.stringUUID == payload.uuid }
+                    val player = iwtcms.players().find { it.name == payload.username || it.uuid == payload.uuid }
 
                     if (player == null) {
                         call.respond(HttpStatusCode.NotFound, "Player not found")
@@ -52,10 +51,11 @@ internal object Kick : Request() {
                             .first()[UsersTable.username]
                     }
 
-                    player.connection.disconnect( if (payload.reason != null) { Component.literal(payload.reason) } else Component.translatable("multiplayer.disconnect.kicked") )
+                    @Suppress("SENSELESS_COMPARISON", "IfThenToElvis")
+                    iwtcms.disconnect(player, if (payload.reason != null) payload.reason else "multiplayer.disconnect.kicked", payload == null )
 
-                    logger.info("Iwtcms user $source kicked player ${player.name.string}")
-                    call.respond("Player ${player.name.string} kicked from server")
+                    logger.info("Iwtcms user $source kicked player ${player.name}")
+                    call.respond("Player ${player.name} kicked from server")
                 },
             )
         }

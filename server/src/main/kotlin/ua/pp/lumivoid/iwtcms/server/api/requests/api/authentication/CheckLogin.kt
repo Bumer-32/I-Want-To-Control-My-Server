@@ -1,11 +1,9 @@
 package ua.pp.lumivoid.iwtcms.server.api.requests.api.authentication
 
-import io.ktor.http.HttpStatusCode
-import io.ktor.server.response.respond
-import io.ktor.server.routing.Routing
-import io.ktor.server.routing.get
-import io.ktor.server.sessions.get
-import io.ktor.server.sessions.sessions
+import io.ktor.http.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
+import io.ktor.server.sessions.*
 import kotlinx.coroutines.flow.first
 import org.jetbrains.exposed.v1.core.and
 import org.jetbrains.exposed.v1.core.eq
@@ -26,6 +24,8 @@ internal object CheckLogin : Request() {
                 call.respond(HttpStatusCode.Unauthorized, "Not logged in")
                 return@get
             }
+
+            println(session)
 
             suspendTransaction {
                 try {

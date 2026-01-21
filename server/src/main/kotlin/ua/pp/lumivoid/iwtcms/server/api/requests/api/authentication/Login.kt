@@ -1,12 +1,10 @@
 package ua.pp.lumivoid.iwtcms.server.api.requests.api.authentication
 
-import io.ktor.http.HttpStatusCode
-import io.ktor.server.request.receive
-import io.ktor.server.response.respond
-import io.ktor.server.routing.Routing
-import io.ktor.server.routing.post
-import io.ktor.server.sessions.sessions
-import io.ktor.server.sessions.set
+import io.ktor.http.*
+import io.ktor.server.request.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
+import io.ktor.server.sessions.*
 import kotlinx.coroutines.flow.first
 import kotlinx.serialization.Serializable
 import org.apache.commons.codec.digest.DigestUtils
@@ -47,7 +45,7 @@ internal object Login : Request() {
     }
 
     @Serializable
-    private data class LoginPayload(
+    data class LoginPayload(
         val username: String,
         val password: String,
     )
