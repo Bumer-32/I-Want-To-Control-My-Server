@@ -4,8 +4,8 @@
     import iwtcmsIcon from "../assets/icon_clearbg.png";
     import githubIcon from "../assets/github.svg";
     import modrinthIcon from "../assets/modrinth.svg";
-    import {onMount} from "svelte";
-    import {logout} from "./auth";
+    import { onMount } from "svelte";
+    import { logout } from "./auth";
 
     let leftDiv: HTMLDivElement;
     let rightDiv: HTMLDivElement;

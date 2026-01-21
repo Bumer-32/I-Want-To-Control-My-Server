@@ -10,8 +10,8 @@
     import icon from "./assets/icon_clearbg.png";
     import "./styles/tailwind.css";
     import "./styles/style.scss";
-    import type {Component} from "svelte";
-    import {checkAuth} from "./lib/auth";
+    import type { Component } from "svelte";
+    import { checkAuth } from "./lib/auth";
 
     const pages: Record<string, Component | null> = {
         "#/": ConsolePage,
@@ -23,7 +23,9 @@
 
     let currentPage: Component | null;
 
-    window.addEventListener("hashchange", () => { window.location.reload() })
+    window.addEventListener("hashchange", () => {
+        window.location.reload();
+    });
 
     if (window.location.hash === "") {
         window.location.assign("/#/");
@@ -41,9 +43,7 @@
         currentPage = pages[window.location.hash];
     }
 
-
     window.addEventListener("load", async () => {
-
         // ? remove loading screen
         document.querySelector<HTMLDivElement>(".loading")!.style.display = "none";
         console.log(window.location.href);

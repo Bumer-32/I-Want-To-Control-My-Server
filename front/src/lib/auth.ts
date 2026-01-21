@@ -1,5 +1,5 @@
 import Constants from "./constants";
-import {isDev} from "./pages/SettingsPage/devMode";
+import { isDev } from "./pages/SettingsPage/devMode";
 import ToastSystem from "./toastSystem";
 
 export async function checkAuth(): Promise<string | null> {
