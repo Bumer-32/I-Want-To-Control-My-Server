@@ -1,6 +1,7 @@
 package ua.pp.lumivoid.iwtcms.server
 
 import kotlinx.coroutines.runBlocking
+import org.jetbrains.annotations.TestOnly
 import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
 import org.jetbrains.exposed.v1.r2dbc.upsert
 import ua.pp.lumivoid.iwtcms.server.tables.MetaTable
@@ -60,5 +61,10 @@ object IWTCMS {
                 MetaTable.upsert { it[key] = "last_shutdown_at"; it[value] = Instant.fromEpochMilliseconds(System.currentTimeMillis()).toString() }
             }
         }
+    }
+
+    @TestOnly
+    internal fun testInit(handler: McHandler) {
+        instance = handler
     }
 }

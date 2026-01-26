@@ -1,0 +1,67 @@
+package ua.pp.lumivoid.iwtcms.server.api.requests.api.user
+
+import io.ktor.client.request.*
+import io.ktor.http.*
+import io.ktor.server.testing.*
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.runBlocking
+import kotlinx.serialization.json.Json
+import org.jetbrains.exposed.v1.core.eq
+import org.jetbrains.exposed.v1.r2dbc.deleteWhere
+import org.jetbrains.exposed.v1.r2dbc.selectAll
+import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
+import org.junit.jupiter.api.AfterAll
+import org.junit.jupiter.api.assertNotNull
+import org.junit.jupiter.api.extension.ExtendWith
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.Arguments
+import org.junit.jupiter.params.provider.MethodSource
+import ua.pp.lumivoid.iwtcms.server.*
+import ua.pp.lumivoid.iwtcms.server.tables.UsersTable
+import kotlin.test.assertEquals
+
+@ExtendWith(SetupTestEnv::class)
+class CreateUserTest: AuthBasedTest() {
+    override var url: String = CreateUser.path
+
+    @ParameterizedTest
+    @MethodSource("params")
+    internal fun `test CreateUser`(testPayload: CreateUser.CreateUserPayload, expectedStatus: HttpStatusCode) = testApplication {
+        verifyTestUserRole(true)
+
+        application { module() }
+
+        val response = client.post(url) {
+            cookie("USER_SESSION", Json.encodeToString(createTestSession()))
+            contentType(ContentType.Application.Json)
+            setBody(Json.encodeToString(testPayload))
+        }
+
+        assertEquals(expectedStatus, response.status)
+
+        if (response.status == HttpStatusCode.OK) {
+            suspendTransaction {
+                val user = UsersTable.selectAll().where { UsersTable.username eq testPayload.username }.firstOrNull()
+                assertNotNull(user)
+            }
+        }
+    }
+
+    companion object {
+        @JvmStatic
+        @AfterAll
+        internal fun `delete users for test`(): Unit = runBlocking {
+            suspendTransaction {
+                UsersTable.deleteWhere { UsersTable.username eq "test" }
+            }
+        }
+
+        @JvmStatic
+        fun params(): List<Arguments> = runBlocking {
+            return@runBlocking listOf(
+                Arguments.of(CreateUser.CreateUserPayload("admin", "", false, emptyList()), HttpStatusCode.Conflict),
+                Arguments.of(CreateUser.CreateUserPayload("test", "", false, emptyList()), HttpStatusCode.OK),
+            )
+        }
+    }
+}

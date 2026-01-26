@@ -24,14 +24,14 @@ internal object Pardon : Request() {
 
     override val request: Routing.() -> Unit = {
         post(path) {
-            val session = call.sessions.get<UserSession>()
-            val payload = call.receive<PardonData>()
-            val iwtcms = IWTCMS.instance
-
             doAuth(
                 call = call,
                 permission = PermissionsList.Permission.USERS_MANAGE.value,
                 success = {
+                    val session = call.sessions.get<UserSession>()
+                    val payload = call.receive<PardonPayload>()
+                    val iwtcms = IWTCMS.instance
+
                     if (payload.username == null) {
                         call.respond(HttpStatusCode.BadRequest, "Username is required")
                         return@doAuth
@@ -40,7 +40,7 @@ internal object Pardon : Request() {
                     val bannedPlayer = iwtcms.bans().find { it.player.name == payload.username }?.player
 
                     if (bannedPlayer == null) {
-                        call.respond(HttpStatusCode.NotFound, "Player not found")
+                        call.respond(HttpStatusCode.Conflict, "Player not banned")
                         return@doAuth
                     }
 
@@ -62,7 +62,7 @@ internal object Pardon : Request() {
     }
 
     @Serializable
-    private data class PardonData(
+    data class PardonPayload(
         val username: String? = null,
     )
 }

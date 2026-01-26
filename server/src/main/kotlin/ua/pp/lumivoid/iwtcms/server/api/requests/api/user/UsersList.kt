@@ -1,8 +1,7 @@
 package ua.pp.lumivoid.iwtcms.server.api.requests.api.user
 
-import io.ktor.server.response.respond
-import io.ktor.server.routing.Routing
-import io.ktor.server.routing.get
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
 import kotlinx.serialization.Serializable
@@ -11,8 +10,8 @@ import org.jetbrains.exposed.v1.core.ResultRow
 import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.r2dbc.selectAll
 import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
-import ua.pp.lumivoid.iwtcms.server.api.doAuth
 import ua.pp.lumivoid.iwtcms.server.api.Request
+import ua.pp.lumivoid.iwtcms.server.api.doAuth
 import ua.pp.lumivoid.iwtcms.server.tables.UserPermissionsTable
 import ua.pp.lumivoid.iwtcms.server.tables.UsersTable
 
@@ -27,7 +26,7 @@ internal object UsersList: Request() {
                 permission = PermissionsList.Permission.USERS_MANAGE.value,
                 success = {
                     val usersList = suspendTransaction {
-                        val usersList = mutableListOf<UsersListData>()
+                        val usersList = mutableListOf<UsersListPayload>()
 
                         UsersTable.selectAll().collect { user: ResultRow ->
                             val permissions = UserPermissionsTable.selectAll()
@@ -36,7 +35,7 @@ internal object UsersList: Request() {
                                 .toList()
 
                             usersList.add(
-                                UsersListData(
+                                UsersListPayload(
                                     id = user[UsersTable.id],
                                     username = user[UsersTable.username],
                                     admin = user[UsersTable.admin],
@@ -54,7 +53,7 @@ internal object UsersList: Request() {
     }
 
     @Serializable
-    private data class UsersListData(
+    data class UsersListPayload(
         val id: Int,
         val username: String,
         val admin: Boolean,

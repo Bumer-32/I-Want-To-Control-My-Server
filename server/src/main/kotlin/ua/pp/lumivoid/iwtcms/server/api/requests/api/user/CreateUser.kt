@@ -1,18 +1,17 @@
 package ua.pp.lumivoid.iwtcms.server.api.requests.api.user
 
-import io.ktor.http.HttpStatusCode
-import io.ktor.server.request.receive
-import io.ktor.server.response.respond
-import io.ktor.server.routing.Routing
-import io.ktor.server.routing.post
+import io.ktor.http.*
+import io.ktor.server.request.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
 import kotlinx.serialization.Serializable
 import org.apache.commons.codec.digest.DigestUtils
 import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.r2dbc.insert
 import org.jetbrains.exposed.v1.r2dbc.selectAll
 import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
-import ua.pp.lumivoid.iwtcms.server.api.doAuth
 import ua.pp.lumivoid.iwtcms.server.api.Request
+import ua.pp.lumivoid.iwtcms.server.api.doAuth
 import ua.pp.lumivoid.iwtcms.server.tables.UserPermissionsTable
 import ua.pp.lumivoid.iwtcms.server.tables.UsersTable
 
@@ -21,12 +20,11 @@ internal object CreateUser : Request() {
 
     override val request: Routing.() -> Unit = {
         post(path) {
-            val payload = call.receive<CreateUserPayload>()
-
             doAuth(
                 call = call,
                 permission = PermissionsList.Permission.USERS_MANAGE.value,
                 success = {
+                    val payload = call.receive<CreateUserPayload>()
                     if (create(
                             payload.username,
                             payload.password,
@@ -78,7 +76,7 @@ internal object CreateUser : Request() {
     }
 
     @Serializable
-    private data class CreateUserPayload(
+    data class CreateUserPayload(
         val username: String,
         val password: String,
         val admin: Boolean,

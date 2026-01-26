@@ -1,18 +1,17 @@
 package ua.pp.lumivoid.iwtcms.server.api.requests.api.user
 
-import io.ktor.http.HttpStatusCode
-import io.ktor.server.request.receive
-import io.ktor.server.response.respond
-import io.ktor.server.routing.Routing
-import io.ktor.server.routing.delete
+import io.ktor.http.*
+import io.ktor.server.request.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
 import kotlinx.coroutines.flow.singleOrNull
 import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.r2dbc.deleteWhere
 import org.jetbrains.exposed.v1.r2dbc.selectAll
 import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
-import ua.pp.lumivoid.iwtcms.server.api.doAuth
 import ua.pp.lumivoid.iwtcms.server.api.Request
+import ua.pp.lumivoid.iwtcms.server.api.doAuth
 import ua.pp.lumivoid.iwtcms.server.tables.UsersTable
 
 internal object DeleteUser : Request() {
@@ -20,12 +19,12 @@ internal object DeleteUser : Request() {
 
     override val request: Routing.() -> Unit = {
         delete(path) {
-            val payload = call.receive<DeleteUserPayload>()
-
             doAuth(
                 call = call,
                 permission = PermissionsList.Permission.USERS_MANAGE.value,
                 success = {
+                    val payload = call.receive<DeleteUserPayload>()
+
                     val success = suspendTransaction {
                         val user = UsersTable.selectAll()
                             .where { UsersTable.username eq payload.username }
@@ -45,7 +44,7 @@ internal object DeleteUser : Request() {
     }
 
     @Serializable
-    private data class DeleteUserPayload(
+    data class DeleteUserPayload(
         val username: String,
     )
 }

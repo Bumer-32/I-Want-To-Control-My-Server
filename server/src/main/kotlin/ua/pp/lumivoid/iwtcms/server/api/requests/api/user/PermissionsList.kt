@@ -1,11 +1,11 @@
 package ua.pp.lumivoid.iwtcms.server.api.requests.api.user
 
-import io.ktor.server.response.respond
-import io.ktor.server.routing.Routing
-import io.ktor.server.routing.get
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
 import kotlinx.serialization.json.Json
-import ua.pp.lumivoid.iwtcms.server.api.doAuth
+import org.jetbrains.annotations.TestOnly
 import ua.pp.lumivoid.iwtcms.server.api.Request
+import ua.pp.lumivoid.iwtcms.server.api.doAuth
 
 internal object PermissionsList: Request() {
     override val path = "/api/user/permissionsList"
@@ -32,6 +32,9 @@ internal object PermissionsList: Request() {
     fun createPermission(permission: String) {
         permissions.add(permission)
     }
+
+    @TestOnly
+    fun permissionsList(): List<String> = permissions
 
     enum class Permission(val value: String) {
         LOGS_READ("logs.read"),

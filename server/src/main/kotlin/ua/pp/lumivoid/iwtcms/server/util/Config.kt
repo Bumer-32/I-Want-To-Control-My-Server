@@ -14,16 +14,14 @@ internal object Config {
     private val defaultConfig = this.javaClass.getResource(Constants.CONFIG_FILE.replace(Constants.CONFIG_FOLDER, ""))!!
     private val configFile = File(Constants.CONFIG_FILE)
 
-    init {
+    fun readConfig(): ConfigData {
+        if (cachedConfig != null) return cachedConfig!!
+
         if (!File(Constants.CONFIG_FOLDER).exists()) File(Constants.CONFIG_FOLDER).mkdirs()
 
         if (!configFile.exists()) {
             configFile.writeText(defaultConfig.readText(), Charsets.UTF_8)
         }
-    }
-
-    fun readConfig(): ConfigData {
-        if (cachedConfig != null) return cachedConfig!!
 
         try {
             val config = ConfigFactory.parseFile(configFile)
@@ -36,6 +34,13 @@ internal object Config {
             ErrorMessages.BAD_CONFIG.launch(logger)
             exitProcess(1)
         }
+    }
+
+    /**
+     * For tests
+     */
+    fun setConfig(config: ConfigData) {
+        cachedConfig = config
     }
 
     private fun createConfigData(config: Config): ConfigData {

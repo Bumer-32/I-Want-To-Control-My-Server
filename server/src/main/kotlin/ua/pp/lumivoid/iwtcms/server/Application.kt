@@ -10,7 +10,7 @@ import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.plugins.cors.routing.*
 import io.ktor.server.plugins.httpsredirect.*
 import io.ktor.server.plugins.statuspages.*
-import io.ktor.server.request.path
+import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.sessions.*
 import io.ktor.server.websocket.*
@@ -25,7 +25,7 @@ import kotlin.time.Duration.Companion.seconds
 private val logger = Constants.LOGGER
 private val config = Config.readConfig()
 
-internal fun Application.module() {
+internal fun Application.module(test: Boolean = false) {
     install(WebSockets) {
         pingPeriod = 15.seconds
         timeout = 15.seconds
@@ -61,7 +61,7 @@ internal fun Application.module() {
         }
     }
 
-    if (config.useSSL && !Config.readConfig().devMode) {
+    if (config.useSSL && !config.devMode && !test) {
         install(HttpsRedirect) {
             sslPort = config.port
             permanentRedirect = true

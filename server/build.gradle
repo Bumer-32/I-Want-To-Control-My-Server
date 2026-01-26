@@ -40,7 +40,7 @@ dependencies {
 
     // * R2DBC drivers
 	implementation "io.r2dbc:r2dbc-h2:$h2_database_version"
-    implementation "com.oracle.database.r2dbc:oracle-r2dbc:${oracle_database_version}"
+    implementation "com.oracle.database.r2dbc:oracle-r2dbc:$oracle_database_version"
     implementation "org.mariadb:r2dbc-mariadb:$mariadb_database_version"
     implementation "io.r2dbc:r2dbc-mssql:$mssql_database_version"
     implementation "io.asyncer:r2dbc-mysql:$mysql_database_version"
@@ -55,7 +55,6 @@ dependencies {
 	compileOnly "me.lucko:spark-api:$spark_api_version"
 	compileOnly "org.apache.logging.log4j:log4j-api:$log4j_version"
 	compileOnly "org.apache.logging.log4j:log4j-core:$log4j_version"
-	compileOnly "com.google.guava:guava:$guava_version"
 
 	// * Testing
 	testImplementation "io.ktor:ktor-server-test-host:$ktor_version"

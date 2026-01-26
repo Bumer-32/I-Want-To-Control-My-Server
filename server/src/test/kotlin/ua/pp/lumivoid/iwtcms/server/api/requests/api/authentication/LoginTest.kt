@@ -1,6 +1,7 @@
 package ua.pp.lumivoid.iwtcms.server.api.requests.api.authentication
 
 import io.ktor.client.request.*
+import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.server.testing.*
 import kotlinx.coroutines.runBlocking
@@ -10,34 +11,31 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import ua.pp.lumivoid.iwtcms.server.SetupTestEnv
-import ua.pp.lumivoid.iwtcms.server.cookie.UserSession
-import ua.pp.lumivoid.iwtcms.server.createTestSession
 import ua.pp.lumivoid.iwtcms.server.module
 import kotlin.test.assertEquals
 
 @ExtendWith(SetupTestEnv::class)
-class CheckLoginTest {
+class LoginTest {
     @ParameterizedTest
     @MethodSource("params")
-    internal fun `test checkLogin`(testSession: UserSession?, expectedStatus: HttpStatusCode) = testApplication {
+    internal fun `test Login`(testPayload: Login.LoginPayload, expectedStatus: HttpStatusCode, expectedMessage: String) = testApplication {
         application { module() }
 
-        val cookie = Json.encodeToString(testSession)
-
-        val response = client.get(CheckLogin.path) {
-            if (testSession != null) cookie("USER_SESSION", cookie)
+        val response = client.post(Login.path) {
+            contentType(ContentType.Application.Json)
+            setBody(Json.encodeToString(testPayload))
         }
 
         assertEquals(expectedStatus, response.status)
+        assertEquals(expectedMessage, response.bodyAsText())
     }
 
     companion object {
         @JvmStatic
         fun params(): List<Arguments> = runBlocking {
             return@runBlocking listOf(
-                Arguments.of(createTestSession(), HttpStatusCode.OK),
-                Arguments.of(UserSession("test", "test"), HttpStatusCode.Unauthorized),
-                Arguments.of(null, HttpStatusCode.Unauthorized),
+                Arguments.of(Login.LoginPayload("admin", "iwtcms"), HttpStatusCode.OK, "Login successful"),
+                Arguments.of(Login.LoginPayload("test", "test"), HttpStatusCode.Unauthorized, "Login failed"),
             )
         }
     }

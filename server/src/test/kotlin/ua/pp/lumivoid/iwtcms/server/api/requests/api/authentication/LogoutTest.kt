@@ -1,9 +1,9 @@
 package ua.pp.lumivoid.iwtcms.server.api.requests.api.authentication
 
 import io.ktor.client.request.*
+import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.server.testing.*
-import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.params.ParameterizedTest
@@ -16,28 +16,28 @@ import ua.pp.lumivoid.iwtcms.server.module
 import kotlin.test.assertEquals
 
 @ExtendWith(SetupTestEnv::class)
-class CheckLoginTest {
+class LogoutTest {
     @ParameterizedTest
     @MethodSource("params")
-    internal fun `test checkLogin`(testSession: UserSession?, expectedStatus: HttpStatusCode) = testApplication {
+    internal fun `test Logout`(testSession: UserSession?, expectedStatus: HttpStatusCode, expectedMessage: String) = testApplication {
         application { module() }
 
         val cookie = Json.encodeToString(testSession)
 
-        val response = client.get(CheckLogin.path) {
+        val response = client.post(Logout.path) {
             if (testSession != null) cookie("USER_SESSION", cookie)
         }
 
         assertEquals(expectedStatus, response.status)
+        assertEquals(expectedMessage, response.bodyAsText())
     }
 
     companion object {
         @JvmStatic
-        fun params(): List<Arguments> = runBlocking {
-            return@runBlocking listOf(
-                Arguments.of(createTestSession(), HttpStatusCode.OK),
-                Arguments.of(UserSession("test", "test"), HttpStatusCode.Unauthorized),
-                Arguments.of(null, HttpStatusCode.Unauthorized),
+        fun params(): List<Arguments> {
+            return listOf(
+                Arguments.of(createTestSession(), HttpStatusCode.OK, "Logged out"),
+                Arguments.of(null, HttpStatusCode.OK, "Not logged in"),
             )
         }
     }

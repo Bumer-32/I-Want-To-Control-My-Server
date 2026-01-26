@@ -30,14 +30,14 @@ internal object Ban : Request() {
     @OptIn(ExperimentalTime::class)
     override val request: Routing.() -> Unit = {
         post(path) {
-            val session = call.sessions.get<UserSession>()
-            val payload = call.receive<BanData>()
-            val iwtcms = IWTCMS.instance
-
             doAuth(
                 call = call,
                 permission = PermissionsList.Permission.USERS_MANAGE.value,
                 success = {
+                    val session = call.sessions.get<UserSession>()
+                    val payload = call.receive<BanPayload>()
+                    val iwtcms = IWTCMS.instance
+
                     if (payload.username == null && payload.uuid == null) {
                         call.respond(HttpStatusCode.BadRequest, "Username or UUID is required")
                         return@doAuth
@@ -81,7 +81,7 @@ internal object Ban : Request() {
     }
 
     @Serializable
-    private data class BanData @OptIn(ExperimentalTime::class) constructor(
+    data class BanPayload @OptIn(ExperimentalTime::class) constructor(
         val username: String? = null,
         val uuid: String? = null,
         val expireDate: Instant? = null,

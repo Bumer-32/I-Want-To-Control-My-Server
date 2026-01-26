@@ -1,6 +1,5 @@
 package ua.pp.lumivoid.iwtcms.server.api.requests.api.player
 
-import com.google.common.net.InetAddresses
 import io.ktor.http.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
@@ -24,22 +23,23 @@ import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
 import kotlin.time.toJavaInstant
 
+@Suppress("DuplicatedCode")
 internal object BanIp : Request() {
     override val path = "/api/player/banIp"
 
     @OptIn(ExperimentalTime::class)
     override val request: Routing.() -> Unit = {
         post(path) {
-            val session = call.sessions.get<UserSession>()
-            val payload = call.receive<BanIpData>()
-            val iwtcms = IWTCMS.instance
-
             doAuth(
                 call = call,
                 permission = PermissionsList.Permission.USERS_MANAGE.value,
                 success = {
-                    val ip = if (InetAddresses.isInetAddress(payload.ip.toString())) {
-                        payload.ip!!
+                    val session = call.sessions.get<UserSession>()
+                    val payload = call.receive<BanIpPayload>()
+                    val iwtcms = IWTCMS.instance
+
+                    val ip = if (payload.ip != null) {
+                        payload.ip
                     } else {
                         if (payload.username == null && payload.uuid == null) {
                             call.respond(HttpStatusCode.BadRequest, "No any targets found, please specify username, uuid or ip")
@@ -90,7 +90,7 @@ internal object BanIp : Request() {
     }
 
     @Serializable
-    private data class BanIpData @OptIn(ExperimentalTime::class) constructor(
+    data class BanIpPayload @OptIn(ExperimentalTime::class) constructor(
         val username: String? = null,
         val uuid: String? = null,
         val ip: String? = null,

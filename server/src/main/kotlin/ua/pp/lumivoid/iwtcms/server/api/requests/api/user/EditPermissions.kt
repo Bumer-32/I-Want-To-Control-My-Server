@@ -1,19 +1,18 @@
 package ua.pp.lumivoid.iwtcms.server.api.requests.api.user
 
-import io.ktor.http.HttpStatusCode
-import io.ktor.server.request.receive
-import io.ktor.server.response.respond
-import io.ktor.server.routing.Routing
-import io.ktor.server.routing.put
-import kotlinx.coroutines.flow.single
+import io.ktor.http.*
+import io.ktor.server.request.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
+import kotlinx.coroutines.flow.singleOrNull
 import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.r2dbc.deleteWhere
 import org.jetbrains.exposed.v1.r2dbc.insert
 import org.jetbrains.exposed.v1.r2dbc.selectAll
 import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
-import ua.pp.lumivoid.iwtcms.server.api.doAuth
 import ua.pp.lumivoid.iwtcms.server.api.Request
+import ua.pp.lumivoid.iwtcms.server.api.doAuth
 import ua.pp.lumivoid.iwtcms.server.tables.UserPermissionsTable
 import ua.pp.lumivoid.iwtcms.server.tables.UsersTable
 
@@ -22,17 +21,22 @@ internal object EditPermissions : Request() {
 
     override val request: Routing.() -> Unit = {
         put(path) {
-            val payload = call.receive<EditPermissionPayload>()
-
             doAuth(
                 call = call,
                 permission = PermissionsList.Permission.USERS_MANAGE.value,
                 success = {
+                    val payload = call.receive<EditPermissionsPayload>()
+
                     suspendTransaction {
                         val user = UsersTable.selectAll()
-                            .where { UsersTable.username eq payload.username }.single()
+                            .where { UsersTable.username eq payload.username }.singleOrNull()
 
-                        UserPermissionsTable.deleteWhere { userId eq user[UsersTable.id] }
+                        if (user == null) {
+                            call.respond(HttpStatusCode.NotFound, "User not found")
+                            return@suspendTransaction
+                        }
+
+                        UserPermissionsTable.deleteWhere { UserPermissionsTable.userId eq user[UsersTable.id] }
 
                         payload.permissions.forEach { permission ->
                             UserPermissionsTable.insert {
@@ -40,16 +44,16 @@ internal object EditPermissions : Request() {
                                 it[UserPermissionsTable.permissionName] = permission
                             }
                         }
-                    }
 
-                    call.respond(HttpStatusCode.OK, "User permissions updated")
+                        call.respond(HttpStatusCode.OK, "User permissions updated")
+                    }
                 }
             )
         }
     }
 
     @Serializable
-    private data class EditPermissionPayload(
+    data class EditPermissionsPayload(
         val username: String,
         val permissions: List<String>,
     )

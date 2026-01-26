@@ -24,14 +24,14 @@ internal object Kick : Request() {
 
     override val request: Routing.() -> Unit = {
         post(path) {
-            val session = call.sessions.get<UserSession>()
-            val payload = call.receive<KickData>()
-            val iwtcms = IWTCMS.instance
-
             doAuth(
                 call = call,
                 permission = PermissionsList.Permission.USERS_MANAGE.value,
                 success = {
+                    val session = call.sessions.get<UserSession>()
+                    val payload = call.receive<KickPayload>()
+                    val iwtcms = IWTCMS.instance
+
                     if (payload.username == null && payload.uuid == null) {
                         call.respond(HttpStatusCode.BadRequest, "Username or UUID is required")
                         return@doAuth
@@ -62,7 +62,7 @@ internal object Kick : Request() {
     }
 
     @Serializable
-    private data class KickData(
+    data class KickPayload(
         val username: String? = null,
         val uuid: String? = null,
         val reason: String? = null,

@@ -39,7 +39,7 @@ internal object BanIpList : Request() {
     }
 
     @Serializable
-    private data class BanIp @OptIn(ExperimentalTime::class) constructor(
+    data class BanIp @OptIn(ExperimentalTime::class) constructor(
         val target: String,
         val reason: String?,
         val expireDate: Instant?,

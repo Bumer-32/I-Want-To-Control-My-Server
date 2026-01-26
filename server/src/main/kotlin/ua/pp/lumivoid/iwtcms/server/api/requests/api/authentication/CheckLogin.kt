@@ -25,8 +25,6 @@ internal object CheckLogin : Request() {
                 return@get
             }
 
-            println(session)
-
             suspendTransaction {
                 try {
                     UsersTable
