@@ -53,8 +53,10 @@ dependencies {
 	implementation "com.charleskorn.kaml:kaml:$kaml_version"
 
 	compileOnly "me.lucko:spark-api:$spark_api_version"
+
 	compileOnly "org.apache.logging.log4j:log4j-api:$log4j_version"
 	compileOnly "org.apache.logging.log4j:log4j-core:$log4j_version"
+	compileOnly "org.slf4j:slf4j-api:$slf4j_version"
 
 	// * Testing
 	testImplementation "io.ktor:ktor-server-test-host:$ktor_version"
