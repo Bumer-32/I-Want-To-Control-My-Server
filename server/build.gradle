@@ -4,10 +4,6 @@ plugins {
 	id "org.jetbrains.kotlin.plugin.serialization"
 }
 
-base {
-	archivesName = "iwtcms-server"
-}
-
 repositories {
 	maven {
 		name "luck-repo"
@@ -47,10 +43,11 @@ dependencies {
     implementation "org.postgresql:r2dbc-postgresql:$postgresql_database_version"
     // * R2DBC drivers
 
-	implementation "org.jetbrains.kotlinx:kotlinx-datetime:$kotlinx_datetime_version"
     implementation "com.typesafe:config:$hocon_config_version"
-	implementation "commons-codec:commons-codec:$commons_codec"
 	implementation "com.charleskorn.kaml:kaml:$kaml_version"
+
+	compileOnly "org.jetbrains.kotlinx:kotlinx-datetime:$kotlinx_datetime_version"
+	compileOnly "commons-codec:commons-codec:$commons_codec"
 
 	compileOnly "me.lucko:spark-api:$spark_api_version"
 
@@ -74,6 +71,10 @@ processResources {
 	def f = file("${projectDir}/build/resources/main/iwtcms.version")
 	f.parentFile.mkdirs()
 	f.text = version
+}
+
+jar {
+	from("${rootProject.projectDir}/LICENSE")
 }
 
 test {

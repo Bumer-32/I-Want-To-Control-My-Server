@@ -1,11 +1,12 @@
-import org.apache.tools.ant.taskdefs.condition.Os
-import groovy.json.JsonSlurper
 import groovy.json.JsonOutput
+import groovy.json.JsonSlurper
+import org.apache.tools.ant.taskdefs.condition.Os
 
 tasks.register("build", Exec) {
     group "build"
     dependsOn tasks.syncVersions
     dependsOn tasks.npmInstall
+    finalizedBy tasks.defaultVersion
 
     workingDir projectDir
 
@@ -47,5 +48,13 @@ tasks.register("syncVersions") {
     json.version = version
     file.text = JsonOutput.prettyPrint(JsonOutput.toJson(json))
     println "package.json version -> ${json.version}"
+}
+
+tasks.register("defaultVersion") {// just to not commit new version to package.json every commit
+    def file = file("package.json")
+    def json = new JsonSlurper().parseText(file.text)
+    json.version = "{version}"
+    file.text = JsonOutput.prettyPrint(JsonOutput.toJson(json))
+    println "package.json version -> {version}"
 }
 

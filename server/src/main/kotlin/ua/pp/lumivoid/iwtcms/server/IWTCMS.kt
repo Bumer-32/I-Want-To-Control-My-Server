@@ -10,6 +10,9 @@ import ua.pp.lumivoid.iwtcms.server.util.McHandler
 import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
 
+/**
+ * Entry point for you if you want to run iwtcms
+ */
 object IWTCMS {
     private val logger = Constants.LOGGER
 

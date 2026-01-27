@@ -6,7 +6,7 @@ plugins {
 }
 
 base {
-	archivesName = "iwtcms-${minecraft_version}-fabric"
+	version = "$rootProject.version+mc$minecraft_version"
 }
 
 configurations {
@@ -24,7 +24,8 @@ repositories {
 }
 
 dependencies {
-	implementation shadow(project(":server"))
+	implementation project(":server")
+	shadow project(":server")
 
     // * Fabric
 	minecraft "com.mojang:minecraft:$minecraft_version"
@@ -46,6 +47,12 @@ processResources {
 shadowJar {
 	minimize()
 	configurations = [project.configurations.shadow]
+
+	dependencies {
+		exclude(dependency("io.netty:.*"))
+		exclude(dependency("org.jetbrains.kotlin:.*"))
+		exclude(dependency("org.jetbrains.kotlinx:.*"))
+	}
 }
 
 loom {

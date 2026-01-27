@@ -1,10 +1,5 @@
-# Automatically build the project and run any configured tests for every push
-# and submitted pull request. This can help catch issues that only occur on
-# certain platforms or Java versions, and provides a first line of defence
-# against bad commits.
-
 name: build
-on: [pull_request, push]
+on: [pull_request, push, workflow_dispatch]
 
 jobs:
     build:
@@ -26,18 +21,35 @@ jobs:
                   java-version: ${{ matrix.java }}
                   distribution: "microsoft"
 
-            - name: setup node
-              uses: actions/setup-node@v6
-
             - name: make gradle wrapper executable
               run: chmod +x ./gradlew
+
+            - name: setup node
+              uses: actions/setup-node@v6
 
             - name: build
               run: ./gradlew build
 
             - name: capture build artifacts
               if: ${{ runner.os == 'Linux' && matrix.java == '21' }} # Only upload artifacts built from the latest java
-              uses: actions/upload-artifact@v4
+              uses: actions/upload-artifact@v6
               with:
                   name: Artifacts
-                  path: fabric/build/libs/
+                  path: |
+                    fabric/build/libs/
+                    server/build/libs/
+
+            - name: capture tests reports
+              if: ${{ always() && runner.os == 'Linux' && matrix.java == '21' }} # Only upload artifacts built from the latest java
+              uses: actions/upload-artifact@v6
+              with:
+                  name: Test reports
+                  path: |
+                    server/build/test-results/
+                    server/build/reports/
+
+            - name: github actions junit report
+              uses: mikepenz/action-junit-report@v5
+              if: always()
+              with:
+                report_paths: 'server/build/test-results/TEST-*.xml'
