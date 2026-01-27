@@ -2,12 +2,12 @@
 
 name: publish
 
-on:
-    push:
-        branches:
-            - main
-        tags-ignore:
-            - skip-ci
+on: [workflow_dispatch]
+#    push:
+#        branches:
+#            - main
+#        tags-ignore:
+#            - skip-ci
 
 jobs:
     publish:

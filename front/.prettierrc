@@ -6,6 +6,5 @@
     "singleQuote": false,
     "bracketSpacing": true,
     "bracketSameLine": false,
-    "printWidth": 200,
-    "endOfLine": "crlf"
+    "printWidth": 200
 }
