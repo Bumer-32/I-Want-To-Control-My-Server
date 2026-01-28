@@ -1,6 +1,10 @@
 name: build
 on: [pull_request, push, workflow_dispatch]
 
+permissions:
+  checks: write
+  pull-requests: write
+
 jobs:
     build:
         strategy:
@@ -53,3 +57,4 @@ jobs:
               if: always()
               with:
                 report_paths: 'server/build/test-results/TEST-*.xml'
+                comment: true
