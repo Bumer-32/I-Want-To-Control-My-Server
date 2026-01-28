@@ -35,3 +35,6 @@ jobs:
 
             - name: building and publishing
               run: ./gradlew publish
+              env:
+                MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
+                MAVEN_SECRET: ${{ secrets.MAVEN_SECRET }}
