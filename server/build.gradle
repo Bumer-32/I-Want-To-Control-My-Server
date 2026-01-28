@@ -68,9 +68,11 @@ processResources {
 	dependsOn(":front:build")
 	dependsOn(":static:build")
 
-	def f = file("${projectDir}/build/resources/main/iwtcms.version")
-	f.parentFile.mkdirs()
-	f.text = version
+	doFirst {
+		def f = file("${projectDir}/build/resources/main/iwtcms.version")
+		f.parentFile.mkdirs()
+		f.text = version
+	}
 }
 
 jar {
