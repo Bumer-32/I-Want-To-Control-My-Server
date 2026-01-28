@@ -56,5 +56,5 @@ jobs:
               uses: mikepenz/action-junit-report@v5
               if: always()
               with:
-                report_paths: 'server/build/test-results/TEST-*.xml'
+                report_paths: 'server/build/test-results/test/TEST-*.xml'
                 comment: true
