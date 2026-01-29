@@ -27,6 +27,7 @@
     "dependencies": {
         "@tailwindcss/vite": "^4.1.5",
         "hocon-web": "^0.0.9",
+        "picomatch": "^4.0.3",
         "tailwindcss": "^4.1.5",
         "yaml": "^2.7.1"
     }
