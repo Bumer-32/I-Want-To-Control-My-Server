@@ -9,17 +9,22 @@ tasks.register("build", Exec) {
     finalizedBy tasks.defaultVersion
 
     workingDir projectDir
+    inputs.dir "$projectDir/src"
+    outputs.dir "$projectDir/build"
 
     String npm = "npm"
     if (Os.isFamily(Os.FAMILY_WINDOWS)) {
         npm = "npm.cmd"
     }
 
-    commandLine npm, "run", "build", "--", "--emptyOutDir"
+    commandLine npm, "run", "build"
 }
 
 tasks.register("npmInstall", Exec) {
     workingDir projectDir
+    inputs.dir "$projectDir/src"
+    inputs.file "$projectDir/package.json"
+    inputs.file "$projectDir/vite.config.ts"
 
     String npm = "npm"
     if (Os.isFamily(Os.FAMILY_WINDOWS)) {

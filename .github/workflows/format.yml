@@ -38,7 +38,7 @@ jobs:
             - name: install dependencies
               run: |
                 cd front
-                npm install
+                npm ci
 
             - name: format
               run: |

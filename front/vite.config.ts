@@ -1,6 +1,6 @@
-import { defineConfig } from "vite";
-import { svelte } from "@sveltejs/vite-plugin-svelte";
-import { sveltePreprocess } from "svelte-preprocess";
+import {defineConfig} from "vite";
+import {svelte} from "@sveltejs/vite-plugin-svelte";
+import {sveltePreprocess} from "svelte-preprocess";
 import tailwindcss from "@tailwindcss/vite";
 
 // https://vite.dev/config/
@@ -14,7 +14,8 @@ export default defineConfig({
     ],
     root: "src",
     build: {
-        outDir: "../../server/build/resources/main/web",
+        outDir: "../build",
+        emptyOutDir: true,
         sourcemap: true,
     },
     server: {

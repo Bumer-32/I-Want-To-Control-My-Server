@@ -63,13 +63,31 @@ dependencies {
 	testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junit_version"
 }
 
+sourceSets {
+	main {
+		resources.srcDir "$buildDir/generated/resources/main"
+	}
+}
+
 processResources {
 	dependsOn(":cli:build")
 	dependsOn(":front:build")
 	dependsOn(":static:build")
 
+	from(project(":cli").file("src")) {
+		into "files"
+	}
+
+	from(project(":front").file("build")) {
+		into "web"
+	}
+
+	from(project(":static").file("src")) {
+		into "static"
+	}
+
 	doFirst {
-		def f = file("${projectDir}/build/resources/main/iwtcms.version")
+		def f = file("$projectDir/build/generated/resources/main/iwtcms.version")
 		f.parentFile.mkdirs()
 		f.text = version
 	}
