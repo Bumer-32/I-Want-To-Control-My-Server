@@ -1,295 +1,195 @@
-# I-Want-To-Control-My-Server
+<div style="display: flex; align-items: center;">
+    <img style="height: 80px" src="https://github.com/Bumer-32/I-Want-To-Control-My-Server/blob/dev/fabric/src/main/resources/assets/iwtcms/icon.png?raw=true" alt="Main Page">
+    <span style="font-size: 60px; margin-left: 35px; font-weight: bold">I-Want-To-Control-My-Server</span>
+</div>
 
-### or just IWTCMS
+### a.k.a **IWTCMS**
 
-Simple minecraft mod, which allows you to connect to your server and control it
 
-### miniDocumentation structure:
-
-[About Clients](#clients-)
-
-[About SSL](#SSL)
-
-[About Users](#Users)
-
-[About Api](#Api)
+A Minecraft server mod that provides a **web-based admin panel** and a **powerful API** to control your server.
 
 ---
 
-## Clients
+## About
 
-[Go to top](#minidocumentation-structure)
-
-&nbsp;
-
-### [Official IWTCMS CLI client](https://github.com/Bumer-32/I-Want-To-Control-My-Server/blob/main/src/main/python/iwtcms_client.py)
-
-To launch an official client, type: `python iwtcms_client.py --help`
-
-### [Unofficial IWTCMS GUI client by AXCWG](https://github.com/AXCWG/IWTCMS-Client)
-
-&nbsp;
+**I want to control my server** - is a Minecraft server mod (Fabric supported) that exposes server functionality through a web interface and API.
+It allows you to manage your server remotely or build custom clients on top of IWTCMS (or integrate your own tools in future as plugins).
 
 <details>
-    <summary>You also can download an official client if you go to the main page of server in the browser</summary>
-    <img src="https://github.com/Bumer-32/I-Want-To-Control-My-Server/blob/main/doc/main page showcase.png?raw=true" alt="Main Page">
+    <summary>Here some features that IWTCMS provides as api</summary>
+    <ul>
+        - Console access - you can read logs, and execute commands</li>
+        - Users - IWTCMS uses user model with permissions, so you can create multiple users with different permissions</li>
+        - Players management - you can kick, kill, ban, see coords of players</li>
+        - Configs management - you can change configs of server using iwtcms api</li>
+        - And more...</li>
+    </ul>
 </details>
 
 ---
 
-## SSL
+## Download
 
-[Go to top](#minidocumentation-structure)
 
-&nbsp;
+- **Modrinth**  
+  https://modrinth.com/mod/i-want-to-control-my-server
 
-I will not tell you how to generate a certificate here, I will only tell you how to use it with IWTCMS. let's be brief
+- **Official Maven repository (releases)**  
+  https://maven.lumivoid.pp.ua/#/releases/ua/pp/lumivoid/iwtcms/iwtcms-fabric
 
-In the config file, we have ssl section:
+- **Unstable builds**  
+  https://maven.lumivoid.pp.ua/#/unstable/ua/pp/lumivoid/iwtcms/iwtcms-fabric
 
-```hocon
-// Other settings
-
-# read more about setting ssl here: https://modrinth.com/mod/i-want-to-control-my-server
-ssl {
-  # use SSL: enabling SSL for embedded server, clients must connect with SSL or they can't send/receive any data. By default it's disabled(false) BUT highly recommended to enable(true) it and setup SSL connection.
-  use SSL = false // boolean
-  # custom Sertificate: if enabled IWTCMS won't generating new sertificate, instead it reads sertificates from config/iwtcms/keystore.jks
-  custom Sertificate = false // boolean
-  # Actually idk what do this shit, but alias must be entered here. Usually you use it for custom generated certificates. By default it's "iwtcms". You can read more here: https://security.stackexchange.com/questions/123944/what-is-the-purpose-role-of-the-alias-attribute-in-java-keystore-files
-  ssl Alias = "iwtcms" // string
-  # sslPass: password for certificates, certs will be automaticly generated with this password or if you use any other certificates it will use pass to read it.
-  ssl Pass = "keystorePassword" // string
-}
-
-// Other settings
-```
-
-In fact, everything is already written here in the comments, but I want to add:
-
-`use SSL` - I always recommend enabling it even if you don't have generated certificate, if `custom Sertificate` disabled IWTCMS will generate new certificate every launch and SSL should work fine.
-
-Btw if `use SSL` enabled non ssl connections disabled at all, you cant connect to it.
-Use https:// instead of http:// and wss:// instead of ws://
-
-&nbsp;
-
-`custom Sertificate` - Just disables auto generation of certificates and instead in reads certificate from config/iwtcms/keystore.jks
-
-&nbsp;
-
-`ssl Alias` and `ssl Pass` must match with alias and password in generated certificates
+> ⚠️ **Unstable builds are UNSTABLE** ⚠️
+> Please be careful with unstable builds, they can contain bugs and may not work properly or can contain breaking changes that will break your old configs  
+> Unstable builds have different versioning than releases, releases follows format `major.minor.patch`, while unstable builds follows `year.day_of_year`  
+> eg. release: 2.0, unstable: 26.30
 
 ---
 
-## Users
+## Configuration
 
-[Go to top](#minidocumentation-structure)
+> IWTCMS uses [hocon](https://github.com/lightbend/config/blob/master/HOCON.md) format for configs  
+> all configs are located in `YOUR_SERVER_FOLDER/iwtcms/iwtcms.hocon`  
+> it will be generated automatically if it doesn't exist (eg on first start or after deleting it)
+> also you can take it from [here](https://github.com/Bumer-32/I-Want-To-Control-My-Server/blob/dev/server/src/main/resources/iwtcms.conf)  
+> almost all props are self-explanatory and commented
+> 
+> There's also some files in iwtcms folder that you probably don't need to touch:
+> - `db.mv.db` - h2 database file, delete it if you forgot password for iwtcms
+> - `iwtcms.keystore.jks` - keystore for SSL
+>
+> Also you can find __BACKUP__ files in iwtcms folder, they are creates when you changing server configs through iwtcms api
 
-&nbsp;
-
-IWTCMS supports user profiles, very simple but useful
-
-```hocon
-// Other settings
-
-auth {
-  # useAuthentication: enabling password for clients, client can't receive/send messages from/to server before login. By default it's disabled(false) BUT highly recommended to enable(true) it password.
-  use Authentication = false // boolean
-
-  # needs ONLY IF useAuthentication enabled
-  # here you can configure users
-  # you can add custom users or remove existing
-  users : [ // list
-    {
-      # anonymous
-      name : anonymous // string # do not change if you wanna keep permits for anonymous
-      # password : anonymous # doesn't matter
-      permits : {
-        read real time logs : false // boolean
-        read logs history : false // boolean
-        execute commands : false // boolean
-      }
-    }
-    {
-      # admin
-      name : admin // string
-      password : iwtcms // string
-      permits : {
-        read real time logs : true // boolean
-        read logs history : true // boolean
-        execute commands : true // boolean
-      }
-    }
-    {
-      # guest
-      name : guest // string
-      password : guest // string
-      permits : {
-        read real time logs : true // boolean
-        read logs history : false // boolean
-        execute commands : false // boolean
-      }
-    }
-  ]
-}
-
-// Other settings
-```
-
-The auth block in the config is responsible for all authentications
-
-`use Authentication` - enables auth, if it disabled anyone can connect, listen, send commands, and any other shit with server with IWTCMS can do.
-
-&nbsp;
-
-`users` - list of all users, there's no limits for users count
-
-Every user has their own permits, False forbids action for user, True allows action.
-
-If any permit is not defined, IWTCMS will use it analog from anonymous user.
-
-If an anonymous user or anonymous permit doesn't exist, then follow this pattern: not defined? - forbidden
-
-If a user does requests without cookies (without logining in), it uses permits from anonymous.
-
-Anonymous didn't need password if his password exists, IWTCMS will ignore this password.
+>  ## SSL
+> 
+> 
+> I will not tell you how to generate a certificate here, I will only tell you how to use it with IWTCMS. let's be brief
+> 
+> In the config file, we have ssl section:
+> 
+> ```hocon
+>   // Other settings
+>   
+>   # read more about setting ssl here: https://modrinth.com/mod/i-want-to-control-my-server
+>   ssl {
+>       # use SSL: enabling SSL for embedded server, clients must connect with SSL or they can't send/receive any data. By default it's disabled(false) BUT highly recommended to enable(true) it and setup SSL connection.
+>       use SSL = false // boolean
+>       # custom Sertificate: if enabled IWTCMS won't generating new sertificate, instead it reads sertificates from config/iwtcms/keystore.jks
+>       custom Sertificate = false // boolean
+>       # Actually idk what do this shit, but alias must be entered here. Usually you use it for custom generated certificates. By default it's "iwtcms". You can read more here: https://security.stackexchange.com/questions/123944/what-is-the-purpose-role-of-the-alias-attribute-in-java-keystore-files
+>       ssl Alias = "iwtcms" // string
+>       # sslPass: password for certificates, certs will be automaticly generated with this password or if you use any other certificates it will use pass to read it.
+>       ssl Pass = "keystorePassword" // string
+>   }
+>   
+>   // Other settings
+> ```
+> 
+> In fact, everything is already written here in the comments, but I want to add:
+> 
+> `use SSL` - I always recommend enabling it even if you don't have generated certificate, if `custom Sertificate` disabled IWTCMS will generate new certificate every launch and SSL should work fine.
+> 
+> Btw if `use SSL` enabled non ssl connections disabled at all, you cant connect to it.
+> Use https:// instead of http:// and wss:// instead of ws://
+> 
+> `custom Sertificate` - Just disables auto generation of certificates and instead in reads certificate from config/iwtcms/keystore.jks
+> 
+> `ssl Alias` and `ssl Pass` must match with alias and password in generated certificates
 
 ---
 
-## Api
+## Clients
+> Coming soon
+---
 
-[Go to top](#minidocumentation-structure)
+## Future plans
+> Coming soon
+---
 
-&nbsp;
+## For developers
 
-Anchors for api:
-
-### Fan fact: IWTCMS follows REST API, cool yup?
-
-[https://127.0.0.1/apiList | ApiListGET](#if-you-want-to-see-all-avail-pages-for-requests-and-websockets-also-go-to)
-
-[https://127.0.0.1/api/logsHistory | LogsHistoryGET](#if-you-want-to-see-the-history-of-all-logs-since-server-launch-go-to)
-
-[https://127.0.0.1/api/login | LoginPOST](#if-you-want-to-log-in-go-to)
-
-[https://127.0.0.1/api/permits/{username} | PermitsGET](#if-you-want-to-see-all-permits-of-user-go-to)
-
-[wss://127.0.0.1/ws/console | WsConsole](#if-you-want-to-reach-the-server-console-go-to)
-
-[Static files](#static-files)
-
-This part of documentation written for developers who want to write their OWN client
-
-Btw if written cool client you can [open issue](https://github.com/Bumer-32/I-Want-To-Control-My-Server/issues) for promoting,
-if your client works well, your client can be added to [About Clients](#clients-) as client or example code
-
-Btw 2
-if you need example
-of client look to [About Clients](#clients-) and [Official IWTCMS CLI client
-(written on python)](https://github.com/Bumer-32/I-Want-To-Control-My-Server/blob/main/python/iwtcms_client.py)
-
-Btw 3  
-Here's postman workspace for iwtcms: https://www.postman.com/bumer-32/iwtcms-api/
-
-### Fucking API (I'm already tired of writing this documentation, but I still need to write a whole chapter about Api)
-
-<img src="https://media1.tenor.com/m/pFz1Q12_hXEAAAAd/cat-holding-head-cat.gif">
-
-Here as examples, I will use enabled SSL and localhost with port 25566 (127.0.0.1:25566),
-replace 127.0.0.1 with your ip, 25566 with your port and use appropriate prefixes for the appropriate protocols
-(see [About SSL](#SSL))
-
-Let's start:
-
-> ### If you want to see all avail pages for requests (and websockets also), go to:
+> ## Maven
+> IWTCMS is available on maven repository  
+> releases: https://maven.lumivoid.pp.ua/#/releases/ua/pp/lumivoid/iwtcms  
+> unstable: https://maven.lumivoid.pp.ua/#/unstable/ua/pp/lumivoid/iwtcms  
+> 
+> ## To use it in your project add this to your `build.gradle`  
+> 
+> ### For releases:
+> ```groovy
+>    maven {
+>        name "lumivoidReleases"
+>        url "https://maven.lumivoid.pp.ua/releases"
+>    }
 >
-> `https://127.0.0.1/apiList`
+> ```
+> 
+> ### For unstable: 
+> ```groovy
+>    maven {
+>        name "lumivoidUnstable"
+>        url "https://maven.lumivoid.pp.ua/unstable"
+>    }
 >
-> I'd recommend finding links in your clients here, names of pages unlikely to be changed,
-> but urls can be changed (sorry but IWTCMS still WIP)
->
-> | page name  | type | response type | uses auth api (needs cookies)? | needs body |
-> | :--------: | :--: | :-----------: | :----------------------------: | :--------: |
-> | ApiListGET | GET  |     JSON      |               No               |     No     |
+> ```
+> 
+> ### After add this dependency to your project as any other:
+> ```groovy
+>   dependencies {
+>       implementation("ua.pp.lumivoid:iwtcms-server:${iwtcms_version}")
+>   }
+> ```
 
-&nbsp;
+> ## Project structure
+> Iwtcms split for multiple modules:
+> - `iwtcms-server` - main module, contains almost all code of iwtcms, teoretically it not depends on minecraft, you can use it in your own project as base
+> - `iwtcms-fabric` - fabric module, implements few interfaces to make it work with fabric and contains fabric.mod.json, you probably don't need it in your own project
+> - `front` - frontend of iwtcms, written in [svelte](https://svelte.dev/) and integrated with gradle using [vite](https://vite.dev/), so you don't really need to write node commands
+> - `cli` - command line interface for iwtcms, written in go
+> - `static` - contains static files for iwtcms, iwtcms uses it if web panel is disabled
 
-> ### If you want to see the history of all logs since server launch, go to:
->
-> `https://127.0.0.1/api/logsHistory`
->
-> Returns list of all logs since server launch
->
-> |   page name    | type | response type | uses auth api (needs cookies)? | needs body |
-> | :------------: | :--: | :-----------: | :----------------------------: | :--------: |
-> | LogsHistoryGET | GET  |     JSON      |              Yes               |     No     |
 
-&nbsp;
+> ## How to build
+> First you need to install jdk 21 and nodejs with npm
+> golang technically optional, but then you don't be able to build cli
+> 
+> Every module has build.gradle with build task, so just run `./gradlew :module:build`
+> Or `./gradlew build` to build all
+> 
+> Frontend builds in front/build
+> Server builds in server/build/libs
+> Fabric builds in fabric/build/libs - iwtcms-***-all.jar is your builded mod
 
-> ### If you want to log in, go to:
+> ## Dev mode
+> It provides some useful features for development
+> Like:
+> - `Auto vite opening` - after iwtcms run it will be run vite automatically
+> - `External db` - you can use external database for development (I think I need to move it from developer functions)
+> - `H2 web server` - so you can manually do something in embedded database
+> - `Some tweaks in web`
+> 
+> Note: IWTCMS WILL NOT LAUNCH IF SERVER LAUNCHED IN NOT "dev environment" (technically it search for gradle file)
+> So DO NOT USE IT IF YOU JUST WANT TO USE IWTCMS
+> 
+> To enable dev mode you need to add this to your `iwtcms.conf`
 >
-> `https://127.0.0.1/api/login`
->
-> Put to your request body JSON with username and password and get logged
->
-> body example:
->
-> ```json
-> {
->     "username": "guest",
->     "password": "guest"
+> ```hocon
+> dev {
+>   # used for developing, DO NOT CHANGE IF YOU ARE NO DEVELOPER
+>   # CAN CAUSES CRASH IF YOU USE COMPILED JAR
+>   # ENABLE IT IF YOU KNOW WHAT YOU DO
+>   # to know more read README.md on github or modrinth of IWTCMS
+>   dev mode = true
+>   auto open vite = false
+>   enable h2 web server = false
+>   use external db = true
+>   external db driver = PostgreSQL // Can be: Oracle, H2, MariaDB, MSSQL, MySQL, PostgreSQL
+>   external db iwtcms name = iwtcms
+>   external db ip = 192.168.0.162
+>   external db port = 5432
 > }
 > ```
->
-> | page name | type |              response type              | uses auth api (needs cookies)? | needs body |
-> | :-------: | :--: | :-------------------------------------: | :----------------------------: | :--------: |
-> | LoginPOST | POST | Plain (Login successful / Login failed) |       No (sets cookies)        |    Yes     |
 
-&nbsp;
-
-> ### If you want to see all permits of user, go to:
->
-> `https://127.0.0.1/api/permits/{username}`
->
-> replace "{username}" with the name of the user you want to learn permissions from
->
-> | page name  | type | response type | uses auth api (needs cookies)? | needs body |
-> | :--------: | :--: | :-----------: | :----------------------------: | :--------: |
-> | PermitsGET | GET  |     JSON      |               No               |     No     |
-
-&nbsp;
-
-> ### If you want to reach the server console, go to:
->
-> `wss://127.0.0.1/ws/console`
->
-> Main feature of IWTCMS, connect to websocket and get all logs!
-> If you want to execute minecraft command, send command as plain text to server through websocket,
-> and it will be executed by IWTCMS
->
-> | page name |   type    |          response type          | uses auth api (needs cookies)? | needs body |
-> | :-------: | :-------: | :-----------------------------: | :----------------------------: | :--------: |
-> | WsConsole | Websocket | Websocket plain messages (logs) |              Yes               |     No     |
-
-&nbsp;
-
-> ### Static files
->
-> Since IWTCMS integrates a real ktor web server, it hosts a lot of static files with it, here is their list:
->
-> |     file name     |        path        |       alternative paths        | file type |
-> | :---------------: | :----------------: | :----------------------------: | :-------: |
-> |     style.css     |     /style.css     |                                |    css    |
-> |     404.html      |     /404.html      | any path witch not found (404) |   html    |
-> |    index.html     |    /index.html     |               /                |   html    |
-> |    favicon.ico    |                    |                                |    ico    |
-> | icon_clearbg.png  | / icon_clearbg.png |                                |    png    |
-> | iwtcms_client.zip | /iwtcms_client.zip |                                |    zip    |
-
----
-
-[//]: # "TODO: How to build in README.md"
-[//]: # "Note: needs sudo on linux"
-
-[//]: # TODO: migrate to mojmaps
+> ## Documentation
+> I'm working on it
