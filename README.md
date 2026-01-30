@@ -18,11 +18,11 @@ It allows you to manage your server remotely or build custom clients on top of I
 <details>
     <summary>Here some features that IWTCMS provides as api</summary>
     <ul>
-        - Console access - you can read logs, and execute commands</li>
-        - Users - IWTCMS uses user model with permissions, so you can create multiple users with different permissions</li>
-        - Players management - you can kick, kill, ban, see coords of players</li>
-        - Configs management - you can change configs of server using iwtcms api</li>
-        - And more...</li>
+        <li>Console access - you can read logs, and execute commands</li>
+        <li>Users - IWTCMS uses user model with permissions, so you can create multiple users with different permissions</li>
+        <li>Players management - you can kick, kill, ban, see coords of players</li>
+        <li>Configs management - you can change configs of server using iwtcms api</li>
+        <li>And more...</li>
     </ul>
 </details>
 
@@ -40,7 +40,7 @@ It allows you to manage your server remotely or build custom clients on top of I
 - **Unstable builds**  
   https://maven.lumivoid.pp.ua/#/unstable/ua/pp/lumivoid/iwtcms/iwtcms-fabric
 
-> ⚠️ **Unstable builds are UNSTABLE** ⚠️
+> ⚠️ **Unstable builds are UNSTABLE** ⚠️  
 > Please be careful with unstable builds, they can contain bugs and may not work properly or can contain breaking changes that will break your old configs  
 > Unstable builds have different versioning than releases, releases follows format `major.minor.patch`, while unstable builds follows `year.day_of_year`  
 > eg. release: 2.0, unstable: 26.30
@@ -51,7 +51,7 @@ It allows you to manage your server remotely or build custom clients on top of I
 
 > IWTCMS uses [hocon](https://github.com/lightbend/config/blob/master/HOCON.md) format for configs  
 > all configs are located in `YOUR_SERVER_FOLDER/iwtcms/iwtcms.hocon`  
-> it will be generated automatically if it doesn't exist (eg on first start or after deleting it)
+> it will be generated automatically if it doesn't exist (eg on first start or after deleting it)  
 > also you can take it from [here](https://github.com/Bumer-32/I-Want-To-Control-My-Server/blob/dev/server/src/main/resources/iwtcms.conf)  
 > almost all props are self-explanatory and commented
 > 
@@ -169,7 +169,7 @@ It allows you to manage your server remotely or build custom clients on top of I
 > - `H2 web server` - so you can manually do something in embedded database
 > - `Some tweaks in web`
 > 
-> Note: IWTCMS WILL NOT LAUNCH IF SERVER LAUNCHED IN NOT "dev environment" (technically it search for gradle file)
+> ⚠️ Note: IWTCMS WILL NOT LAUNCH IF SERVER LAUNCHED IN NOT "dev environment" (technically it search for gradle file)  
 > So DO NOT USE IT IF YOU JUST WANT TO USE IWTCMS
 > 
 > To enable dev mode you need to add this to your `iwtcms.conf`
