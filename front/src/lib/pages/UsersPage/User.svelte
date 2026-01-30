@@ -1,6 +1,6 @@
 <script lang="ts">
-    import {onMount} from "svelte";
-    import type {UserData} from "./userData";
+    import { onMount } from "svelte";
+    import type { UserData } from "./userData";
     import Constants from "../../constants";
     import ToastSystem from "../../toastSystem";
 
