@@ -4,12 +4,14 @@ import io.ktor.http.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.sessions.*
-import kotlinx.coroutines.flow.singleOrNull
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.jetbrains.exposed.v1.core.and
 import org.jetbrains.exposed.v1.core.eq
-import org.jetbrains.exposed.v1.r2dbc.selectAll
-import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
+import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 import ua.pp.lumivoid.iwtcms.server.cookie.UserSession
+import ua.pp.lumivoid.iwtcms.server.tables.UserEntity
+import ua.pp.lumivoid.iwtcms.server.tables.UserPermissionEntity
 import ua.pp.lumivoid.iwtcms.server.tables.UserPermissionsTable
 import ua.pp.lumivoid.iwtcms.server.tables.UsersTable
 
@@ -37,27 +39,27 @@ internal suspend fun doAuth(
         return HttpStatusCode.Unauthorized
     }
 
-    val status = suspendTransaction {
-        val user = UsersTable.selectAll()
-            .where { (UsersTable.username eq session.name) and (UsersTable.uniqueId eq session.id) }
-            .singleOrNull()
+    val status = withContext(Dispatchers.IO) {
+        transaction {
+            val user = UserEntity.find { (UsersTable.username eq session.name) and (UsersTable.uniqueId eq session.id) }.singleOrNull()
 
-        if (user == null) {
-            return@suspendTransaction HttpStatusCode.Unauthorized
-        }
+            if (user == null) {
+                return@transaction HttpStatusCode.Unauthorized
+            }
 
-        if (user[UsersTable.admin]) {
-            return@suspendTransaction HttpStatusCode.OK
-        }
+            if (user.admin) {
+                return@transaction HttpStatusCode.OK
+            }
 
-        val found = UserPermissionsTable.selectAll()
-            .where { (UserPermissionsTable.userId eq user[UsersTable.id]) and (UserPermissionsTable.permissionName eq permission) }
-            .singleOrNull()
+            val found = UserPermissionEntity
+                .find { (UserPermissionsTable.user eq user.id) and (UserPermissionsTable.permissionName eq permission) }
+                .singleOrNull()
 
-        if (found != null) {
-            return@suspendTransaction HttpStatusCode.OK
-        } else {
-            return@suspendTransaction HttpStatusCode.Forbidden
+            if (found != null) {
+                return@transaction HttpStatusCode.OK
+            } else {
+                return@transaction HttpStatusCode.Forbidden
+            }
         }
     }
 

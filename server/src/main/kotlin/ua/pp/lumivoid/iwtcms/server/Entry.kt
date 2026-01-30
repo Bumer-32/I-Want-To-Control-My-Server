@@ -2,8 +2,8 @@ package ua.pp.lumivoid.iwtcms.server
 
 import kotlinx.coroutines.runBlocking
 import org.jetbrains.exposed.v1.core.StdOutSqlLogger
-import org.jetbrains.exposed.v1.r2dbc.*
-import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
+import org.jetbrains.exposed.v1.jdbc.*
+import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 import ua.pp.lumivoid.iwtcms.server.api.requests.api.user.CreateUser
 import ua.pp.lumivoid.iwtcms.server.tables.MetaTable
 import ua.pp.lumivoid.iwtcms.server.tables.UserPermissionsTable
@@ -40,46 +40,44 @@ internal object Entry {
         CustomLogger.setup()
 
         val dbUrl: String = if (config.useExternalDb) {
-            "${config.externalDbDriver.url}://${config.externalDbIp}:${config.externalDbPort}/${config.externalDbIWTCMSName}"
+            "${config.externalDbDriver.url}//${config.externalDbIp}:${config.externalDbPort}/${config.externalDbIWTCMSName}"
         } else {
             "h2:file:///${Constants.DB_FILE.replace("\\", "/")};MODE=MYSQL"
         }
         val dbDriver = if (config.useExternalDb) config.externalDbDriver.driver else "h2"
 
-        logger.info("Connecting to DB r2dbc:$dbUrl with driver: $dbDriver")
+        logger.info("Connecting to DB jdbc:$dbUrl with driver: $dbDriver")
 
-        R2dbcDatabase.connect(
-            url = "r2dbc:$dbUrl",
+        Database.connect(
+            url = "jdbc:$dbUrl",
             driver = dbDriver,
             user = config.databaseUser,
             password = config.databasePassword,
         )
 
-        runBlocking {
-            suspendTransaction {
-                if (config.devMode) addLogger(StdOutSqlLogger)
+        transaction {
+            if (config.devMode) addLogger(StdOutSqlLogger)
 
-                SchemaUtils.create(
-                    UsersTable,
-                    UserPermissionsTable,
-                    MetaTable
-                )
+            SchemaUtils.create(
+                UsersTable,
+                UserPermissionsTable,
+                MetaTable
+            )
 
-                MetaTable.insertIgnore { it[key] = "iwtcms"; it[value] = "iwtcms" } // just why no?
-                MetaTable.insertIgnore { it[key] = "schema_version"; it[value] = Constants.SCHEMA_VERSION }
-                MetaTable.insertIgnore { it[key] = "last_migration_at"; it[value] = "unknown" }
-                MetaTable.insertIgnore { it[key] = "last_migration_from"; it[value] = "unknown" }
-                MetaTable.insertIgnore { it[key] = "last_migration_to"; it[value] = "unknown" }
-                MetaTable.insertIgnore { it[key] = "last_migration_success"; it[value] = "unknown" }
-                MetaTable.insertIgnore { it[key] = "total_migrations"; it[value] = "0" }
-                MetaTable.upsert { it[key] = "last_used_at"; it[value] = Instant.fromEpochMilliseconds(System.currentTimeMillis()).toString() }
-                MetaTable.upsert { it[key] = "last_used_by"; it[value] = IWTCMS.instance.implName } // for easy debug (if used not by iwtcms must be different, for e.g. iwtcms forks)
-                MetaTable.insertIgnore { it[key] = "last_shutdown_at"; it[value] = "unknown" }
-                MetaTable.insertIgnore { it[key] = "initial_iwtcms_version"; it[value] = Constants.MOD_VERSION }
-                MetaTable.upsert { it[key] = "last_iwtcms_version"; it[value] = Constants.MOD_VERSION }
+            MetaTable.insertIgnore { it[key] = "iwtcms"; it[value] = "iwtcms" } // just why no?
+            MetaTable.insertIgnore { it[key] = "schema_version"; it[value] = Constants.SCHEMA_VERSION }
+            MetaTable.insertIgnore { it[key] = "last_migration_at"; it[value] = "unknown" }
+            MetaTable.insertIgnore { it[key] = "last_migration_from"; it[value] = "unknown" }
+            MetaTable.insertIgnore { it[key] = "last_migration_to"; it[value] = "unknown" }
+            MetaTable.insertIgnore { it[key] = "last_migration_success"; it[value] = "unknown" }
+            MetaTable.insertIgnore { it[key] = "total_migrations"; it[value] = "0" }
+            MetaTable.upsert { it[key] = "last_used_at"; it[value] = Instant.fromEpochMilliseconds(System.currentTimeMillis()).toString() }
+            MetaTable.upsert { it[key] = "last_used_by"; it[value] = IWTCMS.instance.implName } // for easy debug (if used not by iwtcms must be different, for e.g. iwtcms forks)
+            MetaTable.insertIgnore { it[key] = "last_shutdown_at"; it[value] = "unknown" }
+            MetaTable.insertIgnore { it[key] = "initial_iwtcms_version"; it[value] = Constants.MOD_VERSION }
+            MetaTable.upsert { it[key] = "last_iwtcms_version"; it[value] = Constants.MOD_VERSION }
 
-                if (UsersTable.selectAll().empty()) CreateUser.create("admin", "iwtcms", true, emptyList())
-            }
+            if (UsersTable.selectAll().empty()) runBlocking { CreateUser.create("admin", "iwtcms", true, emptyList()) }
         }
 
         KtorServer.setup()

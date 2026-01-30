@@ -1,9 +1,8 @@
 package ua.pp.lumivoid.iwtcms.server
 
-import kotlinx.coroutines.runBlocking
 import org.jetbrains.annotations.TestOnly
-import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
-import org.jetbrains.exposed.v1.r2dbc.upsert
+import org.jetbrains.exposed.v1.jdbc.transactions.transaction
+import org.jetbrains.exposed.v1.jdbc.upsert
 import ua.pp.lumivoid.iwtcms.server.tables.MetaTable
 import ua.pp.lumivoid.iwtcms.server.util.CustomLogger
 import ua.pp.lumivoid.iwtcms.server.util.McHandler
@@ -59,10 +58,8 @@ object IWTCMS {
         KtorServer.shutdown()
         CustomLogger.shutdown()
 
-        runBlocking {
-            suspendTransaction {
-                MetaTable.upsert { it[key] = "last_shutdown_at"; it[value] = Instant.fromEpochMilliseconds(System.currentTimeMillis()).toString() }
-            }
+        transaction {
+            MetaTable.upsert { it[key] = "last_shutdown_at"; it[value] = Instant.fromEpochMilliseconds(System.currentTimeMillis()).toString() }
         }
     }
 

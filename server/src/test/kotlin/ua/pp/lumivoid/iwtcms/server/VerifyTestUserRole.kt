@@ -1,15 +1,10 @@
 package ua.pp.lumivoid.iwtcms.server
 
-import kotlinx.coroutines.runBlocking
 import org.jetbrains.exposed.v1.core.eq
-import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
-import org.jetbrains.exposed.v1.r2dbc.update
+import org.jetbrains.exposed.v1.jdbc.transactions.transaction
+import ua.pp.lumivoid.iwtcms.server.tables.UserEntity
 import ua.pp.lumivoid.iwtcms.server.tables.UsersTable
 
-internal fun verifyTestUserRole(admin: Boolean) = runBlocking {
-    suspendTransaction {
-        UsersTable.update({ UsersTable.username eq "admin" }) {
-            it[UsersTable.admin] = admin
-        }
-    }
+internal fun verifyTestUserRole(admin: Boolean) = transaction {
+    UserEntity.find { UsersTable.username eq "admin" }.single().admin = admin
 }

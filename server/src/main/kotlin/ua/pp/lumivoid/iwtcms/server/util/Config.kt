@@ -115,11 +115,11 @@ internal object Config {
     )
 
     enum class DbDriver(val named: String, val driver: String, val url: String) {
-        Oracle("Oracle", "oracle", "oracle"),
-        //    H2("H2", "h2"), // in some reason can't connect by tcp and gives error
-        MariaDB("MariaDB", "mariadb", "mariadb"),
-        MSSQL("MSSQL", "sqlserver", "mssql"),
-        MYSQL("MySQL", "mysql", "mysql"),
-        POSTGRESQL("PostgreSQL", "postgresql", "postgresql"),
+        Oracle("Oracle", "oracle.jdbc.OracleDriver", "oracle:thin:@"),
+        H2("H2", "org.h2.Driver", "h2:"),
+        MariaDB("MariaDB", "org.mariadb.jdbc.Driver", "mariadb:"),
+        MSSQL("MSSQL", "com.microsoft.sqlserver.jdbc.SQLServerDriver", "sqlserver:"),
+        MYSQL("MySQL", "com.mysql.cj.jdbc.Driver", "mysql:"),
+        POSTGRESQL("PostgreSQL", "org.postgresql.Driver", "postgresql:"),
     }
 }

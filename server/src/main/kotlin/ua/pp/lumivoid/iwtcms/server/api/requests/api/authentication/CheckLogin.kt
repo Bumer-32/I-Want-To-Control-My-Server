@@ -4,13 +4,14 @@ import io.ktor.http.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.sessions.*
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.jetbrains.exposed.v1.core.and
 import org.jetbrains.exposed.v1.core.eq
-import org.jetbrains.exposed.v1.r2dbc.selectAll
-import org.jetbrains.exposed.v1.r2dbc.transactions.suspendTransaction
+import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 import ua.pp.lumivoid.iwtcms.server.api.Request
 import ua.pp.lumivoid.iwtcms.server.cookie.UserSession
+import ua.pp.lumivoid.iwtcms.server.tables.UserEntity
 import ua.pp.lumivoid.iwtcms.server.tables.UsersTable
 
 internal object CheckLogin : Request() {
@@ -25,19 +26,14 @@ internal object CheckLogin : Request() {
                 return@get
             }
 
-            suspendTransaction {
-                try {
-                    UsersTable
-                        .selectAll()
-                        .where { (UsersTable.username eq session.name) and (UsersTable.uniqueId eq session.id) }
-                        .first()
-                } catch (_: NoSuchElementException) {
-                    call.respond(HttpStatusCode.Unauthorized, "Not logged in")
-                    return@suspendTransaction
+            val user = withContext(Dispatchers.IO) {
+                transaction {
+                    UserEntity.find { (UsersTable.username eq session.name) and (UsersTable.uniqueId eq session.id) }.firstOrNull()
                 }
-
-                call.respond(session.name)
             }
+
+            if (user == null) call.respond(HttpStatusCode.Unauthorized, "Not logged in")
+            else call.respond(session.name)
         }
     }
 }
