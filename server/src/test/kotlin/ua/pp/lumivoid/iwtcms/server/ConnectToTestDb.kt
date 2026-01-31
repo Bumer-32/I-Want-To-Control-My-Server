@@ -10,9 +10,7 @@ import ua.pp.lumivoid.iwtcms.server.tables.UserPermissionsTable
 import ua.pp.lumivoid.iwtcms.server.tables.UsersTable
 
 fun connectToTestDb() {
-    val url = "jdbc:h2:mem:///test;MODE=MYSQL;DB_CLOSE_DELAY=-1"
-
-    Database.connect(url = url, driver = "h2")
+    Database.connect(url = "jdbc:h2:mem:///test;MODE=MYSQL;DB_CLOSE_DELAY=-1", driver = "org.h2.Driver")
 
     transaction {
         addLogger(StdOutSqlLogger)

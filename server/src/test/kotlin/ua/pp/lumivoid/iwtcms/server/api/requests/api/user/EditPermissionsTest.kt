@@ -40,22 +40,22 @@ class EditPermissionsTest: AuthBasedTest() {
         assertEquals(expectedStatus, response.status)
 
         if (response.status == HttpStatusCode.OK) {
-            val user = transaction {
-                UserEntity.find { UsersTable.username eq "test" }.single()
-            }
-            val permissions = user.permissions.map { it.permissionName }
+            transaction {
+                val user = UserEntity.find { UsersTable.username eq "test" }.single()
+                val permissions = user.permissions.map { it.permissionName }
 
-            assertEquals(testPayload.admin, user.admin)
-            assertContains(permissions, "one")
-            assertContains(permissions, "two")
-            assertContains(permissions, "three")
+                assertEquals(testPayload.admin, user.admin)
+                assertContains(permissions, "one")
+                assertContains(permissions, "two")
+                assertContains(permissions, "three")
+            }
         }
     }
 
     companion object {
         @JvmStatic
         @BeforeAll
-        internal suspend fun `insert users for test`() {
+        internal fun `insert users for test`(): Unit = runBlocking {
                 CreateUser.create("test", "test", false, emptyList())
         }
 

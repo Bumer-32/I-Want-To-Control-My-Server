@@ -50,7 +50,7 @@ class DeleteUserTest: AuthBasedTest() {
     companion object {
         @JvmStatic
         @BeforeAll
-        internal suspend fun `insert users for test`() {
+        internal fun `insert users for test`(): Unit = runBlocking {
             CreateUser.create("test", "test", false, emptyList())
         }
 
