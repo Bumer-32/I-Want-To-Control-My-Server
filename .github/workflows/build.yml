@@ -58,3 +58,12 @@ jobs:
               with:
                 report_paths: 'server/build/test-results/test/TEST-*.xml'
                 comment: true
+
+            - name: generate db file
+              run: ./gradlew generateDb
+
+            - name: capture db file
+              uses: actions/upload-artifact@v6
+              with:
+                name: database
+                path: server/build/db.mv.db

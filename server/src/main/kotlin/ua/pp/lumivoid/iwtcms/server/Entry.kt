@@ -21,6 +21,7 @@ internal object Entry {
     private val logger = Constants.LOGGER
 
     @OptIn(ExperimentalTime::class)
+    @Suppress("DuplicatedCode")
     fun launch() {
         logger.info("Starting iwtcms")
 
@@ -42,9 +43,9 @@ internal object Entry {
         val dbUrl: String = if (config.useExternalDb) {
             "${config.externalDbDriver.url}//${config.externalDbIp}:${config.externalDbPort}/${config.externalDbIWTCMSName}"
         } else {
-            "h2:file:///${Constants.DB_FILE.replace("\\", "/")};MODE=MYSQL"
+            "h2:file:${Constants.DB_FILE.replace("\\", "/")};MODE=MYSQL"
         }
-        val dbDriver = if (config.useExternalDb) config.externalDbDriver.driver else "h2"
+        val dbDriver = if (config.useExternalDb) config.externalDbDriver.driver else Config.DbDriver.H2.driver
 
         logger.info("Connecting to DB jdbc:$dbUrl with driver: $dbDriver")
 

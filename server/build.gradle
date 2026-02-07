@@ -100,3 +100,14 @@ jar {
 test {
 	useJUnitPlatform()
 }
+
+tasks.register("generateDbFile", JavaExec) {
+	group = "other"
+	description = "Generate H2 database with full schema"
+
+    //noinspection ConfigurationAvoidance
+    classpath = sourceSets["main"].runtimeClasspath
+	mainClass.set("ua.pp.lumivoid.iwtcms.server.DbSchemaGenerator")
+
+	workingDir = projectDir
+}
