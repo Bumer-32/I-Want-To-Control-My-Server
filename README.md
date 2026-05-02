@@ -1,3 +1,15 @@
+> [!CAUTION]
+> PROJECT WAS ABARDONED
+>
+> I started this project because i didn't know any normal way to easy administrate my mc servers for friends
+> So I decided to create IWTCMS, but it didn't released because shitcode (but actually I was going to rewrite project normally)
+> And WEB, I really bad frontend-er.
+>
+> So after I found out about Crafty Controller, I don't really see the point in IWTCMS.
+>
+> So since 02.05.2026 IWTCMS is abardoned project and I'll archive repos.
+> Bumer_32
+
 <div style="display: flex; align-items: center;">
     <img style="height: 80px" src="https://github.com/Bumer-32/I-Want-To-Control-My-Server/blob/dev/fabric/src/main/resources/assets/iwtcms/icon.png?raw=true" alt="Main Page">
     <span style="font-size: 60px; margin-left: 35px; font-weight: bold">I-Want-To-Control-My-Server</span>
