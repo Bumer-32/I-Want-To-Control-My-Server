@@ -1,13 +1,13 @@
 > [!CAUTION]
-> PROJECT WAS ABARDONED
+> PROJECT WAS ABARDONED  
 >
-> I started this project because i didn't know any normal way to easy administrate my mc servers for friends
-> So I decided to create IWTCMS, but it didn't released because shitcode (but actually I was going to rewrite project normally)
+> I started this project because i didn't know any normal way to easy administrate my mc servers for friends  
+> So I decided to create IWTCMS, but it didn't released because shitcode (but actually I was going to rewrite project normally)  
 > And WEB, I really bad frontend-er.
 >
 > So after I found out about Crafty Controller, I don't really see the point in IWTCMS.
 >
-> So since 02.05.2026 IWTCMS is abardoned project and I'll archive repos.
+> So since 02.05.2026 IWTCMS is abardoned project and I'll archive repos.  
 > Bumer_32
 
 <div style="display: flex; align-items: center;">
